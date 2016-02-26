@@ -20,6 +20,44 @@ public class PlotManager {
 		loadPlots();
 	}
 	
+	private boolean gridPositionFree(GridPosition gp){
+		for (Plot plot : plots)
+			if (plot.getGridPosition().equals(gp))
+				return false;
+		return true;
+	}
+	
+	public GridPosition getFreeGridPosition(){
+		int x = 0, y = 0, dirStep = 0, blocksLeft = 1;
+		while (!gridPositionFree(new GridPosition(x, y))){
+			switch (dirStep % 4)
+			{
+			case 0: // pos x
+				x++;
+				break;
+			case 1: // pos y
+				y++;
+				break;
+			case 2: // neg x
+				x--;
+				break;
+			case 3: // neg y
+				y--;
+				break;
+			}
+			blocksLeft--;
+			if (blocksLeft <= 0){
+				dirStep++;
+				blocksLeft = dirStep / 2 + 1;
+			}
+		}
+		return new GridPosition(x, y);
+	}
+	
+	public void addPlot(OfflinePlayer p){
+		
+	}
+	
 	public void loadPlots(){
 		
 	}

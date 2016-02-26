@@ -23,4 +23,8 @@ public class GridPosition {
 	public void setY(int y) {
 		this.y = y;
 	}	
+	
+	public boolean equals(GridPosition gp){
+		return this.x == gp.x && this.y == gp.y;
+	}
 }

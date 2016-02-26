@@ -8,8 +8,7 @@ public class Plot {
 	private ProtectedCuboidRegion protectedCuboidRegion;
 	
 	public Plot(GridPosition gp, PlotOrganizer plugin){
-		this.gridPosition = gp;
-		
+		this.gridPosition = gp;		
 	}
 	
 	public GridPosition getGridPosition() {
