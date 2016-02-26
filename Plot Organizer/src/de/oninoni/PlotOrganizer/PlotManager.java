@@ -1,5 +1,6 @@
 package de.oninoni.PlotOrganizer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.bukkit.OfflinePlayer;
@@ -11,10 +12,13 @@ public class PlotManager {
 	
 	PlotOrganizer plugin;
 	
-	HashMap<OfflinePlayer, PlayerPlots> plots = new HashMap<>();
+	ArrayList<Plot> plots;
+	HashMap<OfflinePlayer, ArrayList<Integer>> playerPlots;
 	
 	public PlotManager(PlotOrganizer p){
 		plugin = p;
+		plots = new ArrayList<>();
+		playerPlots = new HashMap<>();
 		loadPlots();
 	}
 	
