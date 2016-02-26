@@ -8,6 +8,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import com.sk89q.worldedit.BlockVector;
+import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 
 public class Plot {
@@ -28,6 +29,13 @@ public class Plot {
 				new BlockVector(gp.getX()*128, 0, gp.getY()*128),
 				new BlockVector(gp.getX()*128 + 127, 255, gp.getY()*128 + 127)
 				);
+		RegionManager regionManager = plugin.getWorldGuard().getRegionManager(plugin.getPlotWorld());
+		regionManager.addRegion(protectedCuboidRegion);
+		try {
+			regionManager.save();
+	    } catch (Exception e) {
+	        plugin.getLogger().warning("Failed to write region: "  + e.getMessage() );
+	    }
 	}
 	
 	public GridPosition getGridPosition() {
