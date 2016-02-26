@@ -73,7 +73,7 @@ public class PlotManager {
 	public void playerEntered(Player p){
 		if(playerPlots.containsKey(p.getPlayer())){
 			Plot favoritePlot = plots.get(favoritePlots.get(p));
-			
+			favoritePlot.teleportTo(p);
 		}else{
 			addPlot(p);
 		}
