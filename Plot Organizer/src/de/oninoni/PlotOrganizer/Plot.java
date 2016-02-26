@@ -16,23 +16,24 @@ public class Plot {
 	private static int PLOT_SIZE = 128;
 	
 	private GridPosition gridPosition;
-	private ProtectedCuboidRegion protectedCuboidRegion;
-	
 	private String name;
 	
-	PlotOrganizer plugin;
+	private ProtectedCuboidRegion protectedCuboidRegion;
 	
-	public Plot(GridPosition gp, PlotOrganizer pl, OfflinePlayer owner){
+	private PlotOrganizer plugin;
+	
+	public Plot(GridPosition gp, PlotOrganizer pl, OfflinePlayer owner, int id){
 		gridPosition = gp;		
 		name = owner.getPlayer().getName() + "'s Plot";
 		plugin = pl;
 		protectedCuboidRegion = new ProtectedCuboidRegion(
-			owner.getName(), 
+			getPlotName(id),
 			new BlockVector(gp.getX() * PLOT_SIZE, 1, gp.getY() * PLOT_SIZE),
 			new BlockVector((gp.getX() + 1) * PLOT_SIZE - 1, 255, (gp.getY() + 1) * PLOT_SIZE - 1)
 		);
 		RegionManager regionManager = plugin.getWorldGuard().getRegionManager(plugin.getPlotWorld());
-		regionManager.addRegion(protectedCuboidRegion);
+		if (regionManager.getRegion(getPlotName(id)) == null)
+			regionManager.addRegion(protectedCuboidRegion);
 		try {
 			regionManager.save();
 	    } catch (Exception e) {
@@ -60,12 +61,16 @@ public class Plot {
 	public String getName() {
 		return name;
 	}
-
+	
 	public void setName(String name) {
 		this.name = name;
 	}
 	
 	public OfflinePlayer getOwner(){
 		return Bukkit.getOfflinePlayer((UUID) protectedCuboidRegion.getOwners().getUniqueIds().toArray()[0]);		
+	}
+	
+	static String getPlotName(int id) {
+		return "plot_" + id;
 	}
 }

@@ -18,7 +18,7 @@ public class PlotOrganizer extends JavaPlugin{
 	private WorldEditPlugin worldEdit;
 	private WorldGuardPlugin worldGuard;
 	
-	PlotManager plotManager;
+	private PlotManager plotManager;
 	
 	private World plotWorld;
 	
