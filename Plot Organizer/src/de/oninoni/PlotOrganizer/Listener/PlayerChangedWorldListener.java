@@ -21,7 +21,7 @@ public class PlayerChangedWorldListener implements Listener{
 	
 	@EventHandler
 	public void onPlayerChangeWorld(PlayerChangedWorldEvent event){
-		if(event.getPlayer().getWorld().getName().equalsIgnoreCase(worldName)){
+		if(event.getPlayer().getWorld() == plugin.getPlotWorld()){
 			plugin.getLogger().info("Player " + event.getPlayer().getName() + " has entered PlotWorld!");
 			plotManager.playerEntered(event.getPlayer());
 		}

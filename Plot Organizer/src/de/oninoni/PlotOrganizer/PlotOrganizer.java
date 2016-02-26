@@ -1,5 +1,6 @@
 package de.oninoni.PlotOrganizer;
 
+import org.bukkit.World;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
@@ -9,8 +10,10 @@ import de.oninoni.PlotOrganizer.Listener.PlayerChangedWorldListener;
 
 public class PlotOrganizer extends JavaPlugin{
 	
-	WorldEditPlugin worldEdit;
-	WorldGuardPlugin worldGuard;
+	private WorldEditPlugin worldEdit;
+	private WorldGuardPlugin worldGuard;
+	
+	private World plotWorld;
 	
 	public void onEnable() {
 		worldEdit = (WorldEditPlugin) getServer().getPluginManager().getPlugin("WorldEdit");
@@ -26,6 +29,8 @@ public class PlotOrganizer extends JavaPlugin{
 			getLogger().warning("World Guard missing!");
 		}
 		
+		plotWorld = getServer().getWorld("PlotWorld");
+		
 		PlotManager plotManager = new PlotManager(this);
 		
 		PlayerChangedWorldListener playerChangedWorldListener = new PlayerChangedWorldListener(this, plotManager);
@@ -35,6 +40,18 @@ public class PlotOrganizer extends JavaPlugin{
 	
 	public void onDisable() {
 		
+	}
+	
+	public WorldEditPlugin getWorldEdit() {
+		return worldEdit;
+	}
+	
+	public WorldGuardPlugin getWorldGuard() {
+		return worldGuard;
+	}
+	
+	public World getPlotWorld() {
+		return plotWorld;
 	}
 	
 }
