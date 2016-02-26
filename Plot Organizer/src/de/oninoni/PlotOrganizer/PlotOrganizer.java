@@ -1,5 +1,7 @@
 package de.oninoni.PlotOrganizer;
 
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -27,6 +29,7 @@ public class PlotOrganizer extends JavaPlugin{
 		}else{
 			getLogger().warning("World Edit missing!");
 		}
+		
 		worldGuard = (WorldGuardPlugin) getServer().getPluginManager().getPlugin("WorldGuard");
 		if(worldGuard != null){
 			getLogger().info("World Guard detected!");
@@ -54,29 +57,43 @@ public class PlotOrganizer extends JavaPlugin{
 	
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if(command.getName().equalsIgnoreCase("plot")){
-			switch(args.length){
-			case 1:
-				if(args[0].equalsIgnoreCase("list")){
-					//TODO List Plots
-				}
-				else if(args[0].equalsIgnoreCase("tp")){
+			if(args[0].equalsIgnoreCase("list")){
+				//TODO Add the Command /plot list
+			}
+			else if(args[0].equalsIgnoreCase("tp")){
+				if(args.length == 1){
 					if(sender instanceof Player){
 						plotManager.tpToFavorite((Player) sender);
 						return true;
 					}
 				}
-				break;
-			case 2:
-				if(args[0].equalsIgnoreCase("list")){
-					//TODO List Plots with Pages
-				}
-				else if(args[0].equalsIgnoreCase("tp")){
+				else if(args.length == 2){
 					if(sender instanceof Player){
 						plotManager.tpToName((Player) sender, args[1]);
 						return true;
 					}
 				}
-				break;
+				else if(args.length == 3){
+					if(sender instanceof Player){
+						plotManager.tpToName((Player) sender, args[1], Bukkit.getOfflinePlayer(args[2]));
+						return true;
+					}
+				}
+				else{
+					sender.sendMessage("/plot tp [Plot Name] [Owner]");
+				}
+			}
+			else if(args[0].equalsIgnoreCase("add")){
+				if(sender.hasPermission("plotmanager.core.add")){
+					if(args.length == 3){
+						OfflinePlayer p = Bukkit.getPlayer(args[2]);
+						if(p.isOnline()){
+							plotManager.addPlot(p, args[2]);
+						}
+					}else{
+						sender.sendMessage("/plot add <Plot Name> <Player>");
+					}
+				}
 			}
 		}
 		return false;

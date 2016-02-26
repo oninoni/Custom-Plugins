@@ -56,10 +56,12 @@ public class PlotManager {
 		return new GridPosition(x, y);
 	}
 	
-	public void addPlot(OfflinePlayer p){
+	public void addPlot(OfflinePlayer p, String name){
 		GridPosition gridPosition = getFreeGridPosition();
 		int plotID = plots.size();
-		plots.add(new Plot(gridPosition, plugin, p));
+		Plot plot = new Plot(gridPosition, plugin, p);
+		plot.setName(name);
+		plots.add(plot);
 		ArrayList<Integer> plots;
 		if (!playerPlots.containsKey(p))
 			plots = new ArrayList<>();
@@ -87,8 +89,12 @@ public class PlotManager {
 	}
 	
 	public void tpToName(Player p, String name){
+		tpToName(p, name, (OfflinePlayer) p);
+	}
+	
+	public void tpToName(Player p, String name, OfflinePlayer owner){
 		for (Plot plot : plots) {
-			if(plot.getOwner() == p){
+			if(plot.getOwner() == owner){
 				if(plot.getName() == name){
 					plot.teleportTo(p);
 					return;
@@ -109,7 +115,7 @@ public class PlotManager {
 		if(playerPlots.containsKey(p.getPlayer())){
 			tpToFavorite(p);
 		}else{
-			addPlot(p);
+			addPlot(p, "Default");
 			tpToFavorite(p);
 		}
 	}
