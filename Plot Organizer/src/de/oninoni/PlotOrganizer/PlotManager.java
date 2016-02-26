@@ -80,7 +80,7 @@ public class PlotManager {
 	}
 	
 	public void tpToFavorite(Player p){
-		if(playerPlots.containsKey(p.getPlayer())){
+		if(favoritePlots.containsKey(p.getPlayer())){
 			Plot favoritePlot = plots.get(favoritePlots.get(p));
 			favoritePlot.teleportTo(p);
 		}
