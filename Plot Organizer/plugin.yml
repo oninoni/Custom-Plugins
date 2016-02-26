@@ -3,3 +3,9 @@ version: 0.01
 description: Plot Organizer for the Plot World of Oninoni.de
 main: de.oninoni.PlotOrganizer.PlotOrganizer
 depend: [WorldEdit, WorldGuard]
+commands:
+  plot:
+    description: For Managing Plots
+    aliases: [po, PlotOrganizer]
+    permission: plotManager.core
+    usage: Do /pl help for Help!

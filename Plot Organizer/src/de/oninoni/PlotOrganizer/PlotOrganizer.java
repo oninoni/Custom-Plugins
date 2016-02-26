@@ -1,6 +1,9 @@
 package de.oninoni.PlotOrganizer;
 
 import org.bukkit.World;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
@@ -12,6 +15,8 @@ public class PlotOrganizer extends JavaPlugin{
 	
 	private WorldEditPlugin worldEdit;
 	private WorldGuardPlugin worldGuard;
+	
+	PlotManager plotManager;
 	
 	private World plotWorld;
 	
@@ -31,7 +36,7 @@ public class PlotOrganizer extends JavaPlugin{
 		
 		plotWorld = getServer().getWorld("PlotWorld");
 		
-		PlotManager plotManager = new PlotManager(this);
+		plotManager = new PlotManager(this);
 		
 		PlayerChangedWorldListener playerChangedWorldListener = new PlayerChangedWorldListener(this, plotManager);
 		
@@ -40,6 +45,36 @@ public class PlotOrganizer extends JavaPlugin{
 	
 	public void onDisable() {
 		
+	}
+	
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+		if(command.getName().equalsIgnoreCase("plot")){
+			switch(args.length){
+			case 1:
+				if(args[0].equalsIgnoreCase("list")){
+					//TODO List Plots
+				}
+				else if(args[0].equalsIgnoreCase("tp")){
+					if(sender instanceof Player){
+						plotManager.tpToFavorite((Player) sender);
+						return true;
+					}
+				}
+				break;
+			case 2:
+				if(args[0].equalsIgnoreCase("list")){
+					//TODO List Plots with Pages
+				}
+				else if(args[0].equalsIgnoreCase("tp")){
+					if(sender instanceof Player){
+						plotManager.tpToName((Player) sender, args[1]);
+						return true;
+					}
+				}
+				break;
+			}
+		}
+		return false;
 	}
 	
 	public WorldEditPlugin getWorldEdit() {

@@ -1,10 +1,13 @@
 package de.oninoni.PlotOrganizer;
 
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
+import com.sk89q.worldedit.BlockVector;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 
 public class Plot {
@@ -16,11 +19,15 @@ public class Plot {
 	
 	PlotOrganizer plugin;
 	
-	public Plot(GridPosition gp, PlotOrganizer plugin){
+	public Plot(GridPosition gp, PlotOrganizer plugin, OfflinePlayer owner){
 		this.gridPosition = gp;		
 		name = "";
 		this.plugin = plugin;
-		//TODO Implement Region creation
+		protectedCuboidRegion = new ProtectedCuboidRegion(
+				owner.getName(), 
+				new BlockVector(gp.getX()*128, 0, gp.getY()*128),
+				new BlockVector(gp.getX()*128 + 127, 255, gp.getY()*128 + 127)
+				);
 	}
 	
 	public GridPosition getGridPosition() {
@@ -44,6 +51,6 @@ public class Plot {
 	}
 	
 	public OfflinePlayer getOwner(){
-		return Bukkit.getOfflinePlayer(protectedCuboidRegion.getOwners().getUniqueIds().);		
+		return Bukkit.getOfflinePlayer((UUID) protectedCuboidRegion.getOwners().getUniqueIds().toArray()[0]);		
 	}
 }

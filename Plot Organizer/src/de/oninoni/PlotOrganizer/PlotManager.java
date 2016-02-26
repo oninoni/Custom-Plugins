@@ -2,7 +2,6 @@ package de.oninoni.PlotOrganizer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -60,7 +59,7 @@ public class PlotManager {
 	public void addPlot(OfflinePlayer p){
 		GridPosition gridPosition = getFreeGridPosition();
 		int plotID = plots.size();
-		plots.add(new Plot(gridPosition, plugin));
+		plots.add(new Plot(gridPosition, plugin, p));
 		ArrayList<Integer> plots;
 		if (!playerPlots.containsKey(p))
 			plots = new ArrayList<>();
@@ -73,14 +72,28 @@ public class PlotManager {
 	}
 	
 	public void delPlot(int plotID){
-		// check for players with that plot
-
+		OfflinePlayer player = plots.get(plotID).getOwner();
+		plots.remove(plotID);
+		playerPlots.remove(player);
+		favoritePlots.remove(player);
+		savePlots();
 	}
 	
 	public void tpToFavorite(Player p){
 		if(playerPlots.containsKey(p.getPlayer())){
 			Plot favoritePlot = plots.get(favoritePlots.get(p));
 			favoritePlot.teleportTo(p);
+		}
+	}
+	
+	public void tpToName(Player p, String name){
+		for (Plot plot : plots) {
+			if(plot.getOwner() == p){
+				if(plot.getName() == name){
+					plot.teleportTo(p);
+					return;
+				}
+			}
 		}
 	}
 	
