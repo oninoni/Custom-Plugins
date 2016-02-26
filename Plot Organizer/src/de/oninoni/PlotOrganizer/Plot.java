@@ -8,7 +8,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import com.sk89q.worldedit.BlockVector;
-import com.sk89q.worldguard.LocalPlayer;
 import com.sk89q.worldguard.domains.DefaultDomain;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
@@ -26,7 +25,7 @@ public class Plot {
 	
 	public Plot(GridPosition gp, PlotOrganizer pl, OfflinePlayer owner, int id){
 		gridPosition = gp;		
-		name = owner.getPlayer().getName() + "'s Plot";
+		name = "";
 		plugin = pl;
 		
 		if(plugin.getWorldGuard().getRegionManager(plugin.getPlotWorld()).hasRegion(getPlotName(id))){

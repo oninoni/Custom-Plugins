@@ -56,7 +56,7 @@ public class PlotOrganizer extends JavaPlugin{
 	}
 	
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if(command.getName().equalsIgnoreCase("plot")){
+		if(command.getName().equalsIgnoreCase("plot") && args.length > 0){
 			if(args[0].equalsIgnoreCase("list")){
 				//TODO Add the Command /plot list
 			}
@@ -81,17 +81,30 @@ public class PlotOrganizer extends JavaPlugin{
 				}
 				else{
 					sender.sendMessage("/plot tp [Plot Name] [Owner]");
+					return true;
 				}
 			}
 			else if(args[0].equalsIgnoreCase("add")){
 				if(sender.hasPermission("plotmanager.core.add")){
 					if(args.length == 3){
-						OfflinePlayer p = Bukkit.getPlayer(args[2]);
+						OfflinePlayer p = Bukkit.getOfflinePlayer(args[2]);
 						if(p.isOnline()){
 							plotManager.addPlot(p, args[2]);
+							sender.sendMessage("Plot added!");
+							return true;
 						}
 					}else{
 						sender.sendMessage("/plot add <Plot Name> <Player>");
+						return true;
+					}
+				}
+			}
+			else if(args[0].equalsIgnoreCase("del")){
+				if(sender.hasPermission("plotmanager.core.del")){
+					if(args.length == 2){
+						plotManager.delPlot(Integer.parseInt(args[1]));
+						sender.sendMessage("Plot deleted!");
+						return true;
 					}
 				}
 			}
