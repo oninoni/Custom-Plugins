@@ -116,13 +116,17 @@ public class PlotManager {
 		plotManagerData.reloadConfig();
 		FileConfiguration config = plotManagerData.getConfig();
 		
-		ConfigurationSection cs = config.getConfigurationSection("plots");
-		for (String key : cs.getKeys(false)){
+		if (!config.contains("plots"))
+			return;
+		
+		for (String key : config.getConfigurationSection("plots").getKeys(false)){
+			ConfigurationSection cs = config.getConfigurationSection("plots." + key);
 			GridPosition gp = new GridPosition(
 				cs.getInt("pos.x"),
 				cs.getInt("pos.y")
 			);
 			int id = Integer.parseInt(key);
+			
 			OfflinePlayer p = Bukkit.getOfflinePlayer(UUID.fromString(cs.getString("UUID")));
 			plots.set(id, new Plot(gp, plugin, p, id));
 			plots.get(id).setName(cs.getString("name"));
