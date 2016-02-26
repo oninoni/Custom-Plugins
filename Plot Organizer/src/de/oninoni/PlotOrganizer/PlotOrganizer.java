@@ -5,6 +5,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
+import de.oninoni.PlotOrganizer.Listener.PlayerChangedWorldListener;
+
 public class PlotOrganizer extends JavaPlugin{
 	
 	WorldEditPlugin worldEdit;
@@ -23,6 +25,12 @@ public class PlotOrganizer extends JavaPlugin{
 		}else{
 			getLogger().warning("World Guard missing!");
 		}
+		
+		PlotManager plotManager = new PlotManager(this);
+		
+		PlayerChangedWorldListener playerChangedWorldListener = new PlayerChangedWorldListener(this, plotManager);
+		
+		getServer().getPluginManager().registerEvents(playerChangedWorldListener, this);
 	}
 	
 	public void onDisable() {
