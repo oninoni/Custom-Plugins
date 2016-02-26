@@ -6,8 +6,6 @@ import java.util.HashMap;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
-import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
-
 public class PlotManager {
 	
 	PlotOrganizer plugin;
@@ -59,7 +57,20 @@ public class PlotManager {
 	}
 	
 	public void addPlot(OfflinePlayer p){
-		
+		GridPosition gridPosition = getFreeGridPosition();
+		int plotID = plots.size();
+		plots.add(new Plot(gridPosition, plugin));
+		ArrayList<Integer> plots = new ArrayList<>();
+		plots.add(plotID);
+		playerPlots.put(p, plots);
+		favoritePlots.put(p, plotID);
+	}
+	
+	public void tpToFavorite(Player p){
+		if(playerPlots.containsKey(p.getPlayer())){
+			Plot favoritePlot = plots.get(favoritePlots.get(p));
+			favoritePlot.teleportTo(p);
+		}
 	}
 	
 	public void loadPlots(){
@@ -72,10 +83,10 @@ public class PlotManager {
 	
 	public void playerEntered(Player p){
 		if(playerPlots.containsKey(p.getPlayer())){
-			Plot favoritePlot = plots.get(favoritePlots.get(p));
-			favoritePlot.teleportTo(p);
+			tpToFavorite(p);
 		}else{
 			addPlot(p);
+			tpToFavorite(p);
 		}
 	}
 	
