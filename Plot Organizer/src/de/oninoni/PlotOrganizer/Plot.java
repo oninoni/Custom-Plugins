@@ -15,7 +15,7 @@ public class Plot {
 	PlotOrganizer plugin;
 	
 	public Plot(GridPosition gp, PlotOrganizer plugin){
-		this.gridPosition = gp;
+		this.gridPosition = gp;		
 		name = "";
 		this.plugin = plugin;
 		//TODO Implement Region creation
