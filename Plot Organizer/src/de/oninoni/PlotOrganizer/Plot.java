@@ -12,6 +12,8 @@ import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 
 public class Plot {
 	
+	private static int PLOT_SIZE = 128;
+	
 	private GridPosition gridPosition;
 	private ProtectedCuboidRegion protectedCuboidRegion;
 	
@@ -19,14 +21,14 @@ public class Plot {
 	
 	PlotOrganizer plugin;
 	
-	public Plot(GridPosition gp, PlotOrganizer plugin, OfflinePlayer owner){
-		this.gridPosition = gp;		
-		name = "";
-		this.plugin = plugin;
+	public Plot(GridPosition gp, PlotOrganizer pl, OfflinePlayer owner){
+		gridPosition = gp;		
+		name = owner.getPlayer().getName() + "'s Plot";
+		plugin = pl;
 		protectedCuboidRegion = new ProtectedCuboidRegion(
 				owner.getName(), 
-				new BlockVector(gp.getX()*128, 0, gp.getY()*128),
-				new BlockVector(gp.getX()*128 + 127, 255, gp.getY()*128 + 127)
+				new BlockVector(gp.getX() * PLOT_SIZE, 0, gp.getY() * PLOT_SIZE),
+				new BlockVector((gp.getX() + 1) * PLOT_SIZE - 1, 255, (gp.getY() + 1) * PLOT_SIZE - 1)
 				);
 	}
 	
@@ -39,7 +41,10 @@ public class Plot {
 	}
 	
 	public void teleportTo(Player p){
-		p.teleport(new Location(plugin.getPlotWorld(), gridPosition.getX()*128, 4, gridPosition.getX()*128));
+		p.teleport(new Location(plugin.getPlotWorld(), 
+								gridPosition.getX() * PLOT_SIZE, 
+								4, 
+								gridPosition.getY() * PLOT_SIZE));
 	}
 
 	public String getName() {
