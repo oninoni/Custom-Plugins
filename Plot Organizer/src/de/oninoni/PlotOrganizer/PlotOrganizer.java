@@ -52,7 +52,7 @@ public class PlotOrganizer extends JavaPlugin{
 	}
 	
 	public void onDisable() {
-		
+		plotManager.savePlots();
 	}
 	
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
