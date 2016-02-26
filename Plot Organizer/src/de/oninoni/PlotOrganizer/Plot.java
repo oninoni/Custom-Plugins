@@ -1,6 +1,8 @@
 package de.oninoni.PlotOrganizer;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
@@ -39,5 +41,9 @@ public class Plot {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public OfflinePlayer getOwner(){
+		return Bukkit.getOfflinePlayer(protectedCuboidRegion.getOwners().getUniqueIds().);		
 	}
 }

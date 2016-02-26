@@ -2,6 +2,7 @@ package de.oninoni.PlotOrganizer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -60,10 +61,20 @@ public class PlotManager {
 		GridPosition gridPosition = getFreeGridPosition();
 		int plotID = plots.size();
 		plots.add(new Plot(gridPosition, plugin));
-		ArrayList<Integer> plots = new ArrayList<>();
+		ArrayList<Integer> plots;
+		if (!playerPlots.containsKey(p))
+			plots = new ArrayList<>();
+		else
+			plots = playerPlots.get(p);
 		plots.add(plotID);
 		playerPlots.put(p, plots);
 		favoritePlots.put(p, plotID);
+		savePlots();
+	}
+	
+	public void delPlot(int plotID){
+		// check for players with that plot
+
 	}
 	
 	public void tpToFavorite(Player p){
