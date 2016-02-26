@@ -34,7 +34,12 @@ public class PlotOrganizer extends JavaPlugin{
 			getLogger().warning("World Guard missing!");
 		}
 		
-		plotWorld = getServer().getWorld("PlotWorld");
+		if(!(getConfig().getKeys(false).size() > 0)){
+			getLogger().info("Loading Default Config!");
+			saveDefaultConfig();
+		}
+		
+		plotWorld = getServer().getWorld(getConfig().getString("world"));
 		
 		plotManager = new PlotManager(this);
 		
