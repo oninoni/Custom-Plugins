@@ -27,10 +27,10 @@ public class Plot {
 		name = owner.getPlayer().getName() + "'s Plot";
 		plugin = pl;
 		protectedCuboidRegion = new ProtectedCuboidRegion(
-				owner.getName(), 
-				new BlockVector(gp.getX() * PLOT_SIZE, 0, gp.getY() * PLOT_SIZE),
-				new BlockVector((gp.getX() + 1) * PLOT_SIZE - 1, 255, (gp.getY() + 1) * PLOT_SIZE - 1)
-				);
+			owner.getName(), 
+			new BlockVector(gp.getX() * PLOT_SIZE, 0, gp.getY() * PLOT_SIZE),
+			new BlockVector((gp.getX() + 1) * PLOT_SIZE - 1, 255, (gp.getY() + 1) * PLOT_SIZE - 1)
+		);
 		RegionManager regionManager = plugin.getWorldGuard().getRegionManager(plugin.getPlotWorld());
 		regionManager.addRegion(protectedCuboidRegion);
 		try {
@@ -50,9 +50,10 @@ public class Plot {
 	
 	public void teleportTo(Player p){
 		p.teleport(new Location(plugin.getPlotWorld(), 
-								gridPosition.getX() * PLOT_SIZE, 
-								4, 
-								gridPosition.getY() * PLOT_SIZE));
+			gridPosition.getX() * PLOT_SIZE, 
+			4,
+			gridPosition.getY() * PLOT_SIZE)
+		);
 	}
 
 	public String getName() {

@@ -8,4 +8,4 @@ commands:
     description: For Managing Plots
     aliases: [po, PlotOrganizer]
     permission: plotManager.core
-    usage: Do /pl help for Help!
+    usage: Do /plot help for Help!
