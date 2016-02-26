@@ -8,6 +8,8 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import com.sk89q.worldedit.BlockVector;
+import com.sk89q.worldguard.LocalPlayer;
+import com.sk89q.worldguard.domains.DefaultDomain;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 
@@ -26,19 +28,40 @@ public class Plot {
 		gridPosition = gp;		
 		name = owner.getPlayer().getName() + "'s Plot";
 		plugin = pl;
-		protectedCuboidRegion = new ProtectedCuboidRegion(
-			getPlotName(id),
-			new BlockVector(gp.getX() * PLOT_SIZE, 1, gp.getY() * PLOT_SIZE),
-			new BlockVector((gp.getX() + 1) * PLOT_SIZE - 1, 255, (gp.getY() + 1) * PLOT_SIZE - 1)
-		);
-		RegionManager regionManager = plugin.getWorldGuard().getRegionManager(plugin.getPlotWorld());
-		if (regionManager.getRegion(getPlotName(id)) == null)
+		
+		if(plugin.getWorldGuard().getRegionManager(plugin.getPlotWorld()).hasRegion(getPlotName(id))){
+			OfflinePlayer oldOwner = (OfflinePlayer) protectedCuboidRegion.getOwners().getPlayers().toArray()[0];
+			if(oldOwner == null){
+				
+			}else{
+				if(oldOwner.getUniqueId() == owner.getUniqueId()){
+					protectedCuboidRegion = (ProtectedCuboidRegion) plugin.getWorldGuard().getRegionManager(plugin.getPlotWorld()).getRegion(getPlotName(id));
+				}else{
+					plugin.getServer().broadcastMessage("[PlotOrganizer] ERROR! Owner != New Owner !!!");
+				}
+			}
+		}else{
+			protectedCuboidRegion = new ProtectedCuboidRegion(
+				getPlotName(id),
+				new BlockVector(gp.getX() * PLOT_SIZE, 1, gp.getY() * PLOT_SIZE),
+				new BlockVector((gp.getX() + 1) * PLOT_SIZE - 1, 255, (gp.getY() + 1) * PLOT_SIZE - 1)
+			);
+			DefaultDomain owners = new DefaultDomain();
+			owners.addPlayer(owner.getUniqueId());
+			
+			protectedCuboidRegion.setOwners(owners);
+			
+			RegionManager regionManager = plugin.getWorldGuard().getRegionManager(plugin.getPlotWorld());
 			regionManager.addRegion(protectedCuboidRegion);
-		try {
-			regionManager.save();
-	    } catch (Exception e) {
-	        plugin.getLogger().warning("Failed to write region: "  + e.getMessage() );
-	    }
+			
+			try {
+				regionManager.save();
+			} catch (Exception e) {
+			     plugin.getLogger().warning("Failed to write region: "  + e.getMessage() );
+			}
+		}
+		
+		
 	}
 	
 	public GridPosition getGridPosition() {
