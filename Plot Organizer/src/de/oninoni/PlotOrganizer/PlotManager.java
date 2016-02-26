@@ -4,18 +4,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.bukkit.OfflinePlayer;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 public class PlotManager {
 	
-	PlotOrganizer plugin;
+	private PlotOrganizer plugin;
 	
-	ArrayList<Plot> plots;
-	HashMap<OfflinePlayer, ArrayList<Integer>> playerPlots;
-	HashMap<OfflinePlayer, Integer> favoritePlots;
+	private PlotManagerData plotManagerData;
 	
-	public PlotManager(PlotOrganizer p){
-		plugin = p;
+	private ArrayList<Plot> plots;
+	private HashMap<OfflinePlayer, ArrayList<Integer>> playerPlots;
+	private HashMap<OfflinePlayer, Integer> favoritePlots;
+	
+	public PlotManager(PlotOrganizer pl){
+		plugin = pl;
+		plotManagerData = new PlotManagerData(pl);
 		plots = new ArrayList<>();
 		playerPlots = new HashMap<>();
 		favoritePlots = new HashMap<>();
@@ -59,7 +63,7 @@ public class PlotManager {
 	public void addPlot(OfflinePlayer p){
 		GridPosition gridPosition = getFreeGridPosition();
 		int plotID = plots.size();
-		plots.add(new Plot(gridPosition, plugin, p));
+		plots.add(new Plot(gridPosition, plugin, p, plotID));
 		ArrayList<Integer> plots;
 		if (!playerPlots.containsKey(p))
 			plots = new ArrayList<>();
@@ -88,11 +92,9 @@ public class PlotManager {
 	
 	public void tpToName(Player p, String name){
 		for (Plot plot : plots) {
-			if(plot.getOwner() == p){
-				if(plot.getName() == name){
-					plot.teleportTo(p);
-					return;
-				}
+			if(plot.getOwner() == p && plot.getName() == name){
+				plot.teleportTo(p);
+				return;
 			}
 		}
 	}
@@ -102,7 +104,24 @@ public class PlotManager {
 	}
 	
 	public void savePlots(){
+		FileConfiguration config = plotManagerData.getConfig();
 		
+		for (Plot plot : plots) {
+			int id = plots.indexOf(plot);
+			GridPosition gp = plot.getGridPosition();
+			config.set("plots." + id + ".pos.x", gp.getX());
+			config.set("plots." + id + ".pos.y", gp.getY());
+			config.set("plots." + id + ".name", plot.getName());
+		}
+		
+		for (OfflinePlayer key : playerPlots.keySet()){
+			String playerUUID = key.getUniqueId().toString();
+			for (int i = 0; i < playerPlots.get(key).size(); i++)
+				config.set("player." + playerUUID + ".allPlots." + i, playerPlots.get(key).get(i));
+			config.set("player." + playerUUID + ".favPlot", favoritePlots.get(key));
+		}
+		
+		plotManagerData.saveConfig();
 	}
 	
 	public void playerEntered(Player p){
