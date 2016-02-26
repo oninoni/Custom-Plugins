@@ -10,6 +10,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
+import com.sk89q.worldguard.domains.DefaultDomain;
+
 public class PlotManager {
 	
 	private PlotOrganizer plugin;
@@ -82,9 +84,11 @@ public class PlotManager {
 	
 	public void delPlot(int plotID){
 		OfflinePlayer player = plots.get(plotID).getOwner();
+		plots.get(plotID).getProtectedCuboidRegion().setOwners(new DefaultDomain());
 		plots.remove(plotID);
 		playerPlots.remove(player);
 		favoritePlots.remove(player);
+		
 		savePlots();
 	}
 	
