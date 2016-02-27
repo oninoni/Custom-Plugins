@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -38,7 +39,7 @@ public class PlotManager {
 		return true;
 	}
 
-	public GridPosition getFreeGridPosition(){
+	private GridPosition getFreeGridPosition(){
 		int x = 0, y = 0, dirStep = 0, blocksLeft = 1;
 		while (!gridPositionFree(new GridPosition(x, y))){
 			switch (dirStep % 4)
@@ -86,7 +87,8 @@ public class PlotManager {
 			plotlist = playerPlots.get(p);
 		plotlist.add(plotID);
 		playerPlots.put(p, plotlist);
-		favoritePlots.put(p, plotID);
+		if (!favoritePlots.containsKey(p)) // only the first plot should be favorited
+			favoritePlots.put(p, plotID);
 		savePlots();
 	}
 	
@@ -144,7 +146,6 @@ public class PlotManager {
 		
 		for (String key : config.getConfigurationSection("player").getKeys(false)) {
 			ConfigurationSection cs = config.getConfigurationSection("player." + key);
-			plugin.getLogger().info("UUID: " + key);
 			ArrayList<Integer> list = new ArrayList<>();
 			for (String index : cs.getConfigurationSection("allPlots").getKeys(false))
 				list.add(Integer.parseInt(index));
@@ -185,5 +186,42 @@ public class PlotManager {
 			addPlot(p, "Default");
 			tpToFavorite(p);
 		}
+	}
+	
+	private void listPlots(OfflinePlayer from, CommandSender to) {
+		ArrayList<Integer> list = playerPlots.get(from);
+		for (int i = 0; i < list.size(); i++){
+			Plot plot = plots.get(list.get(i));
+			GridPosition l = plot.getGridPosition();
+			String msg = 
+				"§b " + (i + 1) + ") " + 
+				plot.getName() + 
+				" at [ " + l.getX() + " | " + l.getY() + " ]";
+			if (list.get(i) == favoritePlots.get(from))
+				msg += " §a(favorited)";
+			to.sendMessage(msg);
+		}	
+	}
+
+	// show own list
+	public void showList(Player player) {			
+		if (playerPlots.get(player).size() == 0){
+			player.sendMessage("§6You don't have any plots yet!");
+			player.sendMessage("§6Enter the plot world to create one");
+			return;
+		}
+		player.sendMessage("§6Your own Plots:");
+		listPlots(player, player);
+	}
+	
+	// show others list
+	public void showList(String from, CommandSender to) {
+		OfflinePlayer player = Bukkit.getOfflinePlayer(from);
+		if (!playerPlots.containsKey(player)){
+			to.sendMessage("§6" + from + " doesn't have any plots!");
+			return;
+		}
+		to.sendMessage("§6" + from + "'s Plots:");
+		listPlots(player, to);
 	}
 }

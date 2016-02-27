@@ -2,7 +2,6 @@ package de.oninoni.PlotOrganizer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -62,29 +61,45 @@ public class PlotOrganizer extends JavaPlugin{
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if(command.getName().equalsIgnoreCase("plot") && args.length > 0){
 			if(args[0].equalsIgnoreCase("list")){
-				//TODO Add the Command /plot list
+				switch (args.length)
+				{
+				case 1:
+					if (sender instanceof Player){
+						plotManager.showList((Player) sender);
+						return true;
+					}
+					break;
+				case 2:
+					plotManager.showList(args[1], sender);
+					return true;
+				default:
+					sender.sendMessage("§cUsage: /plot list [Owner]");
+					return true;
+				}				
 			}
 			else if(args[0].equalsIgnoreCase("tp")){
-				if(args.length == 1){
+				switch(args.length)
+				{
+				case 1:
 					if(sender instanceof Player){
 						plotManager.tpToFavorite((Player) sender);
 						return true;
 					}
-				}
-				else if(args.length == 2){
+					break;
+				case 2:
 					if(sender instanceof Player){
 						plotManager.tpToName((Player) sender, args[1]);
 						return true;
 					}
-				}
-				else if(args.length == 3){
+					break;
+				case 3:
 					if(sender instanceof Player){
 						plotManager.tpToName((Player) sender, args[1], Bukkit.getOfflinePlayer(args[2]));
 						return true;
 					}
-				}
-				else{
-					sender.sendMessage("/plot tp [Plot Name] [Owner]");
+					break;
+				default:
+					sender.sendMessage("§cUsage: /plot tp [Plot Name] [Owner]");
 					return true;
 				}
 			}
@@ -98,7 +113,7 @@ public class PlotOrganizer extends JavaPlugin{
 							return true;
 						}
 					}else{
-						sender.sendMessage("/plot add <Plot Name> <Player>");
+						sender.sendMessage("§cUsage: /plot add <Plot Name> <Player>");
 						return true;
 					}
 				}
@@ -115,7 +130,7 @@ public class PlotOrganizer extends JavaPlugin{
 		}
 		
 		/* Commands to add:
-		 * 
+		 * fav [name] > no name = current plot, if not in (own) plot error
 		 * 
 		 * 
 		 * 
@@ -133,12 +148,6 @@ public class PlotOrganizer extends JavaPlugin{
 	
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 		List<String> result = new ArrayList<String>();
-		Logger l = getLogger();
-		l.info("TabCompletion Request by " + sender.getName());
-		l.info("Command:    " + command.getName());
-		l.info("Alias:      " + alias);
-		l.info("Parameters: " + args.length);
-		l.info("Parameter0: " + args[0]);
 		if (command.getName().equalsIgnoreCase("plot"))
 		{
 			switch (args.length)
@@ -148,13 +157,7 @@ public class PlotOrganizer extends JavaPlugin{
 				addIfStartsWith("del", args[0], result);
 				addIfStartsWith("list", args[0], result);
 				addIfStartsWith("tp", args[0], result);
-				/*
-				if (("add").startsWith(args[0]))
-					result.add("add");
-				result.add("del");
-				result.add("list");
-				result.add("tp");
-				*/
+				addIfStartsWith("fav", args[0], result);
 				break;
 			}
 		}

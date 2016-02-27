@@ -19,6 +19,10 @@ public class Plot {
 	private GridPosition gridPosition;
 	private String name;
 	
+	/* TODO:
+	 * add Friends to plot oder machen wir das einfach über dir protection?
+	*/
+	
 	private ProtectedCuboidRegion protectedCuboidRegion;
 	
 	private PlotOrganizer plugin;
