@@ -153,7 +153,6 @@ public class PlotOrganizer extends JavaPlugin{
 		 * 
 		 */
 		
-		
 		return false;
 	}
 	
