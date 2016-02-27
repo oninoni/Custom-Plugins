@@ -121,9 +121,15 @@ public class PlotOrganizer extends JavaPlugin{
 			else if(args[0].equalsIgnoreCase("del")){
 				if(sender.hasPermission("plotmanager.core.del")){
 					if(args.length == 2){
-						plotManager.delPlot(Integer.parseInt(args[1]));
-						sender.sendMessage("Plot deleted!");
-						return true;
+						try {
+							int id = Integer.parseInt(args[1]);
+							plotManager.delPlot(id);
+							sender.sendMessage("§6Plot deleted!");							
+						} catch (Exception e) {
+							// TODO: handle exception
+							sender.sendMessage("§cUsage: /plot del <id>");
+						}
+						return true;						
 					}
 				}
 			}

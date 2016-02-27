@@ -96,8 +96,21 @@ public class PlotManager {
 		OfflinePlayer player = plots.get(plotID).getOwner();
 		plots.get(plotID).getProtectedCuboidRegion().setOwners(new DefaultDomain());
 		plots.remove(plotID);
-		playerPlots.remove(player);
-		favoritePlots.remove(player);
+		
+		ArrayList<Integer> list = playerPlots.get(player);		
+		for(int i = 0; i < list.size(); i++){
+			if (list.get(i) == plotID){
+				if (favoritePlots.get(player) == list.remove(i)) {
+					if (list.size() > 0){
+						favoritePlots.put(player, list.get(0));
+					}
+					else{
+						playerPlots.remove(player);
+					}						
+					break;	
+				}
+			}
+		}
 		
 		savePlots();
 	}
