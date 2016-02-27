@@ -130,6 +130,7 @@ public class PlotManager {
 		
 		for (String key : config.getConfigurationSection("plots").getKeys(false)){
 			ConfigurationSection cs = config.getConfigurationSection("plots." + key);
+			
 			GridPosition gp = new GridPosition(
 				cs.getInt("pos.x"),
 				cs.getInt("pos.y")
@@ -141,14 +142,22 @@ public class PlotManager {
 			plots.get(id).setName(cs.getString("name"));
 		}
 		
-		// TODO Possseidon: Add Player Plots and Favorites
+		for (String key : config.getConfigurationSection("player").getKeys(false)) {
+			ConfigurationSection cs = config.getConfigurationSection("player." + key);
+			plugin.getLogger().info("UUID: " + key);
+			ArrayList<Integer> list = new ArrayList<>();
+			for (String index : cs.getConfigurationSection("allPlots").getKeys(false))
+				list.add(Integer.parseInt(index));
+			playerPlots.put(Bukkit.getOfflinePlayer(UUID.fromString(key)), list);
+			favoritePlots.put(Bukkit.getOfflinePlayer(UUID.fromString(key)), cs.getInt("favPlot"));
+		}
 	}
 	
 	public void savePlots(){
 		FileConfiguration config = plotManagerData.getConfig();
 		
 		config.set("plots", null);
-		config.set("playerPlots", null);
+		config.set("player", null);
 		
 		for (Integer id : plots.keySet()) {
 			Plot plot = plots.get(id);
