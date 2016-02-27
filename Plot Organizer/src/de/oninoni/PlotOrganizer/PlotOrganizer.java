@@ -122,16 +122,25 @@ public class PlotOrganizer extends JavaPlugin{
 			}
 			else if(args[0].equalsIgnoreCase("del")){
 				if(sender.hasPermission("plotmanager.core.del")){
-					if(args.length == 2){
+					switch(args.length){
+					case 2:
 						try {
 							int id = Integer.parseInt(args[1]);
 							plotManager.delPlot(id);
 							sender.sendMessage("§6Plot deleted!");							
 						} catch (Exception e) {
-							// TODO: handle exception
 							sender.sendMessage("§cUsage: /plot del <id>");
 						}
-						return true;						
+						return true;
+					case 3:
+						int id = plotManager.getIDByOwnerName(Bukkit.getOfflinePlayer(args[1]), args[2]);
+						if (id == -1)
+							sender.sendMessage("§cUsage: /plot del <player> <plotname>");
+						else{
+							plotManager.delPlot(id);
+							sender.sendMessage("§6Plot deleted!");
+						}
+						return true;
 					}
 				}
 			}

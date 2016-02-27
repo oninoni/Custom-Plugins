@@ -109,6 +109,7 @@ public class PlotManager {
 					}
 					else{
 						playerPlots.remove(player);
+						favoritePlots.remove(player);
 					}						
 					break;	
 				}
@@ -239,5 +240,26 @@ public class PlotManager {
 		}
 		to.sendMessage("§6" + from + "'s Plots:");
 		listPlots(player, to);
+	}
+	
+	public int getIDByOwnerName(OfflinePlayer owner, String name){
+		for (Integer id : plots.keySet()) {
+			Plot plot = plots.get(id);
+			
+			plugin.getLogger().info(plot.getOwner() + " = " + owner);
+			plugin.getLogger().info(plot.getName() + " = " + name);
+			
+			if (plot.getOwner().equals(owner) && plot.getName() == name) {
+				return id;
+			}
+		}
+		return -1;
+	}
+	
+	public Plot getPlotByOwnerName(OfflinePlayer owner, String name){
+		int id = getIDByOwnerName(owner, name);
+		if (id == -1)
+			return null;
+		return plots.get(id);
 	}
 }
