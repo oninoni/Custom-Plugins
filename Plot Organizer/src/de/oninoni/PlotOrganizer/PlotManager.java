@@ -18,22 +18,22 @@ public class PlotManager {
 	
 	private PlotManagerData plotManagerData;
 	
-	private ArrayList<Plot> plots;
+	private HashMap<Integer, Plot> plots;	
 	private HashMap<OfflinePlayer, ArrayList<Integer>> playerPlots;
 	private HashMap<OfflinePlayer, Integer> favoritePlots;
 	
 	public PlotManager(PlotOrganizer pl){
 		plugin = pl;
 		plotManagerData = new PlotManagerData(pl);
-		plots = new ArrayList<>();
+		plots = new HashMap<>();
 		playerPlots = new HashMap<>();
 		favoritePlots = new HashMap<>();
 		loadPlots();
 	}
 	
 	private boolean gridPositionFree(GridPosition gp){
-		for (Plot plot : plots)
-			if (plot.getGridPosition().equals(gp))
+		for (Integer key : plots.keySet())
+			if (plots.get(key).getGridPosition().equals(gp))
 				return false;
 		return true;
 	}
@@ -65,19 +65,27 @@ public class PlotManager {
 		return new GridPosition(x, y);
 	}
 	
+	private int getFreePlotID(){
+		int i = 0;
+		while (true) {
+			if (!plots.containsKey(i))
+				return i;			
+		}
+	}
+	
 	public void addPlot(OfflinePlayer p, String name){
 		GridPosition gridPosition = getFreeGridPosition();
-		int plotID = plots.size();
+		int plotID = getFreePlotID();
 		Plot plot = new Plot(gridPosition, plugin, p, plotID);
 		plot.setName(name);
-		plots.add(plot);
-		ArrayList<Integer> plots;
+		plots.put(plotID, plot);
+		ArrayList<Integer> plotlist;
 		if (!playerPlots.containsKey(p))
-			plots = new ArrayList<>();
+			plotlist = new ArrayList<>();
 		else
-			plots = playerPlots.get(p);
-		plots.add(plotID);
-		playerPlots.put(p, plots);
+			plotlist = playerPlots.get(p);
+		plotlist.add(plotID);
+		playerPlots.put(p, plotlist);
 		favoritePlots.put(p, plotID);
 		savePlots();
 	}
@@ -104,7 +112,8 @@ public class PlotManager {
 	}
 	
 	public void tpToName(Player p, String name, OfflinePlayer owner){
-		for (Plot plot : plots) {
+		for (Integer key : plots.keySet()) {
+			Plot plot = plots.get(key);
 			if(plot.getOwner() == owner && plot.getName() == name){
 				plot.teleportTo(p);
 				return;
@@ -128,7 +137,7 @@ public class PlotManager {
 			int id = Integer.parseInt(key);
 			
 			OfflinePlayer p = Bukkit.getOfflinePlayer(UUID.fromString(cs.getString("UUID")));
-			plots.set(id, new Plot(gp, plugin, p, id));
+			plots.put(id, new Plot(gp, plugin, p, id));
 			plots.get(id).setName(cs.getString("name"));
 		}
 	}
@@ -136,8 +145,8 @@ public class PlotManager {
 	public void savePlots(){
 		FileConfiguration config = plotManagerData.getConfig();
 		
-		for (Plot plot : plots) {
-			int id = plots.indexOf(plot);
+		for (Integer id : plots.keySet()) {
+			Plot plot = plots.get(id);
 			GridPosition gp = plot.getGridPosition();
 			config.set("plots." + id + ".pos.x", gp.getX());
 			config.set("plots." + id + ".pos.y", gp.getY());
@@ -163,5 +172,4 @@ public class PlotManager {
 			tpToFavorite(p);
 		}
 	}
-	
 }
