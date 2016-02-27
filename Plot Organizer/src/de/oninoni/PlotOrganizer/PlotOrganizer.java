@@ -131,7 +131,7 @@ public class PlotOrganizer extends JavaPlugin{
 							// TODO: handle exception
 							sender.sendMessage("§cUsage: /plot del <id>");
 						}
-						return true;						
+						return true;
 					}
 				}
 			}
