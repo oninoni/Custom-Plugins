@@ -221,7 +221,7 @@ public class PlotManager {
 
 	// show own list
 	public void showList(Player player) {			
-		if (playerPlots.get(player).size() == 0){
+		if (!playerPlots.containsKey(player)){
 			player.sendMessage("§6You don't have any plots yet!");
 			player.sendMessage("§6Enter the plot world to create one");
 			return;
