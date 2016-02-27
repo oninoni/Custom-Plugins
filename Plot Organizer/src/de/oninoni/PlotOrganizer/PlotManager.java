@@ -148,7 +148,7 @@ public class PlotManager {
 		FileConfiguration config = plotManagerData.getConfig();
 		
 		config.set("plots", null);
-		config.set("playerPlots", null);
+		config.set("player", null);
 		
 		for (Integer id : plots.keySet()) {
 			Plot plot = plots.get(id);
