@@ -67,16 +67,19 @@ public class PlotManager {
 	}
 	
 	private int getFreePlotID(){
-		int i = 0;
+		int i = -1;
 		while (true) {
-			if (!plots.containsKey(i))
+			if (!plots.containsKey(++i))
 				return i;			
 		}
 	}
 	
 	public void addPlot(OfflinePlayer p, String name){
+		plugin.getLogger().info("Position searching...");
 		GridPosition gridPosition = getFreeGridPosition();
+		plugin.getLogger().info("Position found: " + gridPosition.getX() + " / " + gridPosition.getY());
 		int plotID = getFreePlotID();
+		plugin.getLogger().info("Plot ID found: " + plotID);
 		Plot plot = new Plot(gridPosition, plugin, p, plotID);
 		plot.setName(name);
 		plots.put(plotID, plot);
