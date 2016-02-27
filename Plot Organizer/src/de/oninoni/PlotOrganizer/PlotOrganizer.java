@@ -109,6 +109,15 @@ public class PlotOrganizer extends JavaPlugin{
 				}
 			}
 		}
+		
+		/* Commands to add:
+		 * 
+		 * 
+		 * 
+		 * 
+		 */
+		
+		
 		return false;
 	}
 	

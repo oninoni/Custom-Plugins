@@ -140,6 +140,8 @@ public class PlotManager {
 			plots.put(id, new Plot(gp, plugin, p, id));
 			plots.get(id).setName(cs.getString("name"));
 		}
+		
+		// TODO Possseidon: Add Player Plots and Favorites
 	}
 	
 	public void savePlots(){
