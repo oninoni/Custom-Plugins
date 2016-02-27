@@ -108,9 +108,11 @@ public class PlotOrganizer extends JavaPlugin{
 					if(args.length == 3){
 						OfflinePlayer p = Bukkit.getOfflinePlayer(args[2]);
 						if(p.isOnline()){
-							plotManager.addPlot(p, args[2]);
+							plotManager.addPlot(p, args[1]);
 							sender.sendMessage("Plot added!");
 							return true;
+						}else{
+							sender.sendMessage("The Player you choose ");
 						}
 					}else{
 						sender.sendMessage("§cUsage: /plot add <Plot Name> <Player>");
