@@ -29,6 +29,8 @@ public class Plot {
 		plugin = pl;
 		
 		if(plugin.getWorldGuard().getRegionManager(plugin.getPlotWorld()).hasRegion(getPlotName(id))){
+			plugin.getLogger().info(getPlotName(id));
+			
 			OfflinePlayer oldOwner = (OfflinePlayer) protectedCuboidRegion.getOwners().getPlayers().toArray()[0];
 			if(oldOwner == null){
 				
