@@ -29,15 +29,12 @@ public class Plot {
 		plugin = pl;
 		
 		if(plugin.getWorldGuard().getRegionManager(plugin.getPlotWorld()).hasRegion(getPlotName(id))){
-			OfflinePlayer oldOwner = (OfflinePlayer) protectedCuboidRegion.getOwners().getPlayers().toArray()[0];
-			if(oldOwner == null){
+			protectedCuboidRegion = (ProtectedCuboidRegion) plugin.getWorldGuard().getRegionManager(plugin.getPlotWorld()).getRegion(getPlotName(id));
+			if(protectedCuboidRegion.getOwners().getPlayers().toArray().length == 0){
+				DefaultDomain owners = new DefaultDomain();
+				owners.addPlayer(owner.getUniqueId());
 				
-			}else{
-				if(oldOwner.getUniqueId() == owner.getUniqueId()){
-					protectedCuboidRegion = (ProtectedCuboidRegion) plugin.getWorldGuard().getRegionManager(plugin.getPlotWorld()).getRegion(getPlotName(id));
-				}else{
-					plugin.getServer().broadcastMessage("[PlotOrganizer] ERROR! Owner != New Owner !!!");
-				}
+				protectedCuboidRegion.setOwners(owners);
 			}
 		}else{
 			protectedCuboidRegion = new ProtectedCuboidRegion(
