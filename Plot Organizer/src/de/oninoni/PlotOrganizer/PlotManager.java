@@ -145,6 +145,9 @@ public class PlotManager {
 	public void savePlots(){
 		FileConfiguration config = plotManagerData.getConfig();
 		
+		config.set("plots", null);
+		config.set("playerPlots", null);
+		
 		for (Integer id : plots.keySet()) {
 			Plot plot = plots.get(id);
 			GridPosition gp = plot.getGridPosition();
