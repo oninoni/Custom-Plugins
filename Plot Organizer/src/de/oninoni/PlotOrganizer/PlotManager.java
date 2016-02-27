@@ -37,7 +37,7 @@ public class PlotManager {
 				return false;
 		return true;
 	}
-	
+
 	public GridPosition getFreeGridPosition(){
 		int x = 0, y = 0, dirStep = 0, blocksLeft = 1;
 		while (!gridPositionFree(new GridPosition(x, y))){
@@ -148,7 +148,7 @@ public class PlotManager {
 		FileConfiguration config = plotManagerData.getConfig();
 		
 		config.set("plots", null);
-		config.set("player", null);
+		config.set("playerPlots", null);
 		
 		for (Integer id : plots.keySet()) {
 			Plot plot = plots.get(id);
