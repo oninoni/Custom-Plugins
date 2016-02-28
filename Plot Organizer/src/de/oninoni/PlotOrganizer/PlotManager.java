@@ -79,13 +79,29 @@ public class PlotManager {
 	
 	private boolean isPlotNameFree(OfflinePlayer p, String name){
 		ArrayList<Integer> playerPlotIDs = playerPlots.get(p);
-		for (Integer key : playerPlotIDs) {
-			Plot plot = plots.get(key);
-			if(plot.getName().equalsIgnoreCase(name))
-				return false;
+		if(playerPlotIDs != null){
+			for (Integer key : playerPlotIDs) {
+				Plot plot = plots.get(key);
+				if(plot.getName().equalsIgnoreCase(name))
+					return false;
+			}
 		}
-		
 		return true;
+	}
+	
+	public void changePlotName(Player p, String oldName, String newName){
+		int plotId = getIDByOwnerName((OfflinePlayer) p, oldName);
+		if(plotId == -1){
+			p.sendMessage("§6No such Plot with the name " + oldName + "!");
+			return;
+		}
+		if(!isPlotNameFree(p, newName)){
+			p.sendMessage("§6A Plot with the Name " + newName + " does already exist!");
+			return;
+		}
+		Plot plot = plots.get(plotId);
+		plot.setName(newName);
+		p.sendMessage("§6Plot " + oldName + " is now called " + newName);
 	}
 	
 	public boolean addPlot(OfflinePlayer p, String name){
@@ -130,7 +146,7 @@ public class PlotManager {
 					else{
 						playerPlots.remove(player);
 						favoritePlots.remove(player);
-					}						
+					}
 					break;
 				}
 			}
@@ -252,6 +268,7 @@ public class PlotManager {
 	}
 	
 	// show others list
+	@SuppressWarnings("deprecation")
 	public void showList(String from, CommandSender to) {
 		OfflinePlayer player = Bukkit.getOfflinePlayer(from);
 		if (!playerPlots.containsKey(player)){

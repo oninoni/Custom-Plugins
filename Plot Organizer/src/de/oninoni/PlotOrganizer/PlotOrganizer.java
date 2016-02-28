@@ -57,6 +57,7 @@ public class PlotOrganizer extends JavaPlugin{
 		plotManager.savePlots();
 	}
 	
+	@SuppressWarnings("deprecation")
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if(command.getName().equalsIgnoreCase("plot") && args.length > 0){
 			if(args[0].equalsIgnoreCase("list")){
@@ -104,12 +105,12 @@ public class PlotOrganizer extends JavaPlugin{
 						OfflinePlayer p = Bukkit.getOfflinePlayer(args[1]);
 						if(p.isOnline()){
 							if(plotManager.addPlot(p, args[2])){
-								sender.sendMessage("§6Plot added!");
+								sender.sendMessage("§6Plot §f" + args[2] + "§6 added for player §f" + args[1] + "§6!");
 							}else{
-								sender.sendMessage("§6A Plot with that name does already exist!");
+								sender.sendMessage("§6Player §f" + args[1] + "§6 does already have a Plot with the name §f" + args[2] + "§6!");
 							}
 						}else{
-							sender.sendMessage("§6That player is not online!");
+							sender.sendMessage("§6Player §f" + args[1] + "§6 is not online!");
 						}
 					}else{
 						sender.sendMessage("§cUsage: /plot add <player> <plotname>");
@@ -125,7 +126,7 @@ public class PlotOrganizer extends JavaPlugin{
 						try {
 							int id = Integer.parseInt(args[1]);
 							plotManager.delPlot(id);
-							sender.sendMessage("§6Plot deleted!");							
+							sender.sendMessage("§6Plot deleted! (ID: §f" + id + "§6)");							
 						} catch (Exception e) {
 							sender.sendMessage("§cUsage: /plot del <id>");
 						}
@@ -133,10 +134,10 @@ public class PlotOrganizer extends JavaPlugin{
 					case 3:
 						int id = plotManager.getIDByOwnerName(Bukkit.getOfflinePlayer(args[1]), args[2]);
 						if (id == -1)
-							sender.sendMessage("§6" + args[1] + " doesn't have a plot called " + args[2]);
+							sender.sendMessage("§f" + args[1] + "§6 doesn't have a plot called §f" + args[2] + "§6!");
 						else{
 							plotManager.delPlot(id);
-							sender.sendMessage("§6Plot deleted!");
+							sender.sendMessage("§6Plot §f" + args[2] + "§6 of Player §f" + args[1] + "§6 deleted!");
 						}
 						return true;
 					}
@@ -149,6 +150,16 @@ public class PlotOrganizer extends JavaPlugin{
 					}
 				}else{
 					sender.sendMessage("§cUsage: /plot fav <plotname>");
+				}
+				return true;
+			}
+			else if(args[0].equalsIgnoreCase("rename")){
+				if(args.length == 3){
+					if(sender instanceof Player){
+						plotManager.changePlotName((Player)sender, args[1], args[2]);
+					}
+				}else{
+					sender.sendMessage("§cUsage: /plot rename <oldName> <newName>");
 				}
 				return true;
 			}
