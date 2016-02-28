@@ -57,6 +57,7 @@ public class PlotOrganizer extends JavaPlugin{
 		plotManager.savePlots();
 	}
 	
+	// TODO: getOfflinePlayers mit name selber schreiben
 	@SuppressWarnings("deprecation")
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if(command.getName().equalsIgnoreCase("plot") && args.length > 0){
