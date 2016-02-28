@@ -15,6 +15,8 @@ import com.sk89q.worldguard.domains.DefaultDomain;
 
 public class PlotManager {
 	
+	static int MAX_PLOTS = Integer.MAX_VALUE;
+	
 	private PlotOrganizer plugin;
 	
 	private PlotManagerData plotManagerData;
@@ -68,10 +70,11 @@ public class PlotManager {
 	
 	private int getFreePlotID(){
 		int i = -1;
-		while (true) {
+		while (i < MAX_PLOTS) {
 			if (!plots.containsKey(++i))
 				return i;			
 		}
+		return -1;
 	}
 	
 	public void addPlot(OfflinePlayer p, String name){

@@ -130,7 +130,7 @@ public class PlotOrganizer extends JavaPlugin{
 					case 3:
 						int id = plotManager.getIDByOwnerName(Bukkit.getOfflinePlayer(args[1]), args[2]);
 						if (id == -1)
-							sender.sendMessage("§6" + args[1] + "doesn't have a plot called " + args[2]);
+							sender.sendMessage("§6" + args[1] + " doesn't have a plot called " + args[2]);
 						else{
 							plotManager.delPlot(id);
 							sender.sendMessage("§6Plot deleted!");
