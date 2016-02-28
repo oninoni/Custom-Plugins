@@ -1,6 +1,5 @@
 package de.oninoni.PlotOrganizer;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -22,8 +21,8 @@ public class PlotOrganizer extends JavaPlugin{
 	private WorldGuardPlugin worldGuard;
 	
 	private PlotManager plotManager;
-	
 	private World plotWorld;
+	private TabCompletion tabCompletion;
 	
 	public void onEnable() {
 		worldEdit = (WorldEditPlugin) getServer().getPluginManager().getPlugin("WorldEdit");
@@ -45,9 +44,9 @@ public class PlotOrganizer extends JavaPlugin{
 			saveDefaultConfig();
 		}
 		
-		plotWorld = getServer().getWorld(getConfig().getString("world"));
-		
-		plotManager = new PlotManager(this);
+		plotWorld = getServer().getWorld(getConfig().getString("world"));		
+		plotManager = new PlotManager(this);		
+		tabCompletion = new TabCompletion(this);
 		
 		PlayerChangedWorldListener playerChangedWorldListener = new PlayerChangedWorldListener(this, plotManager);
 		
@@ -159,28 +158,8 @@ public class PlotOrganizer extends JavaPlugin{
 	}
 	
 	// TODO: aus momentanem onTabComplete eigene Klasse machen, übersichtlicher
-	private void addIfStartsWith(String fullArg, String partArg, List<String> list){
-		if (fullArg.startsWith(partArg))
-			list.add(fullArg);
-	}
-	
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-		List<String> result = new ArrayList<String>();
-		if (command.getName().equalsIgnoreCase("plot"))
-		{
-			switch (args.length)
-			{
-			case 1:
-				addIfStartsWith("add", args[0], result);
-				addIfStartsWith("del", args[0], result);
-				addIfStartsWith("list", args[0], result);
-				addIfStartsWith("tp", args[0], result);
-				addIfStartsWith("fav", args[0], result);
-				break;
-			}
-		}
-		
-		return result;
+		return tabCompletion.complete(sender, command, args);
 	}
 	
 	public WorldEditPlugin getWorldEdit() {
