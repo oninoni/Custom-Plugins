@@ -88,6 +88,21 @@ public class PlotManager {
 		return true;
 	}
 	
+	public void changePlotName(Player p, String oldName, String newName){
+		int plotId = getIDByOwnerName((OfflinePlayer) p, oldName);
+		if(plotId == -1){
+			p.sendMessage("§6No such Plot with the name " + oldName + "!");
+			return;
+		}
+		if(!isPlotNameFree(p, newName)){
+			p.sendMessage("§6A Plot with the Name " + newName + " does already exist!");
+			return;
+		}
+		Plot plot = plots.get(plotId);
+		plot.setName(newName);
+		p.sendMessage("§6Plot " + oldName + " is now called " + newName);
+	}
+	
 	public boolean addPlot(OfflinePlayer p, String name){
 		if(isPlotNameFree(p, name)){
 			plugin.getLogger().info("Position searching...");
@@ -130,7 +145,7 @@ public class PlotManager {
 					else{
 						playerPlots.remove(player);
 						favoritePlots.remove(player);
-					}						
+					}
 					break;
 				}
 			}
