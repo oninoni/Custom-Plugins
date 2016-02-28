@@ -58,6 +58,7 @@ public class PlotOrganizer extends JavaPlugin{
 		plotManager.savePlots();
 	}
 	
+	@SuppressWarnings("deprecation")
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if(command.getName().equalsIgnoreCase("plot") && args.length > 0){
 			if(args[0].equalsIgnoreCase("list")){

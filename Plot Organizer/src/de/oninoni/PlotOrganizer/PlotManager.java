@@ -79,12 +79,13 @@ public class PlotManager {
 	
 	private boolean isPlotNameFree(OfflinePlayer p, String name){
 		ArrayList<Integer> playerPlotIDs = playerPlots.get(p);
-		for (Integer key : playerPlotIDs) {
-			Plot plot = plots.get(key);
-			if(plot.getName().equalsIgnoreCase(name))
-				return false;
+		if(playerPlotIDs != null){
+			for (Integer key : playerPlotIDs) {
+				Plot plot = plots.get(key);
+				if(plot.getName().equalsIgnoreCase(name))
+					return false;
+			}
 		}
-		
 		return true;
 	}
 	
@@ -267,6 +268,7 @@ public class PlotManager {
 	}
 	
 	// show others list
+	@SuppressWarnings("deprecation")
 	public void showList(String from, CommandSender to) {
 		OfflinePlayer player = Bukkit.getOfflinePlayer(from);
 		if (!playerPlots.containsKey(player)){

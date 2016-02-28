@@ -36,7 +36,7 @@ public class Plot {
 			
 			protectedCuboidRegion = (ProtectedCuboidRegion) plugin.getWorldGuard().getRegionManager(plugin.getPlotWorld()).getRegion(getPlotName(id));
 			if(protectedCuboidRegion.getOwners().getPlayers().toArray().length == 0){
-				protectedCuboidRegion.getOwners().addPlayer(owner.getUniqueId());
+				protectedCuboidRegion.getOwners().addPlayer(plugin.getWorldGuard().wrapOfflinePlayer(owner));
 			}
 		}else{
 			protectedCuboidRegion = new ProtectedCuboidRegion(
@@ -44,7 +44,7 @@ public class Plot {
 				new BlockVector(gp.getX() * PLOT_SIZE, 1, gp.getY() * PLOT_SIZE),
 				new BlockVector((gp.getX() + 1) * PLOT_SIZE - 1, 255, (gp.getY() + 1) * PLOT_SIZE - 1)
 			);
-			protectedCuboidRegion.getOwners().addPlayer(owner.getUniqueId());
+			protectedCuboidRegion.getOwners().addPlayer(plugin.getWorldGuard().wrapOfflinePlayer(owner));
 			
 			RegionManager regionManager = plugin.getWorldGuard().getRegionManager(plugin.getPlotWorld());
 			regionManager.addRegion(protectedCuboidRegion);
