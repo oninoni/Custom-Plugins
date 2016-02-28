@@ -75,6 +75,8 @@ public class PlotManager {
 	}
 	
 	public void addPlot(OfflinePlayer p, String name){
+		// TODO: Plot for same Player can not have two plots with same name!
+		
 		plugin.getLogger().info("Position searching...");
 		GridPosition gridPosition = getFreeGridPosition();
 		plugin.getLogger().info("Position found: " + gridPosition.getX() + " / " + gridPosition.getY());
@@ -246,11 +248,11 @@ public class PlotManager {
 	public int getIDByOwnerName(OfflinePlayer owner, String name){
 		for (Integer id : plots.keySet()) {
 			Plot plot = plots.get(id);
+
+			plugin.getLogger().info(Boolean.toString(plot.getOwner().getUniqueId() == owner.getUniqueId()));
 			
-			plugin.getLogger().info(plot.getOwner() + " = " + owner);
-			plugin.getLogger().info(plot.getName() + " = " + name);
-			
-			if (plot.getOwner().equals(owner) && plot.getName() == name) {
+			if (plot.getOwner().getUniqueId() == owner.getUniqueId() &&
+				plot.getName().equalsIgnoreCase(name)) {
 				return id;
 			}
 		}
@@ -264,13 +266,15 @@ public class PlotManager {
 		return plots.get(id);
 	}
 
-	public void setFavorite(Player p, String name) {
-		int id = getIDByOwnerName(p, name);
+	public void setFavorite(Player owner, String name) {
+		int id = getIDByOwnerName(owner, name);
 		if (id == -1){
-			p.sendMessage("§6You don't have a plot called '" + name + "'!");
-			p.sendMessage("§6Use /plot list to get a list of all your plots");
+			owner.sendMessage("§6You don't have a plot called '" + name + "'!");
+			owner.sendMessage("§6Use /plot list to get a list of all your plots");
+			return;
 		}
-		favoritePlots.put(p, id);
+		favoritePlots.put(owner, id);
+		owner.sendMessage("§6" + name + " is now your favorite plot!");
 		savePlots();
 	}
 }
