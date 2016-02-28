@@ -15,6 +15,8 @@ import com.sk89q.worldguard.domains.DefaultDomain;
 
 public class PlotManager {
 	
+	static int MAX_PLOTS = Integer.MAX_VALUE;
+	
 	private PlotOrganizer plugin;
 	
 	private PlotManagerData plotManagerData;
@@ -68,13 +70,16 @@ public class PlotManager {
 	
 	private int getFreePlotID(){
 		int i = -1;
-		while (true) {
+		while (i < MAX_PLOTS) {
 			if (!plots.containsKey(++i))
 				return i;			
 		}
+		return -1;
 	}
 	
 	public void addPlot(OfflinePlayer p, String name){
+		// TODO: Plot for same Player can not have two plots with same name!
+		
 		plugin.getLogger().info("Position searching...");
 		GridPosition gridPosition = getFreeGridPosition();
 		plugin.getLogger().info("Position found: " + gridPosition.getX() + " / " + gridPosition.getY());
@@ -92,6 +97,7 @@ public class PlotManager {
 		playerPlots.put(p, plotlist);
 		if (!favoritePlots.containsKey(p)) // only the first plot should be favorited
 			favoritePlots.put(p, plotID);
+		
 		savePlots();
 	}
 	
@@ -109,6 +115,7 @@ public class PlotManager {
 					}
 					else{
 						playerPlots.remove(player);
+						favoritePlots.remove(player);
 					}						
 					break;
 				}
@@ -239,5 +246,38 @@ public class PlotManager {
 		}
 		to.sendMessage("§6" + from + "'s Plots:");
 		listPlots(player, to);
+	}
+	
+	public int getIDByOwnerName(OfflinePlayer owner, String name){
+		for (Integer id : plots.keySet()) {
+			Plot plot = plots.get(id);
+
+			plugin.getLogger().info(Boolean.toString(plot.getOwner().getUniqueId() == owner.getUniqueId()));
+			
+			if (plot.getOwner().getUniqueId() == owner.getUniqueId() &&
+				plot.getName().equalsIgnoreCase(name)) {
+				return id;
+			}
+		}
+		return -1;
+	}
+	
+	public Plot getPlotByOwnerName(OfflinePlayer owner, String name){
+		int id = getIDByOwnerName(owner, name);
+		if (id == -1)
+			return null;
+		return plots.get(id);
+	}
+
+	public void setFavorite(Player owner, String name) {
+		int id = getIDByOwnerName(owner, name);
+		if (id == -1){
+			owner.sendMessage("§6You don't have a plot called '" + name + "'!");
+			owner.sendMessage("§6Use /plot list to get a list of all your plots");
+			return;
+		}
+		favoritePlots.put(owner, id);
+		owner.sendMessage("§6" + name + " is now your favorite plot!");
+		savePlots();
 	}
 }

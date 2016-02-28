@@ -66,16 +66,15 @@ public class PlotOrganizer extends JavaPlugin{
 				case 1:
 					if (sender instanceof Player){
 						plotManager.showList((Player) sender);
-						return true;
 					}
 					break;
 				case 2:
 					plotManager.showList(args[1], sender);
-					return true;
+					break;
 				default:
-					sender.sendMessage("§cUsage: /plot list [Owner]");
-					return true;
+					sender.sendMessage("§cUsage: /plot list [player]");
 				}				
+				return true;
 			}
 			else if(args[0].equalsIgnoreCase("tp")){
 				switch(args.length)
@@ -83,25 +82,22 @@ public class PlotOrganizer extends JavaPlugin{
 				case 1:
 					if(sender instanceof Player){
 						plotManager.tpToFavorite((Player) sender);
-						return true;
 					}
 					break;
 				case 2:
 					if(sender instanceof Player){
 						plotManager.tpToName((Player) sender, args[1]);
-						return true;
 					}
 					break;
 				case 3:
 					if(sender instanceof Player){
 						plotManager.tpToName((Player) sender, args[1], Bukkit.getOfflinePlayer(args[2]));
-						return true;
 					}
 					break;
 				default:
-					sender.sendMessage("§cUsage: /plot tp [Plot Name] [Owner]");
-					return true;
+					sender.sendMessage("§cUsage: /plot tp [plotname] [player]");
 				}
+				return true;
 			}
 			else if(args[0].equalsIgnoreCase("add")){
 				if(sender.hasPermission("plotmanager.core.add")){
@@ -109,31 +105,50 @@ public class PlotOrganizer extends JavaPlugin{
 						OfflinePlayer p = Bukkit.getOfflinePlayer(args[1]);
 						if(p.isOnline()){
 							plotManager.addPlot(p, args[2]);
-							sender.sendMessage("Plot added!");
-							return true;
+							sender.sendMessage("§6Plot added!");
 						}else{
-							sender.sendMessage("The Player you choose ");
+							sender.sendMessage("§6That player is not online!");
 						}
 					}else{
 						sender.sendMessage("§cUsage: /plot add <player> <plotname>");
 						return true;
 					}
+					return true;
 				}
 			}
 			else if(args[0].equalsIgnoreCase("del")){
 				if(sender.hasPermission("plotmanager.core.del")){
-					if(args.length == 2){
+					switch(args.length){
+					case 2:
 						try {
 							int id = Integer.parseInt(args[1]);
 							plotManager.delPlot(id);
 							sender.sendMessage("§6Plot deleted!");							
 						} catch (Exception e) {
-							// TODO: handle exception
 							sender.sendMessage("§cUsage: /plot del <id>");
+						}
+						return true;
+					case 3:
+						int id = plotManager.getIDByOwnerName(Bukkit.getOfflinePlayer(args[1]), args[2]);
+						if (id == -1)
+							sender.sendMessage("§6" + args[1] + " doesn't have a plot called " + args[2]);
+						else{
+							plotManager.delPlot(id);
+							sender.sendMessage("§6Plot deleted!");
 						}
 						return true;
 					}
 				}
+			}
+			else if (args[0].equalsIgnoreCase("fav")){
+				if (args.length == 2){
+					if (sender instanceof Player){
+						plotManager.setFavorite((Player) sender, args[1]);
+					}
+				}else{
+					sender.sendMessage("§cUsage: /plot fav <plotname>");
+				}
+				return true;
 			}
 		}
 		
@@ -143,7 +158,6 @@ public class PlotOrganizer extends JavaPlugin{
 		 * 
 		 * 
 		 */
-		
 		
 		return false;
 	}
@@ -184,5 +198,4 @@ public class PlotOrganizer extends JavaPlugin{
 	public World getPlotWorld() {
 		return plotWorld;
 	}
-	
 }
