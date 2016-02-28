@@ -77,28 +77,42 @@ public class PlotManager {
 		return -1;
 	}
 	
-	public void addPlot(OfflinePlayer p, String name){
-		// TODO: Plot for same Player can not have two plots with same name!
+	private boolean isPlotNameFree(OfflinePlayer p, String name){
+		ArrayList<Integer> playerPlotIDs = playerPlots.get(p);
+		for (Integer key : playerPlotIDs) {
+			Plot plot = plots.get(key);
+			if(plot.getName().equalsIgnoreCase(name))
+				return false;
+		}
 		
-		plugin.getLogger().info("Position searching...");
-		GridPosition gridPosition = getFreeGridPosition();
-		plugin.getLogger().info("Position found: " + gridPosition.getX() + " / " + gridPosition.getY());
-		int plotID = getFreePlotID();
-		plugin.getLogger().info("Plot ID found: " + plotID);
-		Plot plot = new Plot(gridPosition, plugin, p, plotID);
-		plot.setName(name);
-		plots.put(plotID, plot);
-		ArrayList<Integer> plotlist;
-		if (!playerPlots.containsKey(p))
-			plotlist = new ArrayList<>();
-		else
-			plotlist = playerPlots.get(p);
-		plotlist.add(plotID);
-		playerPlots.put(p, plotlist);
-		if (!favoritePlots.containsKey(p)) // only the first plot should be favorited
-			favoritePlots.put(p, plotID);
-		
-		savePlots();
+		return true;
+	}
+	
+	public boolean addPlot(OfflinePlayer p, String name){
+		if(isPlotNameFree(p, name)){
+			plugin.getLogger().info("Position searching...");
+			GridPosition gridPosition = getFreeGridPosition();
+			plugin.getLogger().info("Position found: " + gridPosition.getX() + " / " + gridPosition.getY());
+			int plotID = getFreePlotID();
+			plugin.getLogger().info("Plot ID found: " + plotID);
+			Plot plot = new Plot(gridPosition, plugin, p, plotID);
+			plot.setName(name);
+			plots.put(plotID, plot);
+			ArrayList<Integer> plotlist;
+			if (!playerPlots.containsKey(p))
+				plotlist = new ArrayList<>();
+			else
+				plotlist = playerPlots.get(p);
+			plotlist.add(plotID);
+			playerPlots.put(p, plotlist);
+			if (!favoritePlots.containsKey(p)) // only the first plot should be favorited
+				favoritePlots.put(p, plotID);
+			
+			savePlots();
+			
+			return true;
+		}
+		return false;
 	}
 	
 	public void delPlot(int plotID){
