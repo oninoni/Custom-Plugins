@@ -152,13 +152,6 @@ public class PlotOrganizer extends JavaPlugin{
 			}
 		}
 		
-		/* Commands to add:
-		 * fav [name] > no name = current plot, if not in (own) plot error
-		 * 
-		 * 
-		 * 
-		 */
-		
 		return false;
 	}
 	
