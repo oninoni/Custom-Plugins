@@ -328,4 +328,13 @@ public class PlotManager {
 	public boolean delFriend(Player owner, OfflinePlayer player){
 		return delFriend(owner, plots.get(favoritePlots.get(owner)).getName(), player);
 	}
+	
+	public ArrayList<String> getPlotNames(OfflinePlayer player){
+		ArrayList<String> result = new ArrayList<>();
+		for (Integer id : plots.keySet()) {
+			if (plots.get(id).getOwner() == player)
+				result.add(plots.get(id).getName());
+		}
+		return result;
+	}
 }

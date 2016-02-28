@@ -5,21 +5,42 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class TabCompletion {
 	
-	private PlotOrganizer plugin;
+	private static String[] plotCmds = {"add", "del", "list", "tp", "fav", "friends"};
+	private static String[] friendsCmds = {"add", "del", "list"};
 	
-	public TabCompletion(PlotOrganizer pl){
+	private PlotOrganizer plugin;
+	private PlotManager plotManager;
+	
+	public TabCompletion(PlotOrganizer pl, PlotManager pm){
 		plugin = pl;
+		plotManager = pm;
+	}
+	
+	private void addPlotCompletion(OfflinePlayer player, String partArg, List<String> list){
+		ArrayList<String> plotNames = plotManager.getPlotNames(player);
+		for (int i = 0; i < plotNames.size(); i++){
+			String name = plotNames.get(i);
+			if (name.toLowerCase().startsWith(partArg.toLowerCase()))
+				list.add(name);
+		}
 	}
 	
 	private void addCommandCompletion(String fullArg, String partArg, List<String> list){
 		if (fullArg.toLowerCase().startsWith(partArg.toLowerCase()))
 			list.add(fullArg);
+	}
+	
+	private void addCommandCompletion(String[] fullArgs, String partArg, List<String> list){
+		for (int i = 0; i < fullArgs.length; i++)
+			addCommandCompletion(fullArgs[i], partArg, list);
 	}
 	
 	private void addPlayerCompletion(String partArg, List<String> list){		
@@ -30,7 +51,8 @@ public class TabCompletion {
 			addCommandCompletion(name, partArg, list);
 		}
 	}
-
+	
+	@SuppressWarnings("deprecation")
 	public List<String> complete(CommandSender sender, Command command, String[] args) {
 		List<String> result = new ArrayList<String>();
 		if ("plot".toLowerCase().startsWith(command.getName().toLowerCase()))
@@ -39,24 +61,38 @@ public class TabCompletion {
 				plugin.getLogger().info("command completion for : " + command.getName());
 				addCommandCompletion("/plot", command.getName(), result);
 			}else if (args.length == 1){
-				addCommandCompletion("add", args[0], result);
-				addCommandCompletion("del", args[0], result);
-				addCommandCompletion("list", args[0], result);
-				addCommandCompletion("tp", args[0], result);
-				addCommandCompletion("fav", args[0], result);
+				addCommandCompletion(plotCmds, args[0], result);
 			}else if (args.length >= 2){
-				if (args[0].equalsIgnoreCase("add")){
+				if (args[0].equalsIgnoreCase(plotCmds[0])){ 		// add
 					if (args.length == 2){
 						addPlayerCompletion(args[1], result);
 					}
-				}else if (args[0].equalsIgnoreCase("del")){
-					
-				}else if (args[0].equalsIgnoreCase("list")){
-					
-				}else if (args[0].equalsIgnoreCase("tp")){
-					
-				}else if (args[0].equalsIgnoreCase("fav")){
-					
+				}else if (args[0].equalsIgnoreCase(plotCmds[1])){ 	// del
+					if (args.length == 2){
+						addPlayerCompletion(args[1], result);
+					}else if (args.length == 3){
+						addPlotCompletion(Bukkit.getOfflinePlayer(args[1]), args[2], result);
+					}
+				}else if (args[0].equalsIgnoreCase(plotCmds[2])){	// list
+					if (args.length == 2){
+						addPlayerCompletion(args[1], result);
+					}
+				}else if (args[0].equalsIgnoreCase(plotCmds[3])){	// tp
+					if (args.length == 2 && sender instanceof Player){
+						addPlotCompletion((Player) sender, args[1], result);
+					}else if (args.length == 3){
+						addPlayerCompletion(args[2], result);
+					}
+				}else if (args[0].equalsIgnoreCase(plotCmds[4])){	// fav
+					if (args.length == 2){
+						addPlayerCompletion(args[1], result);
+					}
+				}else if (args[0].equalsIgnoreCase(plotCmds[5])){	// friends
+					if (args.length == 2){
+						addCommandCompletion(friendsCmds, args[1], result);
+					}else if(args.length == 3){
+						
+					}
 				}
 			}
 		}		
