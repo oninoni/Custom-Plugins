@@ -19,7 +19,7 @@ public class Plot {
 	private GridPosition gridPosition;
 	private String name;
 	
-	/* TODO:
+	/* TODO: Plots
 	 * add Friends to plot oder machen wir das einfach über dir protection?
 	*/
 	

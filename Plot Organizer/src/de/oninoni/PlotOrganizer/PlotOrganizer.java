@@ -144,6 +144,16 @@ public class PlotOrganizer extends JavaPlugin{
 					}
 				}
 			}
+			else if (args[0].equalsIgnoreCase("fav")){
+				if (sender.hasPermission("plotmanager.core.fav")){
+					if (args.length == 2){
+						if (sender instanceof Player)
+							plotManager.setFavorite((Player) sender, args[1]);
+					}else{
+						sender.sendMessage("§cUsage: /plot fav <plotname>");
+					}
+				}				
+			}
 		}
 		
 		/* Commands to add:

@@ -4,8 +4,8 @@ public class GridPosition {
 	private int x, y;
 	
 	public GridPosition(int x, int y) {
-		this.setX(x);
-		this.setY(y);
+		this.x = x;
+		this.y = y;
 	}
 
 	public int getX() {
@@ -25,6 +25,6 @@ public class GridPosition {
 	}	
 	
 	public boolean equals(GridPosition gp){
-		return this.x == gp.x && this.y == gp.y;
+		return x == gp.x && y == gp.y;
 	}
 }

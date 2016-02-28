@@ -92,6 +92,7 @@ public class PlotManager {
 		playerPlots.put(p, plotlist);
 		if (!favoritePlots.containsKey(p)) // only the first plot should be favorited
 			favoritePlots.put(p, plotID);
+		
 		savePlots();
 	}
 	
@@ -261,5 +262,15 @@ public class PlotManager {
 		if (id == -1)
 			return null;
 		return plots.get(id);
+	}
+
+	public void setFavorite(Player p, String name) {
+		int id = getIDByOwnerName(p, name);
+		if (id == -1){
+			p.sendMessage("§6You don't have a plot called '" + name + "'!");
+			p.sendMessage("§6Use /plot list to get a list of all your plots");
+		}
+		favoritePlots.put(p, id);
+		savePlots();
 	}
 }
