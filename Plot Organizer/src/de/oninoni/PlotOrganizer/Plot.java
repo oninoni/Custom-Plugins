@@ -19,10 +19,6 @@ public class Plot {
 	private GridPosition gridPosition;
 	private String name;
 	
-	/* TODO: Plots
-	 * add Friends to plot oder machen wir das einfach über dir protection?
-	*/
-	
 	private ProtectedCuboidRegion protectedCuboidRegion;
 	
 	private PlotOrganizer plugin;
@@ -124,14 +120,6 @@ public class Plot {
 	 */
 	public Set<UUID> getMembers(){
 		return protectedCuboidRegion.getMembers().getUniqueIds();
-	}
-	
-	/**
-	 * Returns all the Members as a Set<String>
-	 * @return Members as Set<String>
-	 */
-	public Set<String> getMembersNames(){
-		return protectedCuboidRegion.getMembers().getPlayers();
 	}
 	
 	static String getPlotName(int id) {

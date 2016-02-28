@@ -165,7 +165,7 @@ public class PlotOrganizer extends JavaPlugin{
 				return true;
 			}
 			else if(args[0].equalsIgnoreCase("friend") || args[0].equalsIgnoreCase("friends")){
-				if(args.length > 2 && sender instanceof Player){
+				if(args.length >= 2 && sender instanceof Player){
 					if(args[1].equalsIgnoreCase("add")){
 						if(args.length == 3) {
 							if(plotManager.addFriend((Player) sender, Bukkit.getOfflinePlayer(args[2]))){
