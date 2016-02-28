@@ -126,6 +126,14 @@ public class Plot {
 		return protectedCuboidRegion.getMembers().getUniqueIds();
 	}
 	
+	/**
+	 * Returns all the Members as a Set<String>
+	 * @return Members as Set<String>
+	 */
+	public Set<String> getMembersNames(){
+		return protectedCuboidRegion.getMembers().getPlayers();
+	}
+	
 	static String getPlotName(int id) {
 		return "plot_" + id;
 	}

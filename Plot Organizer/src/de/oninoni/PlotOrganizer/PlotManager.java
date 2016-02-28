@@ -2,6 +2,7 @@ package de.oninoni.PlotOrganizer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -311,7 +312,21 @@ public class PlotManager {
 		favoritePlots.put(owner, id);
 		owner.sendMessage("§6" + name + " is now your favorite plot!");
 		savePlots();
-	} 
+	}
+	
+	private Plot getPlotByPosition(Player p){
+		for (Integer key : plots.keySet()) {
+			if(p.getWorld() == plugin.getPlotWorld()){
+				Plot plot = plots.get(key);
+				if(plot.getProtectedCuboidRegion().contains(p.getLocation().getBlockX(), p.getLocation().getBlockY(), p.getLocation().getBlockZ())){
+					return plot;
+				}
+			}else{
+				p.sendMessage("§6You are not in the Plot World!");
+			}
+		}
+		return null;
+	}
 	
 	public boolean addFriend(Player owner, String name, OfflinePlayer player){
 		return getPlotByOwnerName(owner, name).addMember(player);
@@ -322,11 +337,23 @@ public class PlotManager {
 	}
 	
 	public boolean addFriend(Player owner, OfflinePlayer player){
-		return addFriend(owner, plots.get(favoritePlots.get(owner)).getName(), player);
+		return addFriend(owner, getPlotByPosition(owner).getName(), player);
 	}
 	
 	public boolean delFriend(Player owner, OfflinePlayer player){
-		return delFriend(owner, plots.get(favoritePlots.get(owner)).getName(), player);
+		return delFriend(owner, getPlotByPosition(owner).getName(), player);
+	}
+	
+	public void listFriends(Player owner, String name){
+		Set<String> members = getPlotByOwnerName(owner, name).getMembersNames();
+		owner.sendMessage("§6Friends of §f" + owner.getName() + "§6 on Plot §f" + name + "§6:");
+		for (String member : members) {
+			owner.sendMessage("§b - " + member);
+		}
+	}
+	
+	public void listFriends(Player owner){
+		listFriends(owner, getPlotByPosition(owner).getName());
 	}
 	
 	public ArrayList<String> getPlotNames(OfflinePlayer player){
