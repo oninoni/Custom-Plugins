@@ -345,10 +345,10 @@ public class PlotManager {
 	}
 	
 	public void listFriends(Player owner, String name){
-		Set<String> members = getPlotByOwnerName(owner, name).getMembersNames();
+		Set<UUID> members = getPlotByOwnerName(owner, name).getMembers();
 		owner.sendMessage("§6Friends of §f" + owner.getName() + "§6 on Plot §f" + name + "§6:");
-		for (String member : members) {
-			owner.sendMessage("§b - " + member);
+		for (UUID member : members) {
+			owner.sendMessage("§b - " + Bukkit.getOfflinePlayer(member).getName());
 		}
 	}
 	
