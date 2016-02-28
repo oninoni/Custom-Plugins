@@ -90,8 +90,17 @@ public class TabCompletion {
 				}else if (args[0].equalsIgnoreCase(plotCmds[5])){	// friends
 					if (args.length == 2){
 						addCommandCompletion(friendsCmds, args[1], result);
-					}else if(args.length == 3){
-						
+					}else if(args.length >= 3){
+						if (args[1].equalsIgnoreCase(friendsCmds[0]) || 	// add
+							args[1].equalsIgnoreCase(friendsCmds[1])){		// del
+							if(args.length == 3)
+								addPlayerCompletion(args[2], result);
+							else if(args.length == 4)
+								addPlotCompletion(Bukkit.getOfflinePlayer(args[2]), args[3], result);
+						}else if(args[1].equalsIgnoreCase(friendsCmds[2])){	// list
+							if(args.length == 3 && sender instanceof Player)
+								addPlotCompletion((Player) sender, args[2], result);
+						}
 					}
 				}
 			}
