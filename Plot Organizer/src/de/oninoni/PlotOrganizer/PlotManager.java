@@ -201,7 +201,7 @@ public class PlotManager {
 			ConfigurationSection cs = config.getConfigurationSection("player." + key);
 			ArrayList<Integer> list = new ArrayList<>();
 			for (String index : cs.getConfigurationSection("allPlots").getKeys(false))
-				list.add(Integer.parseInt(index));
+				list.add(cs.getInt("allPlots." + index));
 			playerPlots.put(Bukkit.getOfflinePlayer(UUID.fromString(key)), list);
 			favoritePlots.put(Bukkit.getOfflinePlayer(UUID.fromString(key)), cs.getInt("favPlot"));
 		}
