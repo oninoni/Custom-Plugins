@@ -106,16 +106,16 @@ public class PlotOrganizer extends JavaPlugin{
 			else if(args[0].equalsIgnoreCase("add")){
 				if(sender.hasPermission("plotmanager.core.add")){
 					if(args.length == 3){
-						OfflinePlayer p = Bukkit.getOfflinePlayer(args[2]);
+						OfflinePlayer p = Bukkit.getOfflinePlayer(args[1]);
 						if(p.isOnline()){
-							plotManager.addPlot(p, args[1]);
+							plotManager.addPlot(p, args[2]);
 							sender.sendMessage("Plot added!");
 							return true;
 						}else{
 							sender.sendMessage("The Player you choose ");
 						}
 					}else{
-						sender.sendMessage("§cUsage: /plot add <Plot Name> <Player>");
+						sender.sendMessage("§cUsage: /plot add <player> <plotname>");
 						return true;
 					}
 				}

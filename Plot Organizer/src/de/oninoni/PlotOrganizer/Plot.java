@@ -8,7 +8,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import com.sk89q.worldedit.BlockVector;
-import com.sk89q.worldguard.domains.DefaultDomain;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 
@@ -37,10 +36,7 @@ public class Plot {
 			
 			protectedCuboidRegion = (ProtectedCuboidRegion) plugin.getWorldGuard().getRegionManager(plugin.getPlotWorld()).getRegion(getPlotName(id));
 			if(protectedCuboidRegion.getOwners().getPlayers().toArray().length == 0){
-				DefaultDomain owners = new DefaultDomain();
-				owners.addPlayer(owner.getUniqueId());
-				
-				protectedCuboidRegion.setOwners(owners);
+				protectedCuboidRegion.getOwners().addPlayer(owner.getUniqueId());
 			}
 		}else{
 			protectedCuboidRegion = new ProtectedCuboidRegion(
@@ -48,10 +44,7 @@ public class Plot {
 				new BlockVector(gp.getX() * PLOT_SIZE, 1, gp.getY() * PLOT_SIZE),
 				new BlockVector((gp.getX() + 1) * PLOT_SIZE - 1, 255, (gp.getY() + 1) * PLOT_SIZE - 1)
 			);
-			DefaultDomain owners = new DefaultDomain();
-			owners.addPlayer(owner.getUniqueId());
-			
-			protectedCuboidRegion.setOwners(owners);
+			protectedCuboidRegion.getOwners().addPlayer(owner.getUniqueId());
 			
 			RegionManager regionManager = plugin.getWorldGuard().getRegionManager(plugin.getPlotWorld());
 			regionManager.addRegion(protectedCuboidRegion);

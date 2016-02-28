@@ -110,7 +110,7 @@ public class PlotManager {
 					else{
 						playerPlots.remove(player);
 					}						
-					break;	
+					break;
 				}
 			}
 		}
@@ -132,7 +132,7 @@ public class PlotManager {
 	public void tpToName(Player p, String name, OfflinePlayer owner){
 		for (Integer key : plots.keySet()) {
 			Plot plot = plots.get(key);
-			if(plot.getOwner() == owner && plot.getName() == name){
+			if(plot.getOwner().getUniqueId() == owner.getUniqueId() && plot.getName().equalsIgnoreCase(name)){
 				plot.teleportTo(p);
 				return;
 			}
