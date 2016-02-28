@@ -311,7 +311,7 @@ public class PlotManager {
 		favoritePlots.put(owner, id);
 		owner.sendMessage("§6" + name + " is now your favorite plot!");
 		savePlots();
-	}
+	} 
 	
 	public boolean addFriend(Player owner, String name, OfflinePlayer player){
 		return getPlotByOwnerName(owner, name).addMember(player);
