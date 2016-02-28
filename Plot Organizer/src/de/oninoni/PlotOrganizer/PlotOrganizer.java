@@ -127,7 +127,7 @@ public class PlotOrganizer extends JavaPlugin{
 						try {
 							int id = Integer.parseInt(args[1]);
 							plotManager.delPlot(id);
-							sender.sendMessage("§6Plot deleted! (ID: §f" + id + "§6)");							
+							sender.sendMessage("§6Plot deleted! (ID: §f" + id + "§6)");				
 						} catch (Exception e) {
 							sender.sendMessage("§cUsage: /plot del <id>");
 						}
@@ -163,6 +163,33 @@ public class PlotOrganizer extends JavaPlugin{
 					sender.sendMessage("§cUsage: /plot rename <oldName> <newName>");
 				}
 				return true;
+			}
+			else if(args[0].equalsIgnoreCase("friend")){
+				if(args.length > 2){
+					if(args[1].equalsIgnoreCase("add")){
+						if(args.length == 3) {
+							plotManager.addFriend((Player) sender, Bukkit.getOfflinePlayer(args[2]));
+						}
+						else if(args.length == 4){
+							plotManager.addFriend((Player) sender, args[3], Bukkit.getOfflinePlayer(args[2]));
+						}
+						else{
+							sender.sendMessage("§cUsage: /plot friend add <player> [plot]");
+						}
+					}
+					else if(args[1].equalsIgnoreCase("del")){
+						if(args.length == 3){
+							plotManager.delFriend((Player) sender, Bukkit.getOfflinePlayer(args[2]));
+						}
+						else if(args.length == 4){
+							plotManager.delFriend((Player) sender, args[3], Bukkit.getOfflinePlayer(args[2]));
+						}
+						else{
+							sender.sendMessage("§cUsage: /plot friend del <player> [plot]");
+						}
+					}
+					return true;
+				}
 			}
 		}
 		

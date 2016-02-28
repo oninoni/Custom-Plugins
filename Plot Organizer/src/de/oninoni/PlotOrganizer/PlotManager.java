@@ -241,18 +241,19 @@ public class PlotManager {
 		}
 	}
 	
-	private void listPlots(OfflinePlayer from, CommandSender to) {
-		ArrayList<Integer> list = playerPlots.get(from);
+	private void listPlots(OfflinePlayer player, CommandSender sender) {
+		ArrayList<Integer> list = playerPlots.get(player);
 		for (int i = 0; i < list.size(); i++){
+			plugin.getLogger().info("i: " + i + " / " + list.get(i));
 			Plot plot = plots.get(list.get(i));
 			GridPosition l = plot.getGridPosition();
 			String msg = 
 				"§b " + (i + 1) + ") " + 
 				plot.getName() + 
 				" at [ " + l.getX() + " | " + l.getY() + " ]";
-			if (list.get(i) == favoritePlots.get(from))
+			if (list.get(i) == favoritePlots.get(player))
 				msg += " §a(favorited)";
-			to.sendMessage(msg);
+			sender.sendMessage(msg);
 		}	
 	}
 
@@ -269,14 +270,14 @@ public class PlotManager {
 	
 	// show others list
 	@SuppressWarnings("deprecation")
-	public void showList(String from, CommandSender to) {
+	public void showList(String from, CommandSender sender) {
 		OfflinePlayer player = Bukkit.getOfflinePlayer(from);
 		if (!playerPlots.containsKey(player)){
-			to.sendMessage("§6" + from + " doesn't have any plots!");
+			sender.sendMessage("§6" + from + " doesn't have any plots!");
 			return;
 		}
-		to.sendMessage("§6" + from + "'s Plots:");
-		listPlots(player, to);
+		sender.sendMessage("§6" + from + "'s Plots:");
+		listPlots(player, sender);
 	}
 	
 	public int getIDByOwnerName(OfflinePlayer owner, String name){
@@ -310,6 +311,22 @@ public class PlotManager {
 		favoritePlots.put(owner, id);
 		owner.sendMessage("§6" + name + " is now your favorite plot!");
 		savePlots();
+	}
+	
+	public boolean addFriend(Player owner, String name, OfflinePlayer player){
+		return getPlotByOwnerName(owner, name).addMember(player);
+	}
+	
+	public boolean delFriend(Player owner, String name, OfflinePlayer player){
+		return getPlotByOwnerName(owner, name).removeMember(player);
+	}
+	
+	public boolean addFriend(Player owner, OfflinePlayer player){
+		return addFriend(owner, plots.get(favoritePlots.get(owner)).getName(), player);
+	}
+	
+	public boolean delFriend(Player owner, OfflinePlayer player){
+		return delFriend(owner, plots.get(favoritePlots.get(owner)).getName(), player);
 	}
 	
 	public ArrayList<String> getPlotNames(OfflinePlayer player){
