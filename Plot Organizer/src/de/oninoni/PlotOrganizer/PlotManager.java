@@ -311,4 +311,13 @@ public class PlotManager {
 		owner.sendMessage("§6" + name + " is now your favorite plot!");
 		savePlots();
 	}
+	
+	public ArrayList<String> getPlotNames(OfflinePlayer player){
+		ArrayList<String> result = new ArrayList<>();
+		for (Integer id : plots.keySet()) {
+			if (plots.get(id).getOwner() == player)
+				result.add(plots.get(id).getName());
+		}
+		return result;
+	}
 }

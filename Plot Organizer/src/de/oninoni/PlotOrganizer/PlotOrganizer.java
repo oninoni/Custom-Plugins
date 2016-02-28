@@ -46,7 +46,7 @@ public class PlotOrganizer extends JavaPlugin{
 		
 		plotWorld = getServer().getWorld(getConfig().getString("world"));		
 		plotManager = new PlotManager(this);		
-		tabCompletion = new TabCompletion(this);
+		tabCompletion = new TabCompletion(this, plotManager);
 		
 		PlayerChangedWorldListener playerChangedWorldListener = new PlayerChangedWorldListener(this, plotManager);
 		
