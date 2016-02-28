@@ -1,5 +1,6 @@
 package de.oninoni.PlotOrganizer;
 
+import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -41,8 +42,8 @@ public class Plot {
 		}else{
 			protectedCuboidRegion = new ProtectedCuboidRegion(
 				getPlotName(id),
-				new BlockVector(gp.getX() * PLOT_SIZE, 1, gp.getY() * PLOT_SIZE),
-				new BlockVector((gp.getX() + 1) * PLOT_SIZE - 1, 255, (gp.getY() + 1) * PLOT_SIZE - 1)
+				new BlockVector(gp.getX() * PLOT_SIZE + 3, 1, gp.getY() * PLOT_SIZE + 3),
+				new BlockVector((gp.getX() + 1) * PLOT_SIZE - 4, 255, (gp.getY() + 1) * PLOT_SIZE - 4)
 			);
 			protectedCuboidRegion.getOwners().addPlayer(plugin.getWorldGuard().wrapOfflinePlayer(owner));
 			
@@ -86,6 +87,43 @@ public class Plot {
 	
 	public OfflinePlayer getOwner(){
 		return Bukkit.getOfflinePlayer((UUID) protectedCuboidRegion.getOwners().getUniqueIds().toArray()[0]);		
+	}
+	
+	/**
+	 * Adds a Player to the Region as a Member
+	 * @param player The Player that gets added
+	 * @return false means player is already Member
+	 * 
+	 */
+	public boolean addMember(OfflinePlayer player){
+		Set<UUID> members = getMembers();
+		if(members.contains(player.getUniqueId())){
+			return false;
+		}
+		protectedCuboidRegion.getMembers().addPlayer(plugin.getWorldGuard().wrapOfflinePlayer(player));
+		return true;
+	}
+	
+	/**
+	 * Removes a Player from the Region as a Member
+	 * @param player The Player that gets removed
+	 * @return false means player is not Member
+	 */
+	public boolean removeMember(OfflinePlayer player){
+		Set<UUID> members = getMembers();
+		if(!members.contains(player.getUniqueId())){
+			return false;
+		}
+		protectedCuboidRegion.getMembers().removePlayer(plugin.getWorldGuard().wrapOfflinePlayer(player));
+		return true;
+	}
+	
+	/**
+	 * Returns all the Members as a Set<UUID>
+	 * @return Members as Set<UUID>
+	 */
+	public Set<UUID> getMembers(){
+		return protectedCuboidRegion.getMembers().getUniqueIds();
 	}
 	
 	static String getPlotName(int id) {

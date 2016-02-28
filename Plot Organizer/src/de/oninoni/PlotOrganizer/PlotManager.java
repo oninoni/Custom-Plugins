@@ -312,4 +312,20 @@ public class PlotManager {
 		owner.sendMessage("§6" + name + " is now your favorite plot!");
 		savePlots();
 	}
+	
+	public boolean addFriend(Player owner, String name, OfflinePlayer player){
+		return getPlotByOwnerName(owner, name).addMember(player);
+	}
+	
+	public boolean delFriend(Player owner, String name, OfflinePlayer player){
+		return getPlotByOwnerName(owner, name).removeMember(player);
+	}
+	
+	public boolean addFriend(Player owner, OfflinePlayer player){
+		return addFriend(owner, plots.get(favoritePlots.get(owner)).getName(), player);
+	}
+	
+	public boolean delFriend(Player owner, OfflinePlayer player){
+		return delFriend(owner, plots.get(favoritePlots.get(owner)).getName(), player);
+	}
 }
