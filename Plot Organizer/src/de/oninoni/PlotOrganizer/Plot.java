@@ -19,8 +19,8 @@ public class Plot {
 	private GridPosition gridPosition;
 	private String name;
 	
-	/* TODO: Plots
-	 * add Friends to plot oder machen wir das einfach über dir protection?
+	/* TODO: Plot Spawnpoint changeable
+	 * 
 	*/
 	
 	private ProtectedCuboidRegion protectedCuboidRegion;

@@ -230,7 +230,6 @@ public class PlotOrganizer extends JavaPlugin{
 		return false;
 	}
 	
-	// TODO: aus momentanem onTabComplete eigene Klasse machen, übersichtlicher
 	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
 		return tabCompletion.complete(sender, command, args);
 	}
