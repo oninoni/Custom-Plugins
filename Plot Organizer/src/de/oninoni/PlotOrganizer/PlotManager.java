@@ -292,7 +292,7 @@ public class PlotManager {
 		return -1;
 	}
 	
-	public Plot getPlotByOwnerName(OfflinePlayer owner, String name){
+	private Plot getPlotByOwnerName(OfflinePlayer owner, String name){
 		int id = getIDByOwnerName(owner, name);
 		if (id == -1)
 			return null;
@@ -311,7 +311,7 @@ public class PlotManager {
 		savePlots();
 	}
 	
-	private Plot getPlotByPosition(Player p){
+	public Plot getPlotByPosition(Player p){
 		for (Integer key : plots.keySet()) {
 			if(p.getWorld() == plugin.getPlotWorld()){
 				Plot plot = plots.get(key);
@@ -346,6 +346,19 @@ public class PlotManager {
 		owner.sendMessage("§6Friends of §f" + owner.getName() + "§6 on Plot §f" + name + "§6:");
 		for (UUID member : members) {
 			owner.sendMessage("§b - " + Bukkit.getOfflinePlayer(member).getName());
+		}
+	}
+	
+	public void sendPlotInfo(Player player){
+		Plot plot = getPlotByPosition(player);
+		if(plot != null){
+			player.sendMessage("&6You are inside Plot &f" + plot.getName() + "&f of &f" + plot.getOwner().getName() + "&6!");
+			player.sendMessage("&6Also building here:");
+			for (UUID friend : plot.getMembers()) {
+				player.sendMessage("&b" + Bukkit.getOfflinePlayer(friend).getName());
+			}
+		}else{
+			player.sendMessage("&6You are not inside a Plot!");
 		}
 	}
 	

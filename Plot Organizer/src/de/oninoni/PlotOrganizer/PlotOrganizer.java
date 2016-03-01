@@ -77,6 +77,11 @@ public class PlotOrganizer extends JavaPlugin{
 				}				
 				return true;
 			}
+			else if(args[0].equalsIgnoreCase("info")){
+				if(sender instanceof Player){
+					plotManager.sendPlotInfo((Player) sender);
+				}
+			}
 			else if(args[0].equalsIgnoreCase("tp")){
 				switch(args.length)
 				{
@@ -165,7 +170,8 @@ public class PlotOrganizer extends JavaPlugin{
 					printUsage(sender, "rename");
 				}
 				return true;
-			}else if(args[0].equalsIgnoreCase("help")){
+			}
+			else if(args[0].equalsIgnoreCase("help")){
 				if(args.length == 1){
 					sender.sendMessage("§6Available commands: §b/plot...");
 					sender.sendMessage("§b list §9- §aGet a list of all of your or another players plots");
@@ -183,7 +189,8 @@ public class PlotOrganizer extends JavaPlugin{
 				}else
 					sender.sendMessage("§cWhat?");
 				return true;
-			}else if(args[0].equalsIgnoreCase("friend") || args[0].equalsIgnoreCase("friends")){
+			}
+			else if(args[0].equalsIgnoreCase("friend") || args[0].equalsIgnoreCase("friends")){
 				if(args.length >= 2 && sender instanceof Player){
 					if(args[1].equalsIgnoreCase("add")){
 						if(Bukkit.getOfflinePlayer(args[2]).isOnline()){
@@ -192,11 +199,16 @@ public class PlotOrganizer extends JavaPlugin{
 							}
 							else{
 								if(args.length == 3) {
-									if(plotManager.addFriend((Player) sender, Bukkit.getOfflinePlayer(args[2]))){
-										sender.sendMessage("§6Friend §f" + args[2] + "§6 added to this Plot!");
+									if(plotManager.getPlotByPosition((Player) sender) != null){
+										if(plotManager.addFriend((Player) sender, Bukkit.getOfflinePlayer(args[2]))){
+											sender.sendMessage("§6Friend §f" + args[2] + "§6 added to this Plot!");
+										}
+										else{
+											sender.sendMessage("§6Friend §f" + args[2] + "§6 already exists on this Plot!");
+										}
 									}
 									else{
-										sender.sendMessage("§6Friend §f" + args[2] + "§6 already exists on this Plot!");
+										sender.sendMessage("&6You are not inside a Plot!");
 									}
 								}
 								else if(args.length == 4){
@@ -224,11 +236,16 @@ public class PlotOrganizer extends JavaPlugin{
 							}
 							else{
 								if(args.length == 3){
-									if(plotManager.delFriend((Player) sender, Bukkit.getOfflinePlayer(args[2]))){
-										sender.sendMessage("§6Friend §f" + args[2] + "§6 removed from this Plot!");
+									if(plotManager.getPlotByPosition((Player) sender) != null){
+										if(plotManager.delFriend((Player) sender, Bukkit.getOfflinePlayer(args[2]))){
+											sender.sendMessage("§6Friend §f" + args[2] + "§6 removed from this Plot!");
+										}
+										else{
+											sender.sendMessage("§6Friend §f" + args[2] + "§6 does not exist on this Plot!");
+										}
 									}
 									else{
-										sender.sendMessage("§6Friend §f" + args[2] + "§6 does not exist on this Plot!");
+										sender.sendMessage("&6You are not inside a Plot!");
 									}
 								}
 								else if(args.length == 4){
