@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
 
 public class TabCompletion {
 	
-	private static String[] plotCmds = {"add", "del", "list", "tp", "fav", "friends"};
+	private static String[] plotCmds = {"add", "del", "list", "tp", "fav", "friends", "rename"};
 	private static String[] friendsCmds = {"add", "del", "list"};
 	
 	private PlotOrganizer plugin;
@@ -101,6 +101,10 @@ public class TabCompletion {
 							if(args.length == 3 && sender instanceof Player)
 								addPlotCompletion((Player) sender, args[2], result);
 						}
+					}
+				}else if (args[0].equalsIgnoreCase(plotCmds[6])){	// rename
+					if (args.length == 2 && sender instanceof Player){
+						addPlotCompletion((Player) sender, args[1], result);
 					}
 				}
 			}

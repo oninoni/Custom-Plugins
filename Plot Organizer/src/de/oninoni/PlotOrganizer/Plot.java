@@ -55,9 +55,7 @@ public class Plot {
 			} catch (Exception e) {
 			     plugin.getLogger().warning("Failed to write region: "  + e.getMessage() );
 			}
-		}
-		
-		
+		}	
 	}
 	
 	public GridPosition getGridPosition() {
@@ -129,4 +127,6 @@ public class Plot {
 	static String getPlotName(int id) {
 		return "plot_" + id;
 	}
+	
+	
 }
