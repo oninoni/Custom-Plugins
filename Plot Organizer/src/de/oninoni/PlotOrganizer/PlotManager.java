@@ -103,17 +103,17 @@ public class PlotManager {
 		Plot plot = plots.get(plotId);
 		plot.setName(newName);
 		p.sendMessage("§6Plot " + oldName + " is now called " + newName);
+		
+		savePlots();
 	}
 	
 	public boolean addPlot(OfflinePlayer p, String name){
 		if(isPlotNameFree(p, name)){
-			plugin.getLogger().info("Position searching...");
 			GridPosition gridPosition = getFreeGridPosition();
-			plugin.getLogger().info("Position found: " + gridPosition.getX() + " / " + gridPosition.getY());
 			int plotID = getFreePlotID();
-			plugin.getLogger().info("Plot ID found: " + plotID);
 			Plot plot = new Plot(gridPosition, plugin, p, plotID);
 			plot.setName(name);
+			plot.pasteSchematic();
 			plots.put(plotID, plot);
 			ArrayList<Integer> plotlist;
 			if (!playerPlots.containsKey(p))
@@ -127,6 +127,8 @@ public class PlotManager {
 			
 			savePlots();
 			
+			
+			
 			return true;
 		}
 		return false;
@@ -135,6 +137,7 @@ public class PlotManager {
 	public void delPlot(int plotID){
 		OfflinePlayer player = plots.get(plotID).getOwner();
 		plots.get(plotID).getProtectedCuboidRegion().setOwners(new DefaultDomain());
+		plots.get(plotID).getProtectedCuboidRegion().setMembers(new DefaultDomain());
 		plots.remove(plotID);
 		
 		ArrayList<Integer> list = playerPlots.get(player);		
@@ -245,13 +248,9 @@ public class PlotManager {
 	private void listPlots(OfflinePlayer player, CommandSender sender) {
 		ArrayList<Integer> list = playerPlots.get(player);
 		for (int i = 0; i < list.size(); i++){
-			plugin.getLogger().info("i: " + i + " / " + list.get(i));
 			Plot plot = plots.get(list.get(i));
-			GridPosition l = plot.getGridPosition();
 			String msg = 
-				"§b " + (i + 1) + ") " + 
-				plot.getName() + 
-				" at [ " + l.getX() + " | " + l.getY() + " ]";
+				"§b " + (i + 1) + ") " + plot.getName();
 			if (list.get(i) == favoritePlots.get(player))
 				msg += " §a(favorited)";
 			sender.sendMessage(msg);
@@ -285,8 +284,6 @@ public class PlotManager {
 		for (Integer id : plots.keySet()) {
 			Plot plot = plots.get(id);
 
-			plugin.getLogger().info(Boolean.toString(plot.getOwner().getUniqueId() == owner.getUniqueId()));
-			
 			if (plot.getOwner().getUniqueId() == owner.getUniqueId() &&
 				plot.getName().equalsIgnoreCase(name)) {
 				return id;

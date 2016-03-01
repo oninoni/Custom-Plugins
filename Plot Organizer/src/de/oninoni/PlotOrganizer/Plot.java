@@ -1,5 +1,7 @@
 package de.oninoni.PlotOrganizer;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Set;
 import java.util.UUID;
 
@@ -9,9 +11,17 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import com.sk89q.worldedit.BlockVector;
+import com.sk89q.worldedit.CuboidClipboard;
+import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.MaxChangedBlocksException;
+import com.sk89q.worldedit.Vector;
+import com.sk89q.worldedit.bukkit.BukkitWorld;
+import com.sk89q.worldedit.schematic.SchematicFormat;
+import com.sk89q.worldedit.world.DataException;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 
+@SuppressWarnings("deprecation")
 public class Plot {
 	
 	private static int PLOT_SIZE = 128;
@@ -42,8 +52,8 @@ public class Plot {
 		}else{
 			protectedCuboidRegion = new ProtectedCuboidRegion(
 				getPlotName(id),
-				new BlockVector(gp.getX() * PLOT_SIZE + 3, 1, gp.getY() * PLOT_SIZE + 3),
-				new BlockVector((gp.getX() + 1) * PLOT_SIZE - 4, 255, (gp.getY() + 1) * PLOT_SIZE - 4)
+				new BlockVector(gp.getX() * PLOT_SIZE + 4, 1, gp.getY() * PLOT_SIZE + 4),
+				new BlockVector((gp.getX() + 1) * PLOT_SIZE - 5, 255, (gp.getY() + 1) * PLOT_SIZE - 5)
 			);
 			protectedCuboidRegion.getOwners().addPlayer(plugin.getWorldGuard().wrapOfflinePlayer(owner));
 			
@@ -124,6 +134,25 @@ public class Plot {
 	 */
 	public Set<UUID> getMembers(){
 		return protectedCuboidRegion.getMembers().getUniqueIds();
+	}
+	
+	public void pasteSchematic(){
+		try{
+			File dir = new File(plugin.getDataFolder(), "plot.schematic");
+			
+			EditSession editSession = new EditSession(new BukkitWorld(plugin.getPlotWorld()), 128*128*3*2);
+			editSession.enableQueue();
+			
+			SchematicFormat schematic = SchematicFormat.getFormat(dir);
+			CuboidClipboard clipboard = schematic.load(dir);
+			
+			clipboard.paste(editSession, new Vector(gridPosition.getX()*128, 64, gridPosition.getY()*128), false);
+			editSession.flushQueue();
+		}catch (DataException | IOException ex) {
+            ex.printStackTrace();
+        } catch (MaxChangedBlocksException ex) {
+            ex.printStackTrace();
+        }
 	}
 	
 	static String getPlotName(int id) {
