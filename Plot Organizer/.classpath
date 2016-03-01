@@ -2,11 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="C:/Users/Dominik/Documents/Programming/Java/Git/Custom-Plugins/Plot Organizer/jars/bukkit-1.9-R0.1-SNAPSHOT-shaded.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="https://hub.spigotmc.org/javadocs/bukkit/"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="jars/worldedit-bukkit-6.1.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://docs.sk89q.com/worldedit/apidocs/"/>
@@ -17,5 +12,6 @@
 			<attribute name="javadoc_location" value="http://docs.sk89q.com/worldguard/apidocs/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="jars/bukkit-1.9-R0.1-SNAPSHOT-shaded.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
