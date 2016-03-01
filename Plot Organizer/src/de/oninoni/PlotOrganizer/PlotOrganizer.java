@@ -73,7 +73,7 @@ public class PlotOrganizer extends JavaPlugin{
 					plotManager.showList(args[1], sender);
 					break;
 				default:
-					sender.sendMessage("§cUsage: /plot list [player]");
+					printUsage(sender, "list");
 				}				
 				return true;
 			}
@@ -96,7 +96,7 @@ public class PlotOrganizer extends JavaPlugin{
 					}
 					break;
 				default:
-					sender.sendMessage("§cUsage: /plot tp [plotname] [player]");
+					printUsage(sender, "tp");
 				}
 				return true;
 			}
@@ -114,8 +114,7 @@ public class PlotOrganizer extends JavaPlugin{
 							sender.sendMessage("§6Player §f" + args[1] + "§6 is not online!");
 						}
 					}else{
-						sender.sendMessage("§cUsage: /plot add <player> <plotname>");
-						return true;
+						printUsage(sender, "add");
 					}
 					return true;
 				}
@@ -129,7 +128,7 @@ public class PlotOrganizer extends JavaPlugin{
 							plotManager.delPlot(id);
 							sender.sendMessage("§6Plot deleted! (ID: §f" + id + "§6)");				
 						} catch (Exception e) {
-							sender.sendMessage("§cUsage: /plot del <id>");
+							printUsage(sender, "deli");
 						}
 						return true;
 					case 3:
@@ -141,6 +140,9 @@ public class PlotOrganizer extends JavaPlugin{
 							sender.sendMessage("§6Plot §f" + args[2] + "§6 of Player §f" + args[1] + "§6 deleted!");
 						}
 						return true;
+					default:
+						printUsage(sender, "del");
+						return true;
 					}
 				}
 			}
@@ -150,7 +152,7 @@ public class PlotOrganizer extends JavaPlugin{
 						plotManager.setFavorite((Player) sender, args[1]);
 					}
 				}else{
-					sender.sendMessage("§cUsage: /plot fav <plotname>");
+					printUsage(sender, "fav");
 				}
 				return true;
 			}
@@ -160,11 +162,28 @@ public class PlotOrganizer extends JavaPlugin{
 						plotManager.changePlotName((Player)sender, args[1], args[2]);
 					}
 				}else{
-					sender.sendMessage("§cUsage: /plot rename <oldName> <newName>");
+					printUsage(sender, "rename");
 				}
 				return true;
-			}
-			else if(args[0].equalsIgnoreCase("friend") || args[0].equalsIgnoreCase("friends")){
+			}else if(args[0].equalsIgnoreCase("help")){
+				if(args.length == 1){
+					sender.sendMessage("§6Available commands: §b/plot...");
+					sender.sendMessage("§b list §9- §aGet a list of all of your or another players plots");
+					sender.sendMessage("§b tp §9- §aTeleport to one of your or another players plot");
+					sender.sendMessage("§b fav §9- §aFavorite one of your plots as spawnpoint into this world");
+					sender.sendMessage("§b friends §9- §aAdd friends to help you build in your own plot");
+					sender.sendMessage("§b rename §9- §aGive your plots a new name");
+					sender.sendMessage("§6Use /plot help <topic> to check the usage");
+				}else if(args.length == 2){
+					printUsage(sender, args[1]);
+				}else if(args.length == 3){
+					if (args[1].equalsIgnoreCase("friend") || args[1].equalsIgnoreCase("friends")){
+						printUsage(sender, "friends " + args[2]);
+					}
+				}else
+					sender.sendMessage("§cWhat?");
+				return true;
+			}else if(args[0].equalsIgnoreCase("friend") || args[0].equalsIgnoreCase("friends")){
 				if(args.length >= 2 && sender instanceof Player){
 					if(args[1].equalsIgnoreCase("add")){
 						if(Bukkit.getOfflinePlayer(args[2]).isOnline()){
@@ -189,7 +208,7 @@ public class PlotOrganizer extends JavaPlugin{
 									}
 								}
 								else{
-									sender.sendMessage("§cUsage: /plot friend add <player> [plot]");
+									printUsage(sender, "friends add");
 								}
 							}
 						}
@@ -221,7 +240,7 @@ public class PlotOrganizer extends JavaPlugin{
 									}
 								}
 								else{
-									sender.sendMessage("§cUsage: /plot friend del <player> [plot]");
+									printUsage(sender, "friends del");
 								}
 							}
 							
@@ -238,11 +257,11 @@ public class PlotOrganizer extends JavaPlugin{
 							plotManager.listFriends((Player) sender, args[2]);
 						}
 						else{
-							sender.sendMessage("§cUsage: /plot friend list [plot]");
+							printUsage(sender, "friends list");
 						}
 					}
 					else{
-						
+						printUsage(sender, "friends");
 					}
 					return true;
 				}
@@ -266,5 +285,34 @@ public class PlotOrganizer extends JavaPlugin{
 	
 	public World getPlotWorld() {
 		return plotWorld;
+	}
+	
+	private void printUsage(CommandSender sender, String cmd){
+		if(cmd.equalsIgnoreCase("add"))
+			sender.sendMessage("§cUsage: /plot add <player> <plotname>");
+		else if(cmd.equalsIgnoreCase("deli"))
+			sender.sendMessage("§cUsage: /plot del <id>");
+		else if(cmd.equalsIgnoreCase("del"))
+			sender.sendMessage("§cUsage: /plot del <player> <plotname>");
+		else if(cmd.equalsIgnoreCase("list"))
+			sender.sendMessage("§cUsage: /plot list [player]");
+		else if(cmd.equalsIgnoreCase("tp"))
+			sender.sendMessage("§cUsage: /plot tp [plotname] [player]");
+		else if(cmd.equalsIgnoreCase("fav"))
+			sender.sendMessage("§cUsage: /plot fav <plotname>");
+		else if(cmd.equalsIgnoreCase("friends") || cmd.equalsIgnoreCase("friend"))
+			sender.sendMessage("§cUsage: /plot friends <add/del/list>");
+		else if(cmd.equalsIgnoreCase("friends add"))
+			sender.sendMessage("§cUsage: /plot friends add <player> [plot]");
+		else if(cmd.equalsIgnoreCase("friends del"))
+			sender.sendMessage("§cUsage: /plot friends del <player> [plot]");
+		else if (cmd.equalsIgnoreCase("friends list"))	
+			sender.sendMessage("§cUsage: /plot friends list [plot]");		
+		else if(cmd.equalsIgnoreCase("rename"))
+			sender.sendMessage("§cUsage: /plot rename <oldName> <newName>");
+		else if(cmd.equalsIgnoreCase("help"))
+			sender.sendMessage("§cUsage: /plot help <topic>");			
+		else
+			sender.sendMessage("§cThis command doesn't exist!");
 	}
 }
