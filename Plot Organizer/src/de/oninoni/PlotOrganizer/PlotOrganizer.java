@@ -167,45 +167,67 @@ public class PlotOrganizer extends JavaPlugin{
 			else if(args[0].equalsIgnoreCase("friend") || args[0].equalsIgnoreCase("friends")){
 				if(args.length >= 2 && sender instanceof Player){
 					if(args[1].equalsIgnoreCase("add")){
-						if(args.length == 3) {
-							if(plotManager.addFriend((Player) sender, Bukkit.getOfflinePlayer(args[2]))){
-								sender.sendMessage("§6Friend §f" + args[2] + "§6 added to this Plot!");
+						if(Bukkit.getOfflinePlayer(args[2]).isOnline()){
+							if(sender.getName().equalsIgnoreCase(args[2])){
+								sender.sendMessage("&6You already own this plot!");
 							}
 							else{
-								sender.sendMessage("§6Friend §f" + args[2] + "§6 already exists on this Plot!");
-							}
-						}
-						else if(args.length == 4){
-							if(plotManager.addFriend((Player) sender, args[3], Bukkit.getOfflinePlayer(args[2]))){
-								sender.sendMessage("§6Friend §f" + args[2] + "§6 added to §f" + args[3] + "§6!");
-							}
-							else{
-								sender.sendMessage("§6Friend §f" + args[2] + "§6 already exists on §f" + args[3] + "§6!");
+								if(args.length == 3) {
+									if(plotManager.addFriend((Player) sender, Bukkit.getOfflinePlayer(args[2]))){
+										sender.sendMessage("§6Friend §f" + args[2] + "§6 added to this Plot!");
+									}
+									else{
+										sender.sendMessage("§6Friend §f" + args[2] + "§6 already exists on this Plot!");
+									}
+								}
+								else if(args.length == 4){
+									if(plotManager.addFriend((Player) sender, args[3], Bukkit.getOfflinePlayer(args[2]))){
+										sender.sendMessage("§6Friend §f" + args[2] + "§6 added to §f" + args[3] + "§6!");
+									}
+									else{
+										sender.sendMessage("§6Friend §f" + args[2] + "§6 already exists on §f" + args[3] + "§6!");
+									}
+								}
+								else{
+									sender.sendMessage("§cUsage: /plot friend add <player> [plot]");
+								}
 							}
 						}
 						else{
-							sender.sendMessage("§cUsage: /plot friend add <player> [plot]");
+							sender.sendMessage("§f" + args[2] + "§6 is not Online!");
 						}
+						
 					}
 					else if(args[1].equalsIgnoreCase("del")){
-						if(args.length == 3){
-							if(plotManager.delFriend((Player) sender, Bukkit.getOfflinePlayer(args[2]))){
-								sender.sendMessage("§6Friend §f" + args[2] + "§6 removed from this Plot!");
+						if(Bukkit.getOfflinePlayer(args[2]).isOnline()){
+							if(sender.getName().equalsIgnoreCase(args[2])){
+								sender.sendMessage("&6You cant remove yourself from this plot!");
 							}
 							else{
-								sender.sendMessage("§6Friend §f" + args[2] + "§6 does not exist on this Plot!");
+								if(args.length == 3){
+									if(plotManager.delFriend((Player) sender, Bukkit.getOfflinePlayer(args[2]))){
+										sender.sendMessage("§6Friend §f" + args[2] + "§6 removed from this Plot!");
+									}
+									else{
+										sender.sendMessage("§6Friend §f" + args[2] + "§6 does not exist on this Plot!");
+									}
+								}
+								else if(args.length == 4){
+									if(plotManager.delFriend((Player) sender, args[3], Bukkit.getOfflinePlayer(args[2]))){
+										sender.sendMessage("§6Friend §f" + args[2] + "§6 removed from §f" + args[3] + "§6!");
+									}
+									else{
+										sender.sendMessage("§6Friend §f" + args[2] + "§6 does not exist on §f" + args[3] + "§6!");
+									}
+								}
+								else{
+									sender.sendMessage("§cUsage: /plot friend del <player> [plot]");
+								}
 							}
-						}
-						else if(args.length == 4){
-							if(plotManager.delFriend((Player) sender, args[3], Bukkit.getOfflinePlayer(args[2]))){
-								sender.sendMessage("§6Friend §f" + args[2] + "§6 removed from §f" + args[3] + "§6!");
-							}
-							else{
-								sender.sendMessage("§6Friend §f" + args[2] + "§6 does not exist on §f" + args[3] + "§6!");
-							}
+							
 						}
 						else{
-							sender.sendMessage("§cUsage: /plot friend del <player> [plot]");
+							sender.sendMessage("§f" + args[2] + "§6 is not Online!");
 						}
 					}
 					else if(args[1].equalsIgnoreCase("list")){
