@@ -52,7 +52,6 @@ public class TabCompletion {
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	public List<String> complete(CommandSender sender, Command command, String[] args) {
 		List<String> result = new ArrayList<String>();
 		if ("plot".toLowerCase().startsWith(command.getName().toLowerCase()))

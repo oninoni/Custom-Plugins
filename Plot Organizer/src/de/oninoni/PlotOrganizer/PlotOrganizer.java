@@ -1,6 +1,7 @@
 package de.oninoni.PlotOrganizer;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -13,6 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
+import de.oninoni.PlotOrganizer.External.UUIDFetcher;
 import de.oninoni.PlotOrganizer.Listener.PlayerChangedWorldListener;
 
 public class PlotOrganizer extends JavaPlugin{
@@ -57,8 +59,6 @@ public class PlotOrganizer extends JavaPlugin{
 		plotManager.savePlots();
 	}
 	
-	// TODO: getOfflinePlayers mit name selber schreiben
-	@SuppressWarnings("deprecation")
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if(command.getName().equalsIgnoreCase("plot") && args.length > 0){
 			if(args[0].equalsIgnoreCase("list")){
@@ -97,7 +97,15 @@ public class PlotOrganizer extends JavaPlugin{
 					break;
 				case 3:
 					if(sender instanceof Player){
-						plotManager.tpToName((Player) sender, args[1], Bukkit.getOfflinePlayer(args[2]));
+						UUID uuid;
+						try {
+							uuid = UUIDFetcher.getUUIDOf(args[2]);
+						} catch (Exception e) {
+							e.printStackTrace();
+							sender.sendMessage("&6Player: " + args[2] + " does not exist!");
+							return true;
+						}
+						plotManager.tpToName((Player) sender, args[1], Bukkit.getOfflinePlayer(uuid));
 					}
 					break;
 				default:
@@ -108,7 +116,15 @@ public class PlotOrganizer extends JavaPlugin{
 			else if(args[0].equalsIgnoreCase("add")){
 				if(sender.hasPermission("plotmanager.core.add")){
 					if(args.length == 3){
-						OfflinePlayer p = Bukkit.getOfflinePlayer(args[1]);
+						UUID uuid;
+						try {
+							uuid = UUIDFetcher.getUUIDOf(args[1]);
+						} catch (Exception e) {
+							e.printStackTrace();
+							sender.sendMessage("&6Player: " + args[1] + " does not exist!");
+							return true;
+						}
+						OfflinePlayer p = Bukkit.getOfflinePlayer(uuid);
 						if(p.isOnline()){
 							if(plotManager.addPlot(p, args[2])){
 								sender.sendMessage("§6Plot §f" + args[2] + "§6 added for player §f" + args[1] + "§6!");
@@ -137,7 +153,15 @@ public class PlotOrganizer extends JavaPlugin{
 						}
 						return true;
 					case 3:
-						int id = plotManager.getIDByOwnerName(Bukkit.getOfflinePlayer(args[1]), args[2]);
+						UUID uuid;
+						try {
+							uuid = UUIDFetcher.getUUIDOf(args[1]);
+						} catch (Exception e) {
+							e.printStackTrace();
+							sender.sendMessage("&6Player: " + args[1] + " does not exist!");
+							return true;
+						}
+						int id = plotManager.getIDByOwnerName(Bukkit.getOfflinePlayer(uuid), args[2]);
 						if (id == -1)
 							sender.sendMessage("§f" + args[1] + "§6 doesn't have a plot called §f" + args[2] + "§6!");
 						else{
@@ -191,79 +215,98 @@ public class PlotOrganizer extends JavaPlugin{
 				return true;
 			}
 			else if(args[0].equalsIgnoreCase("friend") || args[0].equalsIgnoreCase("friends")){
-				if(args.length >= 2 && sender instanceof Player){
+				if(sender instanceof Player){
 					if(args[1].equalsIgnoreCase("add")){
-						if(Bukkit.getOfflinePlayer(args[2]).isOnline()){
-							if(sender.getName().equalsIgnoreCase(args[2])){
-								sender.sendMessage("&6You already own this plot!");
+						if(args.length >= 3 && args.length <= 4){
+							UUID uuid;
+							try {
+								uuid = UUIDFetcher.getUUIDOf(args[2]);
+							} catch (Exception e) {
+								e.printStackTrace();
+								sender.sendMessage("&6Player: " + args[2] + " does not exist!");
+								return true;
 							}
-							else{
-								if(args.length == 3) {
-									if(plotManager.getPlotByPosition((Player) sender) != null){
-										if(plotManager.addFriend((Player) sender, Bukkit.getOfflinePlayer(args[2]))){
-											sender.sendMessage("§6Friend §f" + args[2] + "§6 added to this Plot!");
-										}
-										else{
-											sender.sendMessage("§6Friend §f" + args[2] + "§6 already exists on this Plot!");
-										}
-									}
-									else{
-										sender.sendMessage("&6You are not inside a Plot!");
-									}
-								}
-								else if(args.length == 4){
-									if(plotManager.addFriend((Player) sender, args[3], Bukkit.getOfflinePlayer(args[2]))){
-										sender.sendMessage("§6Friend §f" + args[2] + "§6 added to §f" + args[3] + "§6!");
-									}
-									else{
-										sender.sendMessage("§6Friend §f" + args[2] + "§6 already exists on §f" + args[3] + "§6!");
-									}
+							if(Bukkit.getOfflinePlayer(uuid).isOnline()){
+								if(sender.getName().equalsIgnoreCase(args[2])){
+									sender.sendMessage("&6You already own this plot!");
 								}
 								else{
-									printUsage(sender, "friends add");
+									if(args.length == 3) {
+										if(plotManager.getPlotByPosition((Player) sender) != null){
+											if(plotManager.addFriend((Player) sender, Bukkit.getOfflinePlayer(uuid))){
+												sender.sendMessage("§6Friend §f" + args[2] + "§6 added to this Plot!");
+											}
+											else{
+												sender.sendMessage("§6Friend §f" + args[2] + "§6 already exists on this Plot!");
+											}
+										}
+										else{
+											sender.sendMessage("&6You are not inside a Plot!");
+										}
+									}
+									else if(args.length == 4){
+										if(plotManager.addFriend((Player) sender, args[3], Bukkit.getOfflinePlayer(uuid))){
+											sender.sendMessage("§6Friend §f" + args[2] + "§6 added to §f" + args[3] + "§6!");
+										}
+										else{
+											sender.sendMessage("§6Friend §f" + args[2] + "§6 already exists on §f" + args[3] + "§6!");
+										}
+									}
 								}
+							}
+							else{
+								sender.sendMessage("§6" + args[2] + "§6 is not online!");
 							}
 						}
 						else{
-							sender.sendMessage("§f" + args[2] + "§6 is not Online!");
+							printUsage(sender, "friends add");
 						}
-						
 					}
 					else if(args[1].equalsIgnoreCase("del")){
-						if(Bukkit.getOfflinePlayer(args[2]).isOnline()){
-							if(sender.getName().equalsIgnoreCase(args[2])){
-								sender.sendMessage("&6You cant remove yourself from this plot!");
+						if(args.length >= 3 && args.length <= 4){
+							UUID uuid;
+							try {
+								uuid = UUIDFetcher.getUUIDOf(args[2]);
+							} catch (Exception e) {
+								e.printStackTrace();
+								sender.sendMessage("&6Player: " + args[2] + " does not exist!");
+								return true;
 							}
-							else{
-								if(args.length == 3){
-									if(plotManager.getPlotByPosition((Player) sender) != null){
-										if(plotManager.delFriend((Player) sender, Bukkit.getOfflinePlayer(args[2]))){
-											sender.sendMessage("§6Friend §f" + args[2] + "§6 removed from this Plot!");
-										}
-										else{
-											sender.sendMessage("§6Friend §f" + args[2] + "§6 does not exist on this Plot!");
-										}
-									}
-									else{
-										sender.sendMessage("&6You are not inside a Plot!");
-									}
-								}
-								else if(args.length == 4){
-									if(plotManager.delFriend((Player) sender, args[3], Bukkit.getOfflinePlayer(args[2]))){
-										sender.sendMessage("§6Friend §f" + args[2] + "§6 removed from §f" + args[3] + "§6!");
-									}
-									else{
-										sender.sendMessage("§6Friend §f" + args[2] + "§6 does not exist on §f" + args[3] + "§6!");
-									}
+							if(Bukkit.getOfflinePlayer(uuid).isOnline()){
+								if(sender.getName().equalsIgnoreCase(args[2])){
+									sender.sendMessage("&6You cant remove yourself from this plot!");
 								}
 								else{
-									printUsage(sender, "friends del");
+									if(args.length == 3){
+										if(plotManager.getPlotByPosition((Player) sender) != null){
+											if(plotManager.delFriend((Player) sender, Bukkit.getOfflinePlayer(uuid))){
+												sender.sendMessage("§6Friend §f" + args[2] + "§6 removed from this Plot!");
+											}
+											else{
+												sender.sendMessage("§6Friend §f" + args[2] + "§6 does not exist on this Plot!");
+											}
+										}
+										else{
+											sender.sendMessage("&6You are not inside a Plot!");
+										}
+									}
+									else if(args.length == 4){
+										if(plotManager.delFriend((Player) sender, args[3], Bukkit.getOfflinePlayer(uuid))){
+											sender.sendMessage("§6Friend §f" + args[2] + "§6 removed from §f" + args[3] + "§6!");
+										}
+										else{
+											sender.sendMessage("§6Friend §f" + args[2] + "§6 does not exist on §f" + args[3] + "§6!");
+										}
+									}
+									
 								}
 							}
-							
+							else{
+								sender.sendMessage("§f" + args[2] + "§6 is not Online!");
+							}
 						}
 						else{
-							sender.sendMessage("§f" + args[2] + "§6 is not Online!");
+							printUsage(sender, "friends del");
 						}
 					}
 					else if(args[1].equalsIgnoreCase("list")){

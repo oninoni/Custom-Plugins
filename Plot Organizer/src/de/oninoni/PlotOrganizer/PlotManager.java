@@ -14,6 +14,8 @@ import org.bukkit.entity.Player;
 
 import com.sk89q.worldguard.domains.DefaultDomain;
 
+import de.oninoni.PlotOrganizer.External.UUIDFetcher;
+
 public class PlotManager {
 	
 	static int MAX_PLOTS = Integer.MAX_VALUE;
@@ -269,9 +271,16 @@ public class PlotManager {
 	}
 	
 	// show others list
-	@SuppressWarnings("deprecation")
 	public void showList(String from, CommandSender sender) {
-		OfflinePlayer player = Bukkit.getOfflinePlayer(from);
+		UUID uuid;
+		try {
+			uuid = UUIDFetcher.getUUIDOf(from);
+		} catch (Exception e) {
+			e.printStackTrace();
+			sender.sendMessage("&6Player: " + from + " does not exist!");
+			return;
+		}
+		OfflinePlayer player = Bukkit.getOfflinePlayer(uuid);
 		if (!playerPlots.containsKey(player)){
 			sender.sendMessage("§6" + from + " doesn't have any plots!");
 			return;
