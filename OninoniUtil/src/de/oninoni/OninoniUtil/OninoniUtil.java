@@ -5,11 +5,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
 
 public class OninoniUtil extends JavaPlugin{
 	
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		String cmd = command.toString();
+		String cmd = command.getName();
 		Player p = null;
 		
 		if (sender instanceof Player){
@@ -19,23 +20,28 @@ public class OninoniUtil extends JavaPlugin{
 		if (cmd.equalsIgnoreCase("home")){
 			if (p != null){
 				if (checkSky(p)){
-					p.teleport(p.getBedSpawnLocation());
-					p.sendMessage("§6Teleported to home");
+					if(p.getBedSpawnLocation() != null){
+						p.teleport(p.getBedSpawnLocation().add(new Vector(0.5, 0, 0.5)));
+						p.sendMessage("§6Teleported to your home");
+					}else{
+						p.sendMessage("§6You don't have a home!\nSleep in a bed that is not obstructed to set your home!");
+					}
 				}else{
-					p.sendMessage("§6Sky connection obstucted");
+					p.sendMessage("§6Sky connection obstructed");
 				}
-			}			
+				return true;
+			}
 		}else if (cmd.equalsIgnoreCase("spawn")){
 			if (p != null){
 				if (checkSky(p)){
-					p.teleport(getWorld().getSpawnLocation());
-					p.sendMessage("§6Teleported to spawn");
+					p.teleport(getWorld().getSpawnLocation().add(new Vector(0.5, 0, 0.5)));
+					p.sendMessage("§6Teleported to the world spawn");
 				}else{
-					p.sendMessage("§6Sky connection obstucted");
+					p.sendMessage("§6Sky connection obstructed");
 				}
+				return true;
 			}
-		}
-		
+		}		
 		return false;
 	}
 	
@@ -44,7 +50,7 @@ public class OninoniUtil extends JavaPlugin{
 	}
 	
 	private boolean checkSky(Player p){
-		return getWorld().getBlockAt(p.getLocation()).getLightFromSky() == 15;
+		return getWorld().getBlockAt(p.getLocation()).getLightFromSky() > 0;
 	}
 
 	public void onEnable() {
