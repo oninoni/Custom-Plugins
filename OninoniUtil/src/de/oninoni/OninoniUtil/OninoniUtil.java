@@ -46,5 +46,12 @@ public class OninoniUtil extends JavaPlugin{
 	private boolean checkSky(Player p){
 		return getWorld().getBlockAt(p.getLocation()).getLightFromSky() == 15;
 	}
+
+	public void onEnable() {
+		
+	}
 	
+	public void onDisable() {
+		
+	}
 }
