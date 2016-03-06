@@ -1,0 +1,4 @@
+name: OninoniUtil
+version: 0.01
+description: Utilities Plugin for oninoni.de
+main: de.oninoni.OninoniUtil.OninoniUtil
