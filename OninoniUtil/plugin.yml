@@ -2,3 +2,15 @@ name: OninoniUtil
 version: 0.01
 description: Utilities Plugin for oninoni.de
 main: de.oninoni.OninoniUtil.OninoniUtil
+  spawn:
+    description: Teleports you to Spawn
+    permission: oninoniUtil
+    usage: Do /<command> to go to Spawn! Only works with sky above your head!
+  home:
+    description: Teleports you to Home
+    permission: oninoniUtil
+    usage: Do /<command> to go to Home! Only works with sky above your head!
+  sethome:
+    description: Teleports you to spawn
+    permission: oninoniUtil
+    usage: Do /<command> to set your Home!
