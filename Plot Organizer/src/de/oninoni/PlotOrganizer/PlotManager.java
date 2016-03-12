@@ -361,10 +361,10 @@ public class PlotManager {
 	public void sendPlotInfo(Player player){
 		Plot plot = getPlotByPosition(player);
 		if(plot != null){
-			player.sendMessage("&6You are inside Plot &f" + plot.getName() + "&f of &f" + plot.getOwner().getName() + "&6!");
-			player.sendMessage("&6Also building here:");
+			player.sendMessage("§6You are inside Plot §f" + plot.getName() + "§f of §f" + plot.getOwner().getName() + "§6!");
+			player.sendMessage("§6Also building here:");
 			for (UUID friend : plot.getMembers()) {
-				player.sendMessage("&b" + Bukkit.getOfflinePlayer(friend).getName());
+				player.sendMessage("§b" + Bukkit.getOfflinePlayer(friend).getName());
 			}
 		}else{
 			player.sendMessage("&6You are not inside a Plot!");
