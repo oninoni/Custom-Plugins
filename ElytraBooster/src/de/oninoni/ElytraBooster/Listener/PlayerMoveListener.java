@@ -42,7 +42,6 @@ public class PlayerMoveListener implements Listener{
 			}
 		}
 		
-		
 		if(level==0.0) return;
 		level-=1;
 		lore.set(1, level / 100.0f + "%");
