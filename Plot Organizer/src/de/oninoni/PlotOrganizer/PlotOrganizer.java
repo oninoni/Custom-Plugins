@@ -80,6 +80,7 @@ public class PlotOrganizer extends JavaPlugin{
 			else if(args[0].equalsIgnoreCase("info")){
 				if(sender instanceof Player){
 					plotManager.sendPlotInfo((Player) sender);
+					return true;
 				}
 			}
 			else if(args[0].equalsIgnoreCase("tp")){
