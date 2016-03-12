@@ -1,0 +1,9 @@
+name: ElytraBooster
+version: 0.01
+description: Gives Elytras a fiery Boost!
+main: de.oninoni.ElytraBooster.ElytraBooster
+commands:
+  elytra:
+    description: Giving you a boosted Elytra
+    permission: elytra.admin
+    usage: Do /<command> to get a boosted elytra
