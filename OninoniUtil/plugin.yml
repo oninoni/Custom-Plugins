@@ -2,6 +2,7 @@ name: OninoniUtil
 version: 0.01
 description: Utilities Plugin for oninoni.de
 main: de.oninoni.OninoniUtil.OninoniUtil
+depend: [PermissionsEx]
 commands:
   spawn:
     description: Teleports you to Spawn

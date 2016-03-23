@@ -13,6 +13,7 @@ public class CraftItemListener implements Listener{
 	
 	@EventHandler
 	public void onCraft(CraftItemEvent event){
+		if(!(event.getInventory().getResult().getItemMeta() == null))return;
 		if(!event.getInventory().getResult().getItemMeta().getLore().get(0).equalsIgnoreCase("Fuel Level:"))return;
 		ItemStack[] ingredients = event.getInventory().getMatrix();
 		ItemStack elytra = new ItemStack(Material.AIR);

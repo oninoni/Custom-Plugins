@@ -7,7 +7,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
+import de.oninoni.OninoniUtil.Listener.PlayerJoinListener;
+import ru.tehkode.permissions.bukkit.PermissionsEx;
+
 public class OninoniUtil extends JavaPlugin{
+	
+	private PermissionsEx permissionsEx;
 	
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		String cmd = command.getName();
@@ -54,10 +59,23 @@ public class OninoniUtil extends JavaPlugin{
 	}
 
 	public void onEnable() {
+		permissionsEx = (PermissionsEx) getServer().getPluginManager().getPlugin("PermissionsEx");
+		if(permissionsEx != null){
+			getLogger().info("PermissionsEx detected!");
+		}else{
+			getLogger().warning("PermissionsEx missing!");
+		}
+		
+		PlayerJoinListener playerJoinListener = new PlayerJoinListener(this);
+		getServer().getPluginManager().registerEvents(playerJoinListener, this);
 		
 	}
 	
 	public void onDisable() {
 		
+	}
+	
+	public PermissionsEx getPermissionsEx() {
+		return permissionsEx;
 	}
 }

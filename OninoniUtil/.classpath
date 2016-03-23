@@ -7,5 +7,6 @@
 			<attribute name="javadoc_location" value="https://hub.spigotmc.org/javadocs/bukkit/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="jars/PermissionsEx-1.23.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
