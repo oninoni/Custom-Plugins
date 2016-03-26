@@ -240,6 +240,9 @@ public class PlotManager {
 	
 	public void playerEntered(Player p){
 		if(playerPlots.containsKey(p.getPlayer())){
+			p.sendMessage("&6Welcome back to Plot World!");
+			p.sendMessage("&6You are inside youre own Plot. You can start building right now!");
+			p.sendMessage("&6Do: &f/plot help &6to get some help!");
 			tpToFavorite(p);
 		}else{
 			p.sendMessage("&6Welcome to Plot World!");
