@@ -7,6 +7,5 @@
 			<attribute name="javadoc_location" value="https://hub.spigotmc.org/javadocs/bukkit/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="jars/craftbukkit.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

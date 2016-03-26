@@ -6,7 +6,6 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_9_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,14 +18,10 @@ public class PlayerMoveListener implements Listener{
 	
 	final float thickness = 8;
 	
-	private boolean isGliding(Player p){
-		return ((CraftPlayer)p).getHandle().cB();
-	}
-	
 	@EventHandler
 	public void onMove(PlayerMoveEvent event){
 		Player p = event.getPlayer();
-		if(!isGliding(p))return;
+		if(!p.isGliding())return;
 		if(!p.isSneaking())return;
 		ItemStack elytra = p.getInventory().getChestplate();
 		ItemMeta itemMeta = elytra.getItemMeta();

@@ -242,6 +242,9 @@ public class PlotManager {
 		if(playerPlots.containsKey(p.getPlayer())){
 			tpToFavorite(p);
 		}else{
+			p.sendMessage("&6Welcome to Plot World!");
+			p.sendMessage("&6You are inside youre own Plot. You can start building right now!");
+			p.sendMessage("&6Do: &f/plot help &6to get some help!");
 			addPlot(p, "Default");
 			tpToFavorite(p);
 		}
