@@ -8,6 +8,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
 import de.oninoni.OninoniUtil.Listener.PlayerJoinListener;
+import de.oninoni.OninoniUtil.Listener.PlayerKickBanListener;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 public class OninoniUtil extends JavaPlugin{
@@ -69,6 +70,8 @@ public class OninoniUtil extends JavaPlugin{
 		PlayerJoinListener playerJoinListener = new PlayerJoinListener(this);
 		getServer().getPluginManager().registerEvents(playerJoinListener, this);
 		
+		PlayerKickBanListener playerKickBanListener = new PlayerKickBanListener(this);
+		getServer().getPluginManager().registerEvents(playerKickBanListener, this);
 	}
 	
 	public void onDisable() {
