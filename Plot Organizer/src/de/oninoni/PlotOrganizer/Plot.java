@@ -43,7 +43,7 @@ public class Plot {
 		plugin = pl;
 		
 		if(plugin.getWorldGuard().getRegionManager(plugin.getPlotWorld()).hasRegion(getPlotName(id))){
-			plugin.getLogger().info(getPlotName(id));
+			//plugin.getLogger().info(getPlotName(id));
 			
 			protectedCuboidRegion = (ProtectedCuboidRegion) plugin.getWorldGuard().getRegionManager(plugin.getPlotWorld()).getRegion(getPlotName(id));
 			if(protectedCuboidRegion.getOwners().getPlayers().toArray().length == 0){

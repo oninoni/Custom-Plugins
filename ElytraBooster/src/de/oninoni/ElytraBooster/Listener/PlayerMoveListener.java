@@ -50,8 +50,6 @@ public class PlayerMoveListener implements Listener{
 		
 		location = location.add(new Vector(0,0.5,0));
 		
-		
-		
 		for(int i = 0; i < thickness; i++){
 			p.getWorld().spawnParticle(Particle.FLAME, location, (int) (thickness/2), 1/thickness, 1/thickness, 1/thickness, 0);
 			p.getWorld().spawnParticle(Particle.SMOKE_NORMAL, location, (int) (thickness/2), 1/thickness, 1/thickness, 1/thickness, 0.1);
@@ -59,8 +57,7 @@ public class PlayerMoveListener implements Listener{
 		}
 		
 		if(level%1==0){
-			p.getWorld().playSound(location, Sound.ENTITY_PLAYER_BURP, 2.0f, 0.6f);
+			p.getWorld().playSound(location, Sound.ENTITY_FIREWORK_LAUNCH, 2.0f, 0.6f);
 		}
-		
 	}
 }
