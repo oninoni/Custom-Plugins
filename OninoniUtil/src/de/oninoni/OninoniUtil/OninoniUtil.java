@@ -40,7 +40,7 @@ public class OninoniUtil extends JavaPlugin{
 		}else if (cmd.equalsIgnoreCase("spawn")){
 			if (p != null){
 				if (checkSky(p)){
-					p.teleport(getWorld().getSpawnLocation().add(new Vector(0.5, 0, 0.5)));
+					p.teleport(getSpawnWorld().getSpawnLocation().add(new Vector(0.5, 0, 0.5)));
 					p.sendMessage("§6Teleported to the world spawn");
 				}else{
 					p.sendMessage("§6Sky connection obstructed");
@@ -51,12 +51,14 @@ public class OninoniUtil extends JavaPlugin{
 		return false;
 	}
 	
-	private World getWorld(){
+	private World getSpawnWorld(){
 		return getServer().getWorld("world");
 	}
 	
 	private boolean checkSky(Player p){
-		return getWorld().getBlockAt(p.getLocation()).getLightFromSky() > 0;
+		if(p.getWorld().getName().equalsIgnoreCase("world"))return p.getWorld().getBlockAt(p.getLocation()).getLightFromSky() > 0;
+		if(p.getWorld().getName().equalsIgnoreCase("world_nether") || p.getWorld().getName().equalsIgnoreCase("world_the_end"))return false;
+		return true;
 	}
 
 	public void onEnable() {

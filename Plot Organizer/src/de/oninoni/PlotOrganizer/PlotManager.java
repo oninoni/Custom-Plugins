@@ -240,17 +240,14 @@ public class PlotManager {
 	
 	public void playerEntered(Player p){
 		if(playerPlots.containsKey(p.getPlayer())){
-			p.sendMessage("&6Welcome back to Plot World!");
-			p.sendMessage("&6You are inside youre own Plot. You can start building right now!");
-			p.sendMessage("&6Do: &f/plot help &6to get some help!");
-			tpToFavorite(p);
+			p.sendMessage("§6Welcome back to Plot World!");
 		}else{
-			p.sendMessage("&6Welcome to Plot World!");
-			p.sendMessage("&6You are inside youre own Plot. You can start building right now!");
-			p.sendMessage("&6Do: &f/plot help &6to get some help!");
+			p.sendMessage("§6Welcome to Plot World!");
 			addPlot(p, "Default");
-			tpToFavorite(p);
 		}
+		p.sendMessage("§6You are inside youre own Plot. You can start building right now!");
+		p.sendMessage("§6Do: §f/plot help §6to get some help!");
+		tpToFavorite(p);
 	}
 	
 	private void listPlots(OfflinePlayer player, CommandSender sender) {
