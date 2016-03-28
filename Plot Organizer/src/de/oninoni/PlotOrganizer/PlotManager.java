@@ -259,7 +259,7 @@ public class PlotManager {
 			if (list.get(i) == favoritePlots.get(player))
 				msg += " §a(favorited)";
 			sender.sendMessage(msg);
-		}	
+		}
 	}
 
 	// show own list
