@@ -41,7 +41,6 @@ public class OnionPower extends JavaPlugin {
 				machineManager.update();
 			}
 		}, 2L);
-		
 	}
 	
 	public void onDisable() {
