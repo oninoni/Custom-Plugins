@@ -1,9 +1,13 @@
 package de.oninoni.OnionPower;
 
+import java.util.Iterator;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.FurnaceRecipe;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comphenix.protocol.ProtocolLibrary;
@@ -23,6 +27,16 @@ public class OnionPower extends JavaPlugin {
 	public static OnionPower get(){return JavaPlugin.getPlugin(OnionPower.class);}
 	
 	public void onEnable() {
+		// DEBUG
+		Bukkit.getLogger().info("Recipes:");
+		for (Iterator<Recipe> iterator = Bukkit.recipeIterator(); iterator.hasNext();) {			
+			Recipe recipe = (Recipe) iterator.next();
+			if (recipe instanceof FurnaceRecipe){
+				FurnaceRecipe f = (FurnaceRecipe) recipe;
+				Bukkit.getLogger().info(f.getInput());
+			}
+		}
+		
 		protocolManager = ProtocolLibrary.getProtocolManager();
 		protocolLibManager = new ProtocolLibManager(protocolManager);
 		protocolLibManager.addLoreListener();

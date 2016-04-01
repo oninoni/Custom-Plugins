@@ -1,17 +1,39 @@
 package de.oninoni.OnionPower.Machines;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Furnace;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.ItemStack;
 
+import de.oninoni.OnionPower.NMSAdapter;
 import de.oninoni.OnionPower.Items.Batterod;
+import de.oninoni.OnionPower.Items.PowerCore;
 
 public class ElectricFurnace extends Machine {
 
+	private Furnace furnace;
+	
 	public ElectricFurnace(Location position, MachineManager machineManager) {
 		super(position, machineManager);
+		ItemStack powerCore = PowerCore.create(this);
+		
+		furnace = ((Furnace) position.getBlock().getState());
+		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+			@Override
+			public void run() {
+				furnace.getInventory().setItem(0, new ItemStack(Material.AIR));
+				furnace.getInventory().setItem(2, powerCore);
+				NMSAdapter.setInvNameFurnace(furnace, getDisplayName());
+				for(HumanEntity viewer : furnace.getInventory().getViewers()){
+					viewer.closeInventory();
+					viewer.openInventory(furnace.getInventory());
+				}
+			}
+		}, 1L);
 	}
 	
 	public static boolean canCreate(InventoryClickEvent e){
@@ -47,25 +69,24 @@ public class ElectricFurnace extends Machine {
 
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
-		
+		requestFromNeighbours();
+		if (power > 0) {
+			
+		}
 	}
 
 	@Override
 	public void onClick(InventoryClickEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onMoveInto(InventoryMoveItemEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void onMoveFrom(InventoryMoveItemEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 

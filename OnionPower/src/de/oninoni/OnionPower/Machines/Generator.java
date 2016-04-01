@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 
 import de.oninoni.OnionPower.NMSAdapter;
 import de.oninoni.OnionPower.Items.Batterod;
-import de.oninoni.OnionPower.Items.BurnTimes;
+import de.oninoni.OnionPower.Items.ItemData;
 import de.oninoni.OnionPower.Items.PowerCore;
 
 public class Generator extends Machine {
@@ -55,13 +55,13 @@ public class Generator extends Machine {
 			
 			if (fuel != null){
 				Material mat = fuel.getType();
-				if (BurnTimes.Item.containsKey(mat) && BurnTimes.Item.get(mat) + power <= getMaxPower()) {
+				if (ItemData.burnTime.containsKey(mat) && ItemData.burnTime.get(mat) + power <= getMaxPower()) {
 					Bukkit.broadcastMessage("Burning Coal!");
 					if (fuel.getAmount() == 1)
 						furnace.getInventory().remove(fuel);
 					else
 						fuel.setAmount(fuel.getAmount() - 1);
-					furnace.setBurnTime(BurnTimes.Item.get(mat));
+					furnace.setBurnTime(ItemData.burnTime.get(mat));
 				}
 			}
 		}
