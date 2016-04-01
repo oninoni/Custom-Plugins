@@ -14,6 +14,7 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 
 import de.oninoni.OnionPower.Items.Batterod;
+import de.oninoni.OnionPower.Listeners.BlockBreakListener;
 import de.oninoni.OnionPower.Listeners.InventoryListener;
 import de.oninoni.OnionPower.Machines.MachineManager;
 
@@ -26,23 +27,16 @@ public class OnionPower extends JavaPlugin {
 	
 	public static OnionPower get(){return JavaPlugin.getPlugin(OnionPower.class);}
 	
-	public void onEnable() {
-		// DEBUG
-		Bukkit.getLogger().info("Recipes:");
-		for (Iterator<Recipe> iterator = Bukkit.recipeIterator(); iterator.hasNext();) {			
-			Recipe recipe = (Recipe) iterator.next();
-			if (recipe instanceof FurnaceRecipe){
-				FurnaceRecipe f = (FurnaceRecipe) recipe;
-				Bukkit.getLogger().info(f.getInput());
-			}
-		}
-		
+	public void onEnable() {		
 		protocolManager = ProtocolLibrary.getProtocolManager();
 		protocolLibManager = new ProtocolLibManager(protocolManager);
 		protocolLibManager.addLoreListener();
 		
 		InventoryListener inventoryListener = new InventoryListener();
 		getServer().getPluginManager().registerEvents(inventoryListener, this);
+		
+		BlockBreakListener blockBreakListener = new BlockBreakListener();
+		getServer().getPluginManager().registerEvents(blockBreakListener, this);
 		
 		machineManager = new MachineManager();
 		

@@ -5,6 +5,9 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Furnace;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.block.Furnace;
+import org.bukkit.entity.HumanEntity;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.ItemStack;
@@ -25,8 +28,7 @@ public class ElectricFurnace extends Machine {
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {
-				furnace.getInventory().setItem(0, new ItemStack(Material.AIR));
-				furnace.getInventory().setItem(2, powerCore);
+				furnace.getInventory().setItem(1, powerCore);
 				NMSAdapter.setInvNameFurnace(furnace, getDisplayName());
 				for(HumanEntity viewer : furnace.getInventory().getViewers()){
 					viewer.closeInventory();
@@ -69,6 +71,8 @@ public class ElectricFurnace extends Machine {
 
 	@Override
 	public void update() {
+		powerIntputTotal = 0;
+		powerOutputTotal = 0;
 		requestFromNeighbours();
 		if (power > 0) {
 			
@@ -76,18 +80,26 @@ public class ElectricFurnace extends Machine {
 	}
 
 	@Override
-	public void onClick(InventoryClickEvent e) {
-		
+	public void onClick(InventoryClickEvent e) {		
+		int convertSlot = e.getView().convertSlot(e.getRawSlot());
+		if(e.getRawSlot() == convertSlot && convertSlot == 1){
+			e.setCancelled(true);
+		}
 	}
 
 	@Override
 	public void onMoveInto(InventoryMoveItemEvent e) {
-		
+	
 	}
 
 	@Override
 	public void onMoveFrom(InventoryMoveItemEvent e) {
-		
+
+	}
+
+	@Override
+	public void onBreak(BlockBreakEvent e) {
+		furnace.getInventory().setItem(1, Batterod.create());
 	}
 
 }

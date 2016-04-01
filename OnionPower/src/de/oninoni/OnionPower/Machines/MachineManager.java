@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
@@ -49,10 +50,20 @@ public class MachineManager {
 		Location source = e.getSource().getLocation();
 		Location destination = e.getDestination().getLocation();
 		if(machines.get(source) != null){
+			Bukkit.getLogger().info("SOURCE!");
 			machines.get(source).onMoveFrom(e);
 		}
 		if(machines.get(destination) != null){
+			Bukkit.getLogger().info("DESTINATION!");
 			machines.get(destination).onMoveInto(e);
+		}
+	}
+	
+	public void onBreak(BlockBreakEvent e){
+		Location location = e.getBlock().getLocation();
+		if(machines.containsKey(location)){
+			machines.get(location).onBreak(e);
+			machines.remove(location);
 		}
 	}
 		

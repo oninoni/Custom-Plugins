@@ -24,6 +24,6 @@ public class InventoryListener implements Listener{
 	
 	@EventHandler
 	public void onMove(InventoryMoveItemEvent e){
-		
+		plugin.getMachineManager().onMove(e);
 	}
 }
