@@ -45,7 +45,14 @@ public class MachineManager {
 	}
 	
 	public void onMove(InventoryMoveItemEvent e){
-		Machine machine = machines.get(e.get)
+		Location source = e.getSource().getLocation();
+		Location destination = e.getDestination().getLocation();
+		if(machines.get(source) != null){
+			machines.get(source).onMoveFrom(e);
+		}
+		if(machines.get(destination) != null){
+			machines.get(destination).onMoveInto(e);
+		}
 	}
 	
 }
