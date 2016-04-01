@@ -38,4 +38,12 @@ public class PowerCore {
 		}
 		return false;
 	}
+	
+	public static void setPowerLevel(ItemStack powerCore, int power, int maxPower){
+		ItemMeta itemMeta = powerCore.getItemMeta();
+		List<String> lore = itemMeta.getLore();
+		lore.set(1, "§6" + power + " / " + maxPower + " " + CustomsItems.UNIT_NAME);
+		itemMeta.setLore(lore);
+		powerCore.setItemMeta(itemMeta);
+	}
 }
