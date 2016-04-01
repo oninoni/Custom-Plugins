@@ -17,8 +17,7 @@ public class Generator extends Machine {
 	public Generator(Location position) {
 		super(position);
 		furnace = ((Furnace) position.getBlock().getState());
-		furnace.getInventory().setItem(2, PowerCore.create(this));
-		furnace.getInventory().setItem(0, new ItemStack(Material.AIR));
+		furnace.getInventory().setItem(0, PowerCore.create(this));
 		NMSAdapter.setInvNameFurnace(furnace, getDisplayName());
 	}
 	
@@ -27,7 +26,7 @@ public class Generator extends Machine {
 		return material == Material.FURNACE 
 			|| material == Material.BURNING_FURNACE;
 	}
-	
+
 	@Override
 	public int getMaxPower() {
 		return 6400;
