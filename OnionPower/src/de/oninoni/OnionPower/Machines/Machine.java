@@ -18,8 +18,8 @@ public abstract class Machine {
 	
 	protected abstract boolean isMaterial(Material material);
 	protected abstract int getMaxEnergy();
-	
-	public abstract void Update();
+
+	public abstract void update();
 
 	public Location getPosition() {
 		return position;
