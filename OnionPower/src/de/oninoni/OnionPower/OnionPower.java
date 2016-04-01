@@ -1,5 +1,6 @@
 package de.oninoni.OnionPower;
 
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comphenix.protocol.ProtocolLibrary;
@@ -21,6 +22,17 @@ public class OnionPower extends JavaPlugin {
 		
 		InventoryOpenListener inventoryOpenListener = new InventoryOpenListener();
 		getServer().getPluginManager().registerEvents(inventoryOpenListener, this);
+		
+		Bukkit.getScheduler().runTaskLater(this, new Runnable() {
+			private OnionPower plugin = OnionPower.get();
+			
+			@Override
+			public void run() {
+				
+				
+				Bukkit.getScheduler().runTaskLater(plugin, this, 5L);
+			}
+		}, 5L);
 	}
 	
 	public void onDisable() {
