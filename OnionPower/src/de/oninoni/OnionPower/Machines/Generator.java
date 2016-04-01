@@ -17,7 +17,7 @@ public class Generator extends Machine {
 	public Generator(Location position) {
 		super(position);
 		furnace = ((Furnace) position.getBlock().getState());
-		furnace.getInventory().setItem(1, PowerCore.create(this));
+		furnace.getInventory().setItem(0, PowerCore.create(this));
 		NMSAdapter.setInvNameFurnace(furnace, getDisplayName());
 	}
 	
@@ -39,7 +39,7 @@ public class Generator extends Machine {
 	
 	public static boolean canCreate(InventoryClickEvent e) {
 		ItemStack item = e.getCursor();
-		if (1 == e.getView().convertSlot(e.getRawSlot())){
+		if (0 == e.getView().convertSlot(e.getRawSlot())){
 			if (Batterod.check(item)){
 				return true;
 			}
