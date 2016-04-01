@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 
 import de.oninoni.OnionPower.NMSAdapter;
 import de.oninoni.OnionPower.Items.Batterod;
+import de.oninoni.OnionPower.Items.BurnTimes;
 import de.oninoni.OnionPower.Items.PowerCore;
 
 public class Generator extends Machine {
@@ -48,22 +49,26 @@ public class Generator extends Machine {
 	}
 	
 	@Override
-	public void update() {		
-		final short BURN_TIME = 100;
-		
-		if (furnace.getBurnTime() > 0) {
-			power++;
-		} else {
+	public void update() {				
+		if (furnace.getBurnTime() == 0) {
 			ItemStack fuel = furnace.getInventory().getFuel();
-			if (fuel != null && fuel.getType() == Material.COAL && BURN_TIME + power < getMaxPower())
-			{
-				Bukkit.broadcastMessage("Burning Coal!");
-				if (fuel.getAmount() == 1)
-					furnace.getInventory().remove(fuel);
-				else
-					fuel.setAmount(fuel.getAmount() - 1);
-				furnace.setBurnTime(BURN_TIME);
+			
+			if (fuel != null){
+				Material mat = fuel.getType();
+				if (BurnTimes.Item.containsKey(mat) && BurnTimes.Item.get(mat) + power <= getMaxPower()) {
+					Bukkit.broadcastMessage("Burning Coal!");
+					if (fuel.getAmount() == 1)
+						furnace.getInventory().remove(fuel);
+					else
+						fuel.setAmount(fuel.getAmount() - 1);
+					furnace.setBurnTime(BurnTimes.Item.get(mat));
+				}
 			}
+		}
+		if (furnace.getBurnTime() > 0) {
+			power += 2;
+			ItemStack powerCore = furnace.getInventory().getResult();
+			PowerCore.setPowerLevel(powerCore, power, getMaxPower());
 		}
 	}
 	

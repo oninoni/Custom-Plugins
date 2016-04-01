@@ -8,7 +8,7 @@ import net.minecraft.server.v1_9_R1.TileEntityFurnace;
 
 public class NMSAdapter {
 	
-	public static void setInvNameFurnace(Furnace furnace, String name){
+	public static void setInvNameFurnace(Furnace furnace, String name) {
 		try{
 			Field inventoryField = furnace.getClass().getDeclaredField("furnace");
 			inventoryField.setAccessible(true);
