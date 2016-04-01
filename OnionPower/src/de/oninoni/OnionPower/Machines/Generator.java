@@ -18,8 +18,8 @@ public class Generator extends Machine {
 	
 	private Furnace furnace;
 	
-	public Generator(Location position) {
-		super(position);
+	public Generator(Location position, MachineManager machineManager) {
+		super(position, machineManager);
 		ItemStack powerCore = PowerCore.create(this);
 
 		furnace = ((Furnace) position.getBlock().getState());
@@ -103,5 +103,15 @@ public class Generator extends Machine {
 	@Override
 	public void onMoveFrom(InventoryMoveItemEvent e) {
 		e.setCancelled(true);
+	}
+
+	@Override
+	public int getMaxPowerOutput() {
+		return 4;
+	}
+
+	@Override
+	public int getMaxPowerInput() {
+		return 0;
 	}
 }

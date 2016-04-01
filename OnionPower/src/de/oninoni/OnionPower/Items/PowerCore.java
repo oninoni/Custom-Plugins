@@ -22,6 +22,8 @@ public class PowerCore {
 		List<String> lore = new ArrayList<>();
 		lore.add("§6" + m.getDisplayName() + " Power:");
 		lore.add("§6" + m.getPower() + " / " + m.getMaxPower() + " " + CustomsItems.UNIT_NAME);
+		lore.add("§6Out: " + m.getPowerOutputTotal() + " / " + m.getMaxPowerOutput() + " " + CustomsItems.UNIT_NAME);
+		lore.add("§6In: " + m.getMaxPowerInput() + " / " + m.getMaxPowerInput() + " " + CustomsItems.UNIT_NAME);
 		itemMeta.setLore(lore);
 		powerCore.setItemMeta(itemMeta);
 		
@@ -39,10 +41,12 @@ public class PowerCore {
 		return false;
 	}
 	
-	public static void setPowerLevel(ItemStack powerCore, int power, int maxPower){
+	public static void setPowerLevel(ItemStack powerCore, Machine m){
 		ItemMeta itemMeta = powerCore.getItemMeta();
 		List<String> lore = itemMeta.getLore();
-		lore.set(1, "§6" + power + " / " + maxPower + " " + CustomsItems.UNIT_NAME);
+		lore.set(1, "§6" + m.getPower() + " / " + m.getMaxPower() + " " + CustomsItems.UNIT_NAME);
+		lore.set(2, "§6Out: " + m.getPowerOutputTotal() + " / " + m.getMaxPowerOutput() + " " + CustomsItems.UNIT_NAME);
+		lore.set(3, "§6In: " + m.getMaxPowerInput() + " / " + m.getMaxPowerInput() + " " + CustomsItems.UNIT_NAME);
 		itemMeta.setLore(lore);
 		powerCore.setItemMeta(itemMeta);
 	}
