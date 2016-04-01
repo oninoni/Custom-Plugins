@@ -20,7 +20,7 @@ public class PowerCore {
 		ItemMeta itemMeta = powerCore.getItemMeta();
 		itemMeta.setDisplayName(NAME);
 		List<String> lore = itemMeta.getLore();
-		lore.add("§6");
+		lore.add("§6" + m.getDisplayName());
 		itemMeta.setLore(lore);
 		powerCore.setItemMeta(itemMeta);
 		
