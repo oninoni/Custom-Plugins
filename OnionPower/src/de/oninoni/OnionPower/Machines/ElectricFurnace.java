@@ -44,6 +44,8 @@ public class ElectricFurnace extends Machine{
 
 	@Override
 	public void update() {
+		powerIntputTotal = 0;
+		powerOutputTotal = 0;
 		// TODO Auto-generated method stub
 		
 	}
