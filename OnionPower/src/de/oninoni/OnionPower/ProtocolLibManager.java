@@ -17,6 +17,10 @@ public class ProtocolLibManager {
 	
 	private static OnionPower plugin = OnionPower.get();
 	
+	public ProtocolLibManager(ProtocolManager protocolManager){
+		this.protocolManager = protocolManager;
+	}
+	
 	private ProtocolManager protocolManager;
 	
 	public void addLoreListener(){
