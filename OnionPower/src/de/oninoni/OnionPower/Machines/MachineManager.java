@@ -27,7 +27,7 @@ public class MachineManager {
 		{
 			Location location = e.getView().getTopInventory().getLocation();
 			if (Generator.canCreate(e))
-				machines.put(location, new Generator(location));
+				machines.put(location, new Generator(location, this));
 			//if (!ElectricFurnace.tryCreation(e))
 		}
 		else
@@ -53,6 +53,10 @@ public class MachineManager {
 		if(machines.get(destination) != null){
 			machines.get(destination).onMoveInto(e);
 		}
+	}
+	
+	public HashMap<Location, Machine> getMachines() {
+		return machines;
 	}
 	
 }
