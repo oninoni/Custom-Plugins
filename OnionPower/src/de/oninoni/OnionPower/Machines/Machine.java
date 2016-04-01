@@ -18,6 +18,7 @@ public abstract class Machine {
 	
 	protected abstract boolean isMaterial(Material material);
 	protected abstract int getMaxEnergy();
+	protected abstract String getDisplayName();
 
 	public abstract void update();
 
@@ -27,5 +28,9 @@ public abstract class Machine {
 	
 	public World getWorld() {
 		return world;
+	}
+	
+	public int getPower() {
+		return power;
 	}
 }

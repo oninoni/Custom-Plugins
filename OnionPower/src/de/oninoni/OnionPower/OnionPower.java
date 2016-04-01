@@ -1,6 +1,8 @@
 package de.oninoni.OnionPower;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comphenix.protocol.ProtocolLibrary;
@@ -47,5 +49,13 @@ public class OnionPower extends JavaPlugin {
 	
 	public MachineManager getMachineManager() {
 		return machineManager;
+	}
+	
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+		
+		if (command.getName().equalsIgnoreCase("batterod")){
+			
+		}
+		return false;
 	}
 }

@@ -44,4 +44,9 @@ public class Generator extends Machine {
 		}
 		return false;
 	}
+
+	@Override
+	protected String getDisplayName() {
+		return "§6§lGenerator";
+	}
 }
