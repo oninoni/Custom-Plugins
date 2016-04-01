@@ -17,8 +17,8 @@ public abstract class Machine {
 	}
 	
 	protected abstract boolean isMaterial(Material material);
-	protected abstract int getMaxEnergy();
 	
+	public abstract int getMaxEnergy();
 	public abstract String getDisplayName();
 	public abstract void update();
 
