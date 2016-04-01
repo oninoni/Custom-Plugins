@@ -6,13 +6,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 
-import de.oninoni.OnionPower.Listeners.InventoryOpenListener;
+import de.oninoni.OnionPower.Listeners.InventoryListener;
 import de.oninoni.OnionPower.Machines.MachineManager;
 
 public class OnionPower extends JavaPlugin {
 	
 	private ProtocolManager protocolManager;
-	public ProtocolLibManager protocolLibManager;
+	private ProtocolLibManager protocolLibManager;
 	
 	private MachineManager machineManager;
 	
@@ -23,8 +23,8 @@ public class OnionPower extends JavaPlugin {
 		protocolLibManager = new ProtocolLibManager(protocolManager);
 		protocolLibManager.addLoreListener();
 		
-		InventoryOpenListener inventoryOpenListener = new InventoryOpenListener();
-		getServer().getPluginManager().registerEvents(inventoryOpenListener, this);
+		InventoryListener inventoryListener = new InventoryListener();
+		getServer().getPluginManager().registerEvents(inventoryListener, this);
 		
 		machineManager = new MachineManager();
 		
@@ -43,5 +43,9 @@ public class OnionPower extends JavaPlugin {
 	
 	public void onDisable() {
 		
+	}
+	
+	public MachineManager getMachineManager() {
+		return machineManager;
 	}
 }
