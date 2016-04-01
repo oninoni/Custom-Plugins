@@ -24,7 +24,7 @@ public class MachineManager {
 		for (Location pos : keySet)
 			machines.get(pos).resetIO();
 		
-		for (Location pos : keySet)
+		for (Location pos : machines.keySet())
 			machines.get(pos).update();
 		
 		for (Location pos: keySet)
