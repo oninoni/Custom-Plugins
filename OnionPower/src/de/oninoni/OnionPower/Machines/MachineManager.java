@@ -28,7 +28,7 @@ public class MachineManager {
 			machines.get(pos).update();
 		
 		for (Location pos: keySet)
-			machines.get(pos).updateDisplay();
+			machines.get(pos).updateUI();
 			
 	}
 	

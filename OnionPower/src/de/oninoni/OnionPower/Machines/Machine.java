@@ -26,6 +26,8 @@ public abstract class Machine {
 			new Vector( 0,  0, -1)
 	};
 	
+	private boolean displayChanged;
+	
 	private MachineManager machineManager;
 	
 	private Location position;
@@ -50,7 +52,7 @@ public abstract class Machine {
 	public abstract void onMoveInto(InventoryMoveItemEvent e);
 	public abstract void onMoveFrom(InventoryMoveItemEvent e);
 	
-	public abstract void updateDisplay();
+	protected abstract void updateDisplay();
 	
 	public abstract void onBreak(BlockBreakEvent e);
 	
@@ -119,6 +121,11 @@ public abstract class Machine {
 	public void resetIO() {
 		powerIntputTotal = 0;
 		powerOutputTotal = 0;
+	}
+	
+	public void updateUI() {
+		if (displayChanged)
+			updateDisplay();
 	}
 		
 }
