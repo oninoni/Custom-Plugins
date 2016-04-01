@@ -18,15 +18,15 @@ public class Generator extends Machine {
 	public Generator(Location position) {
 		super(position);
 		ItemStack powerCore = PowerCore.create(this);
+		furnace = ((Furnace) position.getBlock().getState());
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {
-				furnace = ((Furnace) position.getBlock().getState());
 				furnace.getInventory().setItem(0, new ItemStack(Material.AIR));
 				furnace.getInventory().setItem(2, powerCore);
 				NMSAdapter.setInvNameFurnace(furnace, getDisplayName());
 			}
-		}, 0L);
+		}, 1L);
 	}
 	
 	@Override
