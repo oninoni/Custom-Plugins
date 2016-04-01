@@ -21,7 +21,7 @@ public class Generator extends Machine {
 	}
 
 	@Override
-	public int getMaxEnergy() {
+	public int getMaxPower() {
 		return 6400;
 	}
 
