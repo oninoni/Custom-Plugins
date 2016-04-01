@@ -42,7 +42,7 @@ public class Generator extends Machine {
 		return material == Material.FURNACE 
 			|| material == Material.BURNING_FURNACE;
 	}
-
+	
 	@Override
 	public int getMaxPower() {
 		return 6400;
@@ -68,7 +68,7 @@ public class Generator extends Machine {
 		if (furnace.getBurnTime() > 0) {
 			power += 2;
 			ItemStack powerCore = furnace.getInventory().getResult();
-			PowerCore.setPowerLevel(powerCore, power, getMaxPower());
+			PowerCore.setPowerLevel(powerCore, this);
 		}
 	}
 	

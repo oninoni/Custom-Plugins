@@ -28,7 +28,8 @@ public class MachineManager {
 			Location location = e.getView().getTopInventory().getLocation();
 			if (Generator.canCreate(e))
 				machines.put(location, new Generator(location, this));
-			//if (!ElectricFurnace.tryCreation(e))
+			if (ElectricFurnace.canCreate(e))
+				machines.put(location, new ElectricFurnace(location, this));
 		}
 		else
 		{
