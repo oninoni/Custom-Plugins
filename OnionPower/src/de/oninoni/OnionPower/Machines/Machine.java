@@ -1,5 +1,8 @@
 package de.oninoni.OnionPower.Machines;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -12,7 +15,7 @@ public abstract class Machine {
 	
 	protected static OnionPower plugin = OnionPower.get();
 	
-	protected final Vector[] directions = {
+	private final Vector[] directions = {
 			new Vector( 1,  0,  0),
 			new Vector(-1,  0,  0),
 			new Vector( 0,  1,  0),
@@ -52,16 +55,23 @@ public abstract class Machine {
 		return powerOutput;
 	}
 	
-	protected void requestFromNeighbours(int powerRequested){
-		powerRequested = Math.min(powerRequested, getMaxPowerInput());
-		int powerInput = 0;
-		for(Vector direction : directions){
-			Location neighbourLocation = position.add(direction);
-			if(machineManager.getMachines().containsKey(neighbourLocation)){
-				Machine neighbour = machineManager.getMachines().get(neighbourLocation);
-				powerInput += neighbour.requestPower(powerRequested - powerInput);
-			}
+	private List<Machine> getNeighbours() {
+		List<Machine> result = new ArrayList<>();
+		for (Vector dir : directions){
+			Machine m = machineManager.getMachine(position.add(dir));
+			result.add(m);
 		}
+		return result;
+	}
+	
+	protected void requestFromNeighbours(){	
+		int powerInput = 0;
+		int powerRequested = Math.min(getMaxPower() - power, getMaxPowerInput());
+		List<Machine> machines = getNeighbours();
+		for (Machine machine : machines) {
+			powerInput += machine.requestPower(powerRequested - powerInput);
+		}
+		
 		powerIntputTotal += powerInput;
 		power += powerInput;
 	}

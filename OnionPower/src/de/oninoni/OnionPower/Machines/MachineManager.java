@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.util.Vector;
 
 public class MachineManager {
 	
@@ -55,9 +56,9 @@ public class MachineManager {
 			machines.get(destination).onMoveInto(e);
 		}
 	}
-	
-	public HashMap<Location, Machine> getMachines() {
-		return machines;
+		
+	public Machine getMachine(Location pos) {
+		return machines.get(pos);
 	}
 	
 }
