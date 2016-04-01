@@ -48,8 +48,23 @@ public class Generator extends Machine {
 	}
 	
 	@Override
-	public void update() {
+	public void update() {		
+		final short BURN_TIME = 100;
 		
+		if (furnace.getBurnTime() > 0) {
+			power++;
+		} else {
+			ItemStack fuel = furnace.getInventory().getFuel();
+			if (fuel != null && fuel.getType() == Material.COAL && BURN_TIME + power < getMaxPower())
+			{
+				Bukkit.broadcastMessage("Burning Coal!");
+				if (fuel.getAmount() == 1)
+					furnace.getInventory().remove(fuel);
+				else
+					fuel.setAmount(fuel.getAmount() - 1);
+				furnace.setBurnTime(BURN_TIME);
+			}
+		}
 	}
 	
 	public static boolean canCreate(InventoryClickEvent e) {
