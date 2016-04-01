@@ -2,18 +2,19 @@ package de.oninoni.OnionPower.Machines;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
+
+import de.oninoni.OnionPower.OnionPower;
 
 public abstract class Machine {
 	
+	protected static OnionPower plugin = OnionPower.get();
+	
 	private Location position;
-	private World world;
 	
 	protected int power;
 	
-	public Machine(Location position, World world){
+	public Machine(Location position){
 		this.position = position;
-		this.world = world;
 	}
 	
 	protected abstract boolean isMaterial(Material material);
@@ -24,10 +25,6 @@ public abstract class Machine {
 
 	public Location getPosition() {
 		return position;
-	}
-	
-	public World getWorld() {
-		return world;
 	}
 	
 	public int getPower() {
