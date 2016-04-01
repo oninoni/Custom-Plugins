@@ -17,15 +17,20 @@ public class MachineManager {
 	
 	public void update() {
 		for (Location pos : machines.keySet())
-			machines.get(pos).Update();
+			machines.get(pos).update();
 	}
 	
 	public void onClick(InventoryClickEvent e) {
 		Machine machine = machines.get(e.getInventory().getLocation());
-		if (machine == null) 
-			return;
-		
-		Bukkit.broadcastMessage(e.getWhoClicked().getName() + " just clicked in some machinery!");
+		if (machine == null)
+		{
+			if (!Generator.tryCreation(e))
+			;//if (!ElectricFurnace.tryCreation(e))
+		}
+		else
+		{
+			Bukkit.broadcastMessage(e.getWhoClicked().getName() + " just clicked in some machinery!");
+		}
 	}
 	
 	public void onOpen(InventoryOpenEvent e) {

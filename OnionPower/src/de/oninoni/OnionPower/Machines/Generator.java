@@ -3,9 +3,13 @@ package de.oninoni.OnionPower.Machines;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemStack;
+
+import de.oninoni.OnionPower.Items.Batterod;
 
 public class Generator extends Machine {
-
+	
 	public Generator(Location position, World world) {
 		super(position, world);
 	}
@@ -22,7 +26,22 @@ public class Generator extends Machine {
 	}
 
 	@Override
-	public void Update() {
+	public void update() {
 		
+	}
+	
+	public static boolean tryCreation(InventoryClickEvent e) {
+		ItemStack item = e.getCurrentItem();
+		if (e.getSlot() == 0) 
+		{
+			if (Batterod.check(item)){
+				if (item.getAmount() > 1){
+					item.setAmount(item.getAmount() - 1);				
+				}
+				
+				return true;
+			}
+		}
+		return false;
 	}
 }

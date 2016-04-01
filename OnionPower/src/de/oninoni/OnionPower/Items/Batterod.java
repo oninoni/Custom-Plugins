@@ -12,7 +12,7 @@ public class Batterod {
 	private static final String NAME = "&4Batterod";
 	private static final int MAX_POWER = 64000;
 	
-	public static ItemStack create(){
+	public static ItemStack create() {
 		ItemStack batterod = new ItemStack(Material.BLAZE_ROD);
 		
 		ItemMeta itemMeta = batterod.getItemMeta();
@@ -26,7 +26,7 @@ public class Batterod {
 		return batterod;
 	}
 	
-	public static boolean check(ItemStack item){
+	public static boolean check(ItemStack item) {
 		if(item==null)Bukkit.broadcastMessage("Possseidon Failed!");
 		ItemMeta itemMeta = item.getItemMeta();
 		if(itemMeta != null){
