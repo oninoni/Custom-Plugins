@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 
 public class MachineManager {
@@ -41,6 +42,10 @@ public class MachineManager {
 			return;
 		
 		Bukkit.broadcastMessage(e.getPlayer().getName() + " just opened some machinery!");
+	}
+	
+	public void onMove(InventoryMoveItemEvent e){
+		Machine machine = machines.get(e.get)
 	}
 	
 }
