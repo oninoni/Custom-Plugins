@@ -68,7 +68,7 @@ public class Generator extends Machine {
 		if (furnace.getBurnTime() > 0) {
 			power += 2;
 			ItemStack powerCore = furnace.getInventory().getResult();
-			PowerCore.setPowerLevel(powerCore, power, getMaxPower());
+			PowerCore.setPowerLevel(powerCore, this);
 		}
 	}
 	
