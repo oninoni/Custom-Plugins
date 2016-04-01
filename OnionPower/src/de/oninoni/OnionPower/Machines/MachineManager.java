@@ -13,7 +13,8 @@ public class MachineManager {
 	}
 	
 	public void Update() {
-		
+		for (Vector vec : machines.keySet())
+			machines.get(vec).Update();
 	}
 	
 }
