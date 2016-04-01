@@ -12,7 +12,6 @@ import de.oninoni.OnionPower.Machines.Machine;
 public class PowerCore {
 	
 	private static final String NAME = "&4Power Core";
-	private static final int MAX_POWER = 64000;
 	
 	public static ItemStack create(Machine m){
 		ItemStack powerCore = new ItemStack(Material.END_CRYSTAL);
@@ -20,7 +19,8 @@ public class PowerCore {
 		ItemMeta itemMeta = powerCore.getItemMeta();
 		itemMeta.setDisplayName(NAME);
 		List<String> lore = itemMeta.getLore();
-		lore.add("§6" + m.getDisplayName());
+		lore.add("§6" + m.getDisplayName() + " Power:");
+		lore.add("§6" + m.getPower() + " / " m.getMaxPower() + " " + CustomsItems.UNIT_NAME);
 		itemMeta.setLore(lore);
 		powerCore.setItemMeta(itemMeta);
 		
