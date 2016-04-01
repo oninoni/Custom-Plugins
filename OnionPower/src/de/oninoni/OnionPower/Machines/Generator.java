@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Furnace;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 import de.oninoni.OnionPower.NMSAdapter;
@@ -86,5 +87,15 @@ public class Generator extends Machine {
 		if(convertSlot == 2){
 			e.setCancelled(true);
 		}
+	}
+
+	@Override
+	public void onMoveInto(InventoryMoveItemEvent e) {
+		
+	}
+
+	@Override
+	public void onMoveFrom(InventoryMoveItemEvent e) {
+		e.setCancelled(true);
 	}
 }
