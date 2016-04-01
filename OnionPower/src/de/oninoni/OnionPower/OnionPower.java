@@ -5,7 +5,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 
-public class OnionPower extends JavaPlugin{
+import de.oninoni.OnionPower.Listeners.InventoryOpenListener;
+
+public class OnionPower extends JavaPlugin {
 	
 	private ProtocolManager protocolManager;
 	public ProtocolLibManager protocolLibManager;
@@ -17,10 +19,11 @@ public class OnionPower extends JavaPlugin{
 		protocolLibManager = new ProtocolLibManager(protocolManager);
 		protocolLibManager.addLoreListener();
 		
+		InventoryOpenListener inventoryOpenListener = new InventoryOpenListener();
+		getServer().getPluginManager().registerEvents(inventoryOpenListener, this);
 	}
 	
 	public void onDisable() {
 		
 	}
-	
 }
