@@ -2,15 +2,23 @@ package de.oninoni.OnionPower.Machines;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Furnace;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
+import de.oninoni.OnionPower.NMSAdapter;
 import de.oninoni.OnionPower.Items.Batterod;
+import de.oninoni.OnionPower.Items.PowerCore;
 
 public class Generator extends Machine {
 	
+	private Furnace furnace;
+	
 	public Generator(Location position) {
 		super(position);
+		furnace = ((Furnace) position.getBlock().getState());
+		furnace.getInventory().setItem(1, PowerCore.create(this));
+		NMSAdapter.setInvNameFurnace(furnace, getDisplayName());
 	}
 	
 	@Override
