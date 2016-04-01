@@ -3,6 +3,7 @@ package de.oninoni.OnionPower.Machines;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryMoveItemEvent;
 
 import de.oninoni.OnionPower.OnionPower;
 
@@ -25,6 +26,8 @@ public abstract class Machine {
 	public abstract void update();
 	
 	public abstract void onClick(InventoryClickEvent e);
+	public abstract void onMoveInto(InventoryMoveItemEvent e);
+	public abstract void onMoveFrom(InventoryMoveItemEvent e);
 
 	public Location getPosition() {
 		return position;
