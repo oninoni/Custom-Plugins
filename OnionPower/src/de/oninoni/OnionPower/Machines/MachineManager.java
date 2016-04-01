@@ -15,12 +15,12 @@ public class MachineManager {
 		machines = new HashMap<>();
 	}
 	
-	public void Update() {
+	public void update() {
 		for (Location pos : machines.keySet())
 			machines.get(pos).Update();
 	}
 	
-	public void OnClick(InventoryClickEvent e) {
+	public void onClick(InventoryClickEvent e) {
 		Machine machine = machines.get(e.getInventory().getLocation());
 		if (machine == null) 
 			return;
@@ -28,7 +28,7 @@ public class MachineManager {
 		Bukkit.broadcastMessage(e.getWhoClicked().getName() + " just clicked in some machinery!");
 	}
 	
-	public void OnOpen(InventoryOpenEvent e) {
+	public void onOpen(InventoryOpenEvent e) {
 		Machine machine = machines.get(e.getInventory().getLocation());
 		if (machine == null) 
 			return;
