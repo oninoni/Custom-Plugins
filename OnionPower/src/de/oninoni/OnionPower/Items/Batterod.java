@@ -10,7 +10,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class Batterod {
 	
-	private static final String NAME = "&4Batterod";
+	private static final String NAME = "§4Batterod";
 	private static final int MAX_POWER = 64000;
 	
 	public static ItemStack create() {

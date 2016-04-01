@@ -12,7 +12,7 @@ import de.oninoni.OnionPower.Machines.Machine;
 
 public class PowerCore {
 	
-	private static final String NAME = "&4Power Core";
+	private static final String NAME = "§4Power Core";
 	
 	public static ItemStack create(Machine m){
 		ItemStack powerCore = new ItemStack(Material.END_CRYSTAL);
