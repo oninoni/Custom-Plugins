@@ -1,5 +1,6 @@
 package de.oninoni.OnionPower.Items;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -17,7 +18,7 @@ public class Batterod {
 		
 		ItemMeta itemMeta = batterod.getItemMeta();
 		itemMeta.setDisplayName(NAME);
-		List<String> lore = itemMeta.getLore();
+		List<String> lore = new ArrayList<>();
 		lore.add("§h0");
 		lore.add("§60/" + MAX_POWER + " " + CustomsItems.UNIT_NAME);
 		itemMeta.setLore(lore);
@@ -36,5 +37,4 @@ public class Batterod {
 		}
 		return false;
 	}
-	
 }

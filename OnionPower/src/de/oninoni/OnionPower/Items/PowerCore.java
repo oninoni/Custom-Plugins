@@ -1,5 +1,6 @@
 package de.oninoni.OnionPower.Items;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -18,7 +19,7 @@ public class PowerCore {
 		
 		ItemMeta itemMeta = powerCore.getItemMeta();
 		itemMeta.setDisplayName(NAME);
-		List<String> lore = itemMeta.getLore();
+		List<String> lore = new ArrayList<>();
 		lore.add("§6" + m.getDisplayName() + " Power:");
 		lore.add("§6" + m.getPower() + " / " + m.getMaxPower() + " " + CustomsItems.UNIT_NAME);
 		itemMeta.setLore(lore);
