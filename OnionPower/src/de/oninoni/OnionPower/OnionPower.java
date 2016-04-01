@@ -3,11 +3,13 @@ package de.oninoni.OnionPower;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 
+import de.oninoni.OnionPower.Items.Batterod;
 import de.oninoni.OnionPower.Listeners.InventoryListener;
 import de.oninoni.OnionPower.Machines.MachineManager;
 
@@ -54,7 +56,11 @@ public class OnionPower extends JavaPlugin {
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
 		if (command.getName().equalsIgnoreCase("batterod")){
-			
+			if (sender instanceof Player)
+			{
+				Player player = (Player) sender;
+				player.getInventory().addItem(Batterod.create());
+			}
 		}
 		return false;
 	}

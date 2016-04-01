@@ -1,5 +1,6 @@
 package de.oninoni.OnionPower.Machines;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -38,6 +39,8 @@ public class Generator extends Machine {
 				if (item.getAmount() > 1){
 					item.setAmount(item.getAmount() - 1);				
 				}
+				
+				Bukkit.broadcastMessage("Creation successfull theoretically");
 				
 				return true;
 			}
