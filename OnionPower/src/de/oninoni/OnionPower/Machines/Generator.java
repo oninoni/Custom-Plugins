@@ -1,5 +1,6 @@
 package de.oninoni.OnionPower.Machines;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -31,13 +32,15 @@ public class Generator extends Machine {
 	}
 	
 	public static boolean tryCreation(InventoryClickEvent e) {
-		ItemStack item = e.getCurrentItem();
-		if (e.getSlot() == 0) 
+		ItemStack item = e.getCursor();
+		if (1 == e.getView().convertSlot(e.getRawSlot()))
 		{
 			if (Batterod.check(item)){
 				if (item.getAmount() > 1){
 					item.setAmount(item.getAmount() - 1);				
 				}
+				
+				Bukkit.broadcastMessage("Creation successfull theoretically");
 				
 				return true;
 			}

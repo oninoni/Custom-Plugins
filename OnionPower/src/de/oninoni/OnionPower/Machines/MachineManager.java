@@ -25,7 +25,7 @@ public class MachineManager {
 		if (machine == null)
 		{
 			if (!Generator.tryCreation(e))
-			;//if (!ElectricFurnace.tryCreation(e))
+			; //if (!ElectricFurnace.tryCreation(e))
 		}
 		else
 		{
