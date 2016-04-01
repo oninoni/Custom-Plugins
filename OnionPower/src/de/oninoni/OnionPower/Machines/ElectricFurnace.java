@@ -4,16 +4,19 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.inventory.ItemStack;
 
-public class ElectricFurnace extends Machine{
+import de.oninoni.OnionPower.Items.Batterod;
+
+public class ElectricFurnace extends Machine {
 
 	public ElectricFurnace(Location position, MachineManager machineManager) {
 		super(position, machineManager);
 	}
 	
-	public boolean canCreate(InventoryClickEvent e){
-		
-		return false;
+	public static boolean canCreate(InventoryClickEvent e){
+		ItemStack item = e.getCursor();
+		return 1 == e.getView().convertSlot(e.getRawSlot()) && Batterod.check(item);
 	}
 
 	@Override
@@ -29,7 +32,7 @@ public class ElectricFurnace extends Machine{
 
 	@Override
 	public String getDisplayName() {
-		return "§6§lElectric Furnace";
+		return "§6§lElectrical Furnace";
 	}
 
 	@Override
