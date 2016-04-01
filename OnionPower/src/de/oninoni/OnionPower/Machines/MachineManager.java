@@ -31,7 +31,7 @@ public class MachineManager {
 		}
 		else
 		{
-			Bukkit.broadcastMessage(e.getWhoClicked().getName() + " just clicked in some machinery!");
+			machine.onClick(e);
 		}
 	}
 	

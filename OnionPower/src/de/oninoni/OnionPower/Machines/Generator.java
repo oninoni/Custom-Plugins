@@ -65,4 +65,12 @@ public class Generator extends Machine {
 	public String getDisplayName() {
 		return "§6§lGenerator";
 	}
+
+	@Override
+	public void onClick(InventoryClickEvent e) {
+		int convertSlot = e.getView().convertSlot(e.getRawSlot());
+		if(convertSlot == 2){
+			e.setCancelled(true);
+		}
+	}
 }
