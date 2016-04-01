@@ -2,6 +2,7 @@ name: ElytraBooster
 version: 0.01
 description: Gives Elytras a fiery Boost!
 main: de.oninoni.ElytraBooster.ElytraBooster
+depend: [OnionPower]
 commands:
   elytra:
     description: Giving you a boosted Elytra

@@ -20,7 +20,7 @@ public class PlayerKickBanListener implements Listener{
 		Player player = e.getPlayer();
 		String prefix = plugin.getPermissionsEx().getPermissionsManager().getUser(player).getPrefix();
 		prefix = prefix.replace('&', '§');
-		if(e.getPlayer().isBanned()){
+		if(!e.getPlayer().isBanned()){
 			plugin.getServer().broadcastMessage(prefix + player.getName() + "§6 has been kicked from the Server!");
 			if(e.getReason() != null){
 				plugin.getServer().broadcastMessage("§6Reason: \"" + e.getReason() + "\"");
@@ -29,5 +29,4 @@ public class PlayerKickBanListener implements Listener{
 			plugin.getServer().broadcastMessage(prefix + player.getName() + "§6 has been banned from the Server!");
 		}
 	}
-	
 }
