@@ -46,7 +46,7 @@ public class PowerCore {
 		List<String> lore = itemMeta.getLore();
 		lore.set(1, "§6" + m.getPower() + " / " + m.getMaxPower() + " " + CustomsItems.UNIT_NAME);
 		lore.set(2, "§6Out: " + m.getPowerOutputTotal() + " / " + m.getMaxPowerOutput() + " " + CustomsItems.UNIT_NAME);
-		lore.set(3, "§6In: " + m.getMaxPowerInput() + " / " + m.getMaxPowerInput() + " " + CustomsItems.UNIT_NAME);
+		lore.set(3, "§6In: " + m.getPowerIntputTotal() + " / " + m.getMaxPowerInput() + " " + CustomsItems.UNIT_NAME);
 		itemMeta.setLore(lore);
 		powerCore.setItemMeta(itemMeta);
 	}

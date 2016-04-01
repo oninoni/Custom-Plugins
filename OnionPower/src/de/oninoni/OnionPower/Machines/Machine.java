@@ -43,6 +43,11 @@ public abstract class Machine {
 	public abstract String getDisplayName();
 	public abstract int getMaxPowerOutput();
 	public abstract int getMaxPowerInput();
+	
+	public void resetTotals(){
+		powerIntputTotal = 0;
+		powerOutputTotal = 0;
+	}
 	public abstract void update();
 	
 	public abstract void onClick(InventoryClickEvent e);
@@ -62,7 +67,8 @@ public abstract class Machine {
 		List<Machine> result = new ArrayList<>();
 		for (Vector dir : directions){
 			Machine m = machineManager.getMachine(position.add(dir));
-			result.add(m);
+			if(m != null)
+				result.add(m);
 		}
 		return result;
 	}

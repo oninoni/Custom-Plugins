@@ -19,6 +19,8 @@ public class MachineManager {
 	
 	public void update() {
 		for (Location pos : machines.keySet())
+			machines.get(pos).resetTotals();
+		for (Location pos : machines.keySet())
 			machines.get(pos).update();
 	}
 	

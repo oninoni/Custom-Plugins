@@ -51,8 +51,6 @@ public class Generator extends Machine {
 	
 	@Override
 	public void update() {
-		powerIntputTotal = 0;
-		powerOutputTotal = 0;
 		if (furnace.getBurnTime() == 0) {
 			ItemStack fuel = furnace.getInventory().getFuel();
 			
