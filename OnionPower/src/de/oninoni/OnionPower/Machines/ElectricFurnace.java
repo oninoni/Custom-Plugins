@@ -69,12 +69,7 @@ public class ElectricFurnace extends Machine {
 
 	@Override
 	public void update() {
-		powerIntputTotal = 0;
-		powerOutputTotal = 0;
 		requestFromNeighbours();
-		if (power > 0) {
-			
-		}
 	}
 
 	@Override
@@ -98,6 +93,12 @@ public class ElectricFurnace extends Machine {
 	@Override
 	public void onBreak(BlockBreakEvent e) {
 		furnace.getInventory().setItem(1, Batterod.create());
+	}
+	
+	@Override
+	public void updateDisplay() {
+		ItemStack powerCore = furnace.getInventory().getFuel();
+		PowerCore.setPowerLevel(powerCore, this);
 	}
 
 }

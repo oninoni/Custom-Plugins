@@ -50,6 +50,8 @@ public abstract class Machine {
 	public abstract void onMoveInto(InventoryMoveItemEvent e);
 	public abstract void onMoveFrom(InventoryMoveItemEvent e);
 	
+	public abstract void updateDisplay();
+	
 	public abstract void onBreak(BlockBreakEvent e);
 	
 	public void requestPower(Machine requester){
@@ -61,8 +63,6 @@ public abstract class Machine {
 		// not enough to send / not enough space in requester
 		transPower = Math.min(transPower, power);
 		transPower = Math.min(transPower, requester.getFreeSpace());
-		
-		Bukkit.broadcastMessage("" + requester.getFreeSpace());
 		
 		if (transPower <= 0)
 			return;
@@ -115,4 +115,10 @@ public abstract class Machine {
 	public int getPowerOutputTotal() {
 		return powerOutputTotal;
 	}
+
+	public void resetIO() {
+		powerIntputTotal = 0;
+		powerOutputTotal = 0;
+	}
+		
 }

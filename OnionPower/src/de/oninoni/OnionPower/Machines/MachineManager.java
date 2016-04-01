@@ -1,6 +1,7 @@
 package de.oninoni.OnionPower.Machines;
 
 import java.util.HashMap;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -18,8 +19,17 @@ public class MachineManager {
 	}
 	
 	public void update() {
-		for (Location pos : machines.keySet())
+		Set<Location> keySet = machines.keySet();
+		
+		for (Location pos : keySet)
+			machines.get(pos).resetIO();
+		
+		for (Location pos : keySet)
 			machines.get(pos).update();
+		
+		for (Location pos: keySet)
+			machines.get(pos).updateDisplay();
+			
 	}
 	
 	public void onClick(InventoryClickEvent e) {

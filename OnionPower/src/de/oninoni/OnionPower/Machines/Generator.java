@@ -51,8 +51,6 @@ public class Generator extends Machine {
 	
 	@Override
 	public void update() {
-		powerIntputTotal = 0;
-		powerOutputTotal = 0;
 		if (furnace.getBurnTime() == 0) {
 			ItemStack fuel = furnace.getInventory().getFuel();
 			
@@ -117,5 +115,11 @@ public class Generator extends Machine {
 	@Override
 	public void onBreak(BlockBreakEvent e) {
 		furnace.getInventory().setItem(2, Batterod.create());
+	}
+	
+	@Override
+	public void updateDisplay() {
+		ItemStack powerCore = furnace.getInventory().getResult();
+		PowerCore.setPowerLevel(powerCore, this);
 	}
 }
