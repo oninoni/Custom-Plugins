@@ -3,6 +3,7 @@ package de.oninoni.OnionPower.Machines;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -43,46 +44,60 @@ public abstract class Machine {
 	public abstract String getDisplayName();
 	public abstract int getMaxPowerOutput();
 	public abstract int getMaxPowerInput();
-	
-	public void resetTotals(){
-		powerIntputTotal = 0;
-		powerOutputTotal = 0;
-	}
 	public abstract void update();
 	
 	public abstract void onClick(InventoryClickEvent e);
 	public abstract void onMoveInto(InventoryMoveItemEvent e);
 	public abstract void onMoveFrom(InventoryMoveItemEvent e);
 	
+	public abstract void updateDisplay();
+	
 	public abstract void onBreak(BlockBreakEvent e);
 	
-	public int requestPower(int powerRequested){
-		int powerOutput = Math.min(powerRequested, Math.min(power, getMaxPowerOutput()));
-		power -= powerOutput;
-		powerOutputTotal += powerOutput;
-		return powerOutput;
+	public void requestPower(Machine requester){
+		// max input/output
+		int transPower = Math.min(getMaxPowerOutput(), requester.getMaxPowerInput());	
+		// max total per update
+		transPower = Math.min(transPower, getMaxPowerOutput() - powerOutputTotal);
+		transPower = Math.min(transPower, requester.getMaxPowerInput() - requester.powerIntputTotal);	
+		// not enough to send / not enough space in requester
+		transPower = Math.min(transPower, power);
+		transPower = Math.min(transPower, requester.getFreeSpace());
+		
+		if (transPower <= 0)
+			return;
+		
+		// send power
+		power -= transPower;
+		requester.power += transPower;
+		
+		// change power totals
+		powerOutputTotal += transPower;
+		requester.powerIntputTotal += transPower;	
+		
+		Bukkit.broadcastMessage("Transfered Power: " + transPower);
 	}
 	
+	private int getFreeSpace() {
+		return getMaxPower() - power;
+	}
+
 	private List<Machine> getNeighbours() {
 		List<Machine> result = new ArrayList<>();
 		for (Vector dir : directions){
-			Machine m = machineManager.getMachine(position.add(dir));
-			if(m != null)
+			Location l = position.clone();
+			l.add(dir);
+			Machine m = machineManager.getMachine(l);
+			if (m != null)
 				result.add(m);
 		}
 		return result;
 	}
 	
-	protected void requestFromNeighbours(){	
-		int powerInput = 0;
-		int powerRequested = Math.min(getMaxPower() - power, getMaxPowerInput());
+	protected void requestFromNeighbours(){
 		List<Machine> machines = getNeighbours();
-		for (Machine machine : machines) {
-			powerInput += machine.requestPower(powerRequested - powerInput);
-		}
-		
-		powerIntputTotal += powerInput;
-		power += powerInput;
+		for (Machine machine : machines)
+			machine.requestPower(this);
 	}
 
 	public Location getPosition() {
@@ -100,4 +115,10 @@ public abstract class Machine {
 	public int getPowerOutputTotal() {
 		return powerOutputTotal;
 	}
+
+	public void resetIO() {
+		powerIntputTotal = 0;
+		powerOutputTotal = 0;
+	}
+		
 }
