@@ -31,7 +31,7 @@ public class Batterod {
 		if(item==null)Bukkit.broadcastMessage("Possseidon Failed!");
 		ItemMeta itemMeta = item.getItemMeta();
 		if(itemMeta != null){
-			if(itemMeta.getDisplayName().equalsIgnoreCase(NAME)){
+			if(itemMeta.getDisplayName() != null && itemMeta.getDisplayName().equalsIgnoreCase(NAME)){
 				return true;
 			}
 		}

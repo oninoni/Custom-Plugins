@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.util.Vector;
@@ -47,6 +48,8 @@ public abstract class Machine {
 	public abstract void onClick(InventoryClickEvent e);
 	public abstract void onMoveInto(InventoryMoveItemEvent e);
 	public abstract void onMoveFrom(InventoryMoveItemEvent e);
+	
+	public abstract void onBreak(BlockBreakEvent e);
 	
 	public int requestPower(int powerRequested){
 		int powerOutput = Math.min(powerRequested, Math.min(power, getMaxPowerOutput()));

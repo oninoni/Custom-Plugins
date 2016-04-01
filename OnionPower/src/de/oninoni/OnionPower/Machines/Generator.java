@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Furnace;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.ItemStack;
@@ -21,7 +22,7 @@ public class Generator extends Machine {
 	public Generator(Location position, MachineManager machineManager) {
 		super(position, machineManager);
 		ItemStack powerCore = PowerCore.create(this);
-
+		
 		furnace = ((Furnace) position.getBlock().getState());
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
@@ -69,6 +70,7 @@ public class Generator extends Machine {
 		}
 		if (furnace.getBurnTime() > 0) {
 			power += 2;
+			powerIntputTotal = 2;
 			ItemStack powerCore = furnace.getInventory().getResult();
 			PowerCore.setPowerLevel(powerCore, this);
 		}
@@ -87,7 +89,7 @@ public class Generator extends Machine {
 	@Override
 	public void onClick(InventoryClickEvent e) {
 		int convertSlot = e.getView().convertSlot(e.getRawSlot());
-		if(convertSlot == 2){
+		if(e.getRawSlot() == convertSlot && convertSlot == 2){
 			e.setCancelled(true);
 		}
 	}
@@ -110,5 +112,10 @@ public class Generator extends Machine {
 	@Override
 	public int getMaxPowerInput() {
 		return 0;
+	}
+
+	@Override
+	public void onBreak(BlockBreakEvent e) {
+		furnace.getInventory().setItem(2, Batterod.create());
 	}
 }

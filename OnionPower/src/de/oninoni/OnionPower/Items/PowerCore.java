@@ -23,7 +23,7 @@ public class PowerCore {
 		lore.add("§6" + m.getDisplayName() + " Power:");
 		lore.add("§6" + m.getPower() + " / " + m.getMaxPower() + " " + CustomsItems.UNIT_NAME);
 		lore.add("§6Out: " + m.getPowerOutputTotal() + " / " + m.getMaxPowerOutput() + " " + CustomsItems.UNIT_NAME);
-		lore.add("§6In: " + m.getMaxPowerInput() + " / " + m.getMaxPowerInput() + " " + CustomsItems.UNIT_NAME);
+		lore.add("§6In: " + m.getPowerIntputTotal() + " / " + m.getMaxPowerInput() + " " + CustomsItems.UNIT_NAME);
 		itemMeta.setLore(lore);
 		powerCore.setItemMeta(itemMeta);
 		

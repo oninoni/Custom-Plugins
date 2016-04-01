@@ -10,6 +10,7 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 
 import de.oninoni.OnionPower.Items.Batterod;
+import de.oninoni.OnionPower.Listeners.BlockBreakListener;
 import de.oninoni.OnionPower.Listeners.InventoryListener;
 import de.oninoni.OnionPower.Machines.MachineManager;
 
@@ -29,6 +30,9 @@ public class OnionPower extends JavaPlugin {
 		
 		InventoryListener inventoryListener = new InventoryListener();
 		getServer().getPluginManager().registerEvents(inventoryListener, this);
+		
+		BlockBreakListener blockBreakListener = new BlockBreakListener();
+		getServer().getPluginManager().registerEvents(blockBreakListener, this);
 		
 		machineManager = new MachineManager();
 		
