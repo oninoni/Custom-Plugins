@@ -1,5 +1,6 @@
 package de.oninoni.OnionPower.Machines;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Furnace;
@@ -16,10 +17,16 @@ public class Generator extends Machine {
 	
 	public Generator(Location position) {
 		super(position);
-		furnace = ((Furnace) position.getBlock().getState());
-		furnace.getInventory().setItem(0, new ItemStack(Material.AIR));
-		furnace.getInventory().setItem(2, PowerCore.create(this));
-		NMSAdapter.setInvNameFurnace(furnace, getDisplayName());
+		ItemStack powerCore = PowerCore.create(this);
+		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+			@Override
+			public void run() {
+				furnace = ((Furnace) position.getBlock().getState());
+				furnace.getInventory().setItem(0, new ItemStack(Material.AIR));
+				furnace.getInventory().setItem(2, powerCore);
+				NMSAdapter.setInvNameFurnace(furnace, getDisplayName());
+			}
+		}, 0L);
 	}
 	
 	@Override
