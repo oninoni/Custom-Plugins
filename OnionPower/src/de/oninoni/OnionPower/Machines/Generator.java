@@ -74,7 +74,7 @@ public class Generator extends Machine {
 	
 	public static boolean canCreate(InventoryClickEvent e) {
 		ItemStack item = e.getCursor();
-		return 1 == e.getView().convertSlot(e.getRawSlot()) && Batterod.check(item);
+		return 0 == e.getView().convertSlot(e.getRawSlot()) && Batterod.check(item);
 	}
 	
 	@Override
