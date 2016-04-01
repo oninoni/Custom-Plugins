@@ -42,5 +42,6 @@ public class Generator extends Machine {
 				return true;
 			}
 		}
+		return false;
 	}
 }

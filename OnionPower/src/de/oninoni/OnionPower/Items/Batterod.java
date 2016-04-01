@@ -9,10 +9,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class Batterod {
 	
-	private final String NAME = "&4Batterod";
-	private final int MAX_POWER = 64000;
+	private static final String NAME = "&4Batterod";
+	private static final int MAX_POWER = 64000;
 	
-	public ItemStack create(){
+	public static ItemStack create() {
 		ItemStack batterod = new ItemStack(Material.BLAZE_ROD);
 		
 		ItemMeta itemMeta = batterod.getItemMeta();
@@ -26,7 +26,7 @@ public class Batterod {
 		return batterod;
 	}
 	
-	public boolean check(ItemStack item){
+	public static boolean check(ItemStack item) {
 		if(item==null)Bukkit.broadcastMessage("Possseidon Failed!");
 		ItemMeta itemMeta = item.getItemMeta();
 		if(itemMeta != null){
