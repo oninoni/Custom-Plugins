@@ -37,10 +37,10 @@ public class OnionPower extends JavaPlugin {
 			
 			@Override
 			public void run() {
-				Bukkit.getScheduler().runTaskLater(plugin, this, 5L);
+				Bukkit.getScheduler().runTaskLater(plugin, this, 2L);
 				machineManager.update();
 			}
-		}, 5L);
+		}, 2L);
 		
 	}
 	
