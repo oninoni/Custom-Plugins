@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Furnace;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -26,6 +27,10 @@ public class Generator extends Machine {
 				furnace.getInventory().setItem(0, new ItemStack(Material.AIR));
 				furnace.getInventory().setItem(2, powerCore);
 				NMSAdapter.setInvNameFurnace(furnace, getDisplayName());
+				for(HumanEntity viewer : furnace.getInventory().getViewers()){
+					viewer.closeInventory();
+					viewer.openInventory(furnace.getInventory());
+				}
 			}
 		}, 1L);
 	}
