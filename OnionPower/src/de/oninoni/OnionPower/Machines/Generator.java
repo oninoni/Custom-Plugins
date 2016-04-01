@@ -37,15 +37,10 @@ public class Generator extends Machine {
 		
 	}
 	
-	public static boolean tryCreation(InventoryClickEvent e) {
+	public static boolean canCreate(InventoryClickEvent e) {
 		ItemStack item = e.getCursor();
-		if (1 == e.getView().convertSlot(e.getRawSlot()))
-		{
+		if (1 == e.getView().convertSlot(e.getRawSlot())){
 			if (Batterod.check(item)){
-				if (item.getAmount() > 1){
-					item.setAmount(item.getAmount() - 1);				
-				}
-				
 				return true;
 			}
 		}
