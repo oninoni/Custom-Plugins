@@ -7,23 +7,24 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class Batterod {
+import de.oninoni.OnionPower.Machines.Machine;
+
+public class PowerCore {
 	
-	private static final String NAME = "&4Batterod";
+	private static final String NAME = "&4Power Core";
 	private static final int MAX_POWER = 64000;
 	
-	public static ItemStack create(){
-		ItemStack batterod = new ItemStack(Material.BLAZE_ROD);
+	public static ItemStack create(Machine m){
+		ItemStack powerCore = new ItemStack(Material.END_CRYSTAL);
 		
-		ItemMeta itemMeta = batterod.getItemMeta();
+		ItemMeta itemMeta = powerCore.getItemMeta();
 		itemMeta.setDisplayName(NAME);
 		List<String> lore = itemMeta.getLore();
-		lore.add("§h0");
-		lore.add("§60/" + MAX_POWER + " " + CustomsItems.UNIT_NAME);
+		lore.add("§6");
 		itemMeta.setLore(lore);
-		batterod.setItemMeta(itemMeta);
+		powerCore.setItemMeta(itemMeta);
 		
-		return batterod;
+		return powerCore;
 	}
 	
 	public static boolean check(ItemStack item){
@@ -36,5 +37,4 @@ public class Batterod {
 		}
 		return false;
 	}
-	
 }
