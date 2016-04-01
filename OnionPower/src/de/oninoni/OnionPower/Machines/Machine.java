@@ -1,17 +1,17 @@
 package de.oninoni.OnionPower.Machines;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.util.Vector;
 
 public abstract class Machine {
 	
-	private Vector position;
+	private Location position;
 	private World world;
 	
 	protected int power;
 	
-	public Machine(Vector position, World world){
+	public Machine(Location position, World world){
 		this.position = position;
 		this.world = world;
 	}
@@ -21,7 +21,7 @@ public abstract class Machine {
 	
 	public abstract void Update();
 
-	public Vector getPosition() {
+	public Location getPosition() {
 		return position;
 	}
 	

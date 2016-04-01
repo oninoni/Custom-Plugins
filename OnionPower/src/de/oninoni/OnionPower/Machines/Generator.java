@@ -1,12 +1,12 @@
 package de.oninoni.OnionPower.Machines;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.util.Vector;
 
 public class Generator extends Machine {
 
-	public Generator(Vector position, World world) {
+	public Generator(Location position, World world) {
 		super(position, world);
 	}
 
