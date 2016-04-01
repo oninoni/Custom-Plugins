@@ -20,7 +20,7 @@ public class PowerCore {
 		itemMeta.setDisplayName(NAME);
 		List<String> lore = itemMeta.getLore();
 		lore.add("§6" + m.getDisplayName() + " Power:");
-		lore.add("§6" + m.getPower() + " / " m.getMaxPower() + " " + CustomsItems.UNIT_NAME);
+		lore.add("§6" + m.getPower() + " / " + m.getMaxPower() + " " + CustomsItems.UNIT_NAME);
 		itemMeta.setLore(lore);
 		powerCore.setItemMeta(itemMeta);
 		
