@@ -44,6 +44,8 @@ public class MachineManager {
 				machines.put(location, new Generator(location, this));
 			if (ElectricFurnace.canCreate(e))
 				machines.put(location, new ElectricFurnace(location, this));
+			if (BatrodBox.canCreate(e))
+				machines.put(location, new BatrodBox(location, this));
 		}
 		else
 		{
@@ -55,8 +57,6 @@ public class MachineManager {
 		Machine machine = machines.get(e.getInventory().getLocation());
 		if (machine == null) 
 			return;
-		
-		Bukkit.broadcastMessage(e.getPlayer().getName() + " just opened some machinery!");
 	}
 	
 	public void onMove(InventoryMoveItemEvent e){

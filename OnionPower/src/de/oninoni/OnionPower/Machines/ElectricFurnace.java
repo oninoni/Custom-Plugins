@@ -2,24 +2,21 @@ package de.oninoni.OnionPower.Machines;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Furnace;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 import de.oninoni.OnionPower.NMSAdapter;
-import de.oninoni.OnionPower.Items.Batterod;
+import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.PowerCore;
 
-public class ElectricFurnace extends Machine {
-
-	private Furnace furnace;
-	
+public class ElectricFurnace extends MachineFurnace {
 	public ElectricFurnace(Location position, MachineManager machineManager) {
 		super(position, machineManager);
+		rodSlot = 1;
+		coreSlot = 1;
 		ItemStack powerCore = PowerCore.create(this);
 		
 		furnace = ((Furnace) position.getBlock().getState());
@@ -38,33 +35,18 @@ public class ElectricFurnace extends Machine {
 	
 	public static boolean canCreate(InventoryClickEvent e){
 		ItemStack item = e.getCursor();
-		return 1 == e.getView().convertSlot(e.getRawSlot()) && Batterod.check(item);
+		if(!(e.getInventory().getItem(0) == null && e.getInventory().getItem(1) == null && e.getInventory().getItem(0) == null))return false;
+		return 1 == e.getView().convertSlot(e.getRawSlot()) && Batrod.check(item);
 	}
-
-	@Override
-	protected boolean isMaterial(Material material) {
-		return material == Material.FURNACE 
-			|| material == Material.BURNING_FURNACE;
-	}
-
-	@Override
-	public int getMaxPower() {
-		return 6400;
-	}
-
+	
 	@Override
 	public String getDisplayName() {
 		return "§6§lElectrical Furnace";
 	}
 
 	@Override
-	public int getMaxPowerOutput() {
-		return 0;
-	}
-
-	@Override
 	public int getMaxPowerInput() {
-		return 4;
+		return 40;
 	}
 
 	@Override
@@ -78,27 +60,23 @@ public class ElectricFurnace extends Machine {
 		if(e.getRawSlot() == convertSlot && convertSlot == 1){
 			e.setCancelled(true);
 		}
-	}
-
-	@Override
-	public void onMoveInto(InventoryMoveItemEvent e) {
-		
-	}
-
-	@Override
-	public void onMoveFrom(InventoryMoveItemEvent e) {
-		
-	}
-
+	}	
+	
 	@Override
 	public void onBreak(BlockBreakEvent e) {
-		furnace.getInventory().setItem(1, Batterod.create());
+		furnace.getInventory().setItem(1, Batrod.create());
 	}
 	
 	@Override
 	public void updateDisplay() {
 		ItemStack powerCore = furnace.getInventory().getFuel();
 		PowerCore.setPowerLevel(powerCore, this);
+	}
+
+	@Override
+	public int getMaxPowerOutput() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

@@ -31,7 +31,7 @@ public class PowerCore {
 	}
 	
 	public static boolean check(ItemStack item){
-		if(item==null)Bukkit.broadcastMessage("Possseidon Failed!");
+		if(item==null)return false;
 		ItemMeta itemMeta = item.getItemMeta();
 		if(itemMeta != null){
 			if(itemMeta.getDisplayName().equalsIgnoreCase(NAME)){
@@ -46,7 +46,7 @@ public class PowerCore {
 		List<String> lore = itemMeta.getLore();
 		lore.set(1, "§6" + m.getPower() + " / " + m.getMaxPower() + " " + CustomsItems.UNIT_NAME);
 		if(m.getMaxPowerOutput() == 0){
-			lore.set(2, "§Using: " + m.getPowerOutputTotal() + " " + CustomsItems.UNIT_NAME);
+			lore.set(2, "§6Using: " + m.getPowerOutputTotal() + " " + CustomsItems.UNIT_NAME);
 		}else{
 			lore.set(2, "§6Output: " + m.getPowerOutputTotal() + " / " + m.getMaxPowerOutput() + " " + CustomsItems.UNIT_NAME);
 		}

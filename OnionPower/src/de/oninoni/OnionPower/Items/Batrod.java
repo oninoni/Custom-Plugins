@@ -3,14 +3,13 @@ package de.oninoni.OnionPower.Items;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class Batterod {
+public class Batrod {
 	
-	private static final String NAME = "§4Batterod";
+	private static final String NAME = "§4Batrod";
 	private static final int MAX_POWER = 64000;
 	
 	public static ItemStack create() {
@@ -28,7 +27,7 @@ public class Batterod {
 	}
 	
 	public static boolean check(ItemStack item) {
-		if(item==null)Bukkit.broadcastMessage("Possseidon Failed!");
+		if(item==null)return false;
 		ItemMeta itemMeta = item.getItemMeta();
 		if(itemMeta != null){
 			if(itemMeta.getDisplayName() != null && itemMeta.getDisplayName().equalsIgnoreCase(NAME)){
