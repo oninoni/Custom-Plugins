@@ -14,6 +14,7 @@ import de.oninoni.OnionPower.Items.ItemData;
 import de.oninoni.OnionPower.Items.PowerCore;
 
 public class Generator extends MachineFurnace {
+	
 	public Generator(Location position, MachineManager machineManager) {
 		super(position, machineManager);
 		rodSlot = 0;

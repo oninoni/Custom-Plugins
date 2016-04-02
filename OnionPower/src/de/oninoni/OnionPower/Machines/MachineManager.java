@@ -9,6 +9,8 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.world.ChunkLoadEvent;
+import org.bukkit.event.world.ChunkUnloadEvent;
 
 public class MachineManager {
 	
@@ -78,6 +80,14 @@ public class MachineManager {
 			machines.get(location).onBreak(e);
 			machines.remove(location);
 		}
+	}
+	
+	public void onLoad(ChunkLoadEvent e){
+		
+	}
+	
+	public void onUnLoad(ChunkUnloadEvent e){
+		
 	}
 		
 	public Machine getMachine(Location pos) {
