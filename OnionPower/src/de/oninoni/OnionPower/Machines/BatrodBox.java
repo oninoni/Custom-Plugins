@@ -40,6 +40,7 @@ public class BatrodBox extends Machine{
 				}
 			}
 		}, 1L);
+		@SuppressWarnings("deprecation")
 		int direction = directionAdapter[dispenser.getRawData()];
 		for(int i = 0; i < 6; i++){
 			if(i == direction){
