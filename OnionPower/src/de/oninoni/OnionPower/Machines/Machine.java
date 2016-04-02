@@ -12,9 +12,11 @@ import org.bukkit.Particle;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import de.oninoni.OnionPower.OnionPower;
+import de.oninoni.OnionPower.Items.Batrod;
 
 public abstract class Machine {
 
@@ -242,7 +244,7 @@ public abstract class Machine {
 		}			
 	}
 	
-	public void update() {		
+	public void update() {
 		if (!isLoaded)
 			return;
 		
@@ -258,8 +260,25 @@ public abstract class Machine {
 		isLoaded = false;
 	}
 
-
 	public boolean getIsLoaded() {
 		return isLoaded;
+	}
+	
+	protected void chargeRod(ItemStack item){
+		if(Batrod.check(item)){
+			int rodPower = Batrod.readPower(item);
+			int powerTransfered = Math.min(Batrod.MAX_POWER - rodPower, Math.min(getMaxPowerOutput(), power));
+			Batrod.setPower(item, rodPower + powerTransfered);
+			power -= powerTransfered;
+		}
+	}
+	
+	protected void dechargeRod(ItemStack item){
+		if(Batrod.check(item) && power != getMaxPower()){
+			int rodPower = Batrod.readPower(item);
+			int powerTransfered = Math.min(getMaxPower() - power, Math.min(rodPower, getMaxPowerInput()));
+			Batrod.setPower(item, rodPower - powerTransfered);
+			power += powerTransfered;
+		}
 	}
 }

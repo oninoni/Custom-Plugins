@@ -65,6 +65,7 @@ public class Generator extends MachineFurnace {
 			power += 20;
 			powerIntputTotal = 20;
 		}
+		chargeRod(furnace.getInventory().getSmelting());
 	}
 	
 	public static boolean canCreate(InventoryClickEvent e) {

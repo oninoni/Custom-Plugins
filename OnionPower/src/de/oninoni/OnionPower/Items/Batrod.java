@@ -10,7 +10,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 public class Batrod {
 	
 	private static final String NAME = "§4Batrod";
-	private static final int MAX_POWER = 64000;
+	public static final int MAX_POWER = 64000;
 	
 	public static ItemStack create() {
 		ItemStack batterod = new ItemStack(Material.BLAZE_ROD);
@@ -35,5 +35,19 @@ public class Batrod {
 			}
 		}
 		return false;
+	}
+	
+	public static void setPower(ItemStack item, int power){
+		power = Math.min(power, MAX_POWER);
+		ItemMeta itemMeta = item.getItemMeta();
+		List<String> lore = itemMeta.getLore();
+		lore.set(0, "§h" + power);
+		lore.set(1, "§6" + power + "/" + MAX_POWER + " " + CustomsItems.UNIT_NAME);
+		itemMeta.setLore(lore);
+		item.setItemMeta(itemMeta);
+	}
+	
+	public static int readPower(ItemStack item){
+		return Integer.parseInt(item.getItemMeta().getLore().get(0).substring(2));
 	}
 }

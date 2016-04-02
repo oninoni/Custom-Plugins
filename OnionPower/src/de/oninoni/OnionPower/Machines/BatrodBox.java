@@ -55,6 +55,10 @@ public class BatrodBox extends Machine{
 	@Override
 	public void updateBlock() {
 		requestFromConnected();
+		for(int i = 0; i < 3; i++){
+			chargeRod(dispenser.getInventory().getItem(i));
+			dechargeRod(dispenser.getInventory().getItem(i + 6));
+		}
 	}
 	
 	public static boolean canCreate(InventoryClickEvent e){
