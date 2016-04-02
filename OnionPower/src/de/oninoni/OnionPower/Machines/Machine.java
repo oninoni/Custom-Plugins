@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -52,6 +53,9 @@ public abstract class Machine {
 	
 	private Location position;
 	
+	private Vector vec;
+	private String world;
+	
 	protected int power;
 	protected int powerIntputTotal, powerOutputTotal;
 	
@@ -63,7 +67,11 @@ public abstract class Machine {
 	public Machine(Location position, MachineManager machineManager){
 		this.position = position;
 		this.machineManager = machineManager;
+		
+		vec = position.toVector();
+		world = position.getWorld().getName();
 	}
+
 	
 	protected abstract boolean isMaterial(Material material);
 	
@@ -80,6 +88,8 @@ public abstract class Machine {
 	protected abstract void updateDisplay();
 		
 	public abstract void onBreak(BlockBreakEvent e);
+	
+	private boolean isLoaded;
 	
 	public void requestPower(Machine requester) {
 		sender.add(requester);
@@ -166,14 +176,14 @@ public abstract class Machine {
 	}
 
 	public void resetIO() {
-		if (!position.getChunk().isLoaded())
+		if (!isLoaded)
 			return;
 		powerIntputTotal = 0;
 		powerOutputTotal = 0;
 	}
 	
 	public void processPowerTransfer() {
-		if (!position.getChunk().isLoaded())
+		if (!isLoaded)
 			return;
 		
 		sender.sort(new Comparator<Machine>() {
@@ -215,7 +225,7 @@ public abstract class Machine {
 	}
 
 	public void updateUI() {
-		if (!position.getChunk().isLoaded())
+		if (!isLoaded)
 			return;
 		
 		if (oldPower != power
@@ -229,9 +239,19 @@ public abstract class Machine {
 	}
 	
 	public void update() {
-		if (!position.getChunk().isLoaded())
+		if (!isLoaded)
 			return;
+		
 		updateBlock();
+	}
+	
+	public void load() {
+		isLoaded = true;
+		position = new Location(Bukkit.getWorld(world), vec.getX(), vec.getY(), vec.getZ());
+	}
+	
+	public void unload() {
+		isLoaded = false;
 	}
 		
 }

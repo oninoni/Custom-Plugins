@@ -40,7 +40,7 @@ public class Generator extends MachineFurnace {
 		if (furnace.getBurnTime() == 0) {
 			ItemStack fuel = furnace.getInventory().getFuel();
 			
-			if (fuel != null){
+			if (fuel != null) {
 				Material mat = fuel.getType();
 				if (ItemData.burnTime.containsKey(mat) && ItemData.burnTime.get(mat) + power <= getMaxPower()) {
 					ItemStack top = furnace.getInventory().getSmelting();

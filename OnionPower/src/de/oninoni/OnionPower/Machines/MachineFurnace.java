@@ -62,4 +62,10 @@ public abstract class MachineFurnace extends Machine{
 		ItemStack powerCore = furnace.getInventory().getItem(coreSlot);
 		PowerCore.setPowerLevel(powerCore, this);
 	}
+	
+	@Override
+	public void load() {
+		super.load();
+		furnace = (Furnace) getPosition().getBlock().getState();
+	}
 }
