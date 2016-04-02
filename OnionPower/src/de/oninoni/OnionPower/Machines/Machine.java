@@ -82,7 +82,7 @@ public abstract class Machine {
 		for (int i = 0; i <= MAX_CABLE_LENGTH; i++) {
 			for (Location p : current){
 				blockDistance.put(p, i);
-				for (Vector dir : directions){
+				for (Vector dir : directions){					
 					Location offsetPosition = p.clone();
 					offsetPosition.add(dir);					
 					if (!blockDistance.containsKey(offsetPosition)) {
@@ -91,7 +91,7 @@ public abstract class Machine {
 							PathToMachine machinepath = new PathToMachine();
 							machinepath.machine = machine;
 							Location backtrack = offsetPosition.clone();
-							for (int j = i; j >= 1; j--) {								
+							for (int j = i; j >= 1; j--) {
 								for (Vector back : directions) {
 									Location backPosition = backtrack.clone();
 									backPosition.add(back);
