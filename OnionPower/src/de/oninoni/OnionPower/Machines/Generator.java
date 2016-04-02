@@ -67,7 +67,6 @@ public class Generator extends MachineFurnace {
 			power += 20;
 			powerIntputTotal = 20;
 		}
-		notifyDisplayChange();
 	}
 	
 	public static boolean canCreate(InventoryClickEvent e) {
