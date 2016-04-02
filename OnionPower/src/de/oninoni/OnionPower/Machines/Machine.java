@@ -251,17 +251,17 @@ public abstract class Machine {
 	}
 	
 	public void load() {
-		isLoaded = true;
 		position = new Location(Bukkit.getWorld(world), vec.getX(), vec.getY(), vec.getZ());
+		isLoaded = position.getBlock().getChunk().isLoaded();
 	}
 	
 	public void unload() {
-		isLoaded = false;
+		position = new Location(Bukkit.getWorld(world), vec.getX(), vec.getY(), vec.getZ());
+		isLoaded = position.getBlock().getChunk().isLoaded();
 	}
 
 
 	public boolean getIsLoaded() {
 		return isLoaded;
 	}
-		
 }
