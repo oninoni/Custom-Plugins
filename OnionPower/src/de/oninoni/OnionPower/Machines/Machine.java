@@ -15,7 +15,7 @@ import org.bukkit.util.Vector;
 
 import de.oninoni.OnionPower.OnionPower;
 
-public abstract class Machine {
+public abstract class Machine{
 	
 	protected static OnionPower plugin = OnionPower.get();
 	
