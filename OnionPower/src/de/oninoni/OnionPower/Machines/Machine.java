@@ -34,15 +34,15 @@ public abstract class Machine {
 		true,
 		true,
 		true,
-		false,
-		false,
-		false
+		true,
+		true,
+		true
 	};
 	
 	protected boolean[] allowedOutputs = {
-		false,
-		false,
-		false,
+		true,
+		true,
+		true,
 		true,
 		true,
 		true

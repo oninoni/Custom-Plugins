@@ -66,8 +66,8 @@ public class Generator extends MachineFurnace {
 		if (furnace.getBurnTime() > 0) {
 			power += 20;
 			powerIntputTotal = 20;
-			notifyDisplayChange();
 		}
+		notifyDisplayChange();
 	}
 	
 	public static boolean canCreate(InventoryClickEvent e) {

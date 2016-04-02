@@ -18,6 +18,8 @@ public class BatrodBox extends Machine{
 
 	Dispenser dispenser;
 	
+	private final static int[] directionAdapter = {4,1,5,2,3,0};
+	
 	public BatrodBox(Location position, MachineManager machineManager) {
 		super(position, machineManager);
 		dispenser = (Dispenser) position.getBlock().getState();
@@ -38,14 +40,20 @@ public class BatrodBox extends Machine{
 				}
 			}
 		}, 1L);
-		
-		
-		
+		int direction = directionAdapter[dispenser.getRawData()];
+		for(int i = 0; i < 6; i++){
+			if(i == direction){
+				allowedOutputs[i] = true;
+				allowedInputs[i] = false;
+			}else{
+				allowedOutputs[i] = false;
+			}
+		}
 	}
 
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
+		requestFromConnected();
 	}
 	
 	public static boolean canCreate(InventoryClickEvent e){
@@ -96,20 +104,18 @@ public class BatrodBox extends Machine{
 
 	@Override
 	public void onMoveInto(InventoryMoveItemEvent e) {
-		// TODO Auto-generated method stub
-		
+		e.setCancelled(true);
 	}
 
 	@Override
 	public void onMoveFrom(InventoryMoveItemEvent e) {
-		// TODO Auto-generated method stub
-		
+		e.setCancelled(true);
 	}
 
 	@Override
 	protected void updateDisplay() {
-		// TODO Auto-generated method stub
-		
+		ItemStack powerCore = dispenser.getInventory().getItem(4);
+		PowerCore.setPowerLevel(powerCore, this);
 	}
 
 	@Override
