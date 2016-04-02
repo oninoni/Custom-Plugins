@@ -88,7 +88,7 @@ public class Generator extends MachineFurnace {
 
 	@Override
 	public int getMaxPowerOutput() {
-		return 4;
+		return 40;
 	}
 
 	@Override
