@@ -12,12 +12,12 @@ public class ChunkListener implements Listener{
 	private static OnionPower plugin = OnionPower.get();
 	
 	@EventHandler
-	public void onLoad(ChunkLoadEvent e){
+	public void onLoad(ChunkLoadEvent e) {
 		plugin.getMachineManager().onLoad(e);
 	}
 	
 	@EventHandler
-	public void onUnload(ChunkUnloadEvent e){
-		plugin.getMachineManager().onUnLoad(e);
+	public void onUnload(ChunkUnloadEvent e) {
+		plugin.getMachineManager().onUnload(e);
 	}
 }

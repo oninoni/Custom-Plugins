@@ -68,6 +68,8 @@ public abstract class Machine {
 		this.position = position;
 		this.machineManager = machineManager;
 		
+		isLoaded = true;
+		
 		vec = position.toVector();
 		world = position.getWorld().getName();
 	}
@@ -178,6 +180,9 @@ public abstract class Machine {
 	public void resetIO() {
 		if (!isLoaded)
 			return;
+		
+		Bukkit.broadcastMessage("DEBUG");
+		
 		powerIntputTotal = 0;
 		powerOutputTotal = 0;
 	}
@@ -238,7 +243,7 @@ public abstract class Machine {
 		}			
 	}
 	
-	public void update() {
+	public void update() {		
 		if (!isLoaded)
 			return;
 		
@@ -252,6 +257,11 @@ public abstract class Machine {
 	
 	public void unload() {
 		isLoaded = false;
+	}
+
+
+	public boolean getIsLoaded() {
+		return isLoaded;
 	}
 		
 }

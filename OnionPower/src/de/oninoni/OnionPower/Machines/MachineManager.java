@@ -3,6 +3,7 @@ package de.oninoni.OnionPower.Machines;
 import java.util.HashMap;
 import java.util.Set;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -78,23 +79,32 @@ public class MachineManager {
 	}
 	
 	public void onLoad(ChunkLoadEvent e){
-		
+		for (Location pos : machines.keySet())
+			if (pos.getChunk().getX() == e.getChunk().getX() && 
+				pos.getChunk().getZ() == e.getChunk().getZ() &&
+				pos.getWorld().getName().equalsIgnoreCase(e.getWorld().getName())) {
+				Bukkit.broadcastMessage("LOADED CRAZY SHIT");
+				machines.get(pos).load();
+			}	
 	}
 	
-	public void onUnLoad(ChunkUnloadEvent e){
-		
+	public void onUnload(ChunkUnloadEvent e){		
+		for (Location pos : machines.keySet()) {
+			Bukkit.broadcastMessage("X: " + pos.getChunk().getX() + ", " + e.getChunk().getX());
+			Bukkit.broadcastMessage("Z: " + pos.getChunk().getZ() + ", " + e.getChunk().getZ());
+			Bukkit.broadcastMessage("World: " + pos.getWorld().getName() + ", " + e.getWorld().getName());		
+			
+			if (pos.getChunk().getX() == e.getChunk().getX() && 
+				pos.getChunk().getZ() == e.getChunk().getZ() &&
+				pos.getWorld().getName().equalsIgnoreCase(e.getWorld().getName())) {
+				Bukkit.broadcastMessage("UNLOADED HOLY SHIT");
+				machines.get(pos).unload();
+			}
+		}
 	}
 		
 	public Machine getMachine(Location pos) {
 		return machines.get(pos);
-	}
-	
-	public void Load() {
-		
-	}
-	
-	public void Save() {
-		
 	}
 	
 }
