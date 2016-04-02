@@ -98,7 +98,7 @@ public class BatrodBox extends Machine{
 
 	@Override
 	public void onClick(InventoryClickEvent e) {
-		if((e.getRawSlot() == e.getView().convertSlot(e.getRawSlot())) && e.getRawSlot() >= 4 && e.getRawSlot() <= 6){
+		if((e.getRawSlot() == e.getView().convertSlot(e.getRawSlot())) && e.getRawSlot() >= 3 && e.getRawSlot() <= 5){
 			e.setCancelled(true);
 		}
 	}
