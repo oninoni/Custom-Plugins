@@ -16,10 +16,10 @@ import org.bukkit.util.Vector;
 import de.oninoni.OnionPower.OnionPower;
 
 public abstract class Machine {
-	
+
 	protected static OnionPower plugin = OnionPower.get();
 	
-	private static final int MAX_CABLE_LENGTH = 4;
+	private static final int MAX_CABLE_LENGTH = 16;
 	
 	private static final Vector[] directions = {
 			new Vector( 1,  0,  0),
@@ -71,7 +71,7 @@ public abstract class Machine {
 	public abstract String getDisplayName();
 	public abstract int getMaxPowerOutput();
 	public abstract int getMaxPowerInput();
-	public abstract void update();
+	public abstract void updateBlock();
 	
 	public abstract void onClick(InventoryClickEvent e);
 	public abstract void onMoveInto(InventoryMoveItemEvent e);
@@ -166,11 +166,16 @@ public abstract class Machine {
 	}
 
 	public void resetIO() {
+		if (!position.getChunk().isLoaded())
+			return;
 		powerIntputTotal = 0;
 		powerOutputTotal = 0;
 	}
 	
 	public void processPowerTransfer() {
+		if (!position.getChunk().isLoaded())
+			return;
+		
 		sender.sort(new Comparator<Machine>() {
 			@Override
             public int compare(Machine lhs, Machine rhs) {
@@ -210,6 +215,9 @@ public abstract class Machine {
 	}
 
 	public void updateUI() {
+		if (!position.getChunk().isLoaded())
+			return;
+		
 		if (oldPower != power
 		 || oldPowerInputTotal != powerIntputTotal
 		 || oldPowerOutputTotal != powerOutputTotal) {
@@ -217,8 +225,13 @@ public abstract class Machine {
 			oldPower = power;
 			oldPowerInputTotal = powerIntputTotal;
 			oldPowerOutputTotal = powerOutputTotal;
-		}
-			
+		}			
+	}
+	
+	public void update() {
+		if (!position.getChunk().isLoaded())
+			return;
+		updateBlock();
 	}
 		
 }

@@ -14,6 +14,7 @@ import de.oninoni.OnionPower.Items.ItemData;
 import de.oninoni.OnionPower.Items.PowerCore;
 
 public class Generator extends MachineFurnace {
+	
 	public Generator(Location position, MachineManager machineManager) {
 		super(position, machineManager);
 		rodSlot = 0;
@@ -35,20 +36,13 @@ public class Generator extends MachineFurnace {
 	}
 	
 	@Override
-	public void update() {
+	public void updateBlock() {
 		if (furnace.getBurnTime() == 0) {
 			ItemStack fuel = furnace.getInventory().getFuel();
 			
 			if (fuel != null){
 				Material mat = fuel.getType();
 				if (ItemData.burnTime.containsKey(mat) && ItemData.burnTime.get(mat) + power <= getMaxPower()) {
-					/*
-					if (fuel.getAmount() == 1)
-						furnace.getInventory().remove(fuel);
-					else
-						fuel.setAmount(fuel.getAmount() - 1);
-					furnace.setBurnTime(ItemData.burnTime.get(mat));
-					*/
 					ItemStack top = furnace.getInventory().getSmelting();
 					ItemStack powerCore = furnace.getInventory().getResult();
 					furnace.getInventory().setSmelting(new ItemStack(Material.PORK));

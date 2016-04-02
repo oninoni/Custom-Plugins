@@ -84,4 +84,12 @@ public class MachineManager {
 		return machines.get(pos);
 	}
 	
+	public void Load() {
+		
+	}
+	
+	public void Save() {
+		
+	}
+	
 }

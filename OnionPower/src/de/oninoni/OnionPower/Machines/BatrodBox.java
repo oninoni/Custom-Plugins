@@ -53,7 +53,7 @@ public class BatrodBox extends Machine{
 	}
 
 	@Override
-	public void update() {
+	public void updateBlock() {
 		requestFromConnected();
 	}
 	

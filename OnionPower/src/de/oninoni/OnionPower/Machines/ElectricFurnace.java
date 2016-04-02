@@ -50,7 +50,7 @@ public class ElectricFurnace extends MachineFurnace {
 	}
 
 	@Override
-	public void update() {
+	public void updateBlock() {
 		requestFromConnected();
 	}
 
