@@ -41,6 +41,7 @@ public class PowerCore {
 	}
 	
 	public static void setPowerLevel(ItemStack powerCore, Machine m){
+		if(powerCore==null)return;
 		ItemMeta itemMeta = powerCore.getItemMeta();
 		List<String> lore = itemMeta.getLore();
 		lore.set(1, "§6" + m.getPower() + " / " + m.getMaxPower() + " " + CustomsItems.UNIT_NAME);
