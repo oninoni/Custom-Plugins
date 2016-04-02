@@ -2,6 +2,7 @@ package de.oninoni.OnionPower.Machines;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Furnace;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -10,9 +11,14 @@ import org.bukkit.inventory.ItemStack;
 
 import de.oninoni.OnionPower.NMSAdapter;
 import de.oninoni.OnionPower.Items.Batrod;
+import de.oninoni.OnionPower.Items.ItemData;
 import de.oninoni.OnionPower.Items.PowerCore;
 
 public class ElectricFurnace extends MachineFurnace {
+	
+	private Material cookingInto;
+	private Material cookingFrom;
+	
 	public ElectricFurnace(Location position, MachineManager machineManager, int power) {
 		super(position, machineManager, power);
 		rodSlot = 1;
@@ -45,13 +51,38 @@ public class ElectricFurnace extends MachineFurnace {
 	}
 
 	@Override
-	public int getMaxPowerInput() {
-		return 40;
-	}
-
-	@Override
 	public void updateBlock() {
 		requestFromConnected();
+		if(furnace.getInventory().getSmelting() != null){
+			ItemStack smelting = furnace.getInventory().getSmelting();
+			if(furnace.getBurnTime() <= 0 && ItemData.smeltable.containsKey(smelting.getType())){
+				Material result = ItemData.smeltable.get(smelting.getType());
+				if((furnace.getInventory().getResult() == null || furnace.getInventory().getResult().getType() == result) && power >= 2000){
+					furnace.setBurnTime((short) 200);
+					cookingInto = result;
+					cookingFrom = smelting.getType();
+				}
+			}
+		}
+		if(furnace.getBurnTime() > 0 ){
+			if(furnace.getInventory().getSmelting()!= null && furnace.getInventory().getSmelting().getType() != cookingFrom){
+				
+			}
+			if(furnace.getInventory().getSmelting() == null || furnace.getInventory().getSmelting().getType() != cookingFrom){
+				furnace.setBurnTime((short) 0);
+				furnace.setCookTime((short) 0);
+				cookingInto = null;
+				cookingFrom = null;
+			}else{
+				power -= 20;
+				powerOutputTotal = 20;
+				furnace.setBurnTime((short) 200);
+			}
+		}
+		if(furnace.getInventory().getSmelting() == null && (furnace.getBurnTime() != 0 || furnace.getCookTime() != 0) && cookingInto != null){
+			furnace.setBurnTime((short) 0);
+			furnace.setCookTime((short) 0);
+		}
 	}
 
 	@Override
@@ -73,6 +104,11 @@ public class ElectricFurnace extends MachineFurnace {
 		PowerCore.setPowerLevel(powerCore, this);
 	}
 
+	@Override
+	public int getMaxPowerInput() {
+		return 100;
+	}
+	
 	@Override
 	public int getMaxPowerOutput() {
 		// TODO Auto-generated method stub

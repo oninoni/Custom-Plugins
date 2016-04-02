@@ -88,12 +88,12 @@ public class BatrodBox extends Machine{
 
 	@Override
 	public int getMaxPowerOutput() {
-		return 100;
+		return 500;
 	}
 
 	@Override
 	public int getMaxPowerInput() {
-		return 100;
+		return 500;
 	}
 
 	@Override

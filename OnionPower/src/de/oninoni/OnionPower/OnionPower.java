@@ -42,13 +42,21 @@ public class OnionPower extends JavaPlugin {
 		
 		Bukkit.getScheduler().runTaskLater(this, new Runnable() {
 			private OnionPower plugin = OnionPower.get();
-			
 			@Override
 			public void run() {
 				Bukkit.getScheduler().runTaskLater(plugin, this, 2L);
 				machineManager.update();
 			}
 		}, 2L);
+		
+		Bukkit.getScheduler().runTaskLater(this, new Runnable() {
+			private OnionPower plugin = OnionPower.get();
+			@Override
+			public void run() {
+				Bukkit.getScheduler().runTaskLater(plugin, this, 20L * 60L);
+				machineManager.saveData();
+			}
+		}, 20L * 60L);
 		
 		machineManager.loadData();
 	}

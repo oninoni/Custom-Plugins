@@ -169,6 +169,7 @@ public class MachineManager {
 			machineSection.set("type", machine.getClass().getName());
 		}
 		plugin.saveConfig();
+		Bukkit.getLogger().info("Saved Data!");
 	}
 	
 }

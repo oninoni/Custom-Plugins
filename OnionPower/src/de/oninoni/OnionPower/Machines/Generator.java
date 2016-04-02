@@ -15,6 +15,8 @@ import de.oninoni.OnionPower.Items.PowerCore;
 
 public class Generator extends MachineFurnace {
 	
+	private boolean disableSmeltingSlot = false;
+	
 	public Generator(Location position, MachineManager machineManager, int power) {
 		super(position, machineManager, power);
 		rodSlot = 0;
@@ -47,11 +49,13 @@ public class Generator extends MachineFurnace {
 					ItemStack powerCore = furnace.getInventory().getResult();
 					furnace.getInventory().setSmelting(new ItemStack(Material.PORK));
 					furnace.getInventory().setResult(new ItemStack(Material.AIR));
+					disableSmeltingSlot = true;
 					Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 						@Override
 						public void run() {
 							furnace.getInventory().setSmelting(top);
 							furnace.getInventory().setResult(powerCore);
+							disableSmeltingSlot = false;
 						}
 					}, 1L);
 				}
@@ -70,6 +74,14 @@ public class Generator extends MachineFurnace {
 	}
 	
 	@Override
+	public void onClick(InventoryClickEvent e) {
+		if(disableSmeltingSlot && e.getRawSlot() == e.getView().convertSlot(e.getRawSlot()) && e.getRawSlot() == 0){
+			e.setCancelled(true);
+		}
+		super.onClick(e);
+	}
+	
+	@Override
 	public String getDisplayName() {
 		return "§6§lGenerator";
 	}
@@ -81,7 +93,7 @@ public class Generator extends MachineFurnace {
 
 	@Override
 	public int getMaxPowerOutput() {
-		return 40;
+		return 100;
 	}
 
 	@Override

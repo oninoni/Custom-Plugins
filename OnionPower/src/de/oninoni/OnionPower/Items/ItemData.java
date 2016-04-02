@@ -1,15 +1,18 @@
 package de.oninoni.OnionPower.Items;
 
 import java.util.HashMap;
+import java.util.Iterator;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.FurnaceRecipe;
+import org.bukkit.inventory.Recipe;
 
 public class ItemData {
 	
 	public static final HashMap<Material, Short> burnTime;
 	
-	public static final HashMap<ItemStack, ItemStack> burnable;
+	public static final HashMap<Material, Material> smeltable;
 	
 	static void initBurnTimes() {
 		burnTime.put(Material.LAVA, 			(short)20000 );
@@ -44,13 +47,20 @@ public class ItemData {
 	}
 	
 	static void initBurnable() {
-		
+		Iterator<Recipe> recipeIterator = Bukkit.recipeIterator();
+		while(recipeIterator.hasNext()){
+			Recipe recipe = recipeIterator.next();
+			if(recipe instanceof FurnaceRecipe){
+				FurnaceRecipe furnaceRecipe = ((FurnaceRecipe) recipe);
+				smeltable.put(furnaceRecipe.getInput().getType(), furnaceRecipe.getResult().getType());
+			}
+		}
 	}
 	
 	static {
 		burnTime = new HashMap<>();
 		initBurnTimes();
-		burnable = new HashMap<>();
+		smeltable = new HashMap<>();
 		initBurnable();
 	}	
 	
