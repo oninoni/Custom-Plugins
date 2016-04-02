@@ -78,5 +78,4 @@ public class ElectricFurnace extends MachineFurnace {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-
 }

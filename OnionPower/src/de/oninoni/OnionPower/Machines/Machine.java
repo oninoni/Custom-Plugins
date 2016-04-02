@@ -23,11 +23,29 @@ public abstract class Machine {
 	
 	private static final Vector[] directions = {
 			new Vector( 1,  0,  0),
-			new Vector(-1,  0,  0),
 			new Vector( 0,  1,  0),
-			new Vector( 0, -1,  0),
 			new Vector( 0,  0,  1),
+			new Vector(-1,  0,  0),
+			new Vector( 0, -1,  0),
 			new Vector( 0,  0, -1)
+	};
+	
+	protected boolean[] allowedInputs = {
+		true,
+		true,
+		true,
+		false,
+		false,
+		false
+	};
+	
+	protected boolean[] allowedOutputs = {
+		false,
+		false,
+		false,
+		true,
+		true,
+		true
 	};
 	
 	private boolean displayChanged;
@@ -82,21 +100,23 @@ public abstract class Machine {
 		for (int i = 0; i <= MAX_CABLE_LENGTH; i++) {
 			for (Location p : current){
 				blockDistance.put(p, i);
-				for (Vector dir : directions){
+				for (int j = 0; j < directions.length; j++){
+					if(i == 0 && !allowedInputs[j])continue;
+					Vector dir = directions[j];
 					Location offsetPosition = p.clone();
 					offsetPosition.add(dir);					
 					if (!blockDistance.containsKey(offsetPosition)) {
 						Machine machine = machineManager.getMachine(offsetPosition);
-						if (machine != null && machine.getMaxPowerOutput() > 0) {
+						if (machine != null && machine.getMaxPowerOutput() > 0 && machine.allowedOutputs[(j+3)%6]) {
 							PathToMachine machinepath = new PathToMachine();
 							machinepath.machine = machine;
 							Location backtrack = offsetPosition.clone();
-							for (int j = i; j >= 1; j--) {								
+							for (int k = i; k >= 1; k--) {								
 								for (Vector back : directions) {
 									Location backPosition = backtrack.clone();
 									backPosition.add(back);
 									Integer dis = blockDistance.get(backPosition);									
-									if (dis != null && dis == j) {
+									if (dis != null && dis == k) {
 										backtrack.add(back);
 										machinepath.path.add(backtrack.clone());
 										break;
@@ -120,7 +140,7 @@ public abstract class Machine {
 	protected void requestFromConnected() {
 		List<PathToMachine> machines = getConnectedMachines();
 		
-		for (PathToMachine ptm : machines) {			
+		for (PathToMachine ptm : machines) {
 			ptm.machine.requestPower(this);
 		}
 		if (machines.size() == 0) {
