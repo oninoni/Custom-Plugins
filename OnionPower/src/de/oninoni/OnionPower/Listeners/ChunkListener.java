@@ -13,12 +13,11 @@ public class ChunkListener implements Listener{
 	
 	@EventHandler
 	public void onLoad(ChunkLoadEvent e){
-		
+		plugin.getMachineManager().onLoad(e);
 	}
 	
 	@EventHandler
 	public void onUnload(ChunkUnloadEvent e){
-		
+		plugin.getMachineManager().onUnLoad(e);
 	}
-	
 }

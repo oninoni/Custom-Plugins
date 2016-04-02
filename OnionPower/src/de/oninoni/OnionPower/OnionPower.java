@@ -11,6 +11,7 @@ import com.comphenix.protocol.ProtocolManager;
 
 import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Listeners.BlockBreakListener;
+import de.oninoni.OnionPower.Listeners.ChunkListener;
 import de.oninoni.OnionPower.Listeners.InventoryListener;
 import de.oninoni.OnionPower.Machines.MachineManager;
 
@@ -33,6 +34,9 @@ public class OnionPower extends JavaPlugin {
 		
 		BlockBreakListener blockBreakListener = new BlockBreakListener();
 		getServer().getPluginManager().registerEvents(blockBreakListener, this);
+		
+		ChunkListener chunkListener = new ChunkListener();
+		getServer().getPluginManager().registerEvents(chunkListener, this);
 		
 		machineManager = new MachineManager();
 		
