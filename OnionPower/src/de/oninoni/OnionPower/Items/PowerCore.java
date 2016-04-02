@@ -31,7 +31,7 @@ public class PowerCore {
 	}
 	
 	public static boolean check(ItemStack item){
-		if(item==null)Bukkit.broadcastMessage("Possseidon Failed!");
+		if(item==null)return false;
 		ItemMeta itemMeta = item.getItemMeta();
 		if(itemMeta != null){
 			if(itemMeta.getDisplayName().equalsIgnoreCase(NAME)){

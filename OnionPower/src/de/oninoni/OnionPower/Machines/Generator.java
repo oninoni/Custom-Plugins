@@ -9,7 +9,7 @@ import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 import de.oninoni.OnionPower.NMSAdapter;
-import de.oninoni.OnionPower.Items.Batterod;
+import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.ItemData;
 import de.oninoni.OnionPower.Items.PowerCore;
 
@@ -73,7 +73,8 @@ public class Generator extends MachineFurnace {
 	
 	public static boolean canCreate(InventoryClickEvent e) {
 		ItemStack item = e.getCursor();
-		return 0 == e.getView().convertSlot(e.getRawSlot()) && Batterod.check(item);
+		if(!(e.getInventory().getItem(0) == null && e.getInventory().getItem(1) == null && e.getInventory().getItem(0) == null))return false;
+		return 0 == e.getView().convertSlot(e.getRawSlot()) && Batrod.check(item);
 	}
 	
 	@Override

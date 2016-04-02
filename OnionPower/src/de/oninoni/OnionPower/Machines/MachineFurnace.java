@@ -8,7 +8,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.ItemStack;
 
-import de.oninoni.OnionPower.Items.Batterod;
+import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.PowerCore;
 
 public abstract class MachineFurnace extends Machine{
@@ -54,7 +54,7 @@ public abstract class MachineFurnace extends Machine{
 	
 	@Override
 	public void onBreak(BlockBreakEvent e) {
-		furnace.getInventory().setItem(coreSlot, Batterod.create());
+		furnace.getInventory().setItem(coreSlot, Batrod.create());
 	}
 	
 	@Override

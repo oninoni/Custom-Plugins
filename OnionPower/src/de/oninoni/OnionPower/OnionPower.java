@@ -9,7 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 
-import de.oninoni.OnionPower.Items.Batterod;
+import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Listeners.BlockBreakListener;
 import de.oninoni.OnionPower.Listeners.InventoryListener;
 import de.oninoni.OnionPower.Machines.MachineManager;
@@ -61,7 +61,7 @@ public class OnionPower extends JavaPlugin {
 			if (sender instanceof Player)
 			{
 				Player player = (Player) sender;
-				player.getInventory().addItem(Batterod.create());
+				player.getInventory().addItem(Batrod.create());
 				return true;
 			}
 		}

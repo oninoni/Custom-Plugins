@@ -41,6 +41,8 @@ public class MachineManager {
 				machines.put(location, new Generator(location, this));
 			if (ElectricFurnace.canCreate(e))
 				machines.put(location, new ElectricFurnace(location, this));
+			if (BatrodBox.canCreate(e))
+				machines.put(location, new BatrodBox(location, this));
 		}
 		else
 		{

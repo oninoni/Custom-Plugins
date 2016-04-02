@@ -8,7 +8,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import de.oninoni.OnionPower.NMSAdapter;
-import de.oninoni.OnionPower.Items.Batterod;
+import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.PowerCore;
 
 public class ElectricFurnace extends MachineFurnace {
@@ -39,7 +39,8 @@ public class ElectricFurnace extends MachineFurnace {
 	
 	public static boolean canCreate(InventoryClickEvent e){
 		ItemStack item = e.getCursor();
-		return 1 == e.getView().convertSlot(e.getRawSlot()) && Batterod.check(item);
+		if(!(e.getInventory().getItem(0) == null && e.getInventory().getItem(1) == null && e.getInventory().getItem(0) == null))return false;
+		return 1 == e.getView().convertSlot(e.getRawSlot()) && Batrod.check(item);
 	}
 	
 	@Override
@@ -54,6 +55,6 @@ public class ElectricFurnace extends MachineFurnace {
 
 	@Override
 	public int getMaxPowerInput() {
-		return 4;
+		return 40;
 	}
 }
