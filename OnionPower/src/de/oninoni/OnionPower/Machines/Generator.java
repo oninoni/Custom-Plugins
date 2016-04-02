@@ -15,8 +15,8 @@ import de.oninoni.OnionPower.Items.PowerCore;
 
 public class Generator extends MachineFurnace {
 	
-	public Generator(Location position, MachineManager machineManager) {
-		super(position, machineManager);
+	public Generator(Location position, MachineManager machineManager, int power) {
+		super(position, machineManager, power);
 		rodSlot = 0;
 		coreSlot = 2;
 		ItemStack powerCore = PowerCore.create(this);

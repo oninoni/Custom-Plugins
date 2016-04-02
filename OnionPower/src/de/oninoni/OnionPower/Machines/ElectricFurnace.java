@@ -13,8 +13,8 @@ import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.PowerCore;
 
 public class ElectricFurnace extends MachineFurnace {
-	public ElectricFurnace(Location position, MachineManager machineManager) {
-		super(position, machineManager);
+	public ElectricFurnace(Location position, MachineManager machineManager, int power) {
+		super(position, machineManager, power);
 		rodSlot = 1;
 		coreSlot = 1;
 		ItemStack powerCore = PowerCore.create(this);

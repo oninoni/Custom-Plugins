@@ -5,6 +5,8 @@ import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
@@ -12,7 +14,11 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 
+import de.oninoni.OnionPower.OnionPower;
+
 public class MachineManager {
+	
+	private static OnionPower plugin = OnionPower.get();
 	
 	private HashMap<Location, Machine> machines;
 	
@@ -43,11 +49,16 @@ public class MachineManager {
 		{
 			Location location = e.getView().getTopInventory().getLocation();
 			if (Generator.canCreate(e))
-				machines.put(location, new Generator(location, this));
+				machines.put(location, new Generator(location, this, 0));
 			if (ElectricFurnace.canCreate(e))
-				machines.put(location, new ElectricFurnace(location, this));
+				machines.put(location, new ElectricFurnace(location, this, 0));
 			if (BatrodBox.canCreate(e))
-				machines.put(location, new BatrodBox(location, this));
+				machines.put(location, new BatrodBox(location, this, 0));
+			
+			
+			
+			if(machines.get(e.getInventory().getLocation()) != null	)
+				saveData();
 		}
 		else
 		{
@@ -101,6 +112,63 @@ public class MachineManager {
 		
 	public Machine getMachine(Location pos) {
 		return machines.get(pos);
+	}
+	
+	public void loadData(){
+		machines = new HashMap<>();
+		plugin.reloadConfig();
+		ConfigurationSection config = plugin.getConfig();
+		if(config.isConfigurationSection("Machines")){
+			ConfigurationSection machinesList = config.getConfigurationSection("Machines");
+			Set<String> machineKeys = machinesList.getKeys(false);
+			for (String sectionName : machineKeys) {
+				Bukkit.getLogger().info(sectionName);
+				ConfigurationSection machineSection = machinesList.getConfigurationSection(sectionName);
+				int x = machineSection.getInt("X");
+				int y = machineSection.getInt("Y");
+				int z = machineSection.getInt("Z");
+				World w = Bukkit.getWorld(machineSection.getString("world"));
+				int power = machineSection.getInt("power");
+				Class<?> MachineClass;
+				try {
+					MachineClass = Class.forName(machineSection.getString("type"));
+				} catch (ClassNotFoundException e) {
+					e.printStackTrace();
+					break;
+				}
+				Location l = new Location(w, x, y, z);
+				if(MachineClass == Generator.class){
+					machines.put(l, new Generator(l, this, power));
+				}
+				else if(MachineClass == ElectricFurnace.class){
+					machines.put(l, new ElectricFurnace(l, this, power));
+				}
+				else if(MachineClass == BatrodBox.class){
+					machines.put(l, new BatrodBox(l, this, power));
+				}
+				
+			}
+		}
+	}
+	
+	public void saveData(){
+		plugin.reloadConfig();
+		ConfigurationSection config = plugin.getConfig();
+		config.createSection("Machines");
+		ConfigurationSection machinesList = config.getConfigurationSection("Machines");
+		for (Location pos : machines.keySet()) {
+			Machine machine = machines.get(pos);
+			String sectionName = pos.getBlockX() + "" + pos.getBlockY() + "" + pos.getBlockZ() + "" + pos.getWorld().getName();
+			machinesList.createSection(sectionName);
+			ConfigurationSection machineSection = machinesList.getConfigurationSection(sectionName);
+			machineSection.set("X", pos.getBlockX());
+			machineSection.set("Y", pos.getBlockY());
+			machineSection.set("Z", pos.getBlockZ());
+			machineSection.set("world", pos.getWorld().getName());
+			machineSection.set("power", machine.getPower());
+			machineSection.set("type", machine.getClass().getName());
+		}
+		plugin.saveConfig();
 	}
 	
 }

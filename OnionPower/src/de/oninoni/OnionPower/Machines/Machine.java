@@ -64,9 +64,10 @@ public abstract class Machine {
 	
 	private List<Machine> sender = new ArrayList<>();
 	
-	public Machine(Location position, MachineManager machineManager){
+	public Machine(Location position, MachineManager machineManager, int power){
 		this.position = position;
 		this.machineManager = machineManager;
+		this.power = power;
 		
 		isLoaded = true;
 		

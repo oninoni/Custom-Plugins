@@ -49,10 +49,12 @@ public class OnionPower extends JavaPlugin {
 				machineManager.update();
 			}
 		}, 2L);
+		
+		machineManager.loadData();
 	}
 	
 	public void onDisable() {
-		
+		machineManager.saveData();
 	}
 	
 	public MachineManager getMachineManager() {

@@ -20,8 +20,8 @@ public class BatrodBox extends Machine{
 	
 	private final static int[] directionAdapter = {4,1,5,2,3,0};
 	
-	public BatrodBox(Location position, MachineManager machineManager) {
-		super(position, machineManager);
+	public BatrodBox(Location position, MachineManager machineManager, int power) {
+		super(position, machineManager, power);
 		dispenser = (Dispenser) position.getBlock().getState();
 		ItemStack powerCore = PowerCore.create(this);
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {

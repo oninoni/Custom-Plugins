@@ -18,8 +18,8 @@ public abstract class MachineFurnace extends Machine{
 	
 	protected Furnace furnace;
 	
-	public MachineFurnace(Location position, MachineManager machineManager) {
-		super(position, machineManager);
+	public MachineFurnace(Location position, MachineManager machineManager, int power) {
+		super(position, machineManager, power);
 		furnace = ((Furnace) position.getBlock().getState());
 	}
 	
