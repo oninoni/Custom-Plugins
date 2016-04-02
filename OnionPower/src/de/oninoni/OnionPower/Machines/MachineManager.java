@@ -52,8 +52,6 @@ public class MachineManager {
 		Machine machine = machines.get(e.getInventory().getLocation());
 		if (machine == null) 
 			return;
-		
-		Bukkit.broadcastMessage(e.getPlayer().getName() + " just opened some machinery!");
 	}
 	
 	public void onMove(InventoryMoveItemEvent e){

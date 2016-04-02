@@ -16,7 +16,7 @@ public abstract class MachineFurnace extends Machine{
 	protected int rodSlot;
 	protected int coreSlot;
 	
-	Furnace furnace;
+	protected Furnace furnace;
 	
 	public MachineFurnace(Location position, MachineManager machineManager) {
 		super(position, machineManager);
@@ -31,7 +31,7 @@ public abstract class MachineFurnace extends Machine{
 	
 	@Override
 	public int getMaxPower() {
-		return 6400;
+		return 64000;
 	}
 	
 	@Override

@@ -3,7 +3,6 @@ package de.oninoni.OnionPower.Machines;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Furnace;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
@@ -15,9 +14,6 @@ import de.oninoni.OnionPower.Items.ItemData;
 import de.oninoni.OnionPower.Items.PowerCore;
 
 public class Generator extends MachineFurnace {
-	
-	private Furnace furnace;
-	
 	public Generator(Location position, MachineManager machineManager) {
 		super(position, machineManager);
 		rodSlot = 0;
@@ -46,17 +42,29 @@ public class Generator extends MachineFurnace {
 			if (fuel != null){
 				Material mat = fuel.getType();
 				if (ItemData.burnTime.containsKey(mat) && ItemData.burnTime.get(mat) + power <= getMaxPower()) {
-					Bukkit.broadcastMessage("Burning Coal!");
+					/*
 					if (fuel.getAmount() == 1)
 						furnace.getInventory().remove(fuel);
 					else
 						fuel.setAmount(fuel.getAmount() - 1);
 					furnace.setBurnTime(ItemData.burnTime.get(mat));
+					*/
+					ItemStack top = furnace.getInventory().getSmelting();
+					ItemStack powerCore = furnace.getInventory().getResult();
+					furnace.getInventory().setSmelting(new ItemStack(Material.PORK));
+					furnace.getInventory().setResult(new ItemStack(Material.AIR));
+					Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+						@Override
+						public void run() {
+							furnace.getInventory().setSmelting(top);
+							furnace.getInventory().setResult(powerCore);
+						}
+					}, 1L);
 				}
 			}
 		}
 		if (furnace.getBurnTime() > 0) {
-			power += 2;
+			power += 20;
 			powerIntputTotal = 2;
 			ItemStack powerCore = furnace.getInventory().getResult();
 			PowerCore.setPowerLevel(powerCore, this);

@@ -62,6 +62,7 @@ public class OnionPower extends JavaPlugin {
 			{
 				Player player = (Player) sender;
 				player.getInventory().addItem(Batterod.create());
+				return true;
 			}
 		}
 		return false;

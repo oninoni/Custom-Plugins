@@ -12,9 +12,6 @@ import de.oninoni.OnionPower.Items.Batterod;
 import de.oninoni.OnionPower.Items.PowerCore;
 
 public class ElectricFurnace extends MachineFurnace {
-
-	private Furnace furnace;
-	
 	public ElectricFurnace(Location position, MachineManager machineManager) {
 		super(position, machineManager);
 		rodSlot = 1;
