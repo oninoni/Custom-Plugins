@@ -126,4 +126,10 @@ public class BatrodBox extends Machine{
 		}
 	}
 	
+	@Override
+	public void load() {
+		super.load();
+		dispenser = (Dispenser) getPosition().getBlock().getState();
+	}
+	
 }

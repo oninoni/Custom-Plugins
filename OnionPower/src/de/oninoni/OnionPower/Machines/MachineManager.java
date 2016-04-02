@@ -3,7 +3,6 @@ package de.oninoni.OnionPower.Machines;
 import java.util.HashMap;
 import java.util.Set;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -62,14 +61,10 @@ public class MachineManager {
 	public void onMove(InventoryMoveItemEvent e){
 		Location source = e.getSource().getLocation();
 		Location destination = e.getDestination().getLocation();
-		if(machines.get(source) != null){
-			Bukkit.getLogger().info("SOURCE!");
+		if(machines.get(source) != null)
 			machines.get(source).onMoveFrom(e);
-		}
-		if(machines.get(destination) != null){
-			Bukkit.getLogger().info("DESTINATION!");
+		if(machines.get(destination) != null)
 			machines.get(destination).onMoveInto(e);
-		}
 	}
 	
 	public void onBreak(BlockBreakEvent e){
