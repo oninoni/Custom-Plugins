@@ -111,7 +111,6 @@ public class ElectricFurnace extends MachineFurnace {
 	
 	@Override
 	public int getMaxPowerOutput() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 }
