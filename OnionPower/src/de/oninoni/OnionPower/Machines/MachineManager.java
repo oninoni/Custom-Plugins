@@ -24,10 +24,13 @@ public class MachineManager {
 		for (Location pos : keySet)
 			machines.get(pos).resetIO();
 		
-		for (Location pos : machines.keySet())
+		for (Location pos : keySet)
 			machines.get(pos).update();
 		
-		for (Location pos: keySet)
+		for (Location pos : keySet)
+			machines.get(pos).processPowerTransfer();
+		
+		for (Location pos : keySet)
 			machines.get(pos).updateUI();
 			
 	}

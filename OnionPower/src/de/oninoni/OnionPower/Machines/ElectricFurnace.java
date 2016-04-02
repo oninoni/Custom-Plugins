@@ -69,7 +69,7 @@ public class ElectricFurnace extends Machine {
 
 	@Override
 	public void update() {
-		requestFromNeighbours();
+		requestFromConnected();
 	}
 
 	@Override
@@ -82,12 +82,12 @@ public class ElectricFurnace extends Machine {
 
 	@Override
 	public void onMoveInto(InventoryMoveItemEvent e) {
-	
+		
 	}
 
 	@Override
 	public void onMoveFrom(InventoryMoveItemEvent e) {
-
+		
 	}
 
 	@Override
