@@ -37,7 +37,7 @@ public class Generator extends MachineFurnace {
 	
 	@Override
 	public void updateBlock() {
-		if (furnace.getBurnTime() == 0) {
+		if (furnace.getBurnTime() <= 0) {
 			ItemStack fuel = furnace.getInventory().getFuel();
 			
 			if (fuel != null) {

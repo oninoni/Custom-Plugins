@@ -90,8 +90,10 @@ public class MachineManager {
 	
 	public void onUnload(ChunkUnloadEvent e){		
 		for (Location pos : machines.keySet()) {
-			
-			if (pos.getWorld().getName().equalsIgnoreCase(e.getWorld().getName())) {
+			if (pos.getChunk().getX() == e.getChunk().getX() && 
+				pos.getChunk().getZ() == e.getChunk().getZ() &&
+				pos.getWorld().getName().equalsIgnoreCase(e.getWorld().getName())) {
+				Bukkit.broadcastMessage("UNLOADED HOLY SHIT");
 				machines.get(pos).unload();
 			}
 		}

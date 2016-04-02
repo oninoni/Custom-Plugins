@@ -181,8 +181,6 @@ public abstract class Machine {
 		if (!isLoaded)
 			return;
 		
-		Bukkit.broadcastMessage("DEBUG");
-		
 		powerIntputTotal = 0;
 		powerOutputTotal = 0;
 	}
@@ -252,12 +250,11 @@ public abstract class Machine {
 	
 	public void load() {
 		position = new Location(Bukkit.getWorld(world), vec.getX(), vec.getY(), vec.getZ());
-		isLoaded = position.getBlock().getChunk().isLoaded();
+		isLoaded = true;
 	}
 	
 	public void unload() {
-		position = new Location(Bukkit.getWorld(world), vec.getX(), vec.getY(), vec.getZ());
-		isLoaded = position.getBlock().getChunk().isLoaded();
+		isLoaded = false;
 	}
 
 
