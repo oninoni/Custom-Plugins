@@ -65,7 +65,7 @@ public class Generator extends MachineFurnace {
 		}
 		if (furnace.getBurnTime() > 0) {
 			power += 20;
-			powerIntputTotal = 2;
+			powerIntputTotal = 20;
 			notifyDisplayChange();
 		}
 	}
@@ -88,7 +88,7 @@ public class Generator extends MachineFurnace {
 
 	@Override
 	public int getMaxPowerOutput() {
-		return 4;
+		return 40;
 	}
 
 	@Override
