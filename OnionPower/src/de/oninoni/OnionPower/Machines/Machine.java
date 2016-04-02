@@ -48,14 +48,15 @@ public abstract class Machine {
 		true
 	};
 	
-	private boolean displayChanged;
-	
 	private MachineManager machineManager;
 	
 	private Location position;
 	
 	protected int power;
 	protected int powerIntputTotal, powerOutputTotal;
+	
+	private int oldPower;
+	private int oldPowerInputTotal, oldPowerOutputTotal;
 	
 	private List<Machine> sender = new ArrayList<>();
 	
@@ -206,20 +207,18 @@ public abstract class Machine {
 		// change power totals
 		powerOutputTotal += transPower;
 		requester.powerIntputTotal += transPower;	
-		
-		notifyDisplayChange();
-		requester.notifyDisplayChange();
 	}
 
 	public void updateUI() {
-		if (displayChanged) {
+		if (oldPower != power
+		 || oldPowerInputTotal != powerIntputTotal
+		 || oldPowerOutputTotal != powerOutputTotal) {
 			updateDisplay();
-			displayChanged = false;
+			oldPower = power;
+			oldPowerInputTotal = powerIntputTotal;
+			oldPowerOutputTotal = powerOutputTotal;
 		}
-	}
-	
-	public void notifyDisplayChange() {
-		displayChanged = true;
+			
 	}
 		
 }
