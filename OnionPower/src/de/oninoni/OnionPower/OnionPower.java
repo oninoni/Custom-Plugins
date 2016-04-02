@@ -61,7 +61,7 @@ public class OnionPower extends JavaPlugin {
 	
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
-		if (command.getName().equalsIgnoreCase("batterod")){
+		if (command.getName().equalsIgnoreCase("batrod")){
 			if (sender instanceof Player)
 			{
 				Player player = (Player) sender;

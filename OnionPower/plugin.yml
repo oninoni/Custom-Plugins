@@ -3,6 +3,6 @@ main: de.oninoni.OnionPower.OnionPower
 description: THIS IS AWESOME POWER THING!
 version: 0.0.42
 commands:
-  batterod:
-    description: give the player a batterod
+  batrod:
+    description: give the player a batrod
     usage: Nope

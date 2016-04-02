@@ -181,8 +181,6 @@ public abstract class Machine {
 		if (!isLoaded)
 			return;
 		
-		Bukkit.broadcastMessage("DEBUG");
-		
 		powerIntputTotal = 0;
 		powerOutputTotal = 0;
 	}
