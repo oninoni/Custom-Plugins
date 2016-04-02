@@ -99,8 +99,7 @@ public abstract class Machine {
 		
 		for (int i = 0; i <= MAX_CABLE_LENGTH; i++) {
 			for (Location p : current){
-				blockDistance.put(p, i);
-				for (Vector dir : directions){					
+				blockDistance.put(p, i);			
 				for (int j = 0; j < directions.length; j++){
 					if(i == 0 && !allowedInputs[j])continue;
 					Vector dir = directions[j];
