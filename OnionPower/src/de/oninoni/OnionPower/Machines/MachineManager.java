@@ -49,11 +49,11 @@ public class MachineManager {
 		{
 			Location location = e.getView().getTopInventory().getLocation();
 			if (Generator.canCreate(e))
-				machines.put(location, new Generator(location, this, 0));
+				machines.put(location, new Generator(location, this, 0, new HashMap<>()));
 			if (ElectricFurnace.canCreate(e))
-				machines.put(location, new ElectricFurnace(location, this, 0));
+				machines.put(location, new ElectricFurnace(location, this, 0, new HashMap<>()));
 			if (BatrodBox.canCreate(e))
-				machines.put(location, new BatrodBox(location, this, 0));
+				machines.put(location, new BatrodBox(location, this, 0, new HashMap<>()	));
 			
 			
 			
@@ -138,13 +138,13 @@ public class MachineManager {
 				}
 				Location l = new Location(w, x, y, z);
 				if(MachineClass == Generator.class){
-					machines.put(l, new Generator(l, this, power));
+					machines.put(l, new Generator(l, this, power, new HashMap<>()));
 				}
 				else if(MachineClass == ElectricFurnace.class){
-					machines.put(l, new ElectricFurnace(l, this, power));
+					machines.put(l, new ElectricFurnace(l, this, power, new HashMap<>()));
 				}
 				else if(MachineClass == BatrodBox.class){
-					machines.put(l, new BatrodBox(l, this, power));
+					machines.put(l, new BatrodBox(l, this, power, new HashMap<>()));
 				}
 				
 			}

@@ -1,5 +1,7 @@
 package de.oninoni.OnionPower.Machines;
 
+import java.util.HashMap;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Furnace;
@@ -10,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 
 import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.PowerCore;
+import de.oninoni.OnionPower.Machines.Upgrades.MachineUpgrade;
 
 public abstract class MachineFurnace extends Machine{
 
@@ -18,8 +21,8 @@ public abstract class MachineFurnace extends Machine{
 	
 	protected Furnace furnace;
 	
-	public MachineFurnace(Location position, MachineManager machineManager, int power) {
-		super(position, machineManager, power);
+	public MachineFurnace(Location position, MachineManager machineManager, int power, HashMap<Integer, MachineUpgrade> upgrades) {
+		super(position, machineManager, power, upgrades);
 		furnace = ((Furnace) position.getBlock().getState());
 	}
 	

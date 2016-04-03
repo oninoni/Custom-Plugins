@@ -17,10 +17,14 @@ import org.bukkit.util.Vector;
 
 import de.oninoni.OnionPower.OnionPower;
 import de.oninoni.OnionPower.Items.Batrod;
+import de.oninoni.OnionPower.Machines.Upgrades.MachineUpgrade;
+import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager;
 
 public abstract class Machine {
 
 	protected static OnionPower plugin = OnionPower.get();
+	
+	protected UpgradeManager upgradeManager;
 	
 	private static final int MAX_CABLE_LENGTH = 16;
 	
@@ -66,7 +70,7 @@ public abstract class Machine {
 	
 	private List<Machine> sender = new ArrayList<>();
 	
-	public Machine(Location position, MachineManager machineManager, int power){
+	public Machine(Location position, MachineManager machineManager, int power, HashMap<Integer, MachineUpgrade> upgrades){
 		this.position = position;
 		this.machineManager = machineManager;
 		this.power = power;
@@ -75,8 +79,9 @@ public abstract class Machine {
 		
 		vec = position.toVector();
 		world = position.getWorld().getName();
+		
+		upgradeManager = new UpgradeManager(this, upgrades);
 	}
-
 	
 	protected abstract boolean isMaterial(Material material);
 	

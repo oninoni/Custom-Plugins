@@ -1,5 +1,7 @@
 package de.oninoni.OnionPower.Machines;
 
+import java.util.HashMap;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,14 +15,15 @@ import de.oninoni.OnionPower.NMSAdapter;
 import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.ItemData;
 import de.oninoni.OnionPower.Items.PowerCore;
+import de.oninoni.OnionPower.Machines.Upgrades.MachineUpgrade;
 
 public class ElectricFurnace extends MachineFurnace {
 	
 	private Material cookingInto;
 	private Material cookingFrom;
 	
-	public ElectricFurnace(Location position, MachineManager machineManager, int power) {
-		super(position, machineManager, power);
+	public ElectricFurnace(Location position, MachineManager machineManager, int power, HashMap<Integer, MachineUpgrade> upgrades) {
+		super(position, machineManager, power, upgrades);
 		rodSlot = 1;
 		coreSlot = 1;
 		ItemStack powerCore = PowerCore.create(this);

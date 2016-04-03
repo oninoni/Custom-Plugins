@@ -1,5 +1,7 @@
 package de.oninoni.OnionPower.Machines;
 
+import java.util.HashMap;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import de.oninoni.OnionPower.NMSAdapter;
 import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.PowerCore;
+import de.oninoni.OnionPower.Machines.Upgrades.MachineUpgrade;
 
 public class BatrodBox extends Machine{
 
@@ -20,8 +23,8 @@ public class BatrodBox extends Machine{
 	
 	private final static int[] directionAdapter = {4,1,5,2,3,0};
 	
-	public BatrodBox(Location position, MachineManager machineManager, int power) {
-		super(position, machineManager, power);
+	public BatrodBox(Location position, MachineManager machineManager, int power, HashMap<Integer, MachineUpgrade> upgrades) {
+		super(position, machineManager, power, upgrades);
 		dispenser = (Dispenser) position.getBlock().getState();
 		ItemStack powerCore = PowerCore.create(this);
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {

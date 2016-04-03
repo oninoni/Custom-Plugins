@@ -10,11 +10,6 @@ public class UpgradeManager {
 	
 	HashMap<Integer, MachineUpgrade> upgrades;
 	
-	public UpgradeManager(Machine m){
-		upgrades = new HashMap<>();
-		machine = m;
-	}
-	
 	public UpgradeManager(Machine m, HashMap<Integer, MachineUpgrade> upgrades){
 		this.upgrades = upgrades;
 		machine = m;
