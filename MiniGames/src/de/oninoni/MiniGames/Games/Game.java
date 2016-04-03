@@ -7,6 +7,8 @@ import org.bukkit.entity.Player;
 
 import com.sk89q.worldedit.regions.CuboidRegion;
 
+import de.oninoni.MiniGames.GameManager;
+
 public abstract class Game {
 
 	private Lobby lobby;
@@ -18,7 +20,7 @@ public abstract class Game {
 	public Game(Lobby lobby, GameManager gameManager, CuboidRegion area) {
 		this.lobby = lobby;
 		this.gameManager = gameManager;
-		this.world = gameManager.getWorld;
+		this.world = gameManager.getWorld();
 	}
 	
 	// put player in from main lobby to local lobby
@@ -29,7 +31,7 @@ public abstract class Game {
 	// player returns to main lobby
 	public void playerLeave(Player player) {
 		players.remove(player);
-		gameManager.getLobby().addPlayer();
+		gameManager.getLobby().addPlayer(player);
 	}
 	
 	// all players in local lobby into game and start the game logic

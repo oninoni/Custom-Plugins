@@ -23,4 +23,8 @@ public class GameManager {
 		return world;
 	}
 	
+	public Lobby getLobby() {
+		return lobby;
+	}
+	
 }
