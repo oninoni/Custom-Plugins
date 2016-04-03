@@ -1,5 +1,7 @@
 package de.oninoni.OnionPower.Machines.Upgrades;
 
-public class MachineUpgrades {
+public abstract class MachineUpgrade {
+	
+	
 	
 }
