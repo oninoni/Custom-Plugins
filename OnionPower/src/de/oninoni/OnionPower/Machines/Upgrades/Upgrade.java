@@ -4,11 +4,11 @@ import org.bukkit.inventory.ItemStack;
 
 import de.oninoni.OnionPower.Machines.MachineManager;
 
-public abstract class MachineUpgrade {
+public abstract class Upgrade {
 	
 	MachineManager machineManager;
 	
-	public MachineUpgrade(MachineManager mM){
+	public Upgrade(MachineManager mM){
 		machineManager = mM;
 	}
 	

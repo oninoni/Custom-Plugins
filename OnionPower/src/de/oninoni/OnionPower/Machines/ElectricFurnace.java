@@ -15,14 +15,14 @@ import de.oninoni.OnionPower.NMSAdapter;
 import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.ItemData;
 import de.oninoni.OnionPower.Items.PowerCore;
-import de.oninoni.OnionPower.Machines.Upgrades.MachineUpgrade;
+import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
 
 public class ElectricFurnace extends MachineFurnace {
 	
 	private Material cookingInto;
 	private Material cookingFrom;
 	
-	public ElectricFurnace(Location position, MachineManager machineManager, int power, HashMap<Integer, MachineUpgrade> upgrades) {
+	public ElectricFurnace(Location position, MachineManager machineManager, int power, HashMap<Integer, Upgrade> upgrades) {
 		super(position, machineManager, power, upgrades);
 		rodSlot = 1;
 		coreSlot = 1;

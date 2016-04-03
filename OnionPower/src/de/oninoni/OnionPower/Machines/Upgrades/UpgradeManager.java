@@ -8,9 +8,9 @@ public class UpgradeManager {
 	
 	private Machine machine;
 	
-	HashMap<Integer, MachineUpgrade> upgrades;
+	HashMap<Integer, Upgrade> upgrades;
 	
-	public UpgradeManager(Machine m, HashMap<Integer, MachineUpgrade> upgrades){
+	public UpgradeManager(Machine m, HashMap<Integer, Upgrade> upgrades){
 		this.upgrades = upgrades;
 		machine = m;
 	}

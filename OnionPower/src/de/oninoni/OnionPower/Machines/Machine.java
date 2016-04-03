@@ -17,7 +17,7 @@ import org.bukkit.util.Vector;
 
 import de.oninoni.OnionPower.OnionPower;
 import de.oninoni.OnionPower.Items.Batrod;
-import de.oninoni.OnionPower.Machines.Upgrades.MachineUpgrade;
+import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
 import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager;
 
 public abstract class Machine {
@@ -70,7 +70,7 @@ public abstract class Machine {
 	
 	private List<Machine> sender = new ArrayList<>();
 	
-	public Machine(Location position, MachineManager machineManager, int power, HashMap<Integer, MachineUpgrade> upgrades){
+	public Machine(Location position, MachineManager machineManager, int power, HashMap<Integer, Upgrade> upgrades){
 		this.position = position;
 		this.machineManager = machineManager;
 		this.power = power;
