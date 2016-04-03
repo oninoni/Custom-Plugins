@@ -8,7 +8,11 @@ import com.sk89q.worldedit.bukkit.WorldEditPlugin;
 
 public class MiniGames extends JavaPlugin {
 	
+	public static MiniGames get(){return JavaPlugin.getPlugin(MiniGames.class);}
+	
 	private WorldEditPlugin worldEdit;
+	
+	private GameManager gameManager;
 	
 	public void onEnable() {
 		worldEdit = (WorldEditPlugin) getServer().getPluginManager().getPlugin("WorldEdit");
@@ -17,6 +21,8 @@ public class MiniGames extends JavaPlugin {
 		}else{
 			getLogger().warning("World Edit missing!");
 		}
+		
+		gameManager = new GameManager();
 	}
 	
 	public void onDisable() {
@@ -30,5 +36,9 @@ public class MiniGames extends JavaPlugin {
 	
 	public WorldEditPlugin getWorldEdit() {
 		return worldEdit;
+	}
+	
+	public GameManager getGameManager() {
+		return gameManager;
 	}
 }
