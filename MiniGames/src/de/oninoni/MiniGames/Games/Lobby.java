@@ -14,4 +14,12 @@ public class Lobby {
 		this.location = location;
 	}
 	
+	public void addPlayer(Player player) {
+		players.add(player);
+	}
+	
+	public void delPlayer(Player player) {
+		players.remove(player);
+	}
+	
 }
