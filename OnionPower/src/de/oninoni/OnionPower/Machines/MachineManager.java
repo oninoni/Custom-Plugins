@@ -171,5 +171,4 @@ public class MachineManager {
 		plugin.saveConfig();
 		Bukkit.getLogger().info("Saved Data!");
 	}
-	
 }

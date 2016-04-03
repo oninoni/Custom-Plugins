@@ -281,4 +281,9 @@ public abstract class Machine {
 			power += powerTransfered;
 		}
 	}
+
+	@Deprecated
+	public static boolean canCreate(InventoryClickEvent e) {
+		return false;
+	}
 }
