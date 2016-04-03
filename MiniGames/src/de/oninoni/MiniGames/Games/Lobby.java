@@ -1,4 +1,4 @@
-package de.oninoni.MiniGames;
+package de.oninoni.MiniGames.Games;
 
 import java.util.List;
 
