@@ -6,6 +6,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Dispenser;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 import de.oninoni.OnionPower.Items.PowerCore;
@@ -35,11 +37,26 @@ public abstract class MachineDispenser extends Machine{
 	}
 	
 	@Override
+	public void onMoveFrom(InventoryMoveItemEvent e) {
+		return;
+	}
+	
+	@Override
+	public void onMoveInto(InventoryMoveItemEvent e) {
+		return;
+	}
+	
+	@Override
 	public void onClick(InventoryClickEvent e) {
 		int convertSlot = e.getView().convertSlot(e.getRawSlot());
 		if(e.getRawSlot() == convertSlot && convertSlot == coreSlot){
 			e.setCancelled(true);
 		}
+	}
+	
+	@Override
+	public void onClose(InventoryCloseEvent e){
+		return;
 	}
 	
 	@Override

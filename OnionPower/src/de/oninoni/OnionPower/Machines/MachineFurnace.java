@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Furnace;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -52,6 +53,11 @@ public abstract class MachineFurnace extends Machine{
 	
 	@Override
 	public void onMoveInto(InventoryMoveItemEvent e) {
+		return;
+	}
+	
+	@Override
+	public void onClose(InventoryCloseEvent e){
 		return;
 	}
 	

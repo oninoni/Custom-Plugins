@@ -9,8 +9,8 @@ import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 
@@ -67,10 +67,17 @@ public class MachineManager {
 		}
 	}
 	
-	public void onOpen(InventoryOpenEvent e) {
+	/*public void onOpen(InventoryOpenEvent e) {
 		Machine machine = machines.get(e.getInventory().getLocation());
 		if (machine == null) 
 			return;
+	}*/
+	
+	public void onClose(InventoryCloseEvent e){
+		Machine machine = machines.get(e.getInventory().getHolder().getInventory().getLocation());
+		if(machine != null){
+			machine.onClose(e);
+		}
 	}
 	
 	public void onMove(InventoryMoveItemEvent e){

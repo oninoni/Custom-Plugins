@@ -9,9 +9,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.block.BlockState;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
@@ -28,7 +32,7 @@ public abstract class Machine {
 	
 	private static final int MAX_CABLE_LENGTH = 16;
 	
-	private static final Vector[] directions = {
+	protected static final Vector[] directions = {
 			new Vector( 1,  0,  0),
 			new Vector( 0,  1,  0),
 			new Vector( 0,  0,  1),
@@ -92,6 +96,7 @@ public abstract class Machine {
 	public abstract void updateBlock();
 	
 	public abstract void onClick(InventoryClickEvent e);
+	public abstract void onClose(InventoryCloseEvent e);
 	public abstract void onMoveInto(InventoryMoveItemEvent e);
 	public abstract void onMoveFrom(InventoryMoveItemEvent e);
 	
@@ -289,6 +294,20 @@ public abstract class Machine {
 
 	@Deprecated
 	public static boolean canCreate(InventoryClickEvent e) {
+		return false;
+	}
+	
+	protected boolean pushOneItemInto(int itemPos, Inventory source, Location target){
+		BlockState state = target.getBlock().getState();
+		if(state instanceof InventoryHolder){
+			Inventory targetInventory = ((InventoryHolder) state).getInventory();
+			int firstEmpty = targetInventory.firstEmpty();
+			if(firstEmpty > -1){
+				targetInventory.setItem(firstEmpty, source.getItem(itemPos));
+				source.setItem(4, new ItemStack(Material.AIR));
+				return true;
+			}
+		}
 		return false;
 	}
 }
