@@ -53,8 +53,9 @@ public class MachineManager {
 			if (ElectricFurnace.canCreate(e))
 				machines.put(location, new ElectricFurnace(location, this, 0, new HashMap<>()));
 			if (BatrodBox.canCreate(e))
-				machines.put(location, new BatrodBox(location, this, 0, new HashMap<>()	));
-			
+				machines.put(location, new BatrodBox(location, this, 0, new HashMap<>()));
+			if (Sorter.canCreate(e))
+				machines.put(location, new Sorter(location, this, 0, new HashMap<>()));
 			
 			
 			if(machines.get(e.getInventory().getLocation()) != null	)
@@ -145,6 +146,9 @@ public class MachineManager {
 				}
 				else if(MachineClass == BatrodBox.class){
 					machines.put(l, new BatrodBox(l, this, power, new HashMap<>()));
+				}
+				else if(MachineClass == Sorter.class){
+					machines.put(l, new Sorter(l, this, power, new HashMap<>()));
 				}
 				
 			}

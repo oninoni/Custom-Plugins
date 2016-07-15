@@ -9,6 +9,7 @@ import org.bukkit.block.Furnace;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
 import de.oninoni.OnionPower.NMSAdapter;
@@ -43,6 +44,7 @@ public class ElectricFurnace extends MachineFurnace {
 	}
 	
 	public static boolean canCreate(InventoryClickEvent e){
+		if(!(e.getInventory().getType() == InventoryType.FURNACE))return false;
 		ItemStack item = e.getCursor();
 		if(!(e.getView().getTopInventory().getItem(0) == null && e.getView().getTopInventory().getItem(1) == null && e.getView().getTopInventory().getItem(0) == null))return false;
 		return e.getRawSlot() == e.getView().convertSlot(e.getRawSlot()) && e.getRawSlot() == 1 && Batrod.check(item);

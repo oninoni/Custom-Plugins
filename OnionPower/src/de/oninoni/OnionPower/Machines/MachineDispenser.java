@@ -13,6 +13,8 @@ import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
 
 public abstract class MachineDispenser extends Machine{
 	
+	protected final static int[] directionAdapter = {4,1,5,2,3,0};
+	
 	protected int coreSlot;
 	
 	protected Dispenser dispenser;
