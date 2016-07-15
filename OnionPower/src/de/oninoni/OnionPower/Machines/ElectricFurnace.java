@@ -44,8 +44,8 @@ public class ElectricFurnace extends MachineFurnace {
 	
 	public static boolean canCreate(InventoryClickEvent e){
 		ItemStack item = e.getCursor();
-		if(!(e.getInventory().getItem(0) == null && e.getInventory().getItem(1) == null && e.getInventory().getItem(0) == null))return false;
-		return 1 == e.getView().convertSlot(e.getRawSlot()) && Batrod.check(item);
+		if(!(e.getView().getTopInventory().getItem(0) == null && e.getView().getTopInventory().getItem(1) == null && e.getView().getTopInventory().getItem(0) == null))return false;
+		return e.getRawSlot() == e.getView().convertSlot(e.getRawSlot()) && e.getRawSlot() == 1 && Batrod.check(item);
 	}
 	
 	@Override
@@ -58,12 +58,16 @@ public class ElectricFurnace extends MachineFurnace {
 		requestFromConnected();
 		if(furnace.getInventory().getSmelting() != null){
 			ItemStack smelting = furnace.getInventory().getSmelting();
-			if(furnace.getBurnTime() <= 0 && ItemData.smeltable.containsKey(smelting.getType())){
+			if(furnace.getCookTime() <= 0 && ItemData.smeltable.containsKey(smelting.getType())){
 				Material result = ItemData.smeltable.get(smelting.getType());
 				if((furnace.getInventory().getResult() == null || furnace.getInventory().getResult().getType() == result) && power >= 2000){
 					furnace.setBurnTime((short) 200);
 					cookingInto = result;
 					cookingFrom = smelting.getType();
+				}else{
+					furnace.setBurnTime((short) 0);
+					cookingInto = null;
+					cookingFrom = null;
 				}
 			}
 		}
@@ -90,10 +94,7 @@ public class ElectricFurnace extends MachineFurnace {
 
 	@Override
 	public void onClick(InventoryClickEvent e) {		
-		int convertSlot = e.getView().convertSlot(e.getRawSlot());
-		if(e.getRawSlot() == convertSlot && convertSlot == 1){
-			e.setCancelled(true);
-		}
+		super.onClick(e);
 	}	
 	
 	@Override

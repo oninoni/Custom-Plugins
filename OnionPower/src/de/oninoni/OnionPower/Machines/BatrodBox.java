@@ -17,7 +17,7 @@ import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.PowerCore;
 import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
 
-public class BatrodBox extends Machine{
+public class BatrodBox extends MachineDispenser{
 
 	Dispenser dispenser;
 	
@@ -25,6 +25,7 @@ public class BatrodBox extends Machine{
 	
 	public BatrodBox(Location position, MachineManager machineManager, int power, HashMap<Integer, Upgrade> upgrades) {
 		super(position, machineManager, power, upgrades);
+		coreSlot = 4;
 		dispenser = (Dispenser) position.getBlock().getState();
 		ItemStack powerCore = PowerCore.create(this);
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
@@ -33,9 +34,9 @@ public class BatrodBox extends Machine{
 				for(int i = 0; i < 9; i++){
 					dispenser.getInventory().setItem(i, new ItemStack(Material.AIR));
 				}
-				dispenser.getInventory().setItem(4, powerCore);
-				dispenser.getInventory().setItem(3, new ItemStack(Material.STAINED_GLASS_PANE));
-				dispenser.getInventory().setItem(5, new ItemStack(Material.STAINED_GLASS_PANE));
+				dispenser.getInventory().setItem(coreSlot, powerCore);
+				dispenser.getInventory().setItem(coreSlot - 1, new ItemStack(Material.STAINED_GLASS_PANE));
+				dispenser.getInventory().setItem(coreSlot + 1, new ItemStack(Material.STAINED_GLASS_PANE));
 				NMSAdapter.setInvNameDispenser(dispenser, getDisplayName());
 				for(HumanEntity viewer : dispenser.getInventory().getViewers()){
 					viewer.closeInventory();
@@ -105,7 +106,7 @@ public class BatrodBox extends Machine{
 
 	@Override
 	public void onClick(InventoryClickEvent e) {
-		if((e.getRawSlot() == e.getView().convertSlot(e.getRawSlot())) && e.getRawSlot() >= 3 && e.getRawSlot() <= 5){
+		if((e.getRawSlot() == e.getView().convertSlot(e.getRawSlot())) && e.getRawSlot() >= coreSlot - 1 && e.getRawSlot() <= coreSlot + 1){
 			e.setCancelled(true);
 		}
 	}
@@ -119,24 +120,11 @@ public class BatrodBox extends Machine{
 	public void onMoveFrom(InventoryMoveItemEvent e) {
 		e.setCancelled(true);
 	}
-
-	@Override
-	protected void updateDisplay() {
-		ItemStack powerCore = dispenser.getInventory().getItem(4);
-		PowerCore.setPowerLevel(powerCore, this);
-	}
-
+	
 	@Override
 	public void onBreak(BlockBreakEvent e) {
 		for(int i = 0; i < 9; i++){
 			dispenser.getInventory().setItem(i, Batrod.create());
 		}
 	}
-	
-	@Override
-	public void load() {
-		super.load();
-		dispenser = (Dispenser) getPosition().getBlock().getState();
-	}
-	
 }
