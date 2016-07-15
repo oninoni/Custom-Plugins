@@ -16,6 +16,7 @@ public abstract class Game {
 	private World world;
 	private List<Player> players;
 	private CuboidRegion area;
+	
 	public Game(Lobby lobby, GameManager gameManager, CuboidRegion area) {
 		this.lobby = lobby;
 		this.gameManager = gameManager;
