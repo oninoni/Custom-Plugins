@@ -302,7 +302,6 @@ public abstract class Machine {
 		if(state instanceof InventoryHolder){
 			Inventory targetInventory = ((InventoryHolder) state).getInventory();
 			int firstEmpty = targetInventory.firstEmpty();
-			targetInventory.
 			if(firstEmpty > -1){
 				targetInventory.setItem(firstEmpty, source.getItem(itemPos));
 				source.setItem(4, new ItemStack(Material.AIR));
