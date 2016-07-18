@@ -19,11 +19,19 @@ public class PowerCore {
 		ItemMeta itemMeta = powerCore.getItemMeta();
 		itemMeta.setDisplayName(NAME);
 		List<String> lore = new ArrayList<>();
-		lore.add("§6" + m.getDisplayName() + " Power:");
-		lore.add("§6" + m.getPower() + " / " + m.getMaxPower() + " " + CustomsItems.UNIT_NAME);
-		lore.add("§6Out: " + m.getPowerOutputTotal() + " / " + m.getMaxPowerOutput() + " " + CustomsItems.UNIT_NAME);
-		lore.add("§6In: " + m.getPowerIntputTotal() + " / " + m.getMaxPowerInput() + " " + CustomsItems.UNIT_NAME);
-		lore.add("§h" + m.getPower());
+		lore.add(0, "§6" + m.getDisplayName() + " Power:");
+		lore.add(1, "§6" + m.getPower() + " / " + m.getMaxPower() + " " + CustomsItems.UNIT_NAME);
+		if(m.getMaxPowerOutput() == 0){
+			lore.add(2, "§6Using: " + m.getPowerOutputTotal() + " " + CustomsItems.UNIT_NAME);
+		}else{
+			lore.add(2, "§6Output: " + m.getPowerOutputTotal() + " / " + m.getMaxPowerOutput() + " " + CustomsItems.UNIT_NAME);
+		}
+		if(m.getMaxPowerInput() == 0){
+			lore.add(3, "§6Generating: " + m.getPowerIntputTotal() + " " + CustomsItems.UNIT_NAME);
+		}else{
+			lore.add(3, "§6Input: " + m.getPowerIntputTotal() + " / " + m.getMaxPowerInput() + " " + CustomsItems.UNIT_NAME);
+		}
+		lore.add(4, "§h" + m.getPower());
 		itemMeta.setLore(lore);
 		powerCore.setItemMeta(itemMeta);
 		
@@ -45,8 +53,8 @@ public class PowerCore {
 		if(powerCore==null || m==null)return;
 		ItemMeta itemMeta = powerCore.getItemMeta();
 		List<String> lore = itemMeta.getLore();
+		if(lore.size() != 5)return;
 		lore.set(1, "§6" + m.getPower() + " / " + m.getMaxPower() + " " + CustomsItems.UNIT_NAME);
-		lore.set(4, "§h" + m.getPower());
 		if(m.getMaxPowerOutput() == 0){
 			lore.set(2, "§6Using: " + m.getPowerOutputTotal() + " " + CustomsItems.UNIT_NAME);
 		}else{
@@ -57,6 +65,7 @@ public class PowerCore {
 		}else{
 			lore.set(3, "§6Input: " + m.getPowerIntputTotal() + " / " + m.getMaxPowerInput() + " " + CustomsItems.UNIT_NAME);
 		}
+		lore.set(4, "§h" + m.getPower());
 		itemMeta.setLore(lore);
 		powerCore.setItemMeta(itemMeta);
 	}

@@ -15,6 +15,7 @@ import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
 import de.oninoni.OnionPower.NMSAdapter;
@@ -64,14 +65,13 @@ public class Sorter extends MachineDispenser{
 			}
 	};
 	
-	private ArrayList<Material[]> filter = new ArrayList<>();
+	private ArrayList<Material[]> filters = new ArrayList<>();
 	
 	public Sorter(Location position, MachineManager machineManager, int power, HashMap<Integer, Upgrade> upgrades) {
 		super(position, machineManager, power, upgrades);
 		for(int i = 0; i < 4; i++){
-			filter.add(new Material[]{Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR});
+			filters.add(new Material[]{Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR});
 		}
-		saveFilters();
 		ItemStack powerCore = PowerCore.create(this);
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
@@ -87,6 +87,10 @@ public class Sorter extends MachineDispenser{
 				lore.add("§6If an items enters the Sorter wich is not filtered");
 				lore.add("§6it will leave the sorter towards the front.");
 				
+				for(int i = 0; i < 9; i++){
+					lore.add("§h");
+				}
+				
 				dispenser.getInventory().setItem(1, CustomsItems.getGlassPane((byte) 14, "§4Red Sorting Channel", lore));
 				dispenser.getInventory().setItem(3, CustomsItems.getGlassPane((byte) 13, "§2Green Sorting Channel", lore));
 				dispenser.getInventory().setItem(5, CustomsItems.getGlassPane((byte) 11, "§9Blue Sorting Channel", lore));
@@ -97,6 +101,7 @@ public class Sorter extends MachineDispenser{
 					viewer.closeInventory();
 					viewer.openInventory(dispenser.getInventory());
 				}
+				saveFilters();
 			}
 		}, 1L);
 		setupPowerIO();
@@ -104,6 +109,9 @@ public class Sorter extends MachineDispenser{
 	
 	public Sorter(Location position, MachineManager machineManager, HashMap<Integer, Upgrade> upgrades){
 		super(position, machineManager, upgrades);
+		for(int i = 0; i < 4; i++){
+			filters.add(new Material[]{Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR});
+		}
 		loadFilters();
 		setupPowerIO();
 	}
@@ -120,7 +128,16 @@ public class Sorter extends MachineDispenser{
 	}
 	
 	private void loadFilter(int id){
-		
+		Material[] filter = filters.get(id);
+		int slotID = id * 2 + 1;
+		List<String> lore = dispenser.getInventory().getItem(slotID).getItemMeta().getLore();
+		plugin.getLogger().info(lore + "");
+		for(int i = 0; i < 9; i++){
+			String name = lore.get(i + 3).substring(2);
+			filter[i] = Material.getMaterial(name);
+			plugin.getLogger().info("" + filter[i]);
+		}
+		filters.set(id, filter);
 	}
 	
 	private void loadFilters(){
@@ -130,7 +147,16 @@ public class Sorter extends MachineDispenser{
 	}
 	
 	private void saveFilter(int id){
-		
+		Material[] filter = filters.get(id);
+		int slotID = id * 2 + 1;
+		ItemStack item = dispenser.getInventory().getItem(slotID);
+		ItemMeta itemMeta = item.getItemMeta();
+		List<String> lore = itemMeta.getLore();
+		for(int i = 0; i < 9; i++){
+			lore.set(i + 3, "§h" + filter[i].name());
+		}
+		itemMeta.setLore(lore);
+		item.setItemMeta(itemMeta);
 	}
 	
 	private void saveFilters(){
@@ -140,9 +166,9 @@ public class Sorter extends MachineDispenser{
 	}
 	
 	private boolean isInFilter(Material m, int id){
-		Material[] subFilter = filter.get(id);
-		for(int i = 0; i < subFilter.length; i++){
-			if(m == subFilter[i]){
+		Material[] filter = filters.get(id);
+		for(int i = 0; i < filter.length; i++){
+			if(m == filter[i]){
 				return true;
 			}
 		}
@@ -231,7 +257,7 @@ public class Sorter extends MachineDispenser{
 				if(convertSlot == 7) filterInvName = "§eYellow Filter";
 				Inventory filterInv = Bukkit.createInventory(dispenser, 9, filterInvName);
 				for(int i = 0; i < 9; i++){
-					filterInv.setItem(i, new ItemStack(filter.get(convertSlot / 2)[i]));
+					filterInv.setItem(i, new ItemStack(filters.get(convertSlot / 2)[i]));
 				}
 				e.getWhoClicked().openInventory(filterInv);
 			}
@@ -262,16 +288,15 @@ public class Sorter extends MachineDispenser{
 				filterID = 3;
 			}
 			if(filterID > -1){
-				Material[] subFilter = filter.get(filterID);
+				Material[] filter = filters.get(filterID);
 				for(int i = 0; i < 9; i++){
 					if(e.getInventory().getItem(i) != null){
-						subFilter[i] = e.getInventory().getItem(i).getType();
+						filter[i] = e.getInventory().getItem(i).getType();
 					}else{
-						subFilter[i] = Material.AIR;
+						filter[i] = Material.AIR;
 					}
-					plugin.getLogger().info("" + subFilter[i]);
 				}
-				filter.set(filterID, subFilter);
+				filters.set(filterID, filter);
 				saveFilter(filterID);
 			}
 		}

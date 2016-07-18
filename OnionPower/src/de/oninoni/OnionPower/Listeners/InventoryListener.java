@@ -16,11 +16,6 @@ public class InventoryListener implements Listener{
 	public void onClick(InventoryClickEvent e){
 		plugin.getMachineManager().onClick(e);
 	}
-
-	/*@EventHandler
-	public void onOpen(InventoryOpenEvent e) {
-		plugin.getMachineManager().onOpen(e);
-	}*/
 	
 	@EventHandler
 	public void onClose(InventoryCloseEvent e){

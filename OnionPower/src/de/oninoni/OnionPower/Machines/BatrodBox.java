@@ -38,6 +38,15 @@ public class BatrodBox extends MachineDispenser{
 				}
 			}
 		}, 1L);
+		setupPowerIO();
+	}
+	
+	public BatrodBox(Location position, MachineManager machineManager, HashMap<Integer, Upgrade> upgrades) {
+		super(position, machineManager, upgrades);
+		setupPowerIO();
+	}
+	
+	private void setupPowerIO(){
 		@SuppressWarnings("deprecation")
 		int direction = directionAdapter[dispenser.getRawData()];
 		for(int i = 0; i < 6; i++){

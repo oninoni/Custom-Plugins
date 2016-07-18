@@ -26,7 +26,7 @@ public abstract class MachineDispenser extends Machine{
 	
 	public MachineDispenser(Location position, MachineManager machineManager, HashMap<Integer, Upgrade> upgrades) {
 		super(position, machineManager, upgrades);
-		dispenser = ((Dispenser) position.getBlock());
+		dispenser = ((Dispenser) position.getBlock().getState());
 	}
 	
 	@Override

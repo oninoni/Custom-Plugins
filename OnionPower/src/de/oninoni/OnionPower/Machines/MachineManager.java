@@ -130,13 +130,11 @@ public class MachineManager {
 			ConfigurationSection machinesList = config.getConfigurationSection("Machines");
 			Set<String> machineKeys = machinesList.getKeys(false);
 			for (String sectionName : machineKeys) {
-				Bukkit.getLogger().info(sectionName);
 				ConfigurationSection machineSection = machinesList.getConfigurationSection(sectionName);
 				int x = machineSection.getInt("X");
 				int y = machineSection.getInt("Y");
 				int z = machineSection.getInt("Z");
 				World w = Bukkit.getWorld(machineSection.getString("world"));
-				int power = machineSection.getInt("power");
 				Class<?> MachineClass;
 				try {
 					MachineClass = Class.forName(machineSection.getString("type"));
@@ -152,10 +150,10 @@ public class MachineManager {
 					machines.put(l, new ElectricFurnace(l, this, new HashMap<>()));
 				}
 				else if(MachineClass == BatrodBox.class){
-					machines.put(l, new BatrodBox(l, this, power, new HashMap<>()));
+					machines.put(l, new BatrodBox(l, this, new HashMap<>()));
 				}
 				else if(MachineClass == Sorter.class){
-					machines.put(l, new Sorter(l, this, power, new HashMap<>()));
+					machines.put(l, new Sorter(l, this, new HashMap<>()));
 				}
 			}
 		}
