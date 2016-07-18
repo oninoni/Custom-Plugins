@@ -1,12 +1,14 @@
 package de.oninoni.OnionPower.Machines;
 
 import java.util.HashMap;
+import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -126,9 +128,19 @@ public class BatrodBox extends MachineDispenser{
 	}
 	
 	@Override
-	public void onBreak(BlockBreakEvent e) {
+	public void onBreak(BlockEvent e) {
 		for(int i = 0; i < 9; i++){
 			dispenser.getInventory().setItem(i, Batrod.create());
 		}
+	}
+
+	@Override
+	public boolean onBoom(Block b) {
+		dispenser.getInventory().clear();
+		Random r = new Random();
+		for (int i = 0; i < r.nextInt(9); i++) {
+			dispenser.getInventory().addItem(Batrod.create());
+		}
+		return true;
 	}
 }

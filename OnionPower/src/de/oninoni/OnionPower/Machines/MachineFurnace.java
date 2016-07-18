@@ -5,7 +5,7 @@ import java.util.HashMap;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Furnace;
-import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
@@ -66,7 +66,7 @@ public abstract class MachineFurnace extends Machine{
 	}
 	
 	@Override
-	public void onBreak(BlockBreakEvent e) {
+	public void onBreak(BlockEvent e) {
 		furnace.getInventory().setItem(coreSlot, Batrod.create());
 	}
 	

@@ -5,9 +5,9 @@ import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.Furnace;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
@@ -106,11 +106,6 @@ public class ElectricFurnace extends MachineFurnace {
 	@Override
 	public void onClick(InventoryClickEvent e) {		
 		super.onClick(e);
-	}	
-	
-	@Override
-	public void onBreak(BlockBreakEvent e) {
-		furnace.getInventory().setItem(1, Batrod.create());
 	}
 	
 	@Override
@@ -127,5 +122,12 @@ public class ElectricFurnace extends MachineFurnace {
 	@Override
 	public int getMaxPowerOutput() {
 		return 0;
+	}
+
+	@Override
+	public boolean onBoom(Block e) {
+		furnace.getInventory().clear();
+		furnace.getInventory().addItem(Batrod.create());
+		return true;
 	}
 }

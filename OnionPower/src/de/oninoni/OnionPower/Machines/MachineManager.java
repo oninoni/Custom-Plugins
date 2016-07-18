@@ -1,15 +1,20 @@
 package de.oninoni.OnionPower.Machines;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
@@ -44,7 +49,7 @@ public class MachineManager {
 	}
 	
 	public void onClick(InventoryClickEvent e) {
-		Machine machine = machines.get(e.getInventory().getLocation());
+		Machine machine = machines.get(e.getInventory().getHolder().getInventory().getLocation());
 		if (machine == null)
 		{
 			Location location = e.getView().getTopInventory().getLocation();
@@ -73,6 +78,22 @@ public class MachineManager {
 			return;
 	}*/
 	
+	public void onDrag(InventoryDragEvent e){
+		Machine machine = machines.get(e.getView().getTopInventory().getHolder().getInventory().getLocation());
+		if(machine == null){
+			e.setCancelled(true);
+			return;
+		}
+		Set<Integer> slots = e.getRawSlots();
+		
+		for (Integer slot : slots) {
+			if(slot < e.getView().getTopInventory().getSize() ){
+				e.setCancelled(true);
+				return;
+			}
+		}
+	}
+	
 	public void onClose(InventoryCloseEvent e){
 		Machine machine = machines.get(e.getInventory().getHolder().getInventory().getLocation());
 		if(machine != null){
@@ -94,6 +115,24 @@ public class MachineManager {
 		if(machines.containsKey(location)){
 			machines.get(location).onBreak(e);
 			machines.remove(location);
+		}
+	}
+	
+	public void onBoom(EntityExplodeEvent e){
+		List<Block> blocks = e.blockList();
+		List<Block> notExloding = new ArrayList<>();
+		for (Block block : blocks) {
+			Location location = block.getLocation();
+			if(machines.containsKey(location)){
+				if(machines.get(location).onBoom(block)){
+					machines.remove(location);
+				}else{
+					notExloding.add(block);
+				}
+			}
+		}
+		for (Block block : notExloding) {
+			e.blockList().remove(block);
 		}
 	}
 	

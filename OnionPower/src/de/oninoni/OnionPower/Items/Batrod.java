@@ -2,6 +2,7 @@ package de.oninoni.OnionPower.Items;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -20,6 +21,7 @@ public class Batrod {
 		List<String> lore = new ArrayList<>();
 		lore.add("§h0");
 		lore.add("§60/" + MAX_POWER + " " + CustomsItems.UNIT_NAME);
+		lore.add("§h" + UUID.randomUUID());
 		itemMeta.setLore(lore);
 		batterod.setItemMeta(itemMeta);
 		

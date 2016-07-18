@@ -10,8 +10,9 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
-import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
@@ -130,7 +131,8 @@ public abstract class Machine {
 	
 	protected abstract void updateDisplay();
 		
-	public abstract void onBreak(BlockBreakEvent e);
+	public abstract void onBreak(BlockEvent e);
+	public abstract boolean onBoom(Block e);
 	
 	private boolean isLoaded;
 	

@@ -3,13 +3,15 @@ package de.oninoni.OnionPower.Machines;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
@@ -249,30 +251,47 @@ public class Sorter extends MachineDispenser{
 	
 	@Override
 	public void onClick(InventoryClickEvent e) {
-		super.onClick(e);
 		int convertSlot = e.getView().convertSlot(e.getRawSlot());
-		if(e.getRawSlot() == convertSlot && e.getRawSlot() < 9){
-			if(convertSlot % 2 == 0){
-				if(convertSlot != 4){
-					e.setCancelled(true);
-					if(convertSlot == 2){
-						if(particlesTimeout == 0){
-							particlesTimeout = 100;
+		if(e.getInventory().getType() == InventoryType.DISPENSER){
+			super.onClick(e);
+			if(e.getRawSlot() == convertSlot && convertSlot < 9 && convertSlot >= 0){
+				if(convertSlot % 2 == 0){
+					if(convertSlot != 4){
+						e.setCancelled(true);
+						if(convertSlot == 2){
+							if(particlesTimeout == 0){
+								particlesTimeout = 100;
+							}
 						}
 					}
+				}else{
+					e.setCancelled(true);
+					String filterInvName = "";
+					if(convertSlot == 1) filterInvName = "§4Red Filter";
+					if(convertSlot == 3) filterInvName = "§2Green Filter";
+					if(convertSlot == 5) filterInvName = "§9Blue Filter";
+					if(convertSlot == 7) filterInvName = "§eYellow Filter";
+					Inventory filterInv = Bukkit.createInventory(dispenser, 9, filterInvName);
+					for(int i = 0; i < 9; i++){
+						filterInv.setItem(i, new ItemStack(filters.get(convertSlot / 2)[i]));
+					}
+					e.getWhoClicked().openInventory(filterInv);
 				}
-			}else{
+			}
+		}else{
+			if(e.isShiftClick()){
 				e.setCancelled(true);
-				String filterInvName = "";
-				if(convertSlot == 1) filterInvName = "§4Red Filter";
-				if(convertSlot == 3) filterInvName = "§2Green Filter";
-				if(convertSlot == 5) filterInvName = "§9Blue Filter";
-				if(convertSlot == 7) filterInvName = "§eYellow Filter";
-				Inventory filterInv = Bukkit.createInventory(dispenser, 9, filterInvName);
-				for(int i = 0; i < 9; i++){
-					filterInv.setItem(i, new ItemStack(filters.get(convertSlot / 2)[i]));
+				return;
+			}
+			if(e.getRawSlot() == convertSlot && convertSlot < 9 && convertSlot >= 0){
+				if(e.getCursor().getType() != Material.AIR || e.getCurrentItem().getType() != Material.AIR){
+					e.setCancelled(true);
+					if(e.getCurrentItem().getType() == Material.AIR || e.getCursor().getType() != Material.AIR){
+						e.getInventory().setItem(convertSlot, e.getCursor());
+					}else{
+						e.getInventory().setItem(convertSlot, new ItemStack(Material.AIR));
+					}
 				}
-				e.getWhoClicked().openInventory(filterInv);
 			}
 		}
 	}
@@ -316,14 +335,28 @@ public class Sorter extends MachineDispenser{
 	}
 
 	@Override
-	public void onBreak(BlockBreakEvent e) {
-		for(int i = 0; i < 9; i++){
-			dispenser.getInventory().setItem(i, new ItemStack(Material.AIR));
-		}
+	public void onBreak(BlockEvent e) {
 		dispenser.getInventory().setItem(0, Batrod.create());
-		for(int i = 1; i < 5; i++){
-			dispenser.getInventory().setItem(i, new ItemStack(Material.CHEST));
+		dispenser.getInventory().setItem(1, new ItemStack(Material.CHEST));
+		dispenser.getInventory().setItem(2, Batrod.create());
+		dispenser.getInventory().setItem(3, new ItemStack(Material.CHEST));
+		dispenser.getInventory().setItem(5, new ItemStack(Material.CHEST));
+		dispenser.getInventory().setItem(6, Batrod.create());
+		dispenser.getInventory().setItem(7, new ItemStack(Material.CHEST));
+		dispenser.getInventory().setItem(8, Batrod.create());
+	}
+
+	@Override
+	public boolean onBoom(Block e) {
+		dispenser.getInventory().clear();
+		Random r = new Random();
+		for(int i = 0; i < r.nextInt(4); i++){
+			dispenser.getInventory().addItem(Batrod.create());
 		}
+		for(int i = 0; i < r.nextInt(4); i++){
+			dispenser.getInventory().addItem(new ItemStack(Material.CHEST));
+		}
+		return true;
 	}
 	
 }

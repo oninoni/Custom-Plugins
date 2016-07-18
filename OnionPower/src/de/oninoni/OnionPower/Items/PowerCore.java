@@ -2,6 +2,7 @@ package de.oninoni.OnionPower.Items;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
@@ -114,5 +115,12 @@ public class Generator extends MachineFurnace {
 	@Override
 	public int getMaxPowerInput() {
 		return 0;
+	}
+
+	@Override
+	public boolean onBoom(Block e) {
+		furnace.getInventory().clear();
+		furnace.getInventory().addItem(Batrod.create());
+		return true;
 	}
 }
