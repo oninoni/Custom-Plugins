@@ -17,13 +17,16 @@ public abstract class MachineDispenser extends Machine{
 	
 	protected final static int[] directionAdapter = {4,1,5,2,3,0};
 	
-	protected int coreSlot;
-	
 	protected Dispenser dispenser;
 	
 	public MachineDispenser(Location position, MachineManager machineManager, int power, HashMap<Integer, Upgrade> upgrades) {
 		super(position, machineManager, power, upgrades);
 		dispenser = ((Dispenser) position.getBlock().getState());
+	}
+	
+	public MachineDispenser(Location position, MachineManager machineManager, HashMap<Integer, Upgrade> upgrades) {
+		super(position, machineManager, upgrades);
+		dispenser = ((Dispenser) position.getBlock());
 	}
 	
 	@Override

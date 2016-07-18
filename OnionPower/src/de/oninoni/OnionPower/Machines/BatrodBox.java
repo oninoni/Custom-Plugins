@@ -21,7 +21,6 @@ public class BatrodBox extends MachineDispenser{
 
 	public BatrodBox(Location position, MachineManager machineManager, int power, HashMap<Integer, Upgrade> upgrades) {
 		super(position, machineManager, power, upgrades);
-		coreSlot = 4;
 		ItemStack powerCore = PowerCore.create(this);
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
@@ -49,6 +48,11 @@ public class BatrodBox extends MachineDispenser{
 				allowedOutputs[i] = false;
 			}
 		}
+	}
+	
+	@Override
+	protected void setCoreSlot() {
+		coreSlot = 4;
 	}
 
 	@Override

@@ -21,12 +21,15 @@ import org.bukkit.util.Vector;
 
 import de.oninoni.OnionPower.OnionPower;
 import de.oninoni.OnionPower.Items.Batrod;
+import de.oninoni.OnionPower.Items.PowerCore;
 import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
 import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager;
 
 public abstract class Machine {
 
 	protected static OnionPower plugin = OnionPower.get();
+	
+	protected int coreSlot;
 	
 	protected UpgradeManager upgradeManager;
 	
@@ -75,9 +78,28 @@ public abstract class Machine {
 	private List<Machine> sender = new ArrayList<>();
 	
 	public Machine(Location position, MachineManager machineManager, int power, HashMap<Integer, Upgrade> upgrades){
+		initValues(position, machineManager, upgrades);
+		this.power = power;
+	}
+	
+	public Machine(Location position, MachineManager machineManager, HashMap<Integer, Upgrade> upgrades){
+		initValues(position, machineManager, upgrades);
+		
+		BlockState state = position.getBlock().getState();
+		if(state instanceof InventoryHolder){
+			Inventory inv = ((InventoryHolder) state).getInventory();
+			this.power = PowerCore.getPowerLevel(inv.getItem(coreSlot));
+		}else{
+			plugin.getLogger().warning("Machine at " + position + "is not an Inventory anymore!");
+			this.power = 0;
+		}
+	}
+	
+	private void initValues(Location position, MachineManager machineManager, HashMap<Integer, Upgrade> upgrades){
+		setCoreSlot();
+		
 		this.position = position;
 		this.machineManager = machineManager;
-		this.power = power;
 		
 		isLoaded = true;
 		
@@ -88,6 +110,8 @@ public abstract class Machine {
 	}
 	
 	protected abstract boolean isMaterial(Material material);
+	
+	protected abstract void setCoreSlot();
 	
 	public abstract int getMaxPower();
 	public abstract String getDisplayName();
@@ -297,17 +321,25 @@ public abstract class Machine {
 		return false;
 	}
 	
-	protected boolean pushOneItemInto(int itemPos, Inventory source, Location target){
+	protected int pushOneItemInto(int itemPos, Inventory source, Location target){
+		ItemStack items = source.getItem(itemPos);
 		BlockState state = target.getBlock().getState();
 		if(state instanceof InventoryHolder){
 			Inventory targetInventory = ((InventoryHolder) state).getInventory();
-			int firstEmpty = targetInventory.firstEmpty();
-			if(firstEmpty > -1){
-				targetInventory.setItem(firstEmpty, source.getItem(itemPos));
+			
+			HashMap<Integer, ItemStack> itemsNotMoved = targetInventory.addItem(items);
+			
+			if(itemsNotMoved.size() > 0){
+				int itemNotCountMoved = itemsNotMoved.get(0).getAmount();
+				ItemStack notMoved = source.getItem(4);
+				notMoved.setAmount(itemNotCountMoved);
+				source.setItem(4, notMoved);
+				return items.getAmount() - itemNotCountMoved;
+			}else{
 				source.setItem(4, new ItemStack(Material.AIR));
-				return true;
+				return items.getAmount();
 			}
 		}
-		return false;
+		return -1;
 	}
 }

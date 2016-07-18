@@ -5,7 +5,7 @@
 	<classpathentry kind="lib" path="jars/ProtocolLib.jar"/>
 	<classpathentry kind="lib" path="jars/bukkit-1.10.2-R0.1-SNAPSHOT-shaded.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="https://hub.spigotmc.org/javadocs/bukkit/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/OnionPower/jars/bukkit-1.10.2-R0.1-20160625.015812-1-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="jars/craftbukkit.jar"/>

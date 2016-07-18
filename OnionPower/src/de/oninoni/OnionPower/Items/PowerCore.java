@@ -23,6 +23,7 @@ public class PowerCore {
 		lore.add("§6" + m.getPower() + " / " + m.getMaxPower() + " " + CustomsItems.UNIT_NAME);
 		lore.add("§6Out: " + m.getPowerOutputTotal() + " / " + m.getMaxPowerOutput() + " " + CustomsItems.UNIT_NAME);
 		lore.add("§6In: " + m.getPowerIntputTotal() + " / " + m.getMaxPowerInput() + " " + CustomsItems.UNIT_NAME);
+		lore.add("§h" + m.getPower());
 		itemMeta.setLore(lore);
 		powerCore.setItemMeta(itemMeta);
 		
@@ -45,6 +46,7 @@ public class PowerCore {
 		ItemMeta itemMeta = powerCore.getItemMeta();
 		List<String> lore = itemMeta.getLore();
 		lore.set(1, "§6" + m.getPower() + " / " + m.getMaxPower() + " " + CustomsItems.UNIT_NAME);
+		lore.set(4, "§h" + m.getPower());
 		if(m.getMaxPowerOutput() == 0){
 			lore.set(2, "§6Using: " + m.getPowerOutputTotal() + " " + CustomsItems.UNIT_NAME);
 		}else{
@@ -57,5 +59,10 @@ public class PowerCore {
 		}
 		itemMeta.setLore(lore);
 		powerCore.setItemMeta(itemMeta);
+	}
+	
+	public static int getPowerLevel(ItemStack powerCore){
+		if(powerCore==null)return -1;
+		return Integer.parseInt(powerCore.getItemMeta().getLore().get(4).substring(2));
 	}
 }

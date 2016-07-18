@@ -26,7 +26,6 @@ public class ElectricFurnace extends MachineFurnace {
 	public ElectricFurnace(Location position, MachineManager machineManager, int power, HashMap<Integer, Upgrade> upgrades) {
 		super(position, machineManager, power, upgrades);
 		rodSlot = 1;
-		coreSlot = 1;
 		ItemStack powerCore = PowerCore.create(this);
 		
 		furnace = ((Furnace) position.getBlock().getState());
@@ -41,6 +40,16 @@ public class ElectricFurnace extends MachineFurnace {
 				}
 			}
 		}, 1L);
+	}
+	
+	public ElectricFurnace(Location position, MachineManager machineManager, HashMap<Integer, Upgrade> upgrades) {
+		super(position, machineManager, upgrades);
+		rodSlot = 1;
+	}
+	
+	@Override
+	protected void setCoreSlot() {
+		coreSlot = 1;
 	}
 	
 	public static boolean canCreate(InventoryClickEvent e){

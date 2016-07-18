@@ -27,39 +27,39 @@ public class Sorter extends MachineDispenser{
 	
 	private static final Vector[][] filterDirections = {
 			{
-				new Vector(1.0, 0.0, 0.0),
+				new Vector(0.0, 1.0, 0.0),
 				new Vector(0.0, 0.0, 1.0),
 				new Vector(0.0, 0.0, -1.0),
-				new Vector(-1.0, 0.0, 0.0)
+				new Vector(0.0, -1.0, 0.0)
 			},
 			{
 				new Vector(1.0, 0.0, 0.0),
 				new Vector(0.0, 0.0, -1.0),
 				new Vector(0.0, 0.0, 1.0),
+				new Vector(-1.0, 0.0, 0.0)
+			},
+			{
+				new Vector(0.0, 1.0, 0.0),
+				new Vector(-1.0, 0.0, 0.0),
+				new Vector(1.0, 0.0, 0.0),
+				new Vector(0.0, -1.0, 0.0)
+			},
+			{
+				new Vector(0.0, 1.0, 0.0),
+				new Vector(0.0, 0.0, -1.0),
+				new Vector(0.0, 0.0, 1.0),
+				new Vector(0.0, -1.0, 0.0)
+			},
+			{
+				new Vector(1.0, 0.0, 0.0),
+				new Vector(0.0, 0.0, 1.0),
+				new Vector(0.0, 0.0, -1.0),
 				new Vector(-1.0, 0.0, 0.0)
 			},
 			{
 				new Vector(0.0, 1.0, 0.0),
 				new Vector(1.0, 0.0, 0.0),
 				new Vector(-1.0, 0.0, 0.0),
-				new Vector(0.0, -1.0, 0.0)
-			},
-			{
-				new Vector(0.0, 1.0, 0.0),
-				new Vector(-1.0, 0.0, 1.0),
-				new Vector(1.0, 0.0, -1.0),
-				new Vector(0.0, -1.0, 0.0)
-			},
-			{
-				new Vector(0.0, 1.0, 0.0),
-				new Vector(0.0, 0.0, 1.0),
-				new Vector(0.0, 0.0, -1.0),
-				new Vector(0.0, -1.0, 0.0)
-			},
-			{
-				new Vector(0.0, 1.0, 0.0),
-				new Vector(0.0, 0.0, -1.0),
-				new Vector(0.0, 0.0, 1.0),
 				new Vector(0.0, -1.0, 0.0)
 			}
 	};
@@ -68,10 +68,10 @@ public class Sorter extends MachineDispenser{
 	
 	public Sorter(Location position, MachineManager machineManager, int power, HashMap<Integer, Upgrade> upgrades) {
 		super(position, machineManager, power, upgrades);
-		coreSlot = 0;
 		for(int i = 0; i < 4; i++){
 			filter.add(new Material[]{Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR});
 		}
+		saveFilters();
 		ItemStack powerCore = PowerCore.create(this);
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
@@ -99,6 +99,16 @@ public class Sorter extends MachineDispenser{
 				}
 			}
 		}, 1L);
+		setupPowerIO();
+	}
+	
+	public Sorter(Location position, MachineManager machineManager, HashMap<Integer, Upgrade> upgrades){
+		super(position, machineManager, upgrades);
+		loadFilters();
+		setupPowerIO();
+	}
+	
+	private void setupPowerIO(){
 		@SuppressWarnings("deprecation")
 		int direction = directionAdapter[dispenser.getRawData()];
 		for(int i = 0; i < 6; i++){
@@ -106,6 +116,26 @@ public class Sorter extends MachineDispenser{
 			if(i == direction){
 				allowedInputs[i] = false;
 			}
+		}
+	}
+	
+	private void loadFilter(int id){
+		
+	}
+	
+	private void loadFilters(){
+		for(int i = 0; i < 4; i++){
+			loadFilter(i);
+		}
+	}
+	
+	private void saveFilter(int id){
+		
+	}
+	
+	private void saveFilters(){
+		for(int i = 0; i < 4; i++){
+			saveFilter(i);
 		}
 	}
 	
@@ -117,6 +147,11 @@ public class Sorter extends MachineDispenser{
 			}
 		}
 		return false;
+	}
+	
+	@Override
+	protected void setCoreSlot() {
+		coreSlot = 0;
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -138,8 +173,9 @@ public class Sorter extends MachineDispenser{
 			}else{								// No Filter
 				target = dispenser.getLocation().add(directions[directionAdapter[dispenser.getRawData()]]);
 			}
-			if(pushOneItemInto(4, dispenser.getInventory(), target)){
-				power -= 20;
+			int itemCountMoved = pushOneItemInto(4, dispenser.getInventory(), target);
+			if(itemCountMoved > -1){
+				power -= 20 * itemCountMoved;
 			}
 		}
 	}
@@ -236,7 +272,7 @@ public class Sorter extends MachineDispenser{
 					plugin.getLogger().info("" + subFilter[i]);
 				}
 				filter.set(filterID, subFilter);
-				plugin.getLogger().info(filter.get(filterID)[0]+"");
+				saveFilter(filterID);
 			}
 		}
 	}

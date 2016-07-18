@@ -146,10 +146,10 @@ public class MachineManager {
 				}
 				Location l = new Location(w, x, y, z);
 				if(MachineClass == Generator.class){
-					machines.put(l, new Generator(l, this, power, new HashMap<>()));
+					machines.put(l, new Generator(l, this, new HashMap<>()));
 				}
 				else if(MachineClass == ElectricFurnace.class){
-					machines.put(l, new ElectricFurnace(l, this, power, new HashMap<>()));
+					machines.put(l, new ElectricFurnace(l, this, new HashMap<>()));
 				}
 				else if(MachineClass == BatrodBox.class){
 					machines.put(l, new BatrodBox(l, this, power, new HashMap<>()));
@@ -157,7 +157,6 @@ public class MachineManager {
 				else if(MachineClass == Sorter.class){
 					machines.put(l, new Sorter(l, this, power, new HashMap<>()));
 				}
-				
 			}
 		}
 	}
@@ -176,7 +175,7 @@ public class MachineManager {
 			machineSection.set("Y", pos.getBlockY());
 			machineSection.set("Z", pos.getBlockZ());
 			machineSection.set("world", pos.getWorld().getName());
-			machineSection.set("power", machine.getPower());
+			//machineSection.set("power", machine.getPower());
 			machineSection.set("type", machine.getClass().getName());
 		}
 		plugin.saveConfig();
