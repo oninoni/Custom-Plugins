@@ -18,7 +18,6 @@ public class BlockBreakListener implements Listener{
 	
 	@EventHandler
 	public void onBoom(EntityExplodeEvent e){
-		plugin.getLogger().info("BOOM");
 		plugin.getMachineManager().onBoom(e);
 	}
 	
