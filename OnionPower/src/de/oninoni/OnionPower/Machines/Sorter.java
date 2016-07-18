@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
@@ -206,7 +207,10 @@ public class Sorter extends MachineDispenser{
 		}
 		if(particlesTimeout > 0){
 			particlesTimeout--;
-			
+			renderParticleSideColored(filterDirections[directionAdapter[dispenser.getRawData()]][0], Color.RED);
+			renderParticleSideColored(filterDirections[directionAdapter[dispenser.getRawData()]][1], Color.GREEN);
+			renderParticleSideColored(filterDirections[directionAdapter[dispenser.getRawData()]][2], Color.BLUE);
+			renderParticleSideColored(filterDirections[directionAdapter[dispenser.getRawData()]][3], Color.YELLOW);
 		}
 	}
 	
@@ -253,7 +257,7 @@ public class Sorter extends MachineDispenser{
 					e.setCancelled(true);
 					if(convertSlot == 2){
 						if(particlesTimeout == 0){
-							particlesTimeout = 20;
+							particlesTimeout = 100;
 						}
 					}
 				}

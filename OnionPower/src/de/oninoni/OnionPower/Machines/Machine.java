@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -18,6 +19,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
+
+import com.darkblade12.particleeffect.ParticleEffect;
+import com.darkblade12.particleeffect.ParticleEffect.OrdinaryColor;
 
 import de.oninoni.OnionPower.OnionPower;
 import de.oninoni.OnionPower.Items.Batrod;
@@ -341,5 +345,10 @@ public abstract class Machine {
 			}
 		}
 		return -1;
+	}
+	
+	protected void renderParticleSideColored(Vector d, Color c){
+		Vector direction = d.clone().add(new Vector(0.5, 0.5, 0.5)).subtract(d.clone().multiply(0.4));
+		ParticleEffect.REDSTONE.display(new OrdinaryColor(c), position.clone().add(direction), 16);
 	}
 }
