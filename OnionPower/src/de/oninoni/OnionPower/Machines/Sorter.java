@@ -67,6 +67,8 @@ public class Sorter extends MachineDispenser{
 	
 	private ArrayList<Material[]> filters = new ArrayList<>();
 	
+	private int particlesTimeout = 0;
+	
 	public Sorter(Location position, MachineManager machineManager, int power, HashMap<Integer, Upgrade> upgrades) {
 		super(position, machineManager, power, upgrades);
 		for(int i = 0; i < 4; i++){
@@ -131,11 +133,9 @@ public class Sorter extends MachineDispenser{
 		Material[] filter = filters.get(id);
 		int slotID = id * 2 + 1;
 		List<String> lore = dispenser.getInventory().getItem(slotID).getItemMeta().getLore();
-		plugin.getLogger().info(lore + "");
 		for(int i = 0; i < 9; i++){
 			String name = lore.get(i + 3).substring(2);
 			filter[i] = Material.getMaterial(name);
-			plugin.getLogger().info("" + filter[i]);
 		}
 		filters.set(id, filter);
 	}
@@ -185,7 +185,7 @@ public class Sorter extends MachineDispenser{
 	public void updateBlock() {
 		requestFromConnected();
 		ItemStack item = dispenser.getInventory().getItem(4);
-		if(item != null && power >= 20){
+		if(item != null && power >= 20 * item.getAmount()){
 			Material material = item.getType();
 			Location target;
 			if(isInFilter(material, 0)){		// Red Filter
@@ -203,6 +203,10 @@ public class Sorter extends MachineDispenser{
 			if(itemCountMoved > -1){
 				power -= 20 * itemCountMoved;
 			}
+		}
+		if(particlesTimeout > 0){
+			particlesTimeout--;
+			
 		}
 	}
 	
@@ -247,6 +251,11 @@ public class Sorter extends MachineDispenser{
 			if(convertSlot % 2 == 0){
 				if(convertSlot != 4){
 					e.setCancelled(true);
+					if(convertSlot == 2){
+						if(particlesTimeout == 0){
+							particlesTimeout = 20;
+						}
+					}
 				}
 			}else{
 				e.setCancelled(true);
