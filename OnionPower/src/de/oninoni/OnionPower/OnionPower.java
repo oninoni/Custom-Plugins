@@ -13,6 +13,7 @@ import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Listeners.BlockBreakListener;
 import de.oninoni.OnionPower.Listeners.ChunkListener;
 import de.oninoni.OnionPower.Listeners.InventoryListener;
+import de.oninoni.OnionPower.Listeners.PlayerListener;
 import de.oninoni.OnionPower.Machines.MachineManager;
 
 public class OnionPower extends JavaPlugin {
@@ -37,6 +38,9 @@ public class OnionPower extends JavaPlugin {
 		
 		ChunkListener chunkListener = new ChunkListener();
 		getServer().getPluginManager().registerEvents(chunkListener, this);
+		
+		PlayerListener playerListener = new PlayerListener();
+		getServer().getPluginManager().registerEvents(playerListener, this);
 		
 		machineManager = new MachineManager();
 		
@@ -63,6 +67,7 @@ public class OnionPower extends JavaPlugin {
 	
 	public void onDisable() {
 		machineManager.saveData();
+		machineManager.killAllNames();
 	}
 	
 	public MachineManager getMachineManager() {

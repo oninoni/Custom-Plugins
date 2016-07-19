@@ -7,15 +7,19 @@ import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 
@@ -26,26 +30,60 @@ public class MachineManager {
 	private static OnionPower plugin = OnionPower.get();
 	
 	private HashMap<Location, Machine> machines;
+	private HashMap<Location, Integer> displayTimeout;
+	private HashMap<Location, ArmorStand> displayEntites;
 	
 	public MachineManager() {
 		machines = new HashMap<>();
+		displayTimeout = new HashMap<>();
+		displayEntites = new HashMap<>();
 	}
 	
 	public void update() {
-		Set<Location> keySet = machines.keySet();
+		Set<Location> machinesKeySet = machines.keySet();
 		
-		for (Location pos : keySet)
+		for (Location pos : machinesKeySet)
 			machines.get(pos).resetIO();
 		
-		for (Location pos : keySet)
+		for (Location pos : machinesKeySet)
 			machines.get(pos).update();
 		
-		for (Location pos : keySet)
+		for (Location pos : machinesKeySet)
 			machines.get(pos).processPowerTransfer();
 		
-		for (Location pos : keySet)
+		for (Location pos : machinesKeySet)
 			machines.get(pos).updateUI();
-			
+		
+		Set<Location> displayTimeoutKeySet = displayTimeout.keySet();
+		
+		List<Location> removeThis = new ArrayList<Location>();
+		
+		for (Location location : displayTimeoutKeySet) {
+			int duration = displayTimeout.get(location);
+			duration--;
+			if(duration <= 0){
+				ArmorStand displayEntity = displayEntites.get(location);
+				displayEntity.remove();
+				displayEntites.remove(location);
+				removeThis.add(location);
+				continue;
+			}else{
+				displayTimeout.put(location, duration);
+			}
+		}
+		
+		for (Location location : removeThis) {
+			displayTimeout.remove(location);
+		}
+	}
+	
+	public void killAllNames(){
+		Set<Location> displayTimeoutKeySet = displayTimeout.keySet();
+		
+		for (Location location : displayTimeoutKeySet) {
+			ArmorStand displayEntity = displayEntites.get(location);
+			displayEntity.remove();
+		}
 	}
 	
 	public void onClick(InventoryClickEvent e) {
@@ -144,6 +182,24 @@ public class MachineManager {
 				Bukkit.broadcastMessage("LOADED CRAZY SHIT");
 				machines.get(pos).load();
 			}	
+	}
+	
+	public void onMove(PlayerMoveEvent e){
+		Block target = e.getPlayer().getTargetBlock((Set<Material>) null, 4);
+		if(target == null)return;
+		if(machines.containsKey(target.getLocation()) && !displayTimeout.containsKey(target.getLocation())){
+			ArmorStand armorstand = (ArmorStand) target.getLocation().getWorld().spawnEntity(target.getLocation().add(0.5, 1, 0.5), EntityType.ARMOR_STAND);
+			armorstand.setCustomName(machines.get(target.getLocation()).getDisplayName());
+			armorstand.setCustomNameVisible(true);
+			armorstand.setMarker(true);
+			armorstand.setBasePlate(false);
+			armorstand.setVisible(false);
+			armorstand.setSmall(true);
+			armorstand.setAI(false);
+			armorstand.setGravity(false);
+			displayEntites.put(target.getLocation(), armorstand);
+			displayTimeout.put(target.getLocation(), 20);
+		}
 	}
 	
 	public void onUnload(ChunkUnloadEvent e){		

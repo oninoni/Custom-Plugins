@@ -15,7 +15,7 @@ public class ItemData {
 	public static final HashMap<Material, Material> smeltable;
 	
 	static void initBurnTimes() {
-		burnTime.put(Material.LAVA, 			(short)20000 );
+		burnTime.put(Material.LAVA_BUCKET,		(short)20000);
 		burnTime.put(Material.COAL_BLOCK, 		(short)16000);
 		burnTime.put(Material.BLAZE_ROD, 		(short)2400);
 		burnTime.put(Material.COAL, 			(short)1600);
