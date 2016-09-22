@@ -24,7 +24,6 @@ import org.bukkit.util.Vector;
 import de.oninoni.OnionPower.NMSAdapter;
 import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.CustomsItems;
-import de.oninoni.OnionPower.Items.PowerCore;
 import de.oninoni.OnionPower.Machines.MachineDispenser;
 import de.oninoni.OnionPower.Machines.MachineManager;
 import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
@@ -79,7 +78,6 @@ public class Sorter extends MachineDispenser{
 		for(int i = 0; i < 4; i++){
 			filters.add(new Material[]{Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR});
 		}
-		ItemStack powerCore = PowerCore.create(this);
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {
@@ -216,24 +214,6 @@ public class Sorter extends MachineDispenser{
 			renderParticleSideColored(filterDirections[directionAdapter[dispenser.getRawData()]][2], Color.BLUE);
 			renderParticleSideColored(filterDirections[directionAdapter[dispenser.getRawData()]][3], Color.YELLOW);
 		}
-	}
-	
-	public static boolean canCreate(InventoryClickEvent e){
-		if(!(e.getInventory().getType() == InventoryType.DISPENSER))return false;
-		ItemStack item = e.getCursor();
-		if(!(Batrod.check(item) || item.getType() == Material.CHEST))return false;
-		if(!(e.getRawSlot() == e.getView().convertSlot(e.getRawSlot())))return false;
-		int slot = e.getRawSlot();
-		for(int i = 0; i < 9; i++){
-			if(i == slot)continue;
-			if(i % 2 == 1){
-				if(!(e.getView().getTopInventory().getItem(i) != null && e.getView().getTopInventory().getItem(i).getType() == Material.CHEST)) return false;
-			}else if(i != 4){
-				if(!Batrod.check(e.getView().getTopInventory().getItem(i))) return false;
-			}
-		}
-		
-		return true;
 	}
 	
 	@Override

@@ -28,7 +28,6 @@ public class ElectricFurnace extends MachineFurnace {
 	public ElectricFurnace(Location position, MachineManager machineManager, int power, HashMap<Integer, Upgrade> upgrades) {
 		super(position, machineManager, power, upgrades);
 		rodSlot = 1;
-		ItemStack powerCore = PowerCore.create(this);
 		
 		furnace = ((Furnace) position.getBlock().getState());
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {

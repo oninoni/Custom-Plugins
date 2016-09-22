@@ -15,7 +15,6 @@ import org.bukkit.inventory.ItemStack;
 import de.oninoni.OnionPower.NMSAdapter;
 import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.ItemData;
-import de.oninoni.OnionPower.Items.PowerCore;
 import de.oninoni.OnionPower.Machines.MachineFurnace;
 import de.oninoni.OnionPower.Machines.MachineManager;
 import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
@@ -27,7 +26,6 @@ public class Generator extends MachineFurnace {
 	public Generator(Location position, MachineManager machineManager, int power, HashMap<Integer, Upgrade> upgrades) {
 		super(position, machineManager, power, upgrades);
 		rodSlot = 0;
-		ItemStack powerCore = PowerCore.create(this);
 		
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override

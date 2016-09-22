@@ -11,12 +11,9 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
-import de.oninoni.OnionPower.NMSAdapter;
 import de.oninoni.OnionPower.Items.Batrod;
-import de.oninoni.OnionPower.Items.PowerCore;
 import de.oninoni.OnionPower.Machines.MachineDispenser;
 import de.oninoni.OnionPower.Machines.MachineManager;
 import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
@@ -25,7 +22,6 @@ public class BatrodBox extends MachineDispenser{
 
 	public BatrodBox(Location position, MachineManager machineManager, int power, HashMap<Integer, Upgrade> upgrades) {
 		super(position, machineManager, power, upgrades);
-		ItemStack powerCore = PowerCore.create(this);
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {
@@ -35,7 +31,6 @@ public class BatrodBox extends MachineDispenser{
 				dispenser.getInventory().setItem(coreSlot, powerCore);
 				dispenser.getInventory().setItem(coreSlot - 1, new ItemStack(Material.STAINED_GLASS_PANE));
 				dispenser.getInventory().setItem(coreSlot + 1, new ItemStack(Material.STAINED_GLASS_PANE));
-				NMSAdapter.setInvNameDispenser(dispenser, getDisplayName());
 				for(HumanEntity viewer : dispenser.getInventory().getViewers()){
 					viewer.closeInventory();
 					viewer.openInventory(dispenser.getInventory());
@@ -75,21 +70,6 @@ public class BatrodBox extends MachineDispenser{
 			chargeRod(dispenser.getInventory().getItem(i));
 			dechargeRod(dispenser.getInventory().getItem(i + 6));
 		}
-	}
-	
-	public static boolean canCreate(InventoryClickEvent e){
-		if(!(e.getInventory().getType() == InventoryType.DISPENSER))return false;
-		ItemStack item = e.getCursor();
-		if(!Batrod.check(item))return false;
-		if(!(e.getRawSlot() == e.getView().convertSlot(e.getRawSlot())))return false;
-		int slot = e.getRawSlot();
-		for(int i = 0; i < 8; i++){
-			int slotToCheck = i;
-			if(i >= slot)slotToCheck++;
-			ItemStack itemToCheck = e.getView().getTopInventory().getItem(slotToCheck);
-			if(!Batrod.check(itemToCheck))return false;
-		}
-		return true;
 	}
 	
 	@Override

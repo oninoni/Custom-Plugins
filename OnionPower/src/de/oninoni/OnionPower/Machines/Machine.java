@@ -16,6 +16,7 @@ import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -35,6 +36,7 @@ public abstract class Machine {
 	protected static OnionPower plugin = OnionPower.get();
 	
 	protected int coreSlot;
+	protected ItemStack powerCore;
 	
 	protected UpgradeManager upgradeManager;
 	
@@ -103,6 +105,8 @@ public abstract class Machine {
 	private void initValues(Location position, MachineManager machineManager, HashMap<Integer, Upgrade> upgrades){
 		setCoreSlot();
 		
+		powerCore = PowerCore.create(this);
+		
 		this.position = position;
 		this.machineManager = machineManager;
 		
@@ -130,11 +134,50 @@ public abstract class Machine {
 	public abstract void onMoveFrom(InventoryMoveItemEvent e);
 	
 	protected abstract void updateDisplay();
-		
+	
 	public abstract void onBreak(BlockEvent e);
 	public abstract boolean onBoom(Block e);
 	
 	private boolean isLoaded;
+	
+	public static boolean canCreate(InventoryClickEvent e, String key, InventoryType type){
+		Material[] template = MachineTemplates.buildTemplates.get(key);
+		
+		if(!(e.getView().getTopInventory().getType() == type))return false;
+		
+		if(e.getView().convertSlot(e.getRawSlot()) != e.getSlot())return false;
+		
+		int cursorPos = e.getSlot();
+		for(int i = 0; i < 9; i++){
+			ItemStack check;
+			if(i == cursorPos){
+				check = e.getCursor();
+			}else{
+				check = e.getInventory().getItem(i);
+			}
+			//Check for irrelevant Slots
+			if(template[i] == Material.COMMAND)continue;
+			//Check for empty Slots
+			if(check == null){	
+				if(template[i] == Material.AIR){
+					continue;
+				}else{
+					return false;
+				}
+			}
+			//Check for Batrod Slots
+			if(template[i] == Material.BARRIER){
+				if(Batrod.check(check)){
+					continue;
+				}else{
+					return false;
+				}
+			}
+			//Check normal Slots
+			if(template[i] != check.getType())return false;
+		}
+		return true;
+	}
 	
 	public void requestPower(Machine requester) {
 		sender.add(requester);
@@ -320,11 +363,6 @@ public abstract class Machine {
 			Batrod.setPower(item, rodPower - powerTransfered);
 			power += powerTransfered;
 		}
-	}
-
-	@Deprecated
-	public static boolean canCreate(InventoryClickEvent e) {
-		return false;
 	}
 	
 	protected int pushOneItemInto(int itemPos, Inventory source, Location target){

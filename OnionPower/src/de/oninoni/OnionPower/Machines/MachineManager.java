@@ -19,12 +19,14 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 
 import de.oninoni.OnionPower.OnionPower;
 import de.oninoni.OnionPower.Machines.DispenserBased.BatrodBox;
+import de.oninoni.OnionPower.Machines.DispenserBased.Miner;
 import de.oninoni.OnionPower.Machines.DispenserBased.Sorter;
 import de.oninoni.OnionPower.Machines.FurnaceBased.ElectricFurnace;
 import de.oninoni.OnionPower.Machines.FurnaceBased.Generator;
@@ -99,11 +101,12 @@ public class MachineManager {
 				machines.put(location, new Generator(location, this, 0, new HashMap<>()));
 			if (ElectricFurnace.canCreate(e))
 				machines.put(location, new ElectricFurnace(location, this, 0, new HashMap<>()));
-			if (BatrodBox.canCreate(e))
+			if (BatrodBox.canCreate(e, BatrodBox.class.getName(), InventoryType.DISPENSER))
 				machines.put(location, new BatrodBox(location, this, 0, new HashMap<>()));
-			if (Sorter.canCreate(e))
+			if (Sorter.canCreate(e, Sorter.class.getName(), InventoryType.DISPENSER))
 				machines.put(location, new Sorter(location, this, 0, new HashMap<>()));
-			
+			if (Miner.canCreate(e, Miner.class.getName(), InventoryType.DISPENSER))
+				machines.put(location, new Miner(location, this, 0, new HashMap<>()));
 			
 			if(machines.get(e.getInventory().getLocation()) != null	)
 				saveData();
@@ -122,10 +125,8 @@ public class MachineManager {
 	
 	public void onDrag(InventoryDragEvent e){
 		Machine machine = machines.get(e.getView().getTopInventory().getHolder().getInventory().getLocation());
-		if(machine == null){
-			e.setCancelled(true);
-			return;
-		}
+		if(machine == null)return;
+		
 		Set<Integer> slots = e.getRawSlots();
 		
 		for (Integer slot : slots) {
@@ -252,6 +253,9 @@ public class MachineManager {
 					machines.put(l, new BatrodBox(l, this, new HashMap<>()));
 				}
 				else if(MachineClass == Sorter.class){
+					machines.put(l, new Sorter(l, this, new HashMap<>()));
+				}
+				else if(MachineClass == Miner.class){
 					machines.put(l, new Sorter(l, this, new HashMap<>()));
 				}
 			}
