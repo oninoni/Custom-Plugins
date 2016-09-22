@@ -52,10 +52,9 @@ public abstract class MachineDispenser extends Machine{
 		return;
 	}
 	
-	@Override
 	public void onClick(InventoryClickEvent e) {
 		int convertSlot = e.getView().convertSlot(e.getRawSlot());
-		if(e.getRawSlot() == convertSlot && convertSlot == coreSlot){
+		if(convertSlot == coreSlot){
 			e.setCancelled(true);
 		}
 	}

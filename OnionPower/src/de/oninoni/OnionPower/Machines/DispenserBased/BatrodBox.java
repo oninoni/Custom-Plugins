@@ -94,7 +94,8 @@ public class BatrodBox extends MachineDispenser{
 
 	@Override
 	public void onClick(InventoryClickEvent e) {
-		if((e.getRawSlot() == e.getView().convertSlot(e.getRawSlot())) && e.getRawSlot() >= coreSlot - 1 && e.getRawSlot() <= coreSlot + 1){
+		super.onClick(e);
+		if(e.getRawSlot() >= coreSlot - 1 && e.getRawSlot() <= coreSlot + 1){
 			e.setCancelled(true);
 		}
 	}

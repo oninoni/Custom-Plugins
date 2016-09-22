@@ -79,10 +79,10 @@ public class Generator extends MachineFurnace {
 	
 	@Override
 	public void onClick(InventoryClickEvent e) {
-		if(disableSmeltingSlot && e.getRawSlot() == e.getView().convertSlot(e.getRawSlot()) && e.getRawSlot() == 0){
+		super.onClick(e);
+		if(disableSmeltingSlot && e.getRawSlot() == 0){
 			e.setCancelled(true);
 		}
-		super.onClick(e);
 	}
 	
 	@Override

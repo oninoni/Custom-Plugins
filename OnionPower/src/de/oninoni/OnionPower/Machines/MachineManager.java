@@ -93,6 +93,7 @@ public class MachineManager {
 	}
 	
 	public void onClick(InventoryClickEvent e) {
+		if(e.getRawSlot() != e.getView().convertSlot(e.getRawSlot()) || e.getSlot() >= e.getInventory().getSize())return;
 		Machine machine = machines.get(e.getInventory().getHolder().getInventory().getLocation());
 		if (machine == null)
 		{

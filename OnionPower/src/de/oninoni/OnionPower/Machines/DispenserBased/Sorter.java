@@ -21,7 +21,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
-import de.oninoni.OnionPower.NMSAdapter;
 import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.CustomsItems;
 import de.oninoni.OnionPower.Machines.MachineDispenser;
@@ -232,10 +231,10 @@ public class Sorter extends MachineDispenser{
 	
 	@Override
 	public void onClick(InventoryClickEvent e) {
+		super.onClick(e);
 		int convertSlot = e.getView().convertSlot(e.getRawSlot());
 		if(e.getInventory().getType() == InventoryType.DISPENSER){
-			super.onClick(e);
-			if(e.getRawSlot() == convertSlot && convertSlot < 9 && convertSlot >= 0){
+			if(convertSlot < 9 && convertSlot >= 0){
 				if(convertSlot % 2 == 0){
 					if(convertSlot != 4){
 						e.setCancelled(true);

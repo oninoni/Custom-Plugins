@@ -80,7 +80,8 @@ public class Miner extends MachineDispenser{
 	
 	@Override
 	public void onClick(InventoryClickEvent e) {
-		//TODO CLICK
+		super.onClick(e);
+		e.setCancelled(true);
 	}
 
 	@Override
