@@ -141,6 +141,7 @@ public abstract class Machine {
 	private boolean isLoaded;
 	
 	public static boolean canCreate(InventoryClickEvent e, String key, InventoryType type){
+		//plugin.getLogger().info("Type: " + key);
 		Material[] template = MachineTemplates.buildTemplates.get(key);
 		
 		if(!(e.getView().getTopInventory().getType() == type))return false;
@@ -148,13 +149,15 @@ public abstract class Machine {
 		if(e.getView().convertSlot(e.getRawSlot()) != e.getSlot())return false;
 		
 		int cursorPos = e.getSlot();
-		for(int i = 0; i < 9; i++){
+		for(int i = 0; i < template.length; i++){
+			
 			ItemStack check;
 			if(i == cursorPos){
 				check = e.getCursor();
 			}else{
 				check = e.getInventory().getItem(i);
 			}
+			//plugin.getLogger().info("Slot: " + i + " is a " + check);
 			//Check for irrelevant Slots
 			if(template[i] == Material.COMMAND)continue;
 			//Check for empty Slots

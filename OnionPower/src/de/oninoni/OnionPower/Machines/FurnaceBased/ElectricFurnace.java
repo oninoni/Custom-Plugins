@@ -6,10 +6,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.Furnace;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
 import de.oninoni.OnionPower.NMSAdapter;
@@ -27,12 +25,11 @@ public class ElectricFurnace extends MachineFurnace {
 	
 	public ElectricFurnace(Location position, MachineManager machineManager, int power, HashMap<Integer, Upgrade> upgrades) {
 		super(position, machineManager, power, upgrades);
-		rodSlot = 1;
 		
-		furnace = ((Furnace) position.getBlock().getState());
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {
+				furnace.getInventory().setItem(0, new ItemStack(Material.AIR));
 				furnace.getInventory().setItem(1, powerCore);
 				NMSAdapter.setInvNameFurnace(furnace, getDisplayName());
 				for(HumanEntity viewer : furnace.getInventory().getViewers()){
@@ -45,19 +42,11 @@ public class ElectricFurnace extends MachineFurnace {
 	
 	public ElectricFurnace(Location position, MachineManager machineManager, HashMap<Integer, Upgrade> upgrades) {
 		super(position, machineManager, upgrades);
-		rodSlot = 1;
 	}
 	
 	@Override
 	protected void setCoreSlot() {
 		coreSlot = 1;
-	}
-	
-	public static boolean canCreate(InventoryClickEvent e){
-		if(!(e.getInventory().getType() == InventoryType.FURNACE))return false;
-		ItemStack item = e.getCursor();
-		if(!(e.getView().getTopInventory().getItem(0) == null && e.getView().getTopInventory().getItem(1) == null && e.getView().getTopInventory().getItem(0) == null))return false;
-		return e.getRawSlot() == e.getView().convertSlot(e.getRawSlot()) && e.getRawSlot() == 1 && Batrod.check(item);
 	}
 	
 	@Override

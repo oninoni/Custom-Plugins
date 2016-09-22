@@ -97,9 +97,9 @@ public class MachineManager {
 		if (machine == null)
 		{
 			Location location = e.getView().getTopInventory().getLocation();
-			if (Generator.canCreate(e))
+			if (Generator.canCreate(e, Generator.class.getName(), InventoryType.FURNACE))
 				machines.put(location, new Generator(location, this, 0, new HashMap<>()));
-			if (ElectricFurnace.canCreate(e))
+			if (ElectricFurnace.canCreate(e, ElectricFurnace.class.getName(), InventoryType.FURNACE))
 				machines.put(location, new ElectricFurnace(location, this, 0, new HashMap<>()));
 			if (BatrodBox.canCreate(e, BatrodBox.class.getName(), InventoryType.DISPENSER))
 				machines.put(location, new BatrodBox(location, this, 0, new HashMap<>()));

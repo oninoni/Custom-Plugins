@@ -9,7 +9,6 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
 import de.oninoni.OnionPower.NMSAdapter;
@@ -25,14 +24,15 @@ public class Generator extends MachineFurnace {
 	
 	public Generator(Location position, MachineManager machineManager, int power, HashMap<Integer, Upgrade> upgrades) {
 		super(position, machineManager, power, upgrades);
-		rodSlot = 0;
+		
+		
+		NMSAdapter.setInvNameFurnace(furnace, getDisplayName());
 		
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {
-				furnace.getInventory().setItem(rodSlot, new ItemStack(Material.AIR));
+				furnace.getInventory().setItem(1, new ItemStack(Material.AIR));
 				furnace.getInventory().setItem(coreSlot, powerCore);
-				NMSAdapter.setInvNameFurnace(furnace, getDisplayName());
 				for(HumanEntity viewer : furnace.getInventory().getViewers()){
 					viewer.closeInventory();
 					viewer.openInventory(furnace.getInventory());
@@ -43,7 +43,6 @@ public class Generator extends MachineFurnace {
 	
 	public Generator(Location position, MachineManager machineManager, HashMap<Integer, Upgrade> upgrades){
 		super(position, machineManager, upgrades);
-		rodSlot = 0;
 	}
 	
 	@Override
@@ -80,13 +79,6 @@ public class Generator extends MachineFurnace {
 			powerIntputTotal = 20;
 		}
 		chargeRod(furnace.getInventory().getSmelting());
-	}
-	
-	public static boolean canCreate(InventoryClickEvent e) {
-		if(!(e.getInventory().getType() == InventoryType.FURNACE))return false;
-		ItemStack item = e.getCursor();
-		if(!(e.getView().getTopInventory().getItem(0) == null && e.getView().getTopInventory().getItem(1) == null && e.getView().getTopInventory().getItem(0) == null))return false;
-		return e.getRawSlot() == e.getView().convertSlot(e.getRawSlot()) && e.getRawSlot() == 0 && Batrod.check(item);
 	}
 	
 	@Override

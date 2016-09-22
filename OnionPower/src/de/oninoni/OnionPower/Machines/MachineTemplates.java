@@ -7,6 +7,8 @@ import org.bukkit.Material;
 import de.oninoni.OnionPower.Machines.DispenserBased.BatrodBox;
 import de.oninoni.OnionPower.Machines.DispenserBased.Miner;
 import de.oninoni.OnionPower.Machines.DispenserBased.Sorter;
+import de.oninoni.OnionPower.Machines.FurnaceBased.ElectricFurnace;
+import de.oninoni.OnionPower.Machines.FurnaceBased.Generator;
 
 public class MachineTemplates {
 	
@@ -24,13 +26,19 @@ public class MachineTemplates {
 		});
 		buildTemplates.put(Sorter.class.getName(), new Material[]{
 				Material.BARRIER, 		Material.CHEST, 			Material.BARRIER,
-				Material.CHEST,			Material.COMMAND,				Material.CHEST,
+				Material.CHEST,			Material.COMMAND,			Material.CHEST,
 				Material.BARRIER, 		Material.CHEST, 			Material.BARRIER
 		});
 		buildTemplates.put(BatrodBox.class.getName(), new Material[]{
 				Material.BARRIER, 		Material.BARRIER, 			Material.BARRIER,
 				Material.BARRIER,		Material.BARRIER,			Material.BARRIER,
 				Material.BARRIER, 		Material.BARRIER, 			Material.BARRIER
+		});
+		buildTemplates.put(Generator.class.getName(), new Material[]{
+				Material.COMMAND, 		Material.BARRIER
+		});
+		buildTemplates.put(ElectricFurnace.class.getName(), new Material[]{
+				Material.BARRIER
 		});
 	}
 	

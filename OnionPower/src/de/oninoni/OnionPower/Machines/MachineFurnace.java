@@ -16,8 +16,6 @@ import de.oninoni.OnionPower.Items.PowerCore;
 import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
 
 public abstract class MachineFurnace extends Machine{
-
-	protected int rodSlot;
 	
 	protected Furnace furnace;
 	
