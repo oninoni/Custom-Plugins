@@ -12,6 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.Dispenser;
 import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -28,6 +29,7 @@ import com.darkblade12.particleeffect.ParticleEffect.OrdinaryColor;
 import de.oninoni.OnionPower.OnionPower;
 import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.PowerCore;
+import de.oninoni.OnionPower.Machines.DispenserBased.Miner;
 import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
 import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager;
 
@@ -140,6 +142,7 @@ public abstract class Machine {
 	
 	private boolean isLoaded;
 	
+	@SuppressWarnings("deprecation")
 	public static boolean canCreate(InventoryClickEvent e, String key, InventoryType type){
 		//plugin.getLogger().info("Type: " + key);
 		Material[] template = MachineTemplates.buildTemplates.get(key);
@@ -179,6 +182,13 @@ public abstract class Machine {
 			//Check normal Slots
 			if(template[i] != check.getType())return false;
 		}
+		
+		//Special Check for Miner
+		if(key == Miner.class.getName() && type == InventoryType.DISPENSER && !(((Dispenser) e.getInventory().getHolder()).getRawData() == 0)){
+			e.getWhoClicked().sendMessage("Miners can only be placed Downwards!");
+			return false;
+		}
+		
 		return true;
 	}
 	

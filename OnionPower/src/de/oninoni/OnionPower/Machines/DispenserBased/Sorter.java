@@ -101,7 +101,6 @@ public class Sorter extends MachineDispenser{
 				dispenser.getInventory().setItem(5, CustomsItems.getGlassPane((byte) 11, "§9Blue Sorting Channel", lore));
 				dispenser.getInventory().setItem(7, CustomsItems.getGlassPane((byte) 4 , "§eYellow Sorting Channel", lore));
 				
-				NMSAdapter.setInvNameDispenser(dispenser, getDisplayName());
 				for(HumanEntity viewer : dispenser.getInventory().getViewers()){
 					viewer.closeInventory();
 					viewer.openInventory(dispenser.getInventory());

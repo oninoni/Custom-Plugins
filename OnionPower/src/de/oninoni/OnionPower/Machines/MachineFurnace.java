@@ -11,6 +11,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.ItemStack;
 
+import de.oninoni.OnionPower.NMSAdapter;
 import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.PowerCore;
 import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
@@ -22,11 +23,13 @@ public abstract class MachineFurnace extends Machine{
 	public MachineFurnace(Location position, MachineManager machineManager, int power, HashMap<Integer, Upgrade> upgrades) {
 		super(position, machineManager, power, upgrades);
 		furnace = ((Furnace) position.getBlock().getState());
+		NMSAdapter.setInvNameFurnace(furnace, getDisplayName());
 	}
 	
 	public MachineFurnace(Location position, MachineManager machineManager, HashMap<Integer, Upgrade> upgrades) {
 		super(position, machineManager, upgrades);
 		furnace = ((Furnace) position.getBlock().getState());
+		NMSAdapter.setInvNameFurnace(furnace, getDisplayName());
 	}
 	
 	@Override

@@ -24,4 +24,12 @@ public class CustomsItems {
 		pane.setItemMeta(meta);
 		return pane;
 	}
+	
+	public static ItemStack getMinerPickAxe(){
+		ItemStack pick = new ItemStack(Material.IRON_PICKAXE);
+		ItemMeta meta = pick.getItemMeta();
+		meta.setDisplayName("§4Internal Pickaxe");
+		pick.setItemMeta(meta);
+		return pick;
+	}
 }

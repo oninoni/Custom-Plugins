@@ -4,13 +4,13 @@ import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.block.BlockEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
-import org.bukkit.inventory.ItemStack;
 
+import de.oninoni.OnionPower.Items.CustomsItems;
 import de.oninoni.OnionPower.Machines.MachineDispenser;
 import de.oninoni.OnionPower.Machines.MachineManager;
 import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
@@ -22,13 +22,16 @@ public class Miner extends MachineDispenser{
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {
-				dispenser.getInventory().setItem(coreSlot, powerCore);
-				dispenser.getInventory().setItem(0, new ItemStack(Material.STAINED_GLASS_PANE));
-				dispenser.getInventory().setItem(2, new ItemStack(Material.STAINED_GLASS_PANE));
-				dispenser.getInventory().setItem(3, new ItemStack(Material.STAINED_GLASS_PANE));
-				dispenser.getInventory().setItem(5, new ItemStack(Material.STAINED_GLASS_PANE));
-				dispenser.getInventory().setItem(6, new ItemStack(Material.STAINED_GLASS_PANE));
-				dispenser.getInventory().setItem(8, new ItemStack(Material.STAINED_GLASS_PANE));
+				dispenser.getInventory().setItem(0, CustomsItems.getGlassPane((byte) 2, "§4§kSecret§r §4§kMessage"));
+				dispenser.getInventory().setItem(1, powerCore);
+				dispenser.getInventory().setItem(2, CustomsItems.getGlassPane((byte) 2, "§4§kLol§r §4§kROFL"));
+				//dispenser.getInventory().setItem(4, arg1);
+				dispenser.getInventory().setItem(3, CustomsItems.getGlassPane((byte) 2, "§4§kZweiundvierzig§r"));
+				dispenser.getInventory().setItem(5, CustomsItems.getGlassPane((byte) 2, "§4§kIch§r §4§kmag§r §4§kZüge"));
+				dispenser.getInventory().setItem(6, CustomsItems.getGlassPane((byte) 2, "§4§k42§r §4§k256"));
+				dispenser.getInventory().setItem(7, CustomsItems.getMinerPickAxe());
+				dispenser.getInventory().setItem(8, CustomsItems.getGlassPane((byte) 2, "§4§kPossseidon§r §4§kstinkt!"));
+				
 				for(HumanEntity viewer : dispenser.getInventory().getViewers()){
 					viewer.closeInventory();
 					viewer.openInventory(dispenser.getInventory());
@@ -73,6 +76,11 @@ public class Miner extends MachineDispenser{
 	public void updateBlock() {
 		requestFromConnected();
 		//TODO Actual Mining
+	}
+	
+	@Override
+	public void onClick(InventoryClickEvent e) {
+		//TODO CLICK
 	}
 
 	@Override

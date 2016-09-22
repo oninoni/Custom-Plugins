@@ -256,7 +256,7 @@ public class MachineManager {
 					machines.put(l, new Sorter(l, this, new HashMap<>()));
 				}
 				else if(MachineClass == Miner.class){
-					machines.put(l, new Sorter(l, this, new HashMap<>()));
+					machines.put(l, new Miner(l, this, new HashMap<>()));
 				}
 			}
 		}

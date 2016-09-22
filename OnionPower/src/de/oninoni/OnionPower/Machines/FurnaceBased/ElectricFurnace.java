@@ -31,7 +31,6 @@ public class ElectricFurnace extends MachineFurnace {
 			public void run() {
 				furnace.getInventory().setItem(0, new ItemStack(Material.AIR));
 				furnace.getInventory().setItem(1, powerCore);
-				NMSAdapter.setInvNameFurnace(furnace, getDisplayName());
 				for(HumanEntity viewer : furnace.getInventory().getViewers()){
 					viewer.closeInventory();
 					viewer.openInventory(furnace.getInventory());
