@@ -24,6 +24,10 @@ import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 
 import de.oninoni.OnionPower.OnionPower;
+import de.oninoni.OnionPower.Machines.DispenserBased.BatrodBox;
+import de.oninoni.OnionPower.Machines.DispenserBased.Sorter;
+import de.oninoni.OnionPower.Machines.FurnaceBased.ElectricFurnace;
+import de.oninoni.OnionPower.Machines.FurnaceBased.Generator;
 
 public class MachineManager {
 	

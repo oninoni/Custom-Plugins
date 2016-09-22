@@ -1,4 +1,4 @@
-package de.oninoni.OnionPower.Machines;
+package de.oninoni.OnionPower.Machines.FurnaceBased;
 
 import java.util.HashMap;
 
@@ -16,6 +16,8 @@ import de.oninoni.OnionPower.NMSAdapter;
 import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.ItemData;
 import de.oninoni.OnionPower.Items.PowerCore;
+import de.oninoni.OnionPower.Machines.MachineFurnace;
+import de.oninoni.OnionPower.Machines.MachineManager;
 import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
 
 public class ElectricFurnace extends MachineFurnace {

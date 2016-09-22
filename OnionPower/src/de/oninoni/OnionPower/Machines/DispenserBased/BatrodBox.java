@@ -1,4 +1,4 @@
-package de.oninoni.OnionPower.Machines;
+package de.oninoni.OnionPower.Machines.DispenserBased;
 
 import java.util.HashMap;
 import java.util.Random;
@@ -17,6 +17,8 @@ import org.bukkit.inventory.ItemStack;
 import de.oninoni.OnionPower.NMSAdapter;
 import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.PowerCore;
+import de.oninoni.OnionPower.Machines.MachineDispenser;
+import de.oninoni.OnionPower.Machines.MachineManager;
 import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
 
 public class BatrodBox extends MachineDispenser{
