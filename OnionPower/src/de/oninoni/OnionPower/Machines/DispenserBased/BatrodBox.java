@@ -1,14 +1,10 @@
 package de.oninoni.OnionPower.Machines.DispenserBased;
 
 import java.util.HashMap;
-import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.ItemStack;
@@ -31,10 +27,8 @@ public class BatrodBox extends MachineDispenser{
 				dispenser.getInventory().setItem(coreSlot, powerCore);
 				dispenser.getInventory().setItem(coreSlot - 1, new ItemStack(Material.STAINED_GLASS_PANE));
 				dispenser.getInventory().setItem(coreSlot + 1, new ItemStack(Material.STAINED_GLASS_PANE));
-				for(HumanEntity viewer : dispenser.getInventory().getViewers()){
-					viewer.closeInventory();
-					viewer.openInventory(dispenser.getInventory());
-				}
+
+				updateInventories();
 			}
 		}, 1L);
 		setupPowerIO();
@@ -111,19 +105,14 @@ public class BatrodBox extends MachineDispenser{
 	}
 	
 	@Override
-	public void onBreak(BlockEvent e) {
-		for(int i = 0; i < 9; i++){
-			dispenser.getInventory().setItem(i, Batrod.create());
-		}
-	}
-
-	@Override
-	public boolean onBoom(Block b) {
-		dispenser.getInventory().clear();
-		Random r = new Random();
-		for (int i = 0; i < r.nextInt(9); i++) {
-			dispenser.getInventory().addItem(Batrod.create());
-		}
+	protected boolean doesExplode() {
 		return true;
+	}
+	
+	@Override
+	protected void resetItemAt(int id) {
+		ItemStack batrod = Batrod.create();
+		Batrod.setPower(batrod, getPower() / 10);
+		dispenser.getInventory().setItem(id, batrod);
 	}
 }

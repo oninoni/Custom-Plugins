@@ -5,8 +5,6 @@ import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.ItemStack;
@@ -29,10 +27,8 @@ public class Generator extends MachineFurnace {
 			public void run() {
 				furnace.getInventory().setItem(1, new ItemStack(Material.AIR));
 				furnace.getInventory().setItem(coreSlot, powerCore);
-				for(HumanEntity viewer : furnace.getInventory().getViewers()){
-					viewer.closeInventory();
-					viewer.openInventory(furnace.getInventory());
-				}
+
+				updateInventories();
 			}
 		}, 1L);
 	}
@@ -50,7 +46,7 @@ public class Generator extends MachineFurnace {
 	public void updateBlock() {
 		if (furnace.getBurnTime() <= 0) {
 			ItemStack fuel = furnace.getInventory().getFuel();
-			
+			if(Batrod.check(fuel))return;
 			if (fuel != null) {
 				Material mat = fuel.getType();
 				if (ItemData.burnTime.containsKey(mat) && ItemData.burnTime.get(mat) + power <= getMaxPower()) {
@@ -75,6 +71,7 @@ public class Generator extends MachineFurnace {
 			powerIntputTotal = 20;
 		}
 		chargeRod(furnace.getInventory().getSmelting());
+		dechargeRod(furnace.getInventory().getFuel());
 	}
 	
 	@Override
@@ -106,9 +103,16 @@ public class Generator extends MachineFurnace {
 	}
 
 	@Override
-	public boolean onBoom(Block e) {
-		furnace.getInventory().clear();
-		furnace.getInventory().addItem(Batrod.create());
+	protected void resetItemAt(int id) {
+		if(id == coreSlot){
+			ItemStack batrod = Batrod.create();
+			Batrod.setPower(batrod, getPower());
+			furnace.getInventory().setItem(id, batrod);
+		}
+	}
+
+	@Override
+	protected boolean doesExplode() {
 		return true;
 	}
 }

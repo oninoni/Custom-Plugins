@@ -3,6 +3,7 @@ package de.oninoni.OnionPower.Items;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -29,6 +30,7 @@ public class CustomsItems {
 		ItemStack pick = new ItemStack(Material.IRON_PICKAXE);
 		ItemMeta meta = pick.getItemMeta();
 		meta.setDisplayName("§4Internal Pickaxe");
+		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 		pick.setItemMeta(meta);
 		return pick;
 	}

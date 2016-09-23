@@ -139,6 +139,7 @@ public class MachineManager {
 	}
 	
 	public void onClose(InventoryCloseEvent e){
+		if(e.getInventory().getHolder() == null)return;
 		Machine machine = machines.get(e.getInventory().getHolder().getInventory().getLocation());
 		if(machine != null){
 			machine.onClose(e);
@@ -157,6 +158,7 @@ public class MachineManager {
 	public void onBreak(BlockBreakEvent e){
 		Location location = e.getBlock().getLocation();
 		if(machines.containsKey(location)){
+			machines.get(location).closeInventories();
 			machines.get(location).onBreak(e);
 			machines.remove(location);
 		}
@@ -168,6 +170,7 @@ public class MachineManager {
 		for (Block block : blocks) {
 			Location location = block.getLocation();
 			if(machines.containsKey(location)){
+				machines.get(location).closeInventories();
 				if(machines.get(location).onBoom(block)){
 					machines.remove(location);
 				}else{

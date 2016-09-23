@@ -3,15 +3,11 @@ package de.oninoni.OnionPower.Machines.DispenserBased;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
@@ -100,10 +96,6 @@ public class Sorter extends MachineDispenser{
 				dispenser.getInventory().setItem(5, CustomsItems.getGlassPane((byte) 11, "§9Blue Sorting Channel", lore));
 				dispenser.getInventory().setItem(7, CustomsItems.getGlassPane((byte) 4 , "§eYellow Sorting Channel", lore));
 				
-				for(HumanEntity viewer : dispenser.getInventory().getViewers()){
-					viewer.closeInventory();
-					viewer.openInventory(dispenser.getInventory());
-				}
 				saveFilters();
 			}
 		}, 1L);
@@ -313,29 +305,22 @@ public class Sorter extends MachineDispenser{
 			}
 		}
 	}
-
+	
 	@Override
-	public void onBreak(BlockEvent e) {
-		dispenser.getInventory().setItem(0, Batrod.create());
-		dispenser.getInventory().setItem(1, new ItemStack(Material.CHEST));
-		dispenser.getInventory().setItem(2, Batrod.create());
-		dispenser.getInventory().setItem(3, new ItemStack(Material.CHEST));
-		dispenser.getInventory().setItem(5, new ItemStack(Material.CHEST));
-		dispenser.getInventory().setItem(6, Batrod.create());
-		dispenser.getInventory().setItem(7, new ItemStack(Material.CHEST));
-		dispenser.getInventory().setItem(8, Batrod.create());
+	protected void resetItemAt(int id) {
+		if(id != 4){
+			if(id % 2 == 0){
+				ItemStack batrod = Batrod.create();
+				Batrod.setPower(batrod, getPower());
+				dispenser.getInventory().setItem(id, batrod);
+			}else{
+				dispenser.getInventory().setItem(id, new ItemStack(Material.CHEST));
+			}
+		}
 	}
-
+	
 	@Override
-	public boolean onBoom(Block e) {
-		dispenser.getInventory().clear();
-		Random r = new Random();
-		for(int i = 0; i < r.nextInt(4); i++){
-			dispenser.getInventory().addItem(Batrod.create());
-		}
-		for(int i = 0; i < r.nextInt(4); i++){
-			dispenser.getInventory().addItem(new ItemStack(Material.CHEST));
-		}
+	protected boolean doesExplode() {
 		return true;
 	}
 	

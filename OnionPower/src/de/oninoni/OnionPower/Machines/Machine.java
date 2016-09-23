@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -12,7 +13,7 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
-import org.bukkit.block.Dispenser;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -29,12 +30,13 @@ import com.darkblade12.particleeffect.ParticleEffect.OrdinaryColor;
 import de.oninoni.OnionPower.OnionPower;
 import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.PowerCore;
-import de.oninoni.OnionPower.Machines.DispenserBased.Miner;
 import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
 import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager;
 
 public abstract class Machine {
 
+	//TODO Copy Level of batrod
+	
 	protected static OnionPower plugin = OnionPower.get();
 	
 	protected int coreSlot;
@@ -73,7 +75,8 @@ public abstract class Machine {
 	
 	private MachineManager machineManager;
 	
-	private Location position;
+	protected Location position;
+	protected InventoryHolder invHolder;
 	
 	private Vector vec;
 	private String world;
@@ -112,6 +115,8 @@ public abstract class Machine {
 		this.position = position;
 		this.machineManager = machineManager;
 		
+		invHolder = (InventoryHolder) position.getBlock().getState();
+		
 		isLoaded = true;
 		
 		vec = position.toVector();
@@ -137,12 +142,44 @@ public abstract class Machine {
 	
 	protected abstract void updateDisplay();
 	
-	public abstract void onBreak(BlockEvent e);
-	public abstract boolean onBoom(Block e);
+	protected abstract void resetItemAt(int id);
+	protected abstract boolean doesExplode();
+
+	public void onBreak(BlockEvent e){
+		for(int i = 0; i < invHolder.getInventory().getSize(); i++){
+			resetItemAt(i);
+		}
+	}
+	
+	public boolean onBoom(Block e){
+		Random r = new Random();
+		for(int i = 0; i < invHolder.getInventory().getSize(); i++){
+			if(r.nextInt(2) == 0){
+				resetItemAt(i);
+			}else{
+				invHolder.getInventory().setItem(i, new ItemStack(Material.AIR));
+			}
+		}
+		return doesExplode();
+	}
 	
 	private boolean isLoaded;
 	
-	@SuppressWarnings("deprecation")
+	public void closeInventories(){
+		Object[] viewers = (invHolder).getInventory().getViewers().toArray();
+		for (Object humanEntity : viewers) {
+			((HumanEntity) humanEntity).closeInventory();
+		}
+	}
+	
+	public void updateInventories(){
+		Object[] viewers = (invHolder).getInventory().getViewers().toArray();
+		for (Object humanEntity : viewers) {
+			((HumanEntity) humanEntity).closeInventory();
+			((HumanEntity) humanEntity).openInventory(invHolder.getInventory());
+		}
+	}
+	
 	public static boolean canCreate(InventoryClickEvent e, String key, InventoryType type){
 		//plugin.getLogger().info("Type: " + key);
 		Material[] template = MachineTemplates.buildTemplates.get(key);
@@ -181,12 +218,6 @@ public abstract class Machine {
 			}
 			//Check normal Slots
 			if(template[i] != check.getType())return false;
-		}
-		
-		//Special Check for Miner
-		if(key == Miner.class.getName() && type == InventoryType.DISPENSER && !(((Dispenser) e.getInventory().getHolder()).getRawData() == 0)){
-			e.getWhoClicked().sendMessage("Miners can only be placed Downwards!");
-			return false;
 		}
 		
 		return true;

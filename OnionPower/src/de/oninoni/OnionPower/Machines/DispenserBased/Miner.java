@@ -4,12 +4,12 @@ import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.block.Block;
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.event.block.BlockEvent;
+import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.inventory.ItemStack;
 
+import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.CustomsItems;
 import de.oninoni.OnionPower.Machines.MachineDispenser;
 import de.oninoni.OnionPower.Machines.MachineManager;
@@ -32,10 +32,7 @@ public class Miner extends MachineDispenser{
 				dispenser.getInventory().setItem(7, CustomsItems.getMinerPickAxe());
 				dispenser.getInventory().setItem(8, CustomsItems.getGlassPane((byte) 2, "§4§kPossseidon§r §4§kstinkt!"));
 				
-				for(HumanEntity viewer : dispenser.getInventory().getViewers()){
-					viewer.closeInventory();
-					viewer.openInventory(dispenser.getInventory());
-				}
+				updateInventories();
 			}
 		}, 1L);
 		SetupPowerIO();
@@ -75,7 +72,12 @@ public class Miner extends MachineDispenser{
 	@Override
 	public void updateBlock() {
 		requestFromConnected();
-		//TODO Actual Mining
+		
+	}
+	
+	@Override
+	public void onMoveFrom(InventoryMoveItemEvent e) {
+		e.setCancelled(true);
 	}
 	
 	@Override
@@ -83,20 +85,24 @@ public class Miner extends MachineDispenser{
 		super.onClick(e);
 		e.setCancelled(true);
 	}
-
+	
 	@Override
-	public void onBreak(BlockEvent e) {
-		//TODO onBreak
-	}
-
-	@Override
-	public boolean onBoom(Block e) {
-		// TODO onBoom
-		return false;
+	protected void resetItemAt(int id) {
+		if(id == 1){
+			ItemStack batrod = Batrod.create();
+			Batrod.setPower(batrod, getPower());
+			dispenser.getInventory().setItem(id, batrod);
+		}else if(id == 4){
+			dispenser.getInventory().setItem(id, new ItemStack(Material.REDSTONE_BLOCK));
+		}else if(id == 7){
+			dispenser.getInventory().setItem(id, new ItemStack(Material.IRON_PICKAXE));
+		}else{
+			dispenser.getInventory().setItem(id, new ItemStack(Material.AIR));
+		}
 	}
 	
 	@Override
-	public void onMoveFrom(InventoryMoveItemEvent e) {
-		e.setCancelled(true);
+	protected boolean doesExplode() {
+		return true;
 	}
 }

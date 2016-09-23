@@ -5,14 +5,12 @@ import java.util.HashMap;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Furnace;
-import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 import de.oninoni.OnionPower.NMSAdapter;
-import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.PowerCore;
 import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
 
@@ -64,11 +62,6 @@ public abstract class MachineFurnace extends Machine{
 	@Override
 	public void onClose(InventoryCloseEvent e){
 		return;
-	}
-	
-	@Override
-	public void onBreak(BlockEvent e) {
-		furnace.getInventory().setItem(coreSlot, Batrod.create());
 	}
 	
 	@Override

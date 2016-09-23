@@ -5,8 +5,6 @@ import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -30,10 +28,8 @@ public class ElectricFurnace extends MachineFurnace {
 			public void run() {
 				furnace.getInventory().setItem(0, new ItemStack(Material.AIR));
 				furnace.getInventory().setItem(1, powerCore);
-				for(HumanEntity viewer : furnace.getInventory().getViewers()){
-					viewer.closeInventory();
-					viewer.openInventory(furnace.getInventory());
-				}
+
+				updateInventories();
 			}
 		}, 1L);
 	}
@@ -111,11 +107,18 @@ public class ElectricFurnace extends MachineFurnace {
 	public int getMaxPowerOutput() {
 		return 0;
 	}
-
+	
 	@Override
-	public boolean onBoom(Block e) {
-		furnace.getInventory().clear();
-		furnace.getInventory().addItem(Batrod.create());
+	protected void resetItemAt(int id) {
+		if(id == coreSlot){
+			ItemStack batrod = Batrod.create();
+			Batrod.setPower(batrod, getPower());
+			furnace.getInventory().setItem(id, batrod);
+		}
+	}
+	
+	@Override
+	protected boolean doesExplode() {
 		return true;
 	}
 }
