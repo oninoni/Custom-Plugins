@@ -1,13 +1,16 @@
 package de.oninoni.OnionPower.Machines.DispenserBased;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
 import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.CustomsItems;
@@ -17,6 +20,10 @@ import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
 
 public class Miner extends MachineDispenser{
 
+	private int idleTimer = 0;
+	
+	private static final int MAXRANGE = 128;
+	
 	public Miner(Location position, MachineManager machineManager, int power, HashMap<Integer, Upgrade> upgrades) {
 		super(position, machineManager, power, upgrades);
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
@@ -69,9 +76,43 @@ public class Miner extends MachineDispenser{
 		return 500;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void updateBlock() {
 		requestFromConnected();
+		if(idleTimer <= 0){
+			Vector direction = directions[directionAdapter[dispenser.getRawData()]];
+			int i;
+			for(i = 1; i <= MAXRANGE; i++){
+				Location newPos = position.clone();
+				newPos.add(direction.clone().multiply(i));
+				Block b = position.getWorld().getBlockAt(newPos);
+				if(b!= null && b.getType() != Material.AIR){
+					if(b.getType() == Material.BEDROCK)break;
+					if(b.getType() == Material.WATER || b.getType() == Material.STATIONARY_WATER)continue;
+					if(b.getType() == Material.LAVA || b.getType() == Material.STATIONARY_LAVA)continue;
+					Collection<ItemStack> drops = b.getDrops();
+					MinerShot shot = new MinerShot(this, b);
+					Runnable r = new Runnable() {
+						@Override
+						public void run() {
+							if(shot.update())return;
+							Bukkit.getScheduler().runTaskLater(plugin, this, 1L);
+						}
+					};
+					idleTimer = i / 2 + 1;
+					Bukkit.getScheduler().runTaskLater(plugin, r, 1L);
+					//b.setType(Material.AIR);
+					//position.getWorld().spawnParticle(Particle.PORTAL, newPos.clone().add(0.5, 0.5, 0.5), 10);
+					break;
+				}
+			}
+			if(i > MAXRANGE){
+				idleTimer = 20;
+			}
+		}else{
+			idleTimer--;
+		}
 		
 	}
 	
