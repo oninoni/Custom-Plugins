@@ -63,7 +63,7 @@ public class Miner extends MachineDispenser{
 
 	@Override
 	public String getDisplayName() {
-		return "§6§lVertical Miner";
+		return "§6§lElectrical Stripminer";
 	}
 
 	@Override
