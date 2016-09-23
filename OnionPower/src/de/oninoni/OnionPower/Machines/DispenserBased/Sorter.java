@@ -97,6 +97,7 @@ public class Sorter extends MachineDispenser{
 				dispenser.getInventory().setItem(7, CustomsItems.getGlassPane((byte) 4 , "§eYellow Sorting Channel", lore));
 				
 				saveFilters();
+				reOpenInventories();
 			}
 		}, 1L);
 		setupPowerIO();

@@ -29,7 +29,7 @@ public class ElectricFurnace extends MachineFurnace {
 				furnace.getInventory().setItem(0, new ItemStack(Material.AIR));
 				furnace.getInventory().setItem(1, powerCore);
 
-				updateInventories();
+				reOpenInventories();
 			}
 		}, 1L);
 	}

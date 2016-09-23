@@ -45,7 +45,6 @@ public class MinerShot {
 			}
 		}
 		if(position.clone().subtract(target.getLocation().toVector()).length() < 1){
-			plugin.getLogger().info("PEW!");
 			target.setType(Material.AIR);
 			position.getWorld().playSound(target.getLocation().clone().add(0.5, 0.5, 0.5), Sound.ENTITY_ENDERMEN_TELEPORT, 0.2f, 0.8f);
 			return true;

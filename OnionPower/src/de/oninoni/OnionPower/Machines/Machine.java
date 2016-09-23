@@ -14,6 +14,7 @@ import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -136,15 +137,21 @@ public abstract class Machine {
 	public abstract void updateBlock();
 	
 	public abstract void onClick(InventoryClickEvent e);
-	public abstract void onClose(InventoryCloseEvent e);
 	public abstract void onMoveInto(InventoryMoveItemEvent e);
 	public abstract void onMoveFrom(InventoryMoveItemEvent e);
-	
-	protected abstract void updateDisplay();
+
+	public abstract void onClose(InventoryCloseEvent e);
 	
 	protected abstract void resetItemAt(int id);
 	protected abstract boolean doesExplode();
 
+	public void updateDisplay() {
+		ItemStack powerCore = invHolder.getInventory().getItem(coreSlot);
+		PowerCore.setPowerLevel(powerCore, this);
+		invHolder.getInventory().setItem(coreSlot, powerCore);
+		updateInventories();
+	}
+	
 	public void onBreak(BlockEvent e){
 		for(int i = 0; i < invHolder.getInventory().getSize(); i++){
 			resetItemAt(i);
@@ -173,6 +180,13 @@ public abstract class Machine {
 	}
 	
 	public void updateInventories(){
+		Object[] viewers = (invHolder).getInventory().getViewers().toArray();
+		for (Object humanEntity : viewers) {
+			((Player) humanEntity).updateInventory();
+		}
+	}
+	
+	public void reOpenInventories(){
 		Object[] viewers = (invHolder).getInventory().getViewers().toArray();
 		for (Object humanEntity : viewers) {
 			((HumanEntity) humanEntity).closeInventory();
@@ -401,7 +415,7 @@ public abstract class Machine {
 	}
 	
 	protected void dechargeRod(ItemStack item){
-		if(Batrod.check(item) && power != getMaxPower()){
+		if(Batrod.check(item) && power < getMaxPower()){
 			int rodPower = Batrod.readPower(item);
 			int powerTransfered = Math.min(getMaxPower() - power, Math.min(rodPower, getMaxPowerInput()));
 			Batrod.setPower(item, rodPower - powerTransfered);

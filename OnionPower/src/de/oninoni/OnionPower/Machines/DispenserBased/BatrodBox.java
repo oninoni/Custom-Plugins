@@ -28,7 +28,7 @@ public class BatrodBox extends MachineDispenser{
 				dispenser.getInventory().setItem(coreSlot - 1, new ItemStack(Material.STAINED_GLASS_PANE));
 				dispenser.getInventory().setItem(coreSlot + 1, new ItemStack(Material.STAINED_GLASS_PANE));
 
-				updateInventories();
+				reOpenInventories();
 			}
 		}, 1L);
 		setupPowerIO();

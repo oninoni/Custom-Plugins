@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
@@ -39,7 +40,7 @@ public class Miner extends MachineDispenser{
 				dispenser.getInventory().setItem(7, CustomsItems.getMinerPickAxe());
 				dispenser.getInventory().setItem(8, CustomsItems.getGlassPane((byte) 2, "§4§kPossseidon§r §4§kstinkt!"));
 				
-				updateInventories();
+				reOpenInventories();
 			}
 		}, 1L);
 		SetupPowerIO();
@@ -83,32 +84,43 @@ public class Miner extends MachineDispenser{
 		if(idleTimer <= 0){
 			Vector direction = directions[directionAdapter[dispenser.getRawData()]];
 			int i;
-			for(i = 1; i <= MAXRANGE; i++){
-				Location newPos = position.clone();
-				newPos.add(direction.clone().multiply(i));
-				Block b = position.getWorld().getBlockAt(newPos);
-				if(b!= null && b.getType() != Material.AIR){
-					if(b.getType() == Material.BEDROCK)break;
-					if(b.getType() == Material.WATER || b.getType() == Material.STATIONARY_WATER)continue;
-					if(b.getType() == Material.LAVA || b.getType() == Material.STATIONARY_LAVA)continue;
-					Collection<ItemStack> drops = b.getDrops();
-					MinerShot shot = new MinerShot(this, b);
-					Runnable r = new Runnable() {
-						@Override
-						public void run() {
-							if(shot.update())return;
-							Bukkit.getScheduler().runTaskLater(plugin, this, 1L);
+			Block targetInventoryBlock = position.clone().subtract(direction).getBlock();
+			if(targetInventoryBlock.getState() instanceof InventoryHolder){
+				InventoryHolder targetInventory = (InventoryHolder) targetInventoryBlock.getState();
+				for(i = 1; i <= MAXRANGE; i++){
+					Location newPos = position.clone();
+					newPos.add(direction.clone().multiply(i));
+					Block b = newPos.getBlock();
+					if(b!= null && b.getType() != Material.AIR){
+						if(b.getType() == Material.BEDROCK)break;
+						if(b.getType() == Material.WATER || b.getType() == Material.STATIONARY_WATER)continue;
+						if(b.getType() == Material.LAVA || b.getType() == Material.STATIONARY_LAVA)continue;
+						double distance = position.distance(newPos);
+						if(getPower() > 50 * distance){
+							Collection<ItemStack> drops = b.getDrops();
+							for (ItemStack itemStack : drops) {
+								targetInventory.getInventory().addItem(itemStack);
+							}
+							MinerShot shot = new MinerShot(this, b);
+							Runnable r = new Runnable() {
+								@Override
+								public void run() {
+									power -= 50;
+									if(shot.update())return;
+									Bukkit.getScheduler().runTaskLater(plugin, this, 1L);
+								}
+							};
+							idleTimer = i / 2 + 1;
+							Bukkit.getScheduler().runTaskLater(plugin, r, 1L);
+						}else{
+							idleTimer = 20;
 						}
-					};
-					idleTimer = i / 2 + 1;
-					Bukkit.getScheduler().runTaskLater(plugin, r, 1L);
-					//b.setType(Material.AIR);
-					//position.getWorld().spawnParticle(Particle.PORTAL, newPos.clone().add(0.5, 0.5, 0.5), 10);
-					break;
+						break;
+					}
 				}
-			}
-			if(i > MAXRANGE){
-				idleTimer = 20;
+				if(i > MAXRANGE){
+					idleTimer = 20;
+				}
 			}
 		}else{
 			idleTimer--;

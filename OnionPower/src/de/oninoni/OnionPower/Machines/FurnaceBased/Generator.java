@@ -28,7 +28,7 @@ public class Generator extends MachineFurnace {
 				furnace.getInventory().setItem(1, new ItemStack(Material.AIR));
 				furnace.getInventory().setItem(coreSlot, powerCore);
 
-				updateInventories();
+				reOpenInventories();
 			}
 		}, 1L);
 	}

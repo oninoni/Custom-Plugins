@@ -8,10 +8,8 @@ import org.bukkit.block.Dispenser;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
-import org.bukkit.inventory.ItemStack;
 
 import de.oninoni.OnionPower.NMSAdapter;
-import de.oninoni.OnionPower.Items.PowerCore;
 import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
 
 public abstract class MachineDispenser extends Machine{
@@ -42,6 +40,13 @@ public abstract class MachineDispenser extends Machine{
 		return 64000;
 	}
 	
+	public void onClick(InventoryClickEvent e) {
+		int convertSlot = e.getView().convertSlot(e.getRawSlot());
+		if(convertSlot == coreSlot){
+			e.setCancelled(true);
+		}
+	}
+	
 	@Override
 	public void onMoveFrom(InventoryMoveItemEvent e) {
 		return;
@@ -52,22 +57,9 @@ public abstract class MachineDispenser extends Machine{
 		return;
 	}
 	
-	public void onClick(InventoryClickEvent e) {
-		int convertSlot = e.getView().convertSlot(e.getRawSlot());
-		if(convertSlot == coreSlot){
-			e.setCancelled(true);
-		}
-	}
-	
 	@Override
 	public void onClose(InventoryCloseEvent e){
 		return;
-	}
-	
-	@Override
-	protected void updateDisplay() {
-		ItemStack powerCore = dispenser.getInventory().getItem(coreSlot);
-		PowerCore.setPowerLevel(powerCore, this);
 	}
 	
 	@Override

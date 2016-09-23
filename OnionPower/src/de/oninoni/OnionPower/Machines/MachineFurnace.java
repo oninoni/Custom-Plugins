@@ -8,10 +8,8 @@ import org.bukkit.block.Furnace;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
-import org.bukkit.inventory.ItemStack;
 
 import de.oninoni.OnionPower.NMSAdapter;
-import de.oninoni.OnionPower.Items.PowerCore;
 import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
 
 public abstract class MachineFurnace extends Machine{
@@ -62,12 +60,6 @@ public abstract class MachineFurnace extends Machine{
 	@Override
 	public void onClose(InventoryCloseEvent e){
 		return;
-	}
-	
-	@Override
-	public void updateDisplay() {
-		ItemStack powerCore = furnace.getInventory().getItem(coreSlot);
-		PowerCore.setPowerLevel(powerCore, this);
 	}
 	
 	@Override
