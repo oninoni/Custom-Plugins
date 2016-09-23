@@ -144,6 +144,6 @@ public class Miner extends MachineDispenser{
 	
 	@Override
 	protected boolean doesExplode() {
-		return true;
+		return false;
 	}
 }
