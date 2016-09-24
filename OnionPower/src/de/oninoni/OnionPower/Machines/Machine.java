@@ -25,9 +25,6 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import com.darkblade12.particleeffect.ParticleEffect;
-import com.darkblade12.particleeffect.ParticleEffect.OrdinaryColor;
-
 import de.oninoni.OnionPower.OnionPower;
 import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.PowerCore;
@@ -192,6 +189,28 @@ public abstract class Machine {
 			((HumanEntity) humanEntity).closeInventory();
 			((HumanEntity) humanEntity).openInventory(invHolder.getInventory());
 		}
+	}
+	
+	public static int getBatrodPower(InventoryClickEvent e, String key, InventoryType type){
+		int result = 0;
+		
+		Material[] template = MachineTemplates.buildTemplates.get(key);
+		
+		for (int i = 0; i < template.length; i++) {
+			Material material = template[i];
+			//plugin.getLogger().info("I = " + i + " Mat = " + material + " Item = " + e.getView().getTopInventory().getContents());
+			if(material == Material.BARRIER){
+				ItemStack batrod;
+				if(e.getSlot() == i){
+					batrod = e.getCursor();
+				}else{
+					batrod = e.getInventory().getItem(i);
+				}
+				result += Batrod.readPower(batrod);
+			}
+		}
+		
+		return result;
 	}
 	
 	public static boolean canCreate(InventoryClickEvent e, String key, InventoryType type){
@@ -447,6 +466,6 @@ public abstract class Machine {
 	
 	protected void renderParticleSideColored(Vector d, Color c){
 		Vector direction = d.clone().add(new Vector(0.5, 0.5, 0.5)).subtract(d.clone().multiply(0.4));
-		ParticleEffect.REDSTONE.display(new OrdinaryColor(c), position.clone().add(direction), 16);
+		position.getWorld().spawnParticle(Particle.REDSTONE, position.clone().add(direction), 0, c.getRed() / 255.0f + 0.0001f, c.getBlue() / 255.0f, c.getGreen() / 255.0f, 1);
 	}
 }

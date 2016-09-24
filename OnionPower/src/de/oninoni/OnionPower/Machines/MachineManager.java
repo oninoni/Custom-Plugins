@@ -99,15 +99,40 @@ public class MachineManager {
 		{
 			Location location = e.getView().getTopInventory().getLocation();
 			if (Generator.canCreate(e, Generator.class.getName(), InventoryType.FURNACE))
-				machines.put(location, new Generator(location, this, 0, new HashMap<>()));
+				machines.put(location, new Generator(
+					location, 
+					this, 
+					Generator.getBatrodPower(e, Generator.class.getName(), InventoryType.FURNACE), 
+					new HashMap<>()
+				));
 			if (ElectricFurnace.canCreate(e, ElectricFurnace.class.getName(), InventoryType.FURNACE))
-				machines.put(location, new ElectricFurnace(location, this, 0, new HashMap<>()));
+				machines.put(location, new ElectricFurnace(
+					location, 
+					this, 
+					ElectricFurnace.getBatrodPower(e, ElectricFurnace.class.getName(), InventoryType.FURNACE),
+					new HashMap<>()
+				));
 			if (BatrodBox.canCreate(e, BatrodBox.class.getName(), InventoryType.DISPENSER))
-				machines.put(location, new BatrodBox(location, this, 0, new HashMap<>()));
+				machines.put(location, new BatrodBox(
+					location,
+					this, 
+					BatrodBox.getBatrodPower(e, BatrodBox.class.getName(), InventoryType.DISPENSER),
+					new HashMap<>()
+				));
 			if (Sorter.canCreate(e, Sorter.class.getName(), InventoryType.DISPENSER))
-				machines.put(location, new Sorter(location, this, 0, new HashMap<>()));
+				machines.put(location, new Sorter(
+					location,
+					this,
+					Sorter.getBatrodPower(e, Sorter.class.getName(), InventoryType.DISPENSER),
+					new HashMap<>()
+				));
 			if (Miner.canCreate(e, Miner.class.getName(), InventoryType.DISPENSER))
-				machines.put(location, new Miner(location, this, 0, new HashMap<>()));
+				machines.put(location, new Miner(
+					location,
+					this,
+					Miner.getBatrodPower(e, Miner.class.getName(), InventoryType.DISPENSER),
+					new HashMap<>()
+				));
 			
 			if(machines.get(e.getInventory().getLocation()) != null	)
 				saveData();
@@ -188,7 +213,6 @@ public class MachineManager {
 			if (pos.getChunk().getX() == e.getChunk().getX() && 
 				pos.getChunk().getZ() == e.getChunk().getZ() &&
 				pos.getWorld().getName().equalsIgnoreCase(e.getWorld().getName())) {
-				Bukkit.broadcastMessage("LOADED CRAZY SHIT");
 				machines.get(pos).load();
 			}	
 	}
@@ -216,7 +240,6 @@ public class MachineManager {
 			if (pos.getChunk().getX() == e.getChunk().getX() && 
 				pos.getChunk().getZ() == e.getChunk().getZ() &&
 				pos.getWorld().getName().equalsIgnoreCase(e.getWorld().getName())) {
-				Bukkit.broadcastMessage("UNLOADED HOLY SHIT");
 				machines.get(pos).unload();
 			}
 		}

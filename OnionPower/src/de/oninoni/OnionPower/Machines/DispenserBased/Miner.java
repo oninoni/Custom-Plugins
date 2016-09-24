@@ -96,7 +96,7 @@ public class Miner extends MachineDispenser{
 						if(b.getType() == Material.WATER || b.getType() == Material.STATIONARY_WATER)continue;
 						if(b.getType() == Material.LAVA || b.getType() == Material.STATIONARY_LAVA)continue;
 						double distance = position.distance(newPos);
-						if(getPower() > 50 * distance){
+						if(getPower() > 5 * distance){
 							Collection<ItemStack> drops = b.getDrops();
 							for (ItemStack itemStack : drops) {
 								targetInventory.getInventory().addItem(itemStack);
@@ -105,7 +105,7 @@ public class Miner extends MachineDispenser{
 							Runnable r = new Runnable() {
 								@Override
 								public void run() {
-									power -= 50;
+									power -= 5;
 									if(shot.update())return;
 									Bukkit.getScheduler().runTaskLater(plugin, this, 1L);
 								}
