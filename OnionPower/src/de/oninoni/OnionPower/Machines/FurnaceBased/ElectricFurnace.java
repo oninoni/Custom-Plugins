@@ -123,8 +123,12 @@ public class ElectricFurnace extends MachineFurnace {
 	}
 
 	@Override
-	protected void spawnDesignEntities() {
-		// TODO Auto-generated method stub
+	public int getDesignEntityCount() {
+		return 0;
+	}
+
+	@Override
+	public void spawnDesignEntity(int id) {
 		
 	}
 }

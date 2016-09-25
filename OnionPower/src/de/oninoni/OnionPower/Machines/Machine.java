@@ -115,7 +115,6 @@ public abstract class Machine {
 	private void initValues(Location position, MachineManager machineManager, HashMap<Integer, Upgrade> upgrades){
 		setCoreSlot();
 		
-		designEntities = new ArrayList<>();
 		powerCore = PowerCore.create(this);
 		
 		this.position = position;
@@ -128,9 +127,11 @@ public abstract class Machine {
 		vec = position.toVector();
 		world = position.getWorld().getName();
 		
-		upgradeManager = new UpgradeManager(this, upgrades);
-		
+		designEntities = new ArrayList<>();
+		designEntities.ensureCapacity(getDesignEntityCount());
 		spawnDesignEntities();
+		
+		upgradeManager = new UpgradeManager(this, upgrades);
 	}
 	
 	protected abstract boolean isMaterial(Material material);
@@ -143,7 +144,23 @@ public abstract class Machine {
 	public abstract int getMaxPowerInput();
 	public abstract void updateBlock();
 	
-	protected abstract void spawnDesignEntities();
+	public abstract int getDesignEntityCount();
+	
+	public abstract void spawnDesignEntity(int id);
+	
+	protected void setEntity(int id, ArmorStand a) {
+		if(designEntities.size() <= id){
+			designEntities.add(a);
+		}else{
+			designEntities.set(id, a);
+		}
+	}
+	
+	protected void spawnDesignEntities() {
+		for(int i = 0; i < getDesignEntityCount(); i++){
+			spawnDesignEntity(i);
+		}
+	}
 	
 	public abstract void onClick(InventoryClickEvent e);
 	public abstract void onMoveInto(InventoryMoveItemEvent e);
