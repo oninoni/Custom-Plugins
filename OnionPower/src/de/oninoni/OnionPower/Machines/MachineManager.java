@@ -24,6 +24,8 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
+import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.util.Vector;
 
 import de.oninoni.OnionPower.OnionPower;
 import de.oninoni.OnionPower.Machines.DispenserBased.BatrodBox;
@@ -40,6 +42,15 @@ public class MachineManager {
 	
 	private HashMap<Location, Integer> displayTimeout;
 	private HashMap<Location, ArmorStand> displayEntites;
+	
+	public static final Vector[] directions = {
+			new Vector( 1,  0,  0),
+			new Vector( 0,  1,  0),
+			new Vector( 0,  0,  1),
+			new Vector(-1,  0,  0),
+			new Vector( 0, -1,  0),
+			new Vector( 0,  0, -1)
+	};
 	
 	public MachineManager() {
 		machines = new HashMap<>();
@@ -93,6 +104,38 @@ public class MachineManager {
 			ArmorStand displayEntity = displayEntites.get(location);
 			displayEntity.remove();
 		}
+	}
+	
+	public ArrayList<Machine> getAdjacentMachines(Machine m, int forbiddenSide){
+		int[] forbiddenSides = {forbiddenSide};
+		return getAdjacentMachines(m, forbiddenSides);
+	}
+	
+	public ArrayList<Machine> getAdjacentMachines(Machine m, int[] forbiddenSides){
+		ArrayList<Machine> adjacents = new ArrayList<>();
+		for (int i = 0; i < directions.length; i++) {
+			Location l = m.getPosition().clone().add(directions[i]);
+			if(machines.containsKey(l)){
+				adjacents.add(machines.get(l));
+			}
+		}
+		return adjacents;
+	}
+	
+	public ArrayList<InventoryHolder> getAdjacentInventoryHolders(Machine m, int forbiddenSide){
+		int[] forbiddenSides = {forbiddenSide};
+		return getAdjacentInventoryHolders(m, forbiddenSides);
+	}
+	
+	public ArrayList<InventoryHolder> getAdjacentInventoryHolders(Machine m, int[] forbiddenSides){
+		ArrayList<InventoryHolder> adjacents = new ArrayList<>();
+		for (int i = 0; i < directions.length; i++) {
+			Location l = m.getPosition().clone().add(directions[i]);
+			if(l.getBlock().getState() instanceof InventoryHolder){
+				adjacents.add((InventoryHolder) l.getBlock().getState());
+			}
+		}
+		return adjacents;
 	}
 	
 	public void onClick(InventoryClickEvent e) {

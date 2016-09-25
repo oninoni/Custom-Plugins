@@ -1,5 +1,6 @@
 package de.oninoni.OnionPower.Machines.DispenserBased;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
@@ -83,49 +84,68 @@ public class Miner extends MachineDispenser{
 	public void updateBlock() {
 		requestFromConnected();
 		if(idleTimer <= 0){
-			Vector direction = directions[directionAdapter[dispenser.getRawData()]];
+			Vector direction = MachineManager.directions[directionAdapter[dispenser.getRawData()]];
 			int i;
-			Block targetInventoryBlock = position.clone().subtract(direction).getBlock();
-			if(targetInventoryBlock.getState() instanceof InventoryHolder){
-				InventoryHolder targetInventory = (InventoryHolder) targetInventoryBlock.getState();
-				for(i = 1; i <= MAXRANGE; i++){
-					Location newPos = position.clone();
-					newPos.add(direction.clone().multiply(i));
-					Block b = newPos.getBlock();
-					if(b!= null && b.getType() != Material.AIR){
-						if(b.getType() == Material.BEDROCK)break;
-						if(b.getType() == Material.WATER || b.getType() == Material.STATIONARY_WATER)continue;
-						if(b.getType() == Material.LAVA || b.getType() == Material.STATIONARY_LAVA)continue;
-						if(b.getState() instanceof InventoryHolder || b.getState() instanceof Jukebox){
-							Bukkit.broadcastMessage(""+((InventoryHolder)b.getState()).getInventory().getItem(0));
-							continue;
-						};
-						double distance = position.distance(newPos);
-						if(getPower() > 5 * distance){
-							Collection<ItemStack> drops = b.getDrops();
-							for (ItemStack itemStack : drops) {
-								targetInventory.getInventory().addItem(itemStack);
-							}
-							MinerShot shot = new MinerShot(this, b);
-							Runnable r = new Runnable() {
-								@Override
-								public void run() {
-									power -= 5;
-									if(shot.update())return;
-									Bukkit.getScheduler().runTaskLater(plugin, this, 1L);
+			ArrayList<InventoryHolder> targetInventories = plugin.getMachineManager().getAdjacentInventoryHolders(this, dispenser.getRawData());
+			for(i = 1; i <= MAXRANGE; i++){
+				Location newPos = position.clone();
+				newPos.add(direction.clone().multiply(i));
+				Block b = newPos.getBlock();
+				if(b!= null && b.getType() != Material.AIR){
+					if(b.getType() == Material.BEDROCK)break;
+					if(b.getType() == Material.WATER || b.getType() == Material.STATIONARY_WATER)continue;
+					if(b.getType() == Material.LAVA || b.getType() == Material.STATIONARY_LAVA)continue;
+					if(b.getState() instanceof InventoryHolder || b.getState() instanceof Jukebox){
+						Bukkit.broadcastMessage(""+((InventoryHolder)b.getState()).getInventory().getItem(0));
+						continue;
+					};
+					double distance = position.distance(newPos);
+					if(getPower() > 5 * distance){
+						
+						MinerShot shot = new MinerShot(this, b);
+						Runnable r = new Runnable() {
+							@Override
+							public void run() {
+								power -= 5;
+								if(shot.update()){
+									Collection<ItemStack> drops = b.getDrops();
+									ArrayList<ItemStack> totalLeftOver = new ArrayList<>();
+									for (ItemStack i : drops) {
+										ItemStack leftOver = i;
+										for (InventoryHolder inventoryHolder : targetInventories) {
+											HashMap<Integer, ItemStack> overflow = inventoryHolder.getInventory().addItem(leftOver);
+											if(overflow.size() == 0){
+												leftOver = null;
+												break;
+											}else{
+												leftOver = overflow.get(overflow.keySet().toArray()[0]);
+											}
+										}
+										if(leftOver != null){
+											totalLeftOver.add(leftOver);
+										}
+									}
+									if(totalLeftOver.size() > 0){
+										idleTimer = 20;
+										for (ItemStack itemStack : totalLeftOver) {
+											position.getWorld().dropItem(position, itemStack);
+										}
+									}
+									return;
 								}
-							};
-							idleTimer = i / 2 + 1;
-							Bukkit.getScheduler().runTaskLater(plugin, r, 1L);
-						}else{
-							idleTimer = 20;
-						}
-						break;
+								Bukkit.getScheduler().runTaskLater(plugin, this, 1L);
+							}
+						};
+						idleTimer = i / 2 + 1;
+						Bukkit.getScheduler().runTaskLater(plugin, r, 1L);
+					}else{
+						idleTimer = 20;
 					}
+					break;
 				}
-				if(i > MAXRANGE){
-					idleTimer = 20;
-				}
+			}
+			if(i > MAXRANGE){
+				idleTimer = 20;
 			}
 		}else{
 			idleTimer--;

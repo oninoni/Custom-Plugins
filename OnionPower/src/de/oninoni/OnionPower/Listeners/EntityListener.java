@@ -12,7 +12,6 @@ public class EntityListener implements Listener{
 	
 	@EventHandler
 	public void onDeath(EntityDamageEvent e){
-		plugin.getLogger().info("LOL DIES!");
 		//plugin.getMachineManager().onEntityDeath(e);
 		//TODO Respawn Entities when they get kill doh!
 	}

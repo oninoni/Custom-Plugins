@@ -191,7 +191,7 @@ public class Sorter extends MachineDispenser{
 			}else if(isInFilter(material, 3)){	// Yellow Filter
 				target = dispenser.getLocation().add(filterDirections[directionAdapter[dispenser.getRawData()]][3]);
 			}else{								// No Filter
-				target = dispenser.getLocation().add(directions[directionAdapter[dispenser.getRawData()]]);
+				target = dispenser.getLocation().add(MachineManager.directions[directionAdapter[dispenser.getRawData()]]);
 			}
 			int itemCountMoved = pushOneItemInto(4, dispenser.getInventory(), target);
 			if(itemCountMoved > -1){

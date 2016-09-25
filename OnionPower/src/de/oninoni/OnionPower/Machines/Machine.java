@@ -51,15 +51,6 @@ public abstract class Machine {
 	
 	private static final int MAX_CABLE_LENGTH = 16;
 	
-	protected static final Vector[] directions = {
-			new Vector( 1,  0,  0),
-			new Vector( 0,  1,  0),
-			new Vector( 0,  0,  1),
-			new Vector(-1,  0,  0),
-			new Vector( 0, -1,  0),
-			new Vector( 0,  0, -1)
-	};
-	
 	protected boolean[] allowedInputs = {
 		true,
 		true,
@@ -305,9 +296,10 @@ public abstract class Machine {
 		for (int i = 0; i <= MAX_CABLE_LENGTH; i++) {
 			for (Location p : current){
 				blockDistance.put(p, i);			
-				for (int j = 0; j < directions.length; j++){
+				plugin.getMachineManager();
+				for (int j = 0; j < MachineManager.directions.length; j++){
 					if(i == 0 && !allowedInputs[j])continue;
-					Vector dir = directions[j];
+					Vector dir = MachineManager.directions[j];
 					Location offsetPosition = p.clone();
 					offsetPosition.add(dir);					
 					if (!blockDistance.containsKey(offsetPosition)) {
@@ -317,7 +309,7 @@ public abstract class Machine {
 							machinepath.machine = machine;
 							Location backtrack = offsetPosition.clone();
 							for (int k = i; k >= 1; k--) {								
-								for (Vector back : directions) {
+								for (Vector back : MachineManager.directions) {
 									Location backPosition = backtrack.clone();
 									backPosition.add(back);
 									Integer dis = blockDistance.get(backPosition);									
