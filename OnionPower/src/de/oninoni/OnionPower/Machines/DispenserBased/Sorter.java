@@ -324,5 +324,11 @@ public class Sorter extends MachineDispenser{
 	protected boolean doesExplode() {
 		return true;
 	}
+
+	@Override
+	protected void spawnDesignEntities() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

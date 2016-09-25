@@ -12,6 +12,7 @@ import com.comphenix.protocol.ProtocolManager;
 import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Listeners.BlockBreakListener;
 import de.oninoni.OnionPower.Listeners.ChunkListener;
+import de.oninoni.OnionPower.Listeners.EntityListener;
 import de.oninoni.OnionPower.Listeners.InventoryListener;
 import de.oninoni.OnionPower.Listeners.PlayerListener;
 import de.oninoni.OnionPower.Machines.MachineManager;
@@ -41,6 +42,9 @@ public class OnionPower extends JavaPlugin {
 		
 		PlayerListener playerListener = new PlayerListener();
 		getServer().getPluginManager().registerEvents(playerListener, this);
+		
+		EntityListener entityListener = new EntityListener();
+		getServer().getPluginManager().registerEvents(entityListener, this);
 		
 		machineManager = new MachineManager();
 		

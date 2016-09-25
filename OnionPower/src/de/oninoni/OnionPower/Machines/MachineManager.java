@@ -14,6 +14,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -36,11 +37,13 @@ public class MachineManager {
 	private static OnionPower plugin = OnionPower.get();
 	
 	private HashMap<Location, Machine> machines;
+	
 	private HashMap<Location, Integer> displayTimeout;
 	private HashMap<Location, ArmorStand> displayEntites;
 	
 	public MachineManager() {
 		machines = new HashMap<>();
+		
 		displayTimeout = new HashMap<>();
 		displayEntites = new HashMap<>();
 	}
@@ -235,12 +238,23 @@ public class MachineManager {
 		}
 	}
 	
-	public void onUnload(ChunkUnloadEvent e){		
+	public void onUnload(ChunkUnloadEvent e){
 		for (Location pos : machines.keySet()) {
 			if (pos.getChunk().getX() == e.getChunk().getX() && 
 				pos.getChunk().getZ() == e.getChunk().getZ() &&
 				pos.getWorld().getName().equalsIgnoreCase(e.getWorld().getName())) {
 				machines.get(pos).unload();
+			}
+		}
+	}
+	
+	public void onEntityDeath(EntityDeathEvent e){
+		for (Location pos : machines.keySet()) {
+			ArrayList<ArmorStand> designEntities = machines.get(pos).getDesignEntities();
+			for (ArmorStand armorStand : designEntities) {
+				if(e.getEntity().getUniqueId() == armorStand.getUniqueId()){
+					Bukkit.broadcastMessage("LOL it died!");
+				}
 			}
 		}
 	}

@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.Jukebox;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.InventoryHolder;
@@ -95,6 +96,10 @@ public class Miner extends MachineDispenser{
 						if(b.getType() == Material.BEDROCK)break;
 						if(b.getType() == Material.WATER || b.getType() == Material.STATIONARY_WATER)continue;
 						if(b.getType() == Material.LAVA || b.getType() == Material.STATIONARY_LAVA)continue;
+						if(b.getState() instanceof InventoryHolder || b.getState() instanceof Jukebox){
+							Bukkit.broadcastMessage(""+((InventoryHolder)b.getState()).getInventory().getItem(0));
+							continue;
+						};
 						double distance = position.distance(newPos);
 						if(getPower() > 5 * distance){
 							Collection<ItemStack> drops = b.getDrops();
@@ -157,5 +162,11 @@ public class Miner extends MachineDispenser{
 	@Override
 	protected boolean doesExplode() {
 		return false;
+	}
+
+	@Override
+	protected void spawnDesignEntities() {
+		// TODO Auto-generated method stub
+		
 	}
 }

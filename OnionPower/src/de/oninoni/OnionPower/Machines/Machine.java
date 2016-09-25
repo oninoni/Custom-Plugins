@@ -13,6 +13,7 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockEvent;
@@ -37,6 +38,12 @@ public abstract class Machine {
 	
 	protected static OnionPower plugin = OnionPower.get();
 	
+	protected ArrayList<ArmorStand> designEntities;
+	
+	public ArrayList<ArmorStand> getDesignEntities() {
+		return designEntities;
+	}
+
 	protected int coreSlot;
 	protected ItemStack powerCore;
 	
@@ -108,6 +115,7 @@ public abstract class Machine {
 	private void initValues(Location position, MachineManager machineManager, HashMap<Integer, Upgrade> upgrades){
 		setCoreSlot();
 		
+		designEntities = new ArrayList<>();
 		powerCore = PowerCore.create(this);
 		
 		this.position = position;
@@ -121,6 +129,8 @@ public abstract class Machine {
 		world = position.getWorld().getName();
 		
 		upgradeManager = new UpgradeManager(this, upgrades);
+		
+		spawnDesignEntities();
 	}
 	
 	protected abstract boolean isMaterial(Material material);
@@ -132,6 +142,8 @@ public abstract class Machine {
 	public abstract int getMaxPowerOutput();
 	public abstract int getMaxPowerInput();
 	public abstract void updateBlock();
+	
+	protected abstract void spawnDesignEntities();
 	
 	public abstract void onClick(InventoryClickEvent e);
 	public abstract void onMoveInto(InventoryMoveItemEvent e);
@@ -466,6 +478,6 @@ public abstract class Machine {
 	
 	protected void renderParticleSideColored(Vector d, Color c){
 		Vector direction = d.clone().add(new Vector(0.5, 0.5, 0.5)).subtract(d.clone().multiply(0.4));
-		position.getWorld().spawnParticle(Particle.REDSTONE, position.clone().add(direction), 0, c.getRed() / 255.0f + 0.0001f, c.getBlue() / 255.0f, c.getGreen() / 255.0f, 1);
+		position.getWorld().spawnParticle(Particle.REDSTONE, position.clone().add(direction), 0, c.getRed() / 255.0f + 0.01f, c.getGreen() / 255.0f, c.getBlue() / 255.0f, 1);
 	}
 }

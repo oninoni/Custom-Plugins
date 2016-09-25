@@ -121,4 +121,10 @@ public class ElectricFurnace extends MachineFurnace {
 	protected boolean doesExplode() {
 		return true;
 	}
+
+	@Override
+	protected void spawnDesignEntities() {
+		// TODO Auto-generated method stub
+		
+	}
 }

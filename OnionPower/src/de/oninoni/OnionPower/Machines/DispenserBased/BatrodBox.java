@@ -115,4 +115,10 @@ public class BatrodBox extends MachineDispenser{
 		Batrod.setPower(batrod, getPower() / 10);
 		dispenser.getInventory().setItem(id, batrod);
 	}
+
+	@Override
+	protected void spawnDesignEntities() {
+		// TODO Auto-generated method stub
+		
+	}
 }

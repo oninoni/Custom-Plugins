@@ -5,6 +5,8 @@ import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.ItemStack;
@@ -114,5 +116,10 @@ public class Generator extends MachineFurnace {
 	@Override
 	protected boolean doesExplode() {
 		return true;
+	}
+
+	@Override
+	protected void spawnDesignEntities() {
+		designEntities.add((ArmorStand) position.getWorld().spawnEntity(position, EntityType.ARMOR_STAND));
 	}
 }
