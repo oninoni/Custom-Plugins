@@ -88,8 +88,8 @@ public class ElectricFurnace extends MachineFurnace {
 	}
 
 	@Override
-	public void onClick(InventoryClickEvent e) {		
-		super.onClick(e);
+	public boolean onClick(InventoryClickEvent e) {		
+		return super.onClick(e);
 	}
 	
 	@Override

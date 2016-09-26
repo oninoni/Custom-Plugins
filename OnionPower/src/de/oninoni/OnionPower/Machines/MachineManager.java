@@ -139,10 +139,9 @@ public class MachineManager {
 	}
 	
 	public void onClick(InventoryClickEvent e) {
-		if(e.getRawSlot() != e.getView().convertSlot(e.getRawSlot()) || e.getSlot() >= e.getInventory().getSize())return;
 		Machine machine = machines.get(e.getInventory().getHolder().getInventory().getLocation());
-		if (machine == null)
-		{
+		if (machine == null){
+			if(e.getRawSlot() != e.getView().convertSlot(e.getRawSlot()) || e.getSlot() >= e.getInventory().getSize())return;
 			Location location = e.getView().getTopInventory().getLocation();
 			if (Generator.canCreate(e, Generator.class.getName(), InventoryType.FURNACE))
 				machines.put(location, new Generator(
@@ -151,7 +150,7 @@ public class MachineManager {
 					Generator.getBatrodPower(e, Generator.class.getName(), InventoryType.FURNACE), 
 					new HashMap<>()
 				));
-			if (ElectricFurnace.canCreate(e, ElectricFurnace.class.getName(), InventoryType.FURNACE))
+				if (ElectricFurnace.canCreate(e, ElectricFurnace.class.getName(), InventoryType.FURNACE))
 				machines.put(location, new ElectricFurnace(
 					location, 
 					this, 
@@ -180,11 +179,15 @@ public class MachineManager {
 					new HashMap<>()
 				));
 			
-			if(machines.get(e.getInventory().getLocation()) != null	)
-				saveData();
+			if(machines.get(e.getInventory().getLocation()) != null	)saveData();
 		}
 		else
-		{
+		{			
+			if(e.isShiftClick()){
+				e.setCancelled(true);
+				return;
+			}
+			if(e.getRawSlot() != e.getView().convertSlot(e.getRawSlot()) || e.getSlot() >= e.getInventory().getSize())return;
 			machine.onClick(e);
 		}
 	}

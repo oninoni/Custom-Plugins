@@ -4,11 +4,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 
-import de.oninoni.OnionPower.OnionPower;
-
 public class EntityListener implements Listener{
 	
-	private static OnionPower plugin = OnionPower.get();
+	//private static OnionPower plugin = OnionPower.get();
 	
 	@EventHandler
 	public void onDeath(EntityDamageEvent e){

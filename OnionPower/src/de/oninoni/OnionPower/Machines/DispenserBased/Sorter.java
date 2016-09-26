@@ -223,50 +223,49 @@ public class Sorter extends MachineDispenser{
 	}
 	
 	@Override
-	public void onClick(InventoryClickEvent e) {
-		super.onClick(e);
-		int convertSlot = e.getView().convertSlot(e.getRawSlot());
-		if(e.getInventory().getType() == InventoryType.DISPENSER){
-			if(convertSlot < 9 && convertSlot >= 0){
-				if(convertSlot % 2 == 0){
-					if(convertSlot != 4){
-						e.setCancelled(true);
-						if(convertSlot == 2){
-							if(particlesTimeout == 0){
-								particlesTimeout = 100;
+	public boolean onClick(InventoryClickEvent e) {
+		if(super.onClick(e)){
+			int convertSlot = e.getView().convertSlot(e.getRawSlot());
+			if(e.getInventory().getType() == InventoryType.DISPENSER){
+				if(convertSlot < 9 && convertSlot >= 0){
+					if(convertSlot % 2 == 0){
+						if(convertSlot != 4){
+							e.setCancelled(true);
+							if(convertSlot == 2){
+								if(particlesTimeout == 0){
+									particlesTimeout = 100;
+								}
 							}
 						}
-					}
-				}else{
-					e.setCancelled(true);
-					String filterInvName = "";
-					if(convertSlot == 1) filterInvName = "§4Red Filter";
-					if(convertSlot == 3) filterInvName = "§2Green Filter";
-					if(convertSlot == 5) filterInvName = "§9Blue Filter";
-					if(convertSlot == 7) filterInvName = "§eYellow Filter";
-					Inventory filterInv = Bukkit.createInventory(dispenser, 9, filterInvName);
-					for(int i = 0; i < 9; i++){
-						filterInv.setItem(i, new ItemStack(filters.get(convertSlot / 2)[i]));
-					}
-					e.getWhoClicked().openInventory(filterInv);
-				}
-			}
-		}else{
-			if(e.isShiftClick()){
-				e.setCancelled(true);
-				return;
-			}
-			if(e.getRawSlot() == convertSlot && convertSlot < 9 && convertSlot >= 0){
-				if(e.getCursor().getType() != Material.AIR || e.getCurrentItem().getType() != Material.AIR){
-					e.setCancelled(true);
-					if(e.getCurrentItem().getType() == Material.AIR || e.getCursor().getType() != Material.AIR){
-						e.getInventory().setItem(convertSlot, e.getCursor());
 					}else{
-						e.getInventory().setItem(convertSlot, new ItemStack(Material.AIR));
+						e.setCancelled(true);
+						String filterInvName = "";
+						if(convertSlot == 1) filterInvName = "§4Red Filter";
+						if(convertSlot == 3) filterInvName = "§2Green Filter";
+						if(convertSlot == 5) filterInvName = "§9Blue Filter";
+						if(convertSlot == 7) filterInvName = "§eYellow Filter";
+						Inventory filterInv = Bukkit.createInventory(dispenser, 9, filterInvName);
+						for(int i = 0; i < 9; i++){
+							filterInv.setItem(i, new ItemStack(filters.get(convertSlot / 2)[i]));
+						}
+						e.getWhoClicked().openInventory(filterInv);
+					}
+				}
+			}else{
+				if(e.getRawSlot() == convertSlot && convertSlot < 9 && convertSlot >= 0){
+					if(e.getCursor().getType() != Material.AIR || e.getCurrentItem().getType() != Material.AIR){
+						e.setCancelled(true);
+						if(e.getCurrentItem().getType() == Material.AIR || e.getCursor().getType() != Material.AIR){
+							e.getInventory().setItem(convertSlot, e.getCursor());
+						}else{
+							e.getInventory().setItem(convertSlot, new ItemStack(Material.AIR));
+						}
 					}
 				}
 			}
+			return true;
 		}
+		return false;
 	}
 	
 	@Override

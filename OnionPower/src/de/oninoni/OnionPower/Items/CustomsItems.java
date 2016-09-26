@@ -27,11 +27,16 @@ public class CustomsItems {
 	}
 	
 	public static ItemStack getMinerPickAxe(){
+		return getMinerPickAxe((short) 0);
+	}
+	
+	public static ItemStack getMinerPickAxe(short durability){
 		ItemStack pick = new ItemStack(Material.IRON_PICKAXE);
 		ItemMeta meta = pick.getItemMeta();
 		meta.setDisplayName("§4Internal Pickaxe");
 		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 		pick.setItemMeta(meta);
+		pick.setDurability(durability);
 		return pick;
 	}
 }

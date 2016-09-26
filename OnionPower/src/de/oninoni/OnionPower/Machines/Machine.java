@@ -153,7 +153,19 @@ public abstract class Machine {
 		}
 	}
 	
-	public abstract void onClick(InventoryClickEvent e);
+	public boolean onClick(InventoryClickEvent e){
+		if(e.getInventory().getName() == upgradeManager.getName()){
+			upgradeManager.onClick(e);
+			return true;
+		}
+		int convertSlot = e.getView().convertSlot(e.getRawSlot());
+		if(convertSlot == coreSlot){
+			e.setCancelled(true);
+			upgradeManager.openInterface(e.getWhoClicked());
+		}
+		return false;
+	}
+	
 	public abstract void onMoveInto(InventoryMoveItemEvent e);
 	public abstract void onMoveFrom(InventoryMoveItemEvent e);
 
@@ -227,7 +239,7 @@ public abstract class Machine {
 					batrod = e.getInventory().getItem(i);
 				}
 				result += Batrod.readPower(batrod);
-			}
+			}	
 		}
 		
 		return result;

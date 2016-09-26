@@ -82,75 +82,82 @@ public class Miner extends MachineDispenser{
 	@SuppressWarnings("deprecation")
 	@Override
 	public void updateBlock() {
-		requestFromConnected();
-		if(idleTimer <= 0){
-			Vector direction = MachineManager.directions[directionAdapter[dispenser.getRawData()]];
-			int i;
-			ArrayList<InventoryHolder> targetInventories = plugin.getMachineManager().getAdjacentInventoryHolders(this, dispenser.getRawData());
-			for(i = 1; i <= MAXRANGE; i++){
-				Location newPos = position.clone();
-				newPos.add(direction.clone().multiply(i));
-				Block b = newPos.getBlock();
-				if(b!= null && b.getType() != Material.AIR){
-					if(b.getType() == Material.BEDROCK)break;
-					if(b.getType() == Material.WATER || b.getType() == Material.STATIONARY_WATER)continue;
-					if(b.getType() == Material.LAVA || b.getType() == Material.STATIONARY_LAVA)continue;
-					if(b.getState() instanceof InventoryHolder || b.getState() instanceof Jukebox){
-						Bukkit.broadcastMessage(""+((InventoryHolder)b.getState()).getInventory().getItem(0));
-						continue;
-					};
-					double distance = position.distance(newPos);
-					if(getPower() > 5 * distance){
-						
-						MinerShot shot = new MinerShot(this, b);
-						Runnable r = new Runnable() {
-							@Override
-							public void run() {
-								power -= 5;
-								if(shot.update()){
-									Collection<ItemStack> drops = b.getDrops();
-									ArrayList<ItemStack> totalLeftOver = new ArrayList<>();
-									for (ItemStack i : drops) {
-										ItemStack leftOver = i;
-										for (InventoryHolder inventoryHolder : targetInventories) {
-											HashMap<Integer, ItemStack> overflow = inventoryHolder.getInventory().addItem(leftOver);
-											if(overflow.size() == 0){
-												leftOver = null;
-												break;
-											}else{
-												leftOver = overflow.get(overflow.keySet().toArray()[0]);
-											}
-										}
-										if(leftOver != null){
-											totalLeftOver.add(leftOver);
-										}
-									}
-									if(totalLeftOver.size() > 0){
-										idleTimer = 20;
-										for (ItemStack itemStack : totalLeftOver) {
-											position.getWorld().dropItem(position, itemStack);
-										}
-									}
-									return;
-								}
-								Bukkit.getScheduler().runTaskLater(plugin, this, 1L);
+		if(dispenser.getInventory().getItem(7) != null){
+			if(dispenser.getInventory().getItem(7).getDurability() >= 250){
+				dispenser.getInventory().clear(7);
+			}else{
+				requestFromConnected();
+				if(idleTimer <= 0){
+					Vector direction = MachineManager.directions[directionAdapter[dispenser.getRawData()]];
+					int i;
+					ArrayList<InventoryHolder> targetInventories = plugin.getMachineManager().getAdjacentInventoryHolders(this, dispenser.getRawData());
+					for(i = 1; i <= MAXRANGE; i++){
+						Location newPos = position.clone();
+						newPos.add(direction.clone().multiply(i));
+						Block b = newPos.getBlock();
+						if(b!= null && b.getType() != Material.AIR && targetInventories.size() > 0){
+							if(b.getType() == Material.BEDROCK || b.getState() instanceof InventoryHolder || b.getState() instanceof Jukebox){
+								idleTimer = 20;
+								break;
 							}
-						};
-						idleTimer = i / 2 + 1;
-						Bukkit.getScheduler().runTaskLater(plugin, r, 1L);
-					}else{
+							if(b.getType() == Material.WATER || b.getType() == Material.STATIONARY_WATER)continue;
+							if(b.getType() == Material.LAVA || b.getType() == Material.STATIONARY_LAVA)continue;
+							double distance = position.distance(newPos);
+							if(getPower() > 5 * distance){
+								
+								MinerShot shot = new MinerShot(this, b);
+								Runnable r = new Runnable() {
+									@Override
+									public void run() {
+										power -= 5;
+										if(shot.update()){
+											Collection<ItemStack> drops = b.getDrops(new ItemStack(Material.IRON_PICKAXE));
+											ArrayList<ItemStack> totalLeftOver = new ArrayList<>();
+											for (ItemStack i : drops) {
+												ItemStack leftOver = i;
+												for (InventoryHolder inventoryHolder : targetInventories) {
+													HashMap<Integer, ItemStack> overflow = inventoryHolder.getInventory().addItem(leftOver);
+													if(overflow.size() == 0){
+														leftOver = null;
+														break;
+													}else{
+														leftOver = overflow.get(overflow.keySet().toArray()[0]);
+													}
+												}
+												if(leftOver != null){
+													totalLeftOver.add(leftOver);
+												}
+											}
+											if(totalLeftOver.size() > 0){
+												idleTimer = 20;
+												for (ItemStack itemStack : totalLeftOver) {
+													position.getWorld().dropItem(position, itemStack);
+												}
+											}
+											b.setType(Material.AIR);
+											dispenser.getInventory().getItem(7).setDurability((short) (dispenser.getInventory().getItem(7).getDurability() + 1));
+											
+											return;
+										}
+										Bukkit.getScheduler().runTaskLater(plugin, this, 1L);
+									}
+								};
+								idleTimer = i / 2 + 1;
+								Bukkit.getScheduler().runTaskLater(plugin, r, 1L);
+							}else{
+								idleTimer = 20;
+							}
+							break;
+						}
+					}
+					if(i > MAXRANGE){
 						idleTimer = 20;
 					}
-					break;
+				}else{
+					idleTimer--;
 				}
 			}
-			if(i > MAXRANGE){
-				idleTimer = 20;
-			}
-		}else{
-			idleTimer--;
 		}
-		
 	}
 	
 	@Override
@@ -158,10 +165,19 @@ public class Miner extends MachineDispenser{
 		e.setCancelled(true);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
-	public void onClick(InventoryClickEvent e) {
-		super.onClick(e);
-		e.setCancelled(true);
+	public boolean onClick(InventoryClickEvent e) {
+		if(super.onClick(e)){
+			if(dispenser.getInventory().getItem(7) == null && e.getSlot() == 7 && e.getCursor() != null && e.getCursor().getType() == Material.IRON_PICKAXE){
+				ItemStack i = CustomsItems.getMinerPickAxe(e.getCursor().getDurability());
+				e.setCursor(i);
+			}else{
+				e.setCancelled(true);
+			}
+			return true;
+		}
+		return false;
 	}
 	
 	@Override
@@ -173,7 +189,9 @@ public class Miner extends MachineDispenser{
 		}else if(id == 4){
 			dispenser.getInventory().setItem(id, new ItemStack(Material.REDSTONE_BLOCK));
 		}else if(id == 7){
-			dispenser.getInventory().setItem(id, new ItemStack(Material.IRON_PICKAXE));
+			ItemStack i = new ItemStack(Material.IRON_PICKAXE);
+			i.setDurability(dispenser.getInventory().getItem(7).getDurability());
+			dispenser.getInventory().setItem(id, i);
 		}else{
 			dispenser.getInventory().setItem(id, new ItemStack(Material.AIR));
 		}

@@ -40,11 +40,8 @@ public abstract class MachineFurnace extends Machine{
 	}
 	
 	@Override
-	public void onClick(InventoryClickEvent e) {
-		int convertSlot = e.getView().convertSlot(e.getRawSlot());
-		if(convertSlot == coreSlot){
-			e.setCancelled(true);
-		}
+	public boolean onClick(InventoryClickEvent e) {
+		return super.onClick(e);
 	}
 	
 	@Override
