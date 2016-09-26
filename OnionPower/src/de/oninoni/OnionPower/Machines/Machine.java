@@ -2,6 +2,7 @@ package de.oninoni.OnionPower.Machines;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -33,8 +34,19 @@ import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
 import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager;
 
 public abstract class Machine {
-
-	//TODO Copy Level of batrod
+	
+	public enum UpgradeType{
+		RangeUpgrade,
+		RedstoneUpgrade,
+		EfficiencyUpgrade
+	}
+	
+	protected EnumSet<UpgradeType> availableUpgrades;
+	protected abstract void setAvailableUpgrades();
+	
+	public boolean upgradeAvailable(UpgradeType type){
+		return availableUpgrades.contains(type);
+	}
 	
 	protected static OnionPower plugin = OnionPower.get();
 	
@@ -121,7 +133,8 @@ public abstract class Machine {
 		designEntities = new ArrayList<>();
 		designEntities.ensureCapacity(getDesignEntityCount());
 		spawnDesignEntities();
-		
+
+		setAvailableUpgrades();
 		upgradeManager = new UpgradeManager(this, upgrades);
 	}
 	

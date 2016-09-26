@@ -2,14 +2,13 @@ package de.oninoni.OnionPower.Machines.Upgrades;
 
 import org.bukkit.inventory.ItemStack;
 
-import de.oninoni.OnionPower.Machines.MachineManager;
+import de.oninoni.OnionPower.Machines.Machine.UpgradeType;
 
 public abstract class Upgrade {
 	
-	MachineManager machineManager;
+	public abstract UpgradeType getType();
 	
-	public Upgrade(MachineManager mM){
-		machineManager = mM;
+	public Upgrade(){
 	}
 	
 	@Deprecated

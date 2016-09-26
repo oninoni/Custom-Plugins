@@ -333,5 +333,11 @@ public class Sorter extends MachineDispenser{
 	public void spawnDesignEntity(int id) {
 		
 	}
+
+	@Override
+	protected void setAvailableUpgrades() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

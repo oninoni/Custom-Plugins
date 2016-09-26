@@ -131,4 +131,10 @@ public class ElectricFurnace extends MachineFurnace {
 	public void spawnDesignEntity(int id) {
 		
 	}
+
+	@Override
+	protected void setAvailableUpgrades() {
+		// TODO Auto-generated method stub
+		
+	}
 }
