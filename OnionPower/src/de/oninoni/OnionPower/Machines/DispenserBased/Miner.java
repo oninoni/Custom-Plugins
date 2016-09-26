@@ -20,6 +20,7 @@ import de.oninoni.OnionPower.Items.CustomsItems;
 import de.oninoni.OnionPower.Machines.MachineDispenser;
 import de.oninoni.OnionPower.Machines.MachineManager;
 import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
+import de.oninoni.OnionPower.Machines.Upgrades.UpgradeRedstone;
 
 public class Miner extends MachineDispenser{
 
@@ -82,6 +83,8 @@ public class Miner extends MachineDispenser{
 	@SuppressWarnings("deprecation")
 	@Override
 	public void updateBlock() {
+		UpgradeRedstone redstoneUpgrade = (UpgradeRedstone) upgradeManager.getUpgrade(UpgradeType.RedstoneUpgrade);
+		if(redstoneUpgrade!= null && !redstoneUpgrade.isMachineOnline(this))return;
 		if(dispenser.getInventory().getItem(7) != null){
 			if(dispenser.getInventory().getItem(7).getDurability() >= 250){
 				dispenser.getInventory().clear(7);
@@ -168,16 +171,16 @@ public class Miner extends MachineDispenser{
 	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onClick(InventoryClickEvent e) {
-		if(super.onClick(e)){
+		if(!super.onClick(e)){
 			if(dispenser.getInventory().getItem(7) == null && e.getSlot() == 7 && e.getCursor() != null && e.getCursor().getType() == Material.IRON_PICKAXE){
 				ItemStack i = CustomsItems.getMinerPickAxe(e.getCursor().getDurability());
 				e.setCursor(i);
 			}else{
 				e.setCancelled(true);
 			}
-			return true;
+			return false;
 		}
-		return false;
+		return true;
 	}
 	
 	@Override

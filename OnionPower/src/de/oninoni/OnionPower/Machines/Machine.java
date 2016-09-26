@@ -36,6 +36,7 @@ import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager;
 public abstract class Machine {
 	
 	public enum UpgradeType{
+		Upgrade,
 		RangeUpgrade,
 		RedstoneUpgrade,
 		EfficiencyUpgrade

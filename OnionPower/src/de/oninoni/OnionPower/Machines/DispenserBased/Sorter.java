@@ -224,7 +224,7 @@ public class Sorter extends MachineDispenser{
 	
 	@Override
 	public boolean onClick(InventoryClickEvent e) {
-		if(super.onClick(e)){
+		if(!super.onClick(e)){
 			int convertSlot = e.getView().convertSlot(e.getRawSlot());
 			if(e.getInventory().getType() == InventoryType.DISPENSER){
 				if(convertSlot < 9 && convertSlot >= 0){
@@ -263,9 +263,9 @@ public class Sorter extends MachineDispenser{
 					}
 				}
 			}
-			return true;
+			return false;
 		}
-		return false;
+		return true;
 	}
 	
 	@Override

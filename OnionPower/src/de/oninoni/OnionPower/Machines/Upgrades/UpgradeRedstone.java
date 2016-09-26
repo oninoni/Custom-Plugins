@@ -1,5 +1,10 @@
 package de.oninoni.OnionPower.Machines.Upgrades;
 
+import java.util.ArrayList;
+
+import org.bukkit.inventory.ItemStack;
+
+import de.oninoni.OnionPower.Items.CustomsItems;
 import de.oninoni.OnionPower.Machines.Machine;
 import de.oninoni.OnionPower.Machines.Machine.UpgradeType;
 
@@ -31,7 +36,27 @@ public class UpgradeRedstone extends Upgrade{
 		);
 	}
 
-	public static String getName() {
-		return "§6Upgrade: §5Redstone Control ";
+	@Override
+	public ItemStack getSettingsItem() {
+		ArrayList<String> lore = new ArrayList<>();
+		switch (powerSetting) {
+		case Ignore:
+			lore.add("§rRedstone is ignored!");
+			break;
+		case Off:
+			lore.add("§rRedstone should be off!");
+			break;
+		case On:
+			lore.add("§rRedstone should be on!");
+			break;
+		}
+		ItemStack settingsItem = CustomsItems.getGlassPane((byte) 6, "§5Redstone State Expected:", lore);
+		return settingsItem;
+	}
+
+	@Override
+	public ItemStack onClickSetting() {
+		powerSetting = ExpectedPower.values()[(powerSetting.ordinal() + 1) % ExpectedPower.values().length];
+		return getSettingsItem();
 	}
 }
