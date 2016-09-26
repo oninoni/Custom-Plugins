@@ -23,7 +23,7 @@ public class Generator extends MachineFurnace {
 			@Override
 			public void run() {
 				furnace.getInventory().setItem(1, new ItemStack(Material.AIR));
-				furnace.getInventory().setItem(coreSlot, powerCore);
+				//furnace.getInventory().setItem(coreSlot, getPowerCore());
 
 				reOpenInventories();
 			}

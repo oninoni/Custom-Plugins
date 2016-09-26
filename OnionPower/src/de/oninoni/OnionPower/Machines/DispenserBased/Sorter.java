@@ -74,7 +74,7 @@ public class Sorter extends MachineDispenser{
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {
-				dispenser.getInventory().setItem(coreSlot, powerCore);
+				//dispenser.getInventory().setItem(coreSlot, getPowerCore());
 				dispenser.getInventory().setItem(2, CustomsItems.getGlassPane((byte) 0, "§4Click to Enable Particles"));
 				dispenser.getInventory().setItem(6, CustomsItems.getGlassPane((byte) 0, "§4§kSecret§r §4§kMessage"));
 				dispenser.getInventory().setItem(8, CustomsItems.getGlassPane((byte) 0, "§4§kAnother§r §4§kSecret§r §4§kMessage"));
@@ -175,7 +175,6 @@ public class Sorter extends MachineDispenser{
 	@SuppressWarnings("deprecation")
 	@Override
 	public void updateBlock() {
-		requestFromConnected();
 		ItemStack item = dispenser.getInventory().getItem(4);
 		if(item != null && power >= 20 * item.getAmount()){
 			Material material = item.getType();

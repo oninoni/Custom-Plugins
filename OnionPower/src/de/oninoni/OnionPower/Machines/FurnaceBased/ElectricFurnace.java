@@ -8,7 +8,6 @@ import org.bukkit.inventory.ItemStack;
 
 import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.ItemData;
-import de.oninoni.OnionPower.Items.PowerCore;
 import de.oninoni.OnionPower.Machines.MachineFurnace;
 import de.oninoni.OnionPower.Machines.MachineManager;
 
@@ -24,7 +23,7 @@ public class ElectricFurnace extends MachineFurnace {
 			@Override
 			public void run() {
 				furnace.getInventory().setItem(0, new ItemStack(Material.AIR));
-				furnace.getInventory().setItem(1, powerCore);
+				//furnace.getInventory().setItem(1, getPowerCore());
 
 				reOpenInventories();
 			}
@@ -47,7 +46,6 @@ public class ElectricFurnace extends MachineFurnace {
 
 	@Override
 	public void updateBlock() {
-		requestFromConnected();
 		if(furnace.getInventory().getSmelting() != null){
 			ItemStack smelting = furnace.getInventory().getSmelting();
 			if(furnace.getCookTime() <= 0 && ItemData.smeltable.containsKey(smelting.getType())){
@@ -88,12 +86,6 @@ public class ElectricFurnace extends MachineFurnace {
 	public boolean onClick(InventoryClickEvent e) {		
 		return super.onClick(e);
 	}
-	
-	@Override
-	public void updateDisplay() {
-		ItemStack powerCore = furnace.getInventory().getFuel();
-		PowerCore.setPowerLevel(powerCore, this);
-	}
 
 	@Override
 	public int getMaxPowerInput() {
@@ -131,7 +123,6 @@ public class ElectricFurnace extends MachineFurnace {
 
 	@Override
 	protected void setAvailableUpgrades() {
-		// TODO Auto-generated method stub
-		
+		availableUpgrades.add(UpgradeType.RedstoneUpgrade);
 	}
 }

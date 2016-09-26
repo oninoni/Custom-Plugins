@@ -11,6 +11,8 @@ import de.oninoni.OnionPower.Machines.Machine;
 
 public class PowerCore {
 	
+	//private static OnionPower plugin = OnionPower.get();
+	
 	private static final String NAME = "§4Power Core";
 	
 	public static ItemStack create(Machine m){
@@ -50,10 +52,11 @@ public class PowerCore {
 	}
 	
 	public static void setPowerLevel(ItemStack powerCore, Machine m){
+		//plugin.getLogger().info("UPPDATED Power Core: " + m.getPower());
 		if(powerCore==null || m==null)return;
 		ItemMeta itemMeta = powerCore.getItemMeta();
 		List<String> lore = itemMeta.getLore();
-		if(lore.size() != 5)return;
+		if(lore.size() < 5)return;
 		lore.set(1, "§6" + m.getPower() + " / " + m.getMaxPower() + " " + CustomsItems.UNIT_NAME);
 		if(m.getMaxPowerOutput() == 0){
 			lore.set(2, "§6Using: " + m.getPowerOutputTotal() + " " + CustomsItems.UNIT_NAME);

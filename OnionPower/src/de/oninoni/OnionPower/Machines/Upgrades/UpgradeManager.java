@@ -49,6 +49,7 @@ public class UpgradeManager {
 		}
 	}
 	
+	@SuppressWarnings("incomplete-switch")
 	private static HashMap<Integer, Upgrade> load(Machine m){
 		//plugin.getLogger().info("Loading... Upgrades...");
 		HashMap<Integer, Upgrade> loaded = new HashMap<>();
@@ -61,12 +62,18 @@ public class UpgradeManager {
 			String[] splitted = line.split(":");
 			if(splitted.length == 3){
 				int id = Integer.parseInt(splitted[0]);
-				int type = Integer.parseInt(splitted[1]);
+				UpgradeType type = UpgradeType.values()[Integer.parseInt(splitted[1])];
 				int value = Integer.parseInt(splitted[2]);
 				//plugin.getLogger().info(type + " / " + UpgradeType.RedstoneUpgrade.toString());
-				if(UpgradeType.RedstoneUpgrade.ordinal() == type){
+				//plugin.getLogger().info(id + "|" + type + "|" + value);
+				switch (type) {
+				case RedstoneUpgrade:
 					loaded.put(id, new RedstoneUpgrade(value));
-					//plugin.getLogger().info(id + "|" + type + "|" + value);
+					break;
+				case EfficiencyUpgrade:
+					break;
+				case RangeUpgrade:
+					break;
 				}
 			}
 		}
@@ -120,7 +127,7 @@ public class UpgradeManager {
 			}
 			//Adding all Upgrades
 			if(e.getCursor() != null && e.getCursor().getType() != Material.AIR){
-				if(Upgrade.isUpgrade(e.getCursor(), UpgradeType.RedstoneUpgrade)){
+				if(Upgrade.isUpgrade(e.getCursor(), UpgradeType.RedstoneUpgrade) && machine.upgradeAvailable(UpgradeType.RedstoneUpgrade)){
 					//plugin.getLogger().info("Adding " + Upgrade.getName(UpgradeType.RedstoneUpgrade) + " to " + e.getSlot());
 					RedstoneUpgrade upgrade = new RedstoneUpgrade();
 					upgrades.put(e.getSlot(), upgrade);

@@ -21,7 +21,7 @@ public class BatrodBox extends MachineDispenser{
 				for(int i = 0; i < 9; i++){
 					dispenser.getInventory().setItem(i, new ItemStack(Material.AIR));
 				}
-				dispenser.getInventory().setItem(coreSlot, powerCore);
+				//dispenser.getInventory().setItem(coreSlot, getPowerCore());
 				dispenser.getInventory().setItem(coreSlot - 1, new ItemStack(Material.STAINED_GLASS_PANE));
 				dispenser.getInventory().setItem(coreSlot + 1, new ItemStack(Material.STAINED_GLASS_PANE));
 
@@ -56,7 +56,6 @@ public class BatrodBox extends MachineDispenser{
 
 	@Override
 	public void updateBlock() {
-		requestFromConnected();
 		for(int i = 0; i < 3; i++){
 			chargeRod(dispenser.getInventory().getItem(i));
 			dechargeRod(dispenser.getInventory().getItem(i + 6));

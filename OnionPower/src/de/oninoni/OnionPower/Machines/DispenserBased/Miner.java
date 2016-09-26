@@ -32,7 +32,7 @@ public class Miner extends MachineDispenser{
 			@Override
 			public void run() {
 				dispenser.getInventory().setItem(0, CustomsItems.getGlassPane((byte) 2, "§4§kSecret§r §4§kMessage"));
-				dispenser.getInventory().setItem(1, powerCore);
+				//dispenser.getInventory().setItem(1, getPowerCore());
 				dispenser.getInventory().setItem(2, CustomsItems.getGlassPane((byte) 2, "§4§kLol§r §4§kROFL"));
 				//dispenser.getInventory().setItem(4, arg1);
 				dispenser.getInventory().setItem(3, CustomsItems.getGlassPane((byte) 2, "§4§kZweiundvierzig§r"));
@@ -85,11 +85,10 @@ public class Miner extends MachineDispenser{
 			if(dispenser.getInventory().getItem(7).getDurability() >= 250){
 				dispenser.getInventory().clear(7);
 			}else{
-				requestFromConnected();
 				if(idleTimer <= 0){
-					Vector direction = MachineManager.directions[directionAdapter[dispenser.getRawData()%8]];
+					Vector direction = MachineManager.directions[directionAdapter[dispenser.getRawData() % 8]];
 					int i;
-					ArrayList<InventoryHolder> targetInventories = plugin.getMachineManager().getAdjacentInventoryHolders(this, dispenser.getRawData()%8);
+					ArrayList<InventoryHolder> targetInventories = plugin.getMachineManager().getAdjacentInventoryHolders(this, dispenser.getRawData() % 8);
 					for(i = 1; i <= MAXRANGE; i++){
 						Location newPos = position.clone();
 						newPos.add(direction.clone().multiply(i));
@@ -213,7 +212,6 @@ public class Miner extends MachineDispenser{
 
 	@Override
 	protected void setAvailableUpgrades() {
-		// TODO Auto-generated method stub
-		
+		availableUpgrades.add(UpgradeType.RedstoneUpgrade);
 	}
 }

@@ -59,14 +59,14 @@ public abstract class Machine {
 	}
 
 	protected int coreSlot;
-	protected ItemStack powerCore;
 	
 	public ItemStack getPowerCore(){
-		ItemStack pCore = invHolder.getInventory().getItem(coreSlot);
-		if(pCore != null){
-			powerCore = pCore;
-		}
+		ItemStack powerCore = invHolder.getInventory().getItem(coreSlot);
 		return powerCore;
+	}
+	
+	public void setPowerCore(ItemStack powerCore){
+		invHolder.getInventory().setItem(coreSlot, powerCore);
 	}
 	
 	protected UpgradeManager upgradeManager;
@@ -108,21 +108,23 @@ public abstract class Machine {
 	private List<Machine> sender = new ArrayList<>();
 	
 	public Machine(Location position, MachineManager machineManager, int power){
-		initValues(position, machineManager);
+		setCoreSlot();
 		this.power = power;
+		initValues(position, machineManager);
 	}
 	
 	public Machine(Location position, MachineManager machineManager){
-		initValues(position, machineManager);
+		setCoreSlot();
 		
 		BlockState state = position.getBlock().getState();
 		if(state instanceof InventoryHolder){
-			Inventory inv = ((InventoryHolder) state).getInventory();
-			this.power = PowerCore.getPowerLevel(inv.getItem(coreSlot));
+			this.power = PowerCore.getPowerLevel(((InventoryHolder) state).getInventory().getItem(coreSlot));
 		}else{
 			plugin.getLogger().warning("Machine at " + position + "is not an Inventory anymore!");
 			this.power = 0;
 		}
+		
+		initValues(position, machineManager);
 	}
 	
 	public void setUpgradeLore(){
@@ -133,17 +135,16 @@ public abstract class Machine {
 		lore.addAll(upgradeManager.getPowerCoreLore());
 		itemMeta.setLore(lore);
 		powerCore.setItemMeta(itemMeta);
+		setPowerCore(powerCore);
 	}
 	
 	private void initValues(Location position, MachineManager machineManager){
-		setCoreSlot();
-		
-		powerCore = PowerCore.create(this);
+		invHolder = (InventoryHolder) position.getBlock().getState();
+		setPowerCore(PowerCore.create(this));
 		
 		this.position = position;
 		this.machineManager = machineManager;
 		
-		invHolder = (InventoryHolder) position.getBlock().getState();
 		
 		isLoaded = true;
 		
@@ -154,6 +155,8 @@ public abstract class Machine {
 		designEntities.ensureCapacity(getDesignEntityCount());
 		spawnDesignEntities();
 
+		availableUpgrades = EnumSet.noneOf(UpgradeType.class);
+		
 		setAvailableUpgrades();
 		upgradeManager = new UpgradeManager(this);
 	}
@@ -208,9 +211,10 @@ public abstract class Machine {
 	protected abstract boolean doesExplode();
 
 	public void updateDisplay() {
-		ItemStack powerCore = invHolder.getInventory().getItem(coreSlot);
+		//plugin.getLogger().info("Update!");
+		ItemStack powerCore = getPowerCore();
 		PowerCore.setPowerLevel(powerCore, this);
-		invHolder.getInventory().setItem(coreSlot, powerCore);
+		setPowerCore(powerCore);
 		updateInventories();
 	}
 	
@@ -299,7 +303,7 @@ public abstract class Machine {
 			//Check for irrelevant Slots
 			if(template[i] == Material.COMMAND)continue;
 			//Check for empty Slots
-			if(check == null){	
+			if(check == null){
 				if(template[i] == Material.AIR){
 					continue;
 				}else{
@@ -435,6 +439,10 @@ public abstract class Machine {
 	}
 	
 	private void transferPowerTo(Machine requester) {
+		//plugin.getLogger().info("Power Transferring...");
+		//plugin.getLogger().info(getMaxPowerOutput() + " / " + requester.getMaxPowerInput());
+		//plugin.getLogger().info(power + " / " + requester.power);
+		
 		// max total per update
 		int transPower = Math.min(
 			getMaxPowerOutput() - powerOutputTotal, 
@@ -460,6 +468,8 @@ public abstract class Machine {
 		if (!isLoaded)
 			return;
 		
+		//plugin.getLogger().info("Power: " + power + " / OldPower: " + oldPower);
+		
 		if (oldPower != power
 		 || oldPowerInputTotal != powerIntputTotal
 		 || oldPowerOutputTotal != powerOutputTotal) {
@@ -473,6 +483,10 @@ public abstract class Machine {
 	public void update() {
 		if (!isLoaded)
 			return;
+		
+		if(getDisplayName() != "§6§lGenerator")
+			requestFromConnected();
+			
 		RedstoneUpgrade redstoneUpgrade = (RedstoneUpgrade) upgradeManager.getUpgrade(UpgradeType.RedstoneUpgrade);
 		if(redstoneUpgrade!= null && !redstoneUpgrade.isMachineOnline(this))return;
 		
