@@ -1,7 +1,6 @@
 package de.oninoni.OnionPower.Machines.DispenserBased;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Bukkit;
@@ -21,7 +20,6 @@ import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.CustomsItems;
 import de.oninoni.OnionPower.Machines.MachineDispenser;
 import de.oninoni.OnionPower.Machines.MachineManager;
-import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
 
 public class Sorter extends MachineDispenser{
 	
@@ -68,8 +66,8 @@ public class Sorter extends MachineDispenser{
 	
 	private int particlesTimeout = 0;
 	
-	public Sorter(Location position, MachineManager machineManager, int power, HashMap<Integer, Upgrade> upgrades) {
-		super(position, machineManager, power, upgrades);
+	public Sorter(Location position, MachineManager machineManager, int power) {
+		super(position, machineManager, power);
 		for(int i = 0; i < 4; i++){
 			filters.add(new Material[]{Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR});
 		}
@@ -103,8 +101,8 @@ public class Sorter extends MachineDispenser{
 		setupPowerIO();
 	}
 	
-	public Sorter(Location position, MachineManager machineManager, HashMap<Integer, Upgrade> upgrades){
-		super(position, machineManager, upgrades);
+	public Sorter(Location position, MachineManager machineManager){
+		super(position, machineManager);
 		for(int i = 0; i < 4; i++){
 			filters.add(new Material[]{Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR});
 		}

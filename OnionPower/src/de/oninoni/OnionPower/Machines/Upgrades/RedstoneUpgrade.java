@@ -8,7 +8,7 @@ import de.oninoni.OnionPower.Items.CustomsItems;
 import de.oninoni.OnionPower.Machines.Machine;
 import de.oninoni.OnionPower.Machines.Machine.UpgradeType;
 
-public class UpgradeRedstone extends Upgrade{
+public class RedstoneUpgrade extends Upgrade{
 	
 	public enum ExpectedPower{
 		On,
@@ -17,9 +17,18 @@ public class UpgradeRedstone extends Upgrade{
 	}
 	
 	public ExpectedPower powerSetting = ExpectedPower.Ignore;
+	
+	public ExpectedPower getPowerSetting() {
+		return powerSetting;
+	}
 
-	public UpgradeRedstone() {
+	public RedstoneUpgrade() {
 		super();
+	}
+	
+	public RedstoneUpgrade(int value){
+		super();
+		powerSetting = ExpectedPower.values()[value];
 	}
 
 	@Override

@@ -14,6 +14,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -148,36 +149,31 @@ public class MachineManager {
 				machines.put(location, new Generator(
 					location, 
 					this, 
-					Generator.getBatrodPower(e, Generator.class.getName(), InventoryType.FURNACE), 
-					new HashMap<>()
+					Generator.getBatrodPower(e, Generator.class.getName(), InventoryType.FURNACE)
 				));
 				if (ElectricFurnace.canCreate(e, ElectricFurnace.class.getName(), InventoryType.FURNACE))
 				machines.put(location, new ElectricFurnace(
 					location, 
 					this, 
-					ElectricFurnace.getBatrodPower(e, ElectricFurnace.class.getName(), InventoryType.FURNACE),
-					new HashMap<>()
+					ElectricFurnace.getBatrodPower(e, ElectricFurnace.class.getName(), InventoryType.FURNACE)
 				));
 			if (BatrodBox.canCreate(e, BatrodBox.class.getName(), InventoryType.DISPENSER))
 				machines.put(location, new BatrodBox(
 					location,
 					this, 
-					BatrodBox.getBatrodPower(e, BatrodBox.class.getName(), InventoryType.DISPENSER),
-					new HashMap<>()
+					BatrodBox.getBatrodPower(e, BatrodBox.class.getName(), InventoryType.DISPENSER)
 				));
 			if (Sorter.canCreate(e, Sorter.class.getName(), InventoryType.DISPENSER))
 				machines.put(location, new Sorter(
 					location,
 					this,
-					Sorter.getBatrodPower(e, Sorter.class.getName(), InventoryType.DISPENSER),
-					new HashMap<>()
+					Sorter.getBatrodPower(e, Sorter.class.getName(), InventoryType.DISPENSER)
 				));
 			if (Miner.canCreate(e, Miner.class.getName(), InventoryType.DISPENSER))
 				machines.put(location, new Miner(
 					location,
 					this,
-					Miner.getBatrodPower(e, Miner.class.getName(), InventoryType.DISPENSER),
-					new HashMap<>()
+					Miner.getBatrodPower(e, Miner.class.getName(), InventoryType.DISPENSER)
 				));
 			
 			if(machines.get(e.getInventory().getLocation()) != null	)saveData();
@@ -230,6 +226,16 @@ public class MachineManager {
 			machines.get(destination).onMoveInto(e);
 	}
 	
+	public void onDispense(BlockDispenseEvent e){
+		Location location = e.getBlock().getLocation();
+		if(machines.containsKey(location)){
+			Machine m = machines.get(location);
+			if(m instanceof MachineDispenser){
+				((MachineDispenser) m).onDispense(e);
+			}
+		}
+	}
+		
 	public void onBreak(BlockBreakEvent e){
 		Location location = e.getBlock().getLocation();
 		if(machines.containsKey(location)){
@@ -309,7 +315,7 @@ public class MachineManager {
 			}
 		}
 	}
-		
+	
 	public Machine getMachine(Location pos) {
 		return machines.get(pos);
 	}
@@ -336,19 +342,19 @@ public class MachineManager {
 				}
 				Location l = new Location(w, x, y, z);
 				if(MachineClass == Generator.class){
-					machines.put(l, new Generator(l, this, new HashMap<>()));
+					machines.put(l, new Generator(l, this));
 				}
 				else if(MachineClass == ElectricFurnace.class){
-					machines.put(l, new ElectricFurnace(l, this, new HashMap<>()));
+					machines.put(l, new ElectricFurnace(l, this));
 				}
 				else if(MachineClass == BatrodBox.class){
-					machines.put(l, new BatrodBox(l, this, new HashMap<>()));
+					machines.put(l, new BatrodBox(l, this));
 				}
 				else if(MachineClass == Sorter.class){
-					machines.put(l, new Sorter(l, this, new HashMap<>()));
+					machines.put(l, new Sorter(l, this));
 				}
 				else if(MachineClass == Miner.class){
-					machines.put(l, new Miner(l, this, new HashMap<>()));
+					machines.put(l, new Miner(l, this));
 				}
 			}
 		}

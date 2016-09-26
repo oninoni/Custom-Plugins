@@ -1,7 +1,5 @@
 package de.oninoni.OnionPower.Machines.FurnaceBased;
 
-import java.util.HashMap;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,15 +11,14 @@ import de.oninoni.OnionPower.Items.ItemData;
 import de.oninoni.OnionPower.Items.PowerCore;
 import de.oninoni.OnionPower.Machines.MachineFurnace;
 import de.oninoni.OnionPower.Machines.MachineManager;
-import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
 
 public class ElectricFurnace extends MachineFurnace {
 	
 	private Material cookingInto;
 	private Material cookingFrom;
 	
-	public ElectricFurnace(Location position, MachineManager machineManager, int power, HashMap<Integer, Upgrade> upgrades) {
-		super(position, machineManager, power, upgrades);
+	public ElectricFurnace(Location position, MachineManager machineManager, int power) {
+		super(position, machineManager, power);
 		
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
@@ -34,8 +31,8 @@ public class ElectricFurnace extends MachineFurnace {
 		}, 1L);
 	}
 	
-	public ElectricFurnace(Location position, MachineManager machineManager, HashMap<Integer, Upgrade> upgrades) {
-		super(position, machineManager, upgrades);
+	public ElectricFurnace(Location position, MachineManager machineManager) {
+		super(position, machineManager);
 	}
 	
 	@Override

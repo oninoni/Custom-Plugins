@@ -1,6 +1,8 @@
 package de.oninoni.OnionPower.Machines.Upgrades;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
@@ -22,25 +24,21 @@ public class UpgradeManager {
 	protected static OnionPower plugin = OnionPower.get();
 	
 	private Machine machine;
+	private Inventory inv;
 	
 	HashMap<Integer, Upgrade> upgrades;
 	
 	public UpgradeManager(Machine m){
-		this(m, new HashMap<>());
+		this(m, load(m));
 	}
 	
-	public UpgradeManager(Machine m, HashMap<Integer, Upgrade> upgrades){
+	private UpgradeManager(Machine m, HashMap<Integer, Upgrade> upgrades){
 		this.upgrades = upgrades;
 		machine = m;
-	}
-	
-	public String getName(){
-		return "§4Upgrades:";
-	}
-	
-	public void openInterface(HumanEntity p){
-		Inventory inv = plugin.getServer().createInventory((InventoryHolder) machine.getPosition().getBlock().getState(), 18, getName());
 		
+		inv = plugin.getServer().createInventory((InventoryHolder) machine.getPosition().getBlock().getState(), 18, getName());
+		for(int i = 0; i < 9; i++)inv.setItem(i + 9, CustomsItems.getGlassPane((byte) 15, "§4NO Upgrade in this Slot"));
+
 		Set<Integer> keySet = upgrades.keySet();
 		for (Integer key : keySet) {
 			Upgrade u = upgrades.get(key);
@@ -49,8 +47,65 @@ public class UpgradeManager {
 			inv.setItem(key, uItem);
 			inv.setItem(key + 9, u.getSettingsItem());
 		}
+	}
+	
+	private static HashMap<Integer, Upgrade> load(Machine m){
+		plugin.getLogger().info("Loading... Upgrades...");
+		HashMap<Integer, Upgrade> loaded = new HashMap<>();
 		
+		List<String> lore = m.getPowerCore().getItemMeta().getLore();
+		lore = lore.subList(5, lore.size());
+		
+		for (String line : lore) {
+			String[] splitted = line.split("|");
+			plugin.getLogger().info(line);
+			if(splitted.length == 3){
+				int id = Integer.parseInt(splitted[0]);
+				String type = splitted[1];
+				int value = Integer.parseInt(splitted[2]);
+				if(UpgradeType.RedstoneUpgrade.toString() == type){
+					loaded.put(id, new RedstoneUpgrade(value));
+					plugin.getLogger().info(id + "|" + type + "|" + value);
+				}
+			}
+		}
+		
+		plugin.getLogger().info("Loaded " + loaded.size() + " Upgrades");
+		
+		return loaded;
+	}
+	
+	public List<String> getPowerCoreLore(){
+		List<String> lore = new ArrayList<>();
+		Set<Integer> keySet = upgrades.keySet();
+		for (Integer key : keySet) {
+			Upgrade u = upgrades.get(key);
+			if(u instanceof RedstoneUpgrade){
+				lore.add(key + "|" + u.getType().toString() + "|" + ((RedstoneUpgrade) u).getPowerSetting().ordinal());
+			}
+		}
+		return lore;
+	}
+	
+	public String getName(){
+		return "§4Upgrades:";
+	}
+	
+	public void openInterface(HumanEntity p){
 		p.openInventory(inv);
+	}
+	
+	public void updateIventories(){
+		machine.setUpgradeLore();
+		
+		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+			@Override
+			public void run() {
+				for (HumanEntity viewer : inv.getViewers()) {
+					((Player) viewer).updateInventory();
+				}
+			}
+		}, 1L);
 	}
 	
 	public void onClick(InventoryClickEvent e){
@@ -59,14 +114,14 @@ public class UpgradeManager {
 			if(e.getCurrentItem() != null && e.getCurrentItem().getType() != Material.AIR){
 				if(Upgrade.isUpgrade(e.getCurrentItem(), UpgradeType.RedstoneUpgrade)){
 					upgrades.remove(e.getSlot());
-					e.getInventory().setItem(e.getSlot() + 9, CustomsItems.getGlassPane((byte) 15, "&4NO Upgrade in this Slot"));
+					e.getInventory().setItem(e.getSlot() + 9, CustomsItems.getGlassPane((byte) 15, "§4NO Upgrade in this Slot"));
 				}
 			}
 			//Adding all Upgrades
 			if(e.getCursor() != null && e.getCursor().getType() != Material.AIR){
 				if(Upgrade.isUpgrade(e.getCursor(), UpgradeType.RedstoneUpgrade)){
 					//plugin.getLogger().info("Adding " + Upgrade.getName(UpgradeType.RedstoneUpgrade) + " to " + e.getSlot());
-					UpgradeRedstone upgrade = new UpgradeRedstone();
+					RedstoneUpgrade upgrade = new RedstoneUpgrade();
 					upgrades.put(e.getSlot(), upgrade);
 					e.getInventory().setItem(e.getSlot() + 9, upgrade.getSettingsItem());
 				}else{
@@ -74,23 +129,18 @@ public class UpgradeManager {
 					e.setCancelled(true);
 				}
 			}
-			Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
-				@Override
-				public void run() {
-					for (HumanEntity viewer : e.getInventory().getViewers()) {
-						((Player) viewer).updateInventory();
-					}
-				}
-			}, 1L);
+			updateIventories();
 		}else if(e.getSlot() >= 9 && e.getSlot() <= 17){
 			//plugin.getLogger().info("Clicked in Slot: " + e.getSlot());
-			if(e.getCurrentItem() != null && e.getCurrentItem().getType() != Material.AIR){
+			if(e.getCurrentItem() != null && e.getCurrentItem().getType() != Material.AIR && upgrades.containsKey(e.getSlot() - 9)){
 				Upgrade u = upgrades.get(e.getSlot() - 9);
 				e.getInventory().setItem(e.getSlot(), u.onClickSetting());
 				e.setCancelled(true);
 			}else{
 				e.getWhoClicked().getInventory().addItem(Upgrade.getItem(UpgradeType.RedstoneUpgrade));
+				e.setCancelled(true);
 			}
+			updateIventories();
 		}else{
 			plugin.getLogger().warning("Upgrade Slot: " + e.getSlot() + " selected!");
 		}

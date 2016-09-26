@@ -2,6 +2,7 @@ package de.oninoni.OnionPower.Listeners;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -31,5 +32,10 @@ public class InventoryListener implements Listener{
 	@EventHandler
 	public void onDrag(InventoryDragEvent e){
 		plugin.getMachineManager().onDrag(e);
+	}
+	
+	@EventHandler
+	public void onDispense(BlockDispenseEvent e){
+		plugin.getMachineManager().onDispense(e);
 	}
 }

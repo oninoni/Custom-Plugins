@@ -19,8 +19,6 @@ import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.CustomsItems;
 import de.oninoni.OnionPower.Machines.MachineDispenser;
 import de.oninoni.OnionPower.Machines.MachineManager;
-import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
-import de.oninoni.OnionPower.Machines.Upgrades.UpgradeRedstone;
 
 public class Miner extends MachineDispenser{
 
@@ -28,8 +26,8 @@ public class Miner extends MachineDispenser{
 	
 	private static final int MAXRANGE = 128;
 	
-	public Miner(Location position, MachineManager machineManager, int power, HashMap<Integer, Upgrade> upgrades) {
-		super(position, machineManager, power, upgrades);
+	public Miner(Location position, MachineManager machineManager, int power) {
+		super(position, machineManager, power);
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {
@@ -49,8 +47,8 @@ public class Miner extends MachineDispenser{
 		SetupPowerIO();
 	}
 	
-	public Miner(Location position, MachineManager machineManager, HashMap<Integer, Upgrade> upgrades) {
-		super(position, machineManager, upgrades);
+	public Miner(Location position, MachineManager machineManager) {
+		super(position, machineManager);
 		SetupPowerIO();
 	}
 	
@@ -83,17 +81,15 @@ public class Miner extends MachineDispenser{
 	@SuppressWarnings("deprecation")
 	@Override
 	public void updateBlock() {
-		UpgradeRedstone redstoneUpgrade = (UpgradeRedstone) upgradeManager.getUpgrade(UpgradeType.RedstoneUpgrade);
-		if(redstoneUpgrade!= null && !redstoneUpgrade.isMachineOnline(this))return;
 		if(dispenser.getInventory().getItem(7) != null){
 			if(dispenser.getInventory().getItem(7).getDurability() >= 250){
 				dispenser.getInventory().clear(7);
 			}else{
 				requestFromConnected();
 				if(idleTimer <= 0){
-					Vector direction = MachineManager.directions[directionAdapter[dispenser.getRawData()]];
+					Vector direction = MachineManager.directions[directionAdapter[dispenser.getRawData()%8]];
 					int i;
-					ArrayList<InventoryHolder> targetInventories = plugin.getMachineManager().getAdjacentInventoryHolders(this, dispenser.getRawData());
+					ArrayList<InventoryHolder> targetInventories = plugin.getMachineManager().getAdjacentInventoryHolders(this, dispenser.getRawData()%8);
 					for(i = 1; i <= MAXRANGE; i++){
 						Location newPos = position.clone();
 						newPos.add(direction.clone().multiply(i));

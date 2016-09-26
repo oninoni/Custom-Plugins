@@ -25,13 +25,14 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
 import de.oninoni.OnionPower.OnionPower;
 import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.PowerCore;
-import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
 import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager;
+import de.oninoni.OnionPower.Machines.Upgrades.RedstoneUpgrade;
 
 public abstract class Machine {
 	
@@ -98,13 +99,13 @@ public abstract class Machine {
 	
 	private List<Machine> sender = new ArrayList<>();
 	
-	public Machine(Location position, MachineManager machineManager, int power, HashMap<Integer, Upgrade> upgrades){
-		initValues(position, machineManager, upgrades);
+	public Machine(Location position, MachineManager machineManager, int power){
+		initValues(position, machineManager);
 		this.power = power;
 	}
 	
-	public Machine(Location position, MachineManager machineManager, HashMap<Integer, Upgrade> upgrades){
-		initValues(position, machineManager, upgrades);
+	public Machine(Location position, MachineManager machineManager){
+		initValues(position, machineManager);
 		
 		BlockState state = position.getBlock().getState();
 		if(state instanceof InventoryHolder){
@@ -116,7 +117,21 @@ public abstract class Machine {
 		}
 	}
 	
-	private void initValues(Location position, MachineManager machineManager, HashMap<Integer, Upgrade> upgrades){
+	public void setUpgradeLore(){
+		ItemStack powerCore = getPowerCore();
+		ItemMeta itemMeta = powerCore.getItemMeta();
+		List<String> lore = itemMeta.getLore();
+		lore = lore.subList(0, 5);
+		lore.addAll(upgradeManager.getPowerCoreLore());
+		itemMeta.setLore(lore);
+		powerCore.setItemMeta(itemMeta);
+	}
+	
+	public ItemStack getPowerCore(){
+		return invHolder.getInventory().getItem(coreSlot);
+	}
+	
+	private void initValues(Location position, MachineManager machineManager){
 		setCoreSlot();
 		
 		powerCore = PowerCore.create(this);
@@ -136,7 +151,7 @@ public abstract class Machine {
 		spawnDesignEntities();
 
 		setAvailableUpgrades();
-		upgradeManager = new UpgradeManager(this, upgrades);
+		upgradeManager = new UpgradeManager(this);
 	}
 	
 	protected abstract boolean isMaterial(Material material);
@@ -454,6 +469,8 @@ public abstract class Machine {
 	public void update() {
 		if (!isLoaded)
 			return;
+		RedstoneUpgrade redstoneUpgrade = (RedstoneUpgrade) upgradeManager.getUpgrade(UpgradeType.RedstoneUpgrade);
+		if(redstoneUpgrade!= null && !redstoneUpgrade.isMachineOnline(this))return;
 		
 		updateBlock();
 	}

@@ -1,7 +1,5 @@
 package de.oninoni.OnionPower.Machines.FurnaceBased;
 
-import java.util.HashMap;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,14 +11,13 @@ import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.ItemData;
 import de.oninoni.OnionPower.Machines.MachineFurnace;
 import de.oninoni.OnionPower.Machines.MachineManager;
-import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
 
 public class Generator extends MachineFurnace {
 	
 	private boolean disableSmeltingSlot = false;
 	
-	public Generator(Location position, MachineManager machineManager, int power, HashMap<Integer, Upgrade> upgrades) {
-		super(position, machineManager, power, upgrades);
+	public Generator(Location position, MachineManager machineManager, int power) {
+		super(position, machineManager, power);
 		
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
@@ -33,8 +30,8 @@ public class Generator extends MachineFurnace {
 		}, 1L);
 	}
 	
-	public Generator(Location position, MachineManager machineManager, HashMap<Integer, Upgrade> upgrades){
-		super(position, machineManager, upgrades);
+	public Generator(Location position, MachineManager machineManager){
+		super(position, machineManager);
 	}
 	
 	@Override

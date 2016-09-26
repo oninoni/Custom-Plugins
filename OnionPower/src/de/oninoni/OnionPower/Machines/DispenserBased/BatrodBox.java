@@ -1,7 +1,5 @@
 package de.oninoni.OnionPower.Machines.DispenserBased;
 
-import java.util.HashMap;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -12,12 +10,11 @@ import org.bukkit.inventory.ItemStack;
 import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Machines.MachineDispenser;
 import de.oninoni.OnionPower.Machines.MachineManager;
-import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
 
 public class BatrodBox extends MachineDispenser{
 
-	public BatrodBox(Location position, MachineManager machineManager, int power, HashMap<Integer, Upgrade> upgrades) {
-		super(position, machineManager, power, upgrades);
+	public BatrodBox(Location position, MachineManager machineManager, int power) {
+		super(position, machineManager, power);
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {
@@ -34,8 +31,8 @@ public class BatrodBox extends MachineDispenser{
 		setupPowerIO();
 	}
 	
-	public BatrodBox(Location position, MachineManager machineManager, HashMap<Integer, Upgrade> upgrades) {
-		super(position, machineManager, upgrades);
+	public BatrodBox(Location position, MachineManager machineManager) {
+		super(position, machineManager);
 		setupPowerIO();
 	}
 	

@@ -1,16 +1,14 @@
 package de.oninoni.OnionPower.Machines;
 
-import java.util.HashMap;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Dispenser;
+import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 
 import de.oninoni.OnionPower.NMSAdapter;
-import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
 
 public abstract class MachineDispenser extends Machine{
 	
@@ -18,14 +16,18 @@ public abstract class MachineDispenser extends Machine{
 	
 	protected Dispenser dispenser;
 	
-	public MachineDispenser(Location position, MachineManager machineManager, int power, HashMap<Integer, Upgrade> upgrades) {
-		super(position, machineManager, power, upgrades);
+	public void onDispense(BlockDispenseEvent e){
+		e.setCancelled(true);
+	}
+	
+	public MachineDispenser(Location position, MachineManager machineManager, int power) {
+		super(position, machineManager, power);
 		dispenser = ((Dispenser) position.getBlock().getState());
 		NMSAdapter.setInvNameDispenser(dispenser, getDisplayName());
 	}
 	
-	public MachineDispenser(Location position, MachineManager machineManager, HashMap<Integer, Upgrade> upgrades) {
-		super(position, machineManager, upgrades);
+	public MachineDispenser(Location position, MachineManager machineManager) {
+		super(position, machineManager);
 		dispenser = ((Dispenser) position.getBlock().getState());
 		NMSAdapter.setInvNameDispenser(dispenser, getDisplayName());
 	}
