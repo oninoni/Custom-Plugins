@@ -30,4 +30,8 @@ public class UpgradeRedstone extends Upgrade{
 			(powerSetting == ExpectedPower.Off && !power)
 		);
 	}
+
+	public static String getName() {
+		return "§6Upgrade: §5Redstone Control ";
+	}
 }
