@@ -42,7 +42,7 @@ public class UpgradeManager {
 		Set<Integer> keySet = upgrades.keySet();
 		for (Integer key : keySet) {
 			Upgrade u = upgrades.get(key);
-			plugin.getLogger().info("Loaded: " + u.getName());
+			//plugin.getLogger().info("Loaded: " + u.getName());
 			ItemStack uItem = Upgrade.getItem(u.getType());
 			inv.setItem(key, uItem);
 			inv.setItem(key + 9, u.getSettingsItem());
@@ -50,27 +50,28 @@ public class UpgradeManager {
 	}
 	
 	private static HashMap<Integer, Upgrade> load(Machine m){
-		plugin.getLogger().info("Loading... Upgrades...");
+		//plugin.getLogger().info("Loading... Upgrades...");
 		HashMap<Integer, Upgrade> loaded = new HashMap<>();
 		
 		List<String> lore = m.getPowerCore().getItemMeta().getLore();
 		lore = lore.subList(5, lore.size());
 		
 		for (String line : lore) {
-			String[] splitted = line.split("|");
-			plugin.getLogger().info(line);
+			line = line.substring(2);
+			String[] splitted = line.split(":");
 			if(splitted.length == 3){
 				int id = Integer.parseInt(splitted[0]);
-				String type = splitted[1];
+				int type = Integer.parseInt(splitted[1]);
 				int value = Integer.parseInt(splitted[2]);
-				if(UpgradeType.RedstoneUpgrade.toString() == type){
+				//plugin.getLogger().info(type + " / " + UpgradeType.RedstoneUpgrade.toString());
+				if(UpgradeType.RedstoneUpgrade.ordinal() == type){
 					loaded.put(id, new RedstoneUpgrade(value));
-					plugin.getLogger().info(id + "|" + type + "|" + value);
+					//plugin.getLogger().info(id + "|" + type + "|" + value);
 				}
 			}
 		}
 		
-		plugin.getLogger().info("Loaded " + loaded.size() + " Upgrades");
+		//plugin.getLogger().info("Loaded " + loaded.size() + " Upgrades");
 		
 		return loaded;
 	}
@@ -81,7 +82,7 @@ public class UpgradeManager {
 		for (Integer key : keySet) {
 			Upgrade u = upgrades.get(key);
 			if(u instanceof RedstoneUpgrade){
-				lore.add(key + "|" + u.getType().toString() + "|" + ((RedstoneUpgrade) u).getPowerSetting().ordinal());
+				lore.add("§h" + key + ":" + u.getType().ordinal() + ":" + ((RedstoneUpgrade) u).getPowerSetting().ordinal());
 			}
 		}
 		return lore;

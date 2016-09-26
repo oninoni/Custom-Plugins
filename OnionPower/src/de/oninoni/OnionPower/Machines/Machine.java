@@ -31,8 +31,8 @@ import org.bukkit.util.Vector;
 import de.oninoni.OnionPower.OnionPower;
 import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.PowerCore;
-import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager;
 import de.oninoni.OnionPower.Machines.Upgrades.RedstoneUpgrade;
+import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager;
 
 public abstract class Machine {
 	
@@ -60,6 +60,14 @@ public abstract class Machine {
 
 	protected int coreSlot;
 	protected ItemStack powerCore;
+	
+	public ItemStack getPowerCore(){
+		ItemStack pCore = invHolder.getInventory().getItem(coreSlot);
+		if(pCore != null){
+			powerCore = pCore;
+		}
+		return powerCore;
+	}
 	
 	protected UpgradeManager upgradeManager;
 	
@@ -125,10 +133,6 @@ public abstract class Machine {
 		lore.addAll(upgradeManager.getPowerCoreLore());
 		itemMeta.setLore(lore);
 		powerCore.setItemMeta(itemMeta);
-	}
-	
-	public ItemStack getPowerCore(){
-		return invHolder.getInventory().getItem(coreSlot);
 	}
 	
 	private void initValues(Location position, MachineManager machineManager){
