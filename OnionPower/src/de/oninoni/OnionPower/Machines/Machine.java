@@ -109,12 +109,15 @@ public abstract class Machine {
 	
 	public Machine(Location position, MachineManager machineManager, int power){
 		setCoreSlot();
+		invHolder = (InventoryHolder) position.getBlock().getState();
 		this.power = power;
+		setPowerCore(PowerCore.create(this));
 		initValues(position, machineManager);
 	}
 	
 	public Machine(Location position, MachineManager machineManager){
 		setCoreSlot();
+		invHolder = (InventoryHolder) position.getBlock().getState();
 		
 		BlockState state = position.getBlock().getState();
 		if(state instanceof InventoryHolder){
@@ -139,8 +142,6 @@ public abstract class Machine {
 	}
 	
 	private void initValues(Location position, MachineManager machineManager){
-		invHolder = (InventoryHolder) position.getBlock().getState();
-		setPowerCore(PowerCore.create(this));
 		
 		this.position = position;
 		this.machineManager = machineManager;
@@ -443,6 +444,11 @@ public abstract class Machine {
 		//plugin.getLogger().info(getMaxPowerOutput() + " / " + requester.getMaxPowerInput());
 		//plugin.getLogger().info(power + " / " + requester.power);
 		
+		RedstoneUpgrade redstoneUpgrade = ((RedstoneUpgrade)upgradeManager.getUpgrade(UpgradeType.RedstoneUpgrade));
+		
+		if(redstoneUpgrade!= null && !redstoneUpgrade.isMachineOnline(this))
+			return;
+		
 		// max total per update
 		int transPower = Math.min(
 			getMaxPowerOutput() - powerOutputTotal, 
@@ -480,15 +486,20 @@ public abstract class Machine {
 		}			
 	}
 	
+	protected boolean isActive(){
+		RedstoneUpgrade redstoneUpgrade = (RedstoneUpgrade) upgradeManager.getUpgrade(UpgradeType.RedstoneUpgrade);
+		return redstoneUpgrade!= null && !redstoneUpgrade.isMachineOnline(this);
+	}
+	
 	public void update() {
 		if (!isLoaded)
 			return;
 		
-		if(getDisplayName() != "§6§lGenerator")
+		if(getDisplayName() != "§6§lGenerator"){
 			requestFromConnected();
 			
-		RedstoneUpgrade redstoneUpgrade = (RedstoneUpgrade) upgradeManager.getUpgrade(UpgradeType.RedstoneUpgrade);
-		if(redstoneUpgrade!= null && !redstoneUpgrade.isMachineOnline(this))return;
+			if(isActive())return;
+		}
 		
 		updateBlock();
 	}

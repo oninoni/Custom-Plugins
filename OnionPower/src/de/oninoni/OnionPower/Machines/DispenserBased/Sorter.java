@@ -180,15 +180,15 @@ public class Sorter extends MachineDispenser{
 			Material material = item.getType();
 			Location target;
 			if(isInFilter(material, 0)){		// Red Filter
-				target = dispenser.getLocation().add(filterDirections[directionAdapter[dispenser.getRawData()]][0]);
+				target = dispenser.getLocation().add(filterDirections[directionAdapter[dispenser.getRawData() % 8]][0]);
 			}else if(isInFilter(material, 1)){	// Green Filter
-				target = dispenser.getLocation().add(filterDirections[directionAdapter[dispenser.getRawData()]][1]);
+				target = dispenser.getLocation().add(filterDirections[directionAdapter[dispenser.getRawData() % 8]][1]);
 			}else if(isInFilter(material, 2)){	// Blue Filter
-				target = dispenser.getLocation().add(filterDirections[directionAdapter[dispenser.getRawData()]][2]);
+				target = dispenser.getLocation().add(filterDirections[directionAdapter[dispenser.getRawData() % 8]][2]);
 			}else if(isInFilter(material, 3)){	// Yellow Filter
-				target = dispenser.getLocation().add(filterDirections[directionAdapter[dispenser.getRawData()]][3]);
+				target = dispenser.getLocation().add(filterDirections[directionAdapter[dispenser.getRawData() % 8]][3]);
 			}else{								// No Filter
-				target = dispenser.getLocation().add(MachineManager.directions[directionAdapter[dispenser.getRawData()]]);
+				target = dispenser.getLocation().add(MachineManager.directions[directionAdapter[dispenser.getRawData() % 8]]);
 			}
 			int itemCountMoved = pushOneItemInto(4, dispenser.getInventory(), target);
 			if(itemCountMoved > -1){
@@ -197,10 +197,10 @@ public class Sorter extends MachineDispenser{
 		}
 		if(particlesTimeout > 0){
 			particlesTimeout--;
-			renderParticleSideColored(filterDirections[directionAdapter[dispenser.getRawData()]][0], Color.RED);
-			renderParticleSideColored(filterDirections[directionAdapter[dispenser.getRawData()]][1], Color.GREEN);
-			renderParticleSideColored(filterDirections[directionAdapter[dispenser.getRawData()]][2], Color.BLUE);
-			renderParticleSideColored(filterDirections[directionAdapter[dispenser.getRawData()]][3], Color.YELLOW);
+			renderParticleSideColored(filterDirections[directionAdapter[dispenser.getRawData() % 8]][0], Color.RED);
+			renderParticleSideColored(filterDirections[directionAdapter[dispenser.getRawData() % 8]][1], Color.GREEN);
+			renderParticleSideColored(filterDirections[directionAdapter[dispenser.getRawData() % 8]][2], Color.BLUE);
+			renderParticleSideColored(filterDirections[directionAdapter[dispenser.getRawData() % 8]][3], Color.YELLOW);
 		}
 	}
 	
@@ -333,8 +333,7 @@ public class Sorter extends MachineDispenser{
 
 	@Override
 	protected void setAvailableUpgrades() {
-		// TODO Auto-generated method stub
-		
+		availableUpgrades.add(UpgradeType.RedstoneUpgrade);
 	}
 	
 }

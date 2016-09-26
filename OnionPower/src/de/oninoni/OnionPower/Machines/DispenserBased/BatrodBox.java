@@ -19,6 +19,7 @@ public class BatrodBox extends MachineDispenser{
 			@Override
 			public void run() {
 				for(int i = 0; i < 9; i++){
+					if(i!=coreSlot)
 					dispenser.getInventory().setItem(i, new ItemStack(Material.AIR));
 				}
 				//dispenser.getInventory().setItem(coreSlot, getPowerCore());
@@ -38,7 +39,7 @@ public class BatrodBox extends MachineDispenser{
 	
 	private void setupPowerIO(){
 		@SuppressWarnings("deprecation")
-		int direction = directionAdapter[dispenser.getRawData()];
+		int direction = directionAdapter[dispenser.getRawData() % 8];
 		for(int i = 0; i < 6; i++){
 			if(i == direction){
 				allowedOutputs[i] = true;
@@ -127,7 +128,6 @@ public class BatrodBox extends MachineDispenser{
 
 	@Override
 	protected void setAvailableUpgrades() {
-		// TODO Auto-generated method stub
-		
+		availableUpgrades.add(UpgradeType.RedstoneUpgrade);
 	}
 }

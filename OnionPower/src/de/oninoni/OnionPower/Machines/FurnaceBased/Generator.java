@@ -43,7 +43,7 @@ public class Generator extends MachineFurnace {
 	public void updateBlock() {
 		if (furnace.getBurnTime() <= 0) {
 			ItemStack fuel = furnace.getInventory().getFuel();
-			if(Batrod.check(fuel))return;
+			if(Batrod.check(fuel) || isActive())return;
 			if (fuel != null) {
 				Material mat = fuel.getType();
 				if (ItemData.burnTime.containsKey(mat) && ItemData.burnTime.get(mat) + power <= getMaxPower()) {
@@ -128,7 +128,6 @@ public class Generator extends MachineFurnace {
 
 	@Override
 	protected void setAvailableUpgrades() {
-		// TODO Auto-generated method stub
-		
+		availableUpgrades.add(UpgradeType.RedstoneUpgrade);
 	}
 }
