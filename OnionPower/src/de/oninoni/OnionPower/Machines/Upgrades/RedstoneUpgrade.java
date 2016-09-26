@@ -16,19 +16,18 @@ public class RedstoneUpgrade extends Upgrade{
 		Ignore
 	}
 	
-	public ExpectedPower powerSetting = ExpectedPower.Ignore;
-	
-	public ExpectedPower getPowerSetting() {
-		return powerSetting;
-	}
+	public ExpectedPower powerSetting;
 
-	public RedstoneUpgrade() {
-		super();
+	public RedstoneUpgrade(){
+		this(ExpectedPower.Ignore.ordinal());
 	}
 	
 	public RedstoneUpgrade(int value){
-		super();
 		powerSetting = ExpectedPower.values()[value];
+	}
+	
+	public ExpectedPower getPowerSetting() {
+		return powerSetting;
 	}
 
 	@Override
@@ -50,16 +49,16 @@ public class RedstoneUpgrade extends Upgrade{
 		ArrayList<String> lore = new ArrayList<>();
 		switch (powerSetting) {
 		case Ignore:
-			lore.add("§rRedstone is ignored!");
+			lore.add("§4Redstone is ignored");
 			break;
 		case Off:
-			lore.add("§rRedstone should be off!");
+			lore.add("§4Redstone should be off");
 			break;
 		case On:
-			lore.add("§rRedstone should be on!");
+			lore.add("§4Redstone should be on");
 			break;
 		}
-		ItemStack settingsItem = CustomsItems.getGlassPane((byte) 6, "§5Redstone State Expected:", lore);
+		ItemStack settingsItem = CustomsItems.getGlassPane((byte) 6, "§6Redstone State Expected:", lore);
 		return settingsItem;
 	}
 

@@ -151,7 +151,7 @@ public class MachineManager {
 					this, 
 					Generator.getBatrodPower(e, Generator.class.getName(), InventoryType.FURNACE)
 				));
-				if (ElectricFurnace.canCreate(e, ElectricFurnace.class.getName(), InventoryType.FURNACE))
+			if (ElectricFurnace.canCreate(e, ElectricFurnace.class.getName(), InventoryType.FURNACE))
 				machines.put(location, new ElectricFurnace(
 					location, 
 					this, 

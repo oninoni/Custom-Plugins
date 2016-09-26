@@ -271,11 +271,7 @@ public abstract class Machine {
 			//plugin.getLogger().info("I = " + i + " Mat = " + material + " Item = " + e.getView().getTopInventory().getContents());
 			if(material == Material.BARRIER){
 				ItemStack batrod;
-				if(e.getSlot() == i){
-					batrod = e.getCursor();
-				}else{
-					batrod = e.getInventory().getItem(i);
-				}
+				batrod = e.getInventory().getItem(i);
 				result += Batrod.readPower(batrod);
 			}	
 		}
@@ -283,6 +279,7 @@ public abstract class Machine {
 		return result;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public static boolean canCreate(InventoryClickEvent e, String key, InventoryType type){
 		//plugin.getLogger().info("Type: " + key);
 		Material[] template = MachineTemplates.buildTemplates.get(key);
@@ -323,6 +320,9 @@ public abstract class Machine {
 			if(template[i] != check.getType())return false;
 		}
 		
+		e.setCurrentItem(e.getCursor());
+		e.setCursor(new ItemStack(Material.AIR));
+		e.setCancelled(true);
 		return true;
 	}
 	

@@ -6,27 +6,30 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import de.oninoni.OnionPower.OnionPower;
 import de.oninoni.OnionPower.Machines.Machine.UpgradeType;
 
 public abstract class Upgrade {
+	
+	protected static OnionPower plugin = OnionPower.get();
 	
 	public abstract UpgradeType getType();
 	public abstract ItemStack getSettingsItem();
 	public abstract ItemStack onClickSetting();
 	
 	public static String getName(UpgradeType type) {
-		if(type == UpgradeType.RedstoneUpgrade){
-			return "§6Upgrade: §4Redstone Upgrade";
+		switch (type) {
+		case RedstoneUpgrade:
+			return "§6Upgrade: §4Redstone";
+		case RangeUpgrade:
+			return "§6Upgrade: §4Range";
+		default:
+			return "§6Upgrade: §4";
 		}
-		return "§6Upgrade: §4";
 	}
 	
 	public String getName(){
 		return getName(getType());
-	}
-	
-	public Upgrade(){
-		
 	}
 	
 	public static ItemStack getItem(UpgradeType type){

@@ -39,4 +39,12 @@ public class CustomsItems {
 		pick.setDurability(durability);
 		return pick;
 	}
+	
+	public static ItemStack getLaserPrism(){
+		ItemStack prism = new ItemStack(Material.STAINED_GLASS, 1, (short) 10);
+		ItemMeta meta = prism.getItemMeta();
+		meta.setDisplayName("§5Laser Prism");
+		prism.setItemMeta(meta);
+		return prism;
+	}
 }

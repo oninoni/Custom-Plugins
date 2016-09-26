@@ -73,6 +73,7 @@ public class UpgradeManager {
 				case EfficiencyUpgrade:
 					break;
 				case RangeUpgrade:
+					loaded.put(id, new RangeUpgrade(value));
 					break;
 				}
 			}
@@ -90,6 +91,8 @@ public class UpgradeManager {
 			Upgrade u = upgrades.get(key);
 			if(u instanceof RedstoneUpgrade){
 				lore.add("§h" + key + ":" + u.getType().ordinal() + ":" + ((RedstoneUpgrade) u).getPowerSetting().ordinal());
+			}else if(u instanceof RangeUpgrade){
+				lore.add("§h" + key + ":" + u.getType().ordinal() + ":" + ((RangeUpgrade) u).getRange());
 			}
 		}
 		return lore;
@@ -120,7 +123,7 @@ public class UpgradeManager {
 		if(e.getSlot() >= 0 && e.getSlot() <= 8){
 			//Removing all Upgrades
 			if(e.getCurrentItem() != null && e.getCurrentItem().getType() != Material.AIR){
-				if(Upgrade.isUpgrade(e.getCurrentItem(), UpgradeType.RedstoneUpgrade)){
+				if(Upgrade.isUpgrade(e.getCurrentItem(), UpgradeType.Upgrade)){
 					upgrades.remove(e.getSlot());
 					e.getInventory().setItem(e.getSlot() + 9, CustomsItems.getGlassPane((byte) 15, "§4NO Upgrade in this Slot"));
 				}
@@ -130,6 +133,10 @@ public class UpgradeManager {
 				if(Upgrade.isUpgrade(e.getCursor(), UpgradeType.RedstoneUpgrade) && machine.upgradeAvailable(UpgradeType.RedstoneUpgrade)){
 					//plugin.getLogger().info("Adding " + Upgrade.getName(UpgradeType.RedstoneUpgrade) + " to " + e.getSlot());
 					RedstoneUpgrade upgrade = new RedstoneUpgrade();
+					upgrades.put(e.getSlot(), upgrade);
+					e.getInventory().setItem(e.getSlot() + 9, upgrade.getSettingsItem());
+				}else if(Upgrade.isUpgrade(e.getCursor(), UpgradeType.RangeUpgrade) && machine.upgradeAvailable(UpgradeType.RangeUpgrade)){
+					RangeUpgrade upgrade = new RangeUpgrade();
 					upgrades.put(e.getSlot(), upgrade);
 					e.getInventory().setItem(e.getSlot() + 9, upgrade.getSettingsItem());
 				}else{
@@ -145,7 +152,10 @@ public class UpgradeManager {
 				e.getInventory().setItem(e.getSlot(), u.onClickSetting());
 				e.setCancelled(true);
 			}else{
-				e.getWhoClicked().getInventory().addItem(Upgrade.getItem(UpgradeType.RedstoneUpgrade));
+				if(e.getSlot() == 10)
+					e.getWhoClicked().getInventory().addItem(Upgrade.getItem(UpgradeType.RedstoneUpgrade));
+				else
+					e.getWhoClicked().getInventory().addItem(Upgrade.getItem(UpgradeType.RangeUpgrade));
 				e.setCancelled(true);
 			}
 			updateIventories();
