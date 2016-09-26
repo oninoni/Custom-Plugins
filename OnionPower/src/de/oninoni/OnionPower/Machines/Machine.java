@@ -223,6 +223,7 @@ public abstract class Machine {
 		for(int i = 0; i < invHolder.getInventory().getSize(); i++){
 			resetItemAt(i);
 		}
+		//TODO Upgrades need to drop
 	}
 	
 	public boolean onBoom(Block e){
@@ -234,6 +235,7 @@ public abstract class Machine {
 				invHolder.getInventory().setItem(i, new ItemStack(Material.AIR));
 			}
 		}
+		//TODO here too
 		return doesExplode();
 	}
 	

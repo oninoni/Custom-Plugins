@@ -1,5 +1,7 @@
 package de.oninoni.OnionPower.Machines.Upgrades;
 
+import java.util.ArrayList;
+
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -20,12 +22,29 @@ public abstract class Upgrade {
 	public static String getName(UpgradeType type) {
 		switch (type) {
 		case RedstoneUpgrade:
-			return "§6Upgrade: §4Redstone";
+			return "§6Upgrade: §aRedstone";
 		case RangeUpgrade:
-			return "§6Upgrade: §4Range";
+			return "§6Upgrade: §aRange";
 		default:
-			return "§6Upgrade: §4";
+			return "§6Upgrade: §a";
 		}
+	}
+	
+	private static ArrayList<String> getLore(UpgradeType type){
+		ArrayList<String> lore = new ArrayList<>();
+		switch (type) {
+		case RedstoneUpgrade:
+			lore.add("§9This upgrade allows a Machine,");
+			lore.add("§9to be controlled by §3Redstone§9.");
+			break;
+		case RangeUpgrade:
+			lore.add("§9This can change the range");
+			lore.add("§9of an §3Electrical Stripminer§9.");
+			break;
+		default:
+			lore.add("§9Oninoni forgot to add a description here....");
+		}
+		return lore;
 	}
 	
 	public String getName(){
@@ -36,6 +55,7 @@ public abstract class Upgrade {
 		ItemStack itemStack = new ItemStack(Material.PAPER);
 		ItemMeta itemMeta = itemStack.getItemMeta();
 		itemMeta.setDisplayName(getName(type));
+		itemMeta.setLore(getLore(type));
 		itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 		itemMeta.addEnchant(Enchantment.DURABILITY, 1, false);
 		itemStack.setItemMeta(itemMeta);
