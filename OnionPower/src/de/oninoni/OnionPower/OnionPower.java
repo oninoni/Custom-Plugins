@@ -26,7 +26,7 @@ public class OnionPower extends JavaPlugin {
 	
 	public static OnionPower get(){return JavaPlugin.getPlugin(OnionPower.class);}
 	
-	public void onEnable() {		
+	public void onEnable() {	
 		protocolManager = ProtocolLibrary.getProtocolManager();
 		protocolLibManager = new ProtocolLibManager(protocolManager);
 		protocolLibManager.addLoreListener();
