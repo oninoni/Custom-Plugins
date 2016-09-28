@@ -17,7 +17,6 @@ import org.bukkit.util.Vector;
 
 import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.CustomsItems;
-import de.oninoni.OnionPower.Machines.MachineDispenser;
 import de.oninoni.OnionPower.Machines.MachineManager;
 import de.oninoni.OnionPower.Machines.Upgrades.RangeUpgrade;
 

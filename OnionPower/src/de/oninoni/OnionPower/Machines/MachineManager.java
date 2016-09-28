@@ -30,6 +30,7 @@ import org.bukkit.util.Vector;
 
 import de.oninoni.OnionPower.OnionPower;
 import de.oninoni.OnionPower.Machines.DispenserBased.BatrodBox;
+import de.oninoni.OnionPower.Machines.DispenserBased.MachineDispenser;
 import de.oninoni.OnionPower.Machines.DispenserBased.Miner;
 import de.oninoni.OnionPower.Machines.DispenserBased.Sorter;
 import de.oninoni.OnionPower.Machines.FurnaceBased.ElectricFurnace;

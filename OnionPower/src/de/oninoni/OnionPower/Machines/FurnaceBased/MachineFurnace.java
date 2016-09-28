@@ -1,4 +1,4 @@
-package de.oninoni.OnionPower.Machines;
+package de.oninoni.OnionPower.Machines.FurnaceBased;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -8,6 +8,8 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 
 import de.oninoni.OnionPower.NMSAdapter;
+import de.oninoni.OnionPower.Machines.Machine;
+import de.oninoni.OnionPower.Machines.MachineManager;
 
 public abstract class MachineFurnace extends Machine{
 	

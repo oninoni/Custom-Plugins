@@ -18,8 +18,9 @@ import org.bukkit.util.Vector;
 
 import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.CustomsItems;
-import de.oninoni.OnionPower.Machines.MachineDispenser;
 import de.oninoni.OnionPower.Machines.MachineManager;
+
+//TODO Check inventory Type you move into
 
 public class Sorter extends MachineDispenser{
 	

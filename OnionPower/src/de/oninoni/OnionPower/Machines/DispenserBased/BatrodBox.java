@@ -8,7 +8,6 @@ import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 import de.oninoni.OnionPower.Items.Batrod;
-import de.oninoni.OnionPower.Machines.MachineDispenser;
 import de.oninoni.OnionPower.Machines.MachineManager;
 
 public class BatrodBox extends MachineDispenser{

@@ -8,7 +8,6 @@ import org.bukkit.inventory.ItemStack;
 
 import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.ItemData;
-import de.oninoni.OnionPower.Machines.MachineFurnace;
 import de.oninoni.OnionPower.Machines.MachineManager;
 
 public class ElectricFurnace extends MachineFurnace {
