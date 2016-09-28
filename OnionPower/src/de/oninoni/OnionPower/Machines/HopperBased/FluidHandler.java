@@ -77,7 +77,7 @@ public class FluidHandler extends MachineHopper{
 	}
 	
 	private void updateTank(){
-		CustomsItems.getTank(level, maxLevel, lava);
+		
 	}
 	
 	private void fillSlot(int id){
