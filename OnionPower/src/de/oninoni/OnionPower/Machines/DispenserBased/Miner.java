@@ -215,7 +215,7 @@ public class Miner extends MachineDispenser{
 
 	@Override
 	public void spawnDesignEntity(int id) {
-		
+		return;
 	}
 
 	@Override

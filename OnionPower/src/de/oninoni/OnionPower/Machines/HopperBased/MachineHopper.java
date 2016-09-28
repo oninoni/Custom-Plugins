@@ -1,9 +1,8 @@
-package de.oninoni.OnionPower.Machines.DispenserBased;
+package de.oninoni.OnionPower.Machines.HopperBased;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Dispenser;
-import org.bukkit.event.block.BlockDispenseEvent;
+import org.bukkit.block.Hopper;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
@@ -12,22 +11,20 @@ import de.oninoni.OnionPower.NMSAdapter;
 import de.oninoni.OnionPower.Machines.Machine;
 import de.oninoni.OnionPower.Machines.MachineManager;
 
-public abstract class MachineDispenser extends Machine{
+public abstract class MachineHopper extends Machine{
+
+	Hopper hopper;
 	
-	protected final static int[] directionAdapter = {4,1,5,2,3,0};
-	
-	protected Dispenser dispenser;
-	
-	public MachineDispenser(Location position, MachineManager machineManager, int power) {
+	public MachineHopper(Location position, MachineManager machineManager, int power) {
 		super(position, machineManager, power);
-		dispenser = (Dispenser) invHolder;
-		NMSAdapter.setInvNameDispenser(dispenser, getDisplayName());
+		hopper = (Hopper) invHolder;
+		NMSAdapter.setInvNameHopper(hopper, getDisplayName());
 	}
 	
-	public MachineDispenser(Location position, MachineManager machineManager) {
+	public MachineHopper(Location position, MachineManager machineManager) {
 		super(position, machineManager);
-		dispenser = ((Dispenser) position.getBlock().getState());
-		NMSAdapter.setInvNameDispenser(dispenser, getDisplayName());
+		hopper = (Hopper) invHolder;
+		NMSAdapter.setInvNameHopper(hopper, getDisplayName());
 	}
 	
 	@Override
@@ -62,10 +59,6 @@ public abstract class MachineDispenser extends Machine{
 	@Override
 	public void load() {
 		super.load();
-		dispenser = (Dispenser) invHolder;
-	}
-	
-	public void onDispense(BlockDispenseEvent e){
-		e.setCancelled(true);
+		hopper = (Hopper) invHolder;
 	}
 }

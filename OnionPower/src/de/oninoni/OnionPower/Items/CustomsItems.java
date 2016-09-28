@@ -47,4 +47,28 @@ public class CustomsItems {
 		prism.setItemMeta(meta);
 		return prism;
 	}
+	
+	public static ItemStack getCraftingCore(){
+		ItemStack craftingCore = new ItemStack(Material.WORKBENCH);
+		ItemMeta meta = craftingCore.getItemMeta();
+		meta.setDisplayName("§3Crafting Core");
+		craftingCore.setItemMeta(meta);
+		return craftingCore;
+	}
+	
+	public static ItemStack getTank(){
+		ItemStack tank = new ItemStack(Material.GLASS);
+		ItemMeta meta = tank.getItemMeta();
+		meta.setDisplayName("§3Tank");
+		tank.setItemMeta(meta);
+		return tank;
+	}
+	
+	public static ItemStack getTankWall(){
+		ItemStack tankWall = new ItemStack(Material.IRON_BLOCK);
+		ItemMeta meta = tankWall.getItemMeta();
+		meta.setDisplayName("§3Tank Wall");
+		tankWall.setItemMeta(meta);
+		return tankWall;
+	}
 }

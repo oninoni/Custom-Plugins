@@ -9,6 +9,7 @@ import de.oninoni.OnionPower.Machines.DispenserBased.Miner;
 import de.oninoni.OnionPower.Machines.DispenserBased.Sorter;
 import de.oninoni.OnionPower.Machines.FurnaceBased.ElectricFurnace;
 import de.oninoni.OnionPower.Machines.FurnaceBased.Generator;
+import de.oninoni.OnionPower.Machines.HopperBased.FluidHandler;
 
 public class MachineTemplates {
 	
@@ -34,11 +35,16 @@ public class MachineTemplates {
 				Material.BARRIER,		Material.BARRIER,			Material.BARRIER,
 				Material.BARRIER, 		Material.BARRIER, 			Material.BARRIER
 		});
+		
 		buildTemplates.put(Generator.class.getName(), new Material[]{
 				Material.COMMAND, 		Material.BARRIER
 		});
 		buildTemplates.put(ElectricFurnace.class.getName(), new Material[]{
 				Material.BARRIER
+		});
+
+		buildTemplates.put(FluidHandler.class.getName(), new Material[]{
+				Material.AIR,		Material.BARRIER, 			Material.GLASS, 			Material.WORKBENCH,			Material.AIR
 		});
 	}
 	

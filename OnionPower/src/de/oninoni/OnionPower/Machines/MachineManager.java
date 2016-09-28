@@ -35,6 +35,7 @@ import de.oninoni.OnionPower.Machines.DispenserBased.Miner;
 import de.oninoni.OnionPower.Machines.DispenserBased.Sorter;
 import de.oninoni.OnionPower.Machines.FurnaceBased.ElectricFurnace;
 import de.oninoni.OnionPower.Machines.FurnaceBased.Generator;
+import de.oninoni.OnionPower.Machines.HopperBased.FluidHandler;
 
 public class MachineManager {
 	
@@ -176,7 +177,12 @@ public class MachineManager {
 					this,
 					Miner.getBatrodPower(e, Miner.class.getName(), InventoryType.DISPENSER)
 				));
-			
+			if (FluidHandler.canCreate(e, FluidHandler.class.getName(), InventoryType.HOPPER))
+				machines.put(location, new FluidHandler(
+					location,
+					this,
+					FluidHandler.getBatrodPower(e, FluidHandler.class.getName(), InventoryType.HOPPER)
+				));
 			if(machines.get(e.getInventory().getLocation()) != null	)saveData();
 		}
 		else
@@ -356,6 +362,9 @@ public class MachineManager {
 				}
 				else if(MachineClass == Miner.class){
 					machines.put(l, new Miner(l, this));
+				}
+				else if(MachineClass == FluidHandler.class){
+					machines.put(l, new FluidHandler(l, this));
 				}
 			}
 		}

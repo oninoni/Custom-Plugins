@@ -117,11 +117,11 @@ public abstract class Machine {
 	
 	public Machine(Location position, MachineManager machineManager){
 		setCoreSlot();
-		invHolder = (InventoryHolder) position.getBlock().getState();
 		
 		BlockState state = position.getBlock().getState();
 		if(state instanceof InventoryHolder){
-			this.power = PowerCore.getPowerLevel(((InventoryHolder) state).getInventory().getItem(coreSlot));
+			invHolder = (InventoryHolder) position.getBlock().getState();
+			this.power = PowerCore.getPowerLevel(getPowerCore());
 		}else{
 			plugin.getLogger().warning("Machine at " + position + "is not an Inventory anymore!");
 			this.power = 0;
@@ -512,6 +512,7 @@ public abstract class Machine {
 	public void load() {
 		position = new Location(Bukkit.getWorld(world), vec.getX(), vec.getY(), vec.getZ());
 		isLoaded = true;
+		invHolder = (InventoryHolder) position.getBlock().getState();
 	}
 	
 	public void unload() {
