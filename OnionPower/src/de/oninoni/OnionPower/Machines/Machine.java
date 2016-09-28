@@ -46,6 +46,8 @@ public abstract class Machine {
 	protected EnumSet<UpgradeType> availableUpgrades;
 	protected abstract void setAvailableUpgrades();
 	
+	protected boolean needsUpdate = false;
+	
 	public boolean upgradeAvailable(UpgradeType type){
 		return availableUpgrades.contains(type);
 	}
@@ -83,12 +85,12 @@ public abstract class Machine {
 	};
 	
 	protected boolean[] allowedOutputs = {
-		true,
-		true,
-		true,
-		true,
-		true,
-		true
+		false,
+		false,
+		false,
+		false,
+		false,
+		false
 	};
 	
 	private MachineManager machineManager;
@@ -483,11 +485,13 @@ public abstract class Machine {
 		
 		if (oldPower != power
 		 || oldPowerInputTotal != powerIntputTotal
-		 || oldPowerOutputTotal != powerOutputTotal) {
+		 || oldPowerOutputTotal != powerOutputTotal
+		 || needsUpdate) {
 			updateDisplay();
 			oldPower = power;
 			oldPowerInputTotal = powerIntputTotal;
 			oldPowerOutputTotal = powerOutputTotal;
+			needsUpdate = false;
 		}			
 	}
 	

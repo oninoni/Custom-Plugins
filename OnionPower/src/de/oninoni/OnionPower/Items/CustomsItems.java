@@ -1,5 +1,6 @@
 package de.oninoni.OnionPower.Items;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Material;
@@ -54,21 +55,5 @@ public class CustomsItems {
 		meta.setDisplayName("§3Crafting Core");
 		craftingCore.setItemMeta(meta);
 		return craftingCore;
-	}
-	
-	public static ItemStack getTank(){
-		ItemStack tank = new ItemStack(Material.GLASS);
-		ItemMeta meta = tank.getItemMeta();
-		meta.setDisplayName("§3Tank");
-		tank.setItemMeta(meta);
-		return tank;
-	}
-	
-	public static ItemStack getTankWall(){
-		ItemStack tankWall = new ItemStack(Material.IRON_BLOCK);
-		ItemMeta meta = tankWall.getItemMeta();
-		meta.setDisplayName("§3Tank Wall");
-		tankWall.setItemMeta(meta);
-		return tankWall;
 	}
 }

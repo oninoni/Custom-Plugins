@@ -27,10 +27,19 @@ public class Generator extends MachineFurnace {
 				reOpenInventories();
 			}
 		}, 1L);
+		SetupPowerIO();
 	}
 	
 	public Generator(Location position, MachineManager machineManager){
 		super(position, machineManager);
+		SetupPowerIO();
+	}
+	
+	private void SetupPowerIO(){
+		for(int i = 0; i < 6; i++){
+			allowedOutputs[i] = true;
+			allowedInputs[i] = false;
+		}
 	}
 	
 	@Override

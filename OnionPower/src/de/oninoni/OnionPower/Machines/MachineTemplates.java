@@ -44,7 +44,7 @@ public class MachineTemplates {
 		});
 
 		buildTemplates.put(FluidHandler.class.getName(), new Material[]{
-				Material.AIR,		Material.BARRIER, 			Material.GLASS, 			Material.WORKBENCH,			Material.AIR
+				Material.AIR,		Material.AIR, 			Material.BARRIER, 			Material.GLASS,			Material.WORKBENCH
 		});
 	}
 	
