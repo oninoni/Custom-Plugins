@@ -3,6 +3,7 @@ package de.oninoni.OnionPower.Machines.Upgrades;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
@@ -173,5 +174,24 @@ public class UpgradeManager {
 			}
 		}
 		return null;
+	}
+	
+	public void onBreak(){
+		Set<Integer> keySet = upgrades.keySet();
+		for (Integer key : keySet) {
+			Upgrade u = upgrades.get(key);
+			machine.getPosition().getWorld().dropItemNaturally(machine.getPosition(), u.getItem());
+		}
+	}
+	
+	public void onBoom(){
+		Random r = new Random();
+		Set<Integer> keySet = upgrades.keySet();
+		for (Integer key : keySet) {
+			if(r.nextInt(2) == 0){
+				Upgrade u = upgrades.get(key);
+				machine.getPosition().getWorld().dropItemNaturally(machine.getPosition(), u.getItem());
+			}
+		}
 	}
 }

@@ -13,5 +13,4 @@ public class EntityListener implements Listener{
 		//plugin.getMachineManager().onEntityDeath(e);
 		//TODO Respawn Entities when they get kill doh!
 	}
-	
 }

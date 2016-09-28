@@ -223,20 +223,23 @@ public abstract class Machine {
 		for(int i = 0; i < invHolder.getInventory().getSize(); i++){
 			resetItemAt(i);
 		}
-		//TODO Upgrades need to drop
+		upgradeManager.onBreak();
 	}
 	
 	public boolean onBoom(Block e){
-		Random r = new Random();
-		for(int i = 0; i < invHolder.getInventory().getSize(); i++){
-			if(r.nextInt(2) == 0){
-				resetItemAt(i);
-			}else{
-				invHolder.getInventory().setItem(i, new ItemStack(Material.AIR));
+		if(doesExplode()){
+			Random r = new Random();
+			for(int i = 0; i < invHolder.getInventory().getSize(); i++){
+				if(r.nextInt(2) == 0){
+					resetItemAt(i);
+				}else{
+					invHolder.getInventory().setItem(i, new ItemStack(Material.AIR));
+				}
 			}
+			upgradeManager.onBoom();
+			return true;
 		}
-		//TODO here too
-		return doesExplode();
+		return false;
 	}
 	
 	private boolean isLoaded;
