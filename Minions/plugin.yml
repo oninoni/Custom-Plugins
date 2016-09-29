@@ -1,0 +1,11 @@
+name: Minions
+main: de.oninoni.Minions.Minions
+description: Minions to help you do devious stuff
+version: 0.0.256
+commands:
+  minion:
+    description: give the player a minion
+    usage: Nai!
+  comehere:
+    description: call all them minions
+    usage: Nai!
