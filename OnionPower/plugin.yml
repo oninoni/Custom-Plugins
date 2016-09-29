@@ -1,7 +1,7 @@
 name: OnionPower
 main: de.oninoni.OnionPower.OnionPower
 description: THIS IS AWESOME POWER THING!
-version: 0.0.42
+version: 0.42.006
 commands:
   batrod:
     description: give the player a batrod

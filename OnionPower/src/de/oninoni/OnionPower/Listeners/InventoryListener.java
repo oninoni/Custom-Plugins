@@ -7,6 +7,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.event.inventory.InventoryPickupItemEvent;
 
 import de.oninoni.OnionPower.OnionPower;
 
@@ -27,6 +28,11 @@ public class InventoryListener implements Listener{
 	@EventHandler
 	public void onMove(InventoryMoveItemEvent e){
 		plugin.getMachineManager().onMove(e);
+	}
+	
+	@EventHandler
+	public void onPickup(InventoryPickupItemEvent e){
+		plugin.getMachineManager().onPickup(e);
 	}
 	
 	@EventHandler

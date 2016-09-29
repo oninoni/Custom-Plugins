@@ -6,6 +6,7 @@ import org.bukkit.block.Hopper;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.event.inventory.InventoryPickupItemEvent;
 
 import de.oninoni.OnionPower.NMSAdapter;
 import de.oninoni.OnionPower.Machines.Machine;
@@ -26,6 +27,8 @@ public abstract class MachineHopper extends Machine{
 		hopper = (Hopper) invHolder;
 		NMSAdapter.setInvNameHopper(hopper, getDisplayName());
 	}
+	
+	public abstract void onPickup(InventoryPickupItemEvent e);
 	
 	@Override
 	protected boolean isMaterial(Material material) {

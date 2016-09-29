@@ -21,6 +21,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
@@ -36,6 +37,7 @@ import de.oninoni.OnionPower.Machines.DispenserBased.Sorter;
 import de.oninoni.OnionPower.Machines.FurnaceBased.ElectricFurnace;
 import de.oninoni.OnionPower.Machines.FurnaceBased.Generator;
 import de.oninoni.OnionPower.Machines.HopperBased.FluidHandler;
+import de.oninoni.OnionPower.Machines.HopperBased.MachineHopper;
 
 public class MachineManager {
 	
@@ -134,7 +136,7 @@ public class MachineManager {
 		ArrayList<InventoryHolder> adjacents = new ArrayList<>();
 		for (int i = 0; i < directions.length; i++) {
 			Location l = m.getPosition().clone().add(directions[i]);
-			if(l.getBlock().getState() instanceof InventoryHolder){
+			if(l.getBlock().getState() instanceof InventoryHolder && !machines.containsKey(l)){
 				adjacents.add((InventoryHolder) l.getBlock().getState());
 			}
 		}
@@ -196,12 +198,6 @@ public class MachineManager {
 		}
 	}
 	
-	/*public void onOpen(InventoryOpenEvent e) {
-		Machine machine = machines.get(e.getInventory().getLocation());
-		if (machine == null) 
-			return;
-	}*/
-	
 	public void onDrag(InventoryDragEvent e){
 		Machine machine = machines.get(e.getView().getTopInventory().getHolder().getInventory().getLocation());
 		if(machine == null)return;
@@ -227,10 +223,19 @@ public class MachineManager {
 	public void onMove(InventoryMoveItemEvent e){
 		Location source = e.getSource().getLocation();
 		Location destination = e.getDestination().getLocation();
-		if(machines.get(source) != null)
+		if(machines.containsKey(source))
 			machines.get(source).onMoveFrom(e);
-		if(machines.get(destination) != null)
+		if(machines.containsKey(destination))
 			machines.get(destination).onMoveInto(e);
+	}
+	
+	public void onPickup(InventoryPickupItemEvent e){
+		Location pos = e.getInventory().getLocation();
+		if(machines.containsKey(pos)){
+			Machine m = machines.get(pos);
+			if(m instanceof MachineHopper)
+				((MachineHopper) m).onPickup(e);
+		}
 	}
 	
 	public void onDispense(BlockDispenseEvent e){

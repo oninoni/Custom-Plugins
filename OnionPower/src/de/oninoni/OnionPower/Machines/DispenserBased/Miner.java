@@ -17,7 +17,9 @@ import org.bukkit.util.Vector;
 
 import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.CustomsItems;
+import de.oninoni.OnionPower.Machines.Machine;
 import de.oninoni.OnionPower.Machines.MachineManager;
+import de.oninoni.OnionPower.Machines.HopperBased.FluidHandler;
 import de.oninoni.OnionPower.Machines.Upgrades.RangeUpgrade;
 
 public class Miner extends MachineDispenser{
@@ -85,6 +87,31 @@ public class Miner extends MachineDispenser{
 		}
 		return MAXRANGE;
 	}
+	
+	private boolean checkFluidHandler(Block b){
+		@SuppressWarnings("deprecation")
+		ArrayList<Machine> adjacentMachines = plugin.getMachineManager().getAdjacentMachines(this,  dispenser.getRawData() % 8);
+		boolean success = false;
+		for (Machine machine : adjacentMachines) {
+			if(machine instanceof FluidHandler){
+				FluidHandler fluidHandler = ((FluidHandler) machine);
+				if(b.getType() == Material.WATER || b.getType() == Material.STATIONARY_WATER){
+					if(!fluidHandler.isLavaMode()){
+						if(fluidHandler.addFluid(1) == 0){
+							success = true;
+						}
+					}
+				}else{
+					if(fluidHandler.isLavaMode()){
+						if(fluidHandler.addFluid(1) == 0){
+							success = true;
+						}
+					}
+				}
+			}
+		}
+		return success;
+	}
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -106,8 +133,16 @@ public class Miner extends MachineDispenser{
 								idleTimer = 20;
 								break;
 							}
-							if(b.getType() == Material.WATER || b.getType() == Material.STATIONARY_WATER)continue;
-							if(b.getType() == Material.LAVA || b.getType() == Material.STATIONARY_LAVA)continue;
+							if(b.getType() == Material.WATER || b.getType() == Material.STATIONARY_WATER || b.getType() == Material.LAVA || b.getType() == Material.STATIONARY_LAVA){
+								
+								if(!checkFluidHandler(b)){
+									if(b.getType() == Material.WATER || b.getType() == Material.STATIONARY_WATER){
+										continue;
+									}else{
+										break;
+									}
+								}
+							}
 							double distance = position.distance(newPos);
 							if(getPower() > 5 * distance){
 								
