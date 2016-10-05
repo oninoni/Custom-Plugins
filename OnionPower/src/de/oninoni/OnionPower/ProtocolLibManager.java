@@ -14,32 +14,34 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 
 public class ProtocolLibManager {
-	
+
 	private static OnionPower plugin = OnionPower.get();
-	
-	public ProtocolLibManager(ProtocolManager protocolManager){
+
+	public ProtocolLibManager(ProtocolManager protocolManager) {
 		this.protocolManager = protocolManager;
 	}
-	
+
 	private ProtocolManager protocolManager;
-	
-	public void addLoreListener(){
-		protocolManager.addPacketListener(new PacketAdapter(plugin, ListenerPriority.NORMAL, PacketType.Play.Server.SET_SLOT, PacketType.Play.Server.WINDOW_ITEMS) {
+
+	public void addLoreListener() {
+		protocolManager.addPacketListener(new PacketAdapter(plugin, ListenerPriority.NORMAL,
+				PacketType.Play.Server.SET_SLOT, PacketType.Play.Server.WINDOW_ITEMS) {
 			@Override
 			public void onPacketSending(PacketEvent event) {
-				if(event.getPlayer().getGameMode() == GameMode.CREATIVE)return;
-				if(event.getPacketType() == PacketType.Play.Server.SET_SLOT){
+				if (event.getPlayer().getGameMode() == GameMode.CREATIVE)
+					return;
+				if (event.getPacketType() == PacketType.Play.Server.SET_SLOT) {
 					PacketContainer packet = event.getPacket().deepClone();
 					List<ItemStack> sm = packet.getItemModifier().getValues();
-					for(int i = 0; i < sm.size(); i++){
+					for (int i = 0; i < sm.size(); i++) {
 						ItemStack item = sm.get(i);
-						if(item != null){
+						if (item != null) {
 							ItemMeta itemMeta = item.getItemMeta();
-							if(itemMeta.hasLore()){
+							if (itemMeta.hasLore()) {
 								List<String> lore = itemMeta.getLore();
 								for (int k = 0; k < lore.size(); k++) {
 									String s = lore.get(k);
-									if(s.startsWith("§h")){
+									if (s.startsWith("§h")) {
 										lore.remove(s);
 										k--;
 									}
@@ -51,19 +53,19 @@ public class ProtocolLibManager {
 					}
 					event.setPacket(packet);
 				}
-				if(event.getPacketType() == PacketType.Play.Server.WINDOW_ITEMS){
+				if (event.getPacketType() == PacketType.Play.Server.WINDOW_ITEMS) {
 					PacketContainer packet = event.getPacket().deepClone();
 					List<ItemStack[]> sm = packet.getItemArrayModifier().getValues();
-					for(int i = 0; i < sm.size(); i++){
-						for(int j = 0; j < sm.get(i).length; j++){
+					for (int i = 0; i < sm.size(); i++) {
+						for (int j = 0; j < sm.get(i).length; j++) {
 							ItemStack item = sm.get(i)[j];
-							if(item != null){
+							if (item != null) {
 								ItemMeta itemMeta = item.getItemMeta();
-								if(itemMeta.hasLore()){
+								if (itemMeta.hasLore()) {
 									List<String> lore = itemMeta.getLore();
 									for (int k = 0; k < lore.size(); k++) {
 										String s = lore.get(k);
-										if(s.startsWith("§h")){
+										if (s.startsWith("§h")) {
 											lore.remove(s);
 											k--;
 										}

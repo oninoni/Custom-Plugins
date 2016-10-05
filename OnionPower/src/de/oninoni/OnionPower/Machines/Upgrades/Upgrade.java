@@ -9,16 +9,25 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import de.oninoni.OnionPower.OnionPower;
-import de.oninoni.OnionPower.Machines.Machine.UpgradeType;
+import de.oninoni.OnionPower.Machines.Machine;
+import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager.UpgradeType;
 
 public abstract class Upgrade {
-	
+
+	protected Machine machine;
+
+	public Upgrade(Machine m) {
+		machine = m;
+	}
+
 	protected static OnionPower plugin = OnionPower.get();
-	
+
 	public abstract UpgradeType getType();
+
 	public abstract ItemStack getSettingsItem();
+
 	public abstract ItemStack onClickSetting();
-	
+
 	public static String getName(UpgradeType type) {
 		switch (type) {
 		case RedstoneUpgrade:
@@ -29,8 +38,8 @@ public abstract class Upgrade {
 			return "§6Upgrade: §a";
 		}
 	}
-	
-	private static ArrayList<String> getLore(UpgradeType type){
+
+	private static ArrayList<String> getLore(UpgradeType type) {
 		ArrayList<String> lore = new ArrayList<>();
 		switch (type) {
 		case RedstoneUpgrade:
@@ -46,12 +55,12 @@ public abstract class Upgrade {
 		}
 		return lore;
 	}
-	
-	public String getName(){
+
+	public String getName() {
 		return getName(getType());
 	}
-	
-	public static ItemStack getItem(UpgradeType type){
+
+	public static ItemStack getItem(UpgradeType type) {
 		ItemStack itemStack = new ItemStack(Material.PAPER);
 		ItemMeta itemMeta = itemStack.getItemMeta();
 		itemMeta.setDisplayName(getName(type));
@@ -61,16 +70,17 @@ public abstract class Upgrade {
 		itemStack.setItemMeta(itemMeta);
 		return itemStack;
 	}
-	
-	public ItemStack getItem(){
+
+	public ItemStack getItem() {
 		return getItem(getType());
 	}
-	
-	public static boolean isUpgrade(ItemStack i, UpgradeType type){
+
+	public static boolean isUpgrade(ItemStack i, UpgradeType type) {
 		return i.getType() == Material.PAPER && i.getItemMeta().getDisplayName().startsWith(getName(type));
 	}
-	
-	public static boolean isUpgrade(ItemStack i){
-		return i.getType() == Material.PAPER && i.getItemMeta().getDisplayName().startsWith(getName(UpgradeType.Upgrade));
+
+	public static boolean isUpgrade(ItemStack i) {
+		return i.getType() == Material.PAPER
+				&& i.getItemMeta().getDisplayName().startsWith(getName(UpgradeType.Upgrade));
 	}
 }

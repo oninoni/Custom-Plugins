@@ -6,26 +6,25 @@ import org.bukkit.inventory.ItemStack;
 
 import de.oninoni.OnionPower.Items.CustomsItems;
 import de.oninoni.OnionPower.Machines.Machine;
-import de.oninoni.OnionPower.Machines.Machine.UpgradeType;
+import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager.UpgradeType;
 
-public class RedstoneUpgrade extends Upgrade{
-	
-	public enum ExpectedPower{
-		On,
-		Off,
-		Ignore
+public class RedstoneUpgrade extends Upgrade {
+
+	public enum ExpectedPower {
+		On, Off, Ignore
 	}
-	
+
 	public ExpectedPower powerSetting;
 
-	public RedstoneUpgrade(){
-		this(ExpectedPower.Ignore.ordinal());
+	public RedstoneUpgrade(Machine m) {
+		this(m, ExpectedPower.Ignore.ordinal());
 	}
-	
-	public RedstoneUpgrade(int value){
+
+	public RedstoneUpgrade(Machine m, int value) {
+		super(m);
 		powerSetting = ExpectedPower.values()[value];
 	}
-	
+
 	public ExpectedPower getPowerSetting() {
 		return powerSetting;
 	}
@@ -34,14 +33,11 @@ public class RedstoneUpgrade extends Upgrade{
 	public UpgradeType getType() {
 		return UpgradeType.RedstoneUpgrade;
 	}
-	
-	public boolean isMachineOnline(Machine m){
+
+	public boolean isMachineOnline(Machine m) {
 		boolean power = m.getPosition().getBlock().getBlockPower() > 0;
-		return (
-			powerSetting == ExpectedPower.Ignore ||
-			(powerSetting == ExpectedPower.On && power) ||
-			(powerSetting == ExpectedPower.Off && !power)
-		);
+		return (powerSetting == ExpectedPower.Ignore || (powerSetting == ExpectedPower.On && power)
+				|| (powerSetting == ExpectedPower.Off && !power));
 	}
 
 	@Override

@@ -5,38 +5,40 @@ import java.util.ArrayList;
 import org.bukkit.inventory.ItemStack;
 
 import de.oninoni.OnionPower.Items.CustomsItems;
-import de.oninoni.OnionPower.Machines.Machine.UpgradeType;
+import de.oninoni.OnionPower.Machines.Machine;
+import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager.UpgradeType;
 
-public class RangeUpgrade extends Upgrade{
+public class RangeUpgrade extends Upgrade {
 
 	int range;
-	
-	public RangeUpgrade(){
-		this(5);
+
+	public RangeUpgrade(Machine m) {
+		this(m, 5);
 	}
-	
-	public RangeUpgrade(int value){
+
+	public RangeUpgrade(Machine m, int value) {
+		super(m);
 		range = value;
 	}
-	
+
 	@Override
 	public UpgradeType getType() {
 		return UpgradeType.RangeUpgrade;
 	}
 
-	public int getRange(){
-		return (int)Math.pow(2, range);
+	public int getRange() {
+		return (int) Math.pow(2, range);
 	}
-	
+
 	@Override
 	public ItemStack getSettingsItem() {
 		ArrayList<String> lore = new ArrayList<>();
-		if(range == 0){
+		if (range == 0) {
 			lore.add("§41 Block");
-		}else{
+		} else {
 			lore.add("§4" + getRange() + " Blocks");
 		}
-		
+
 		ItemStack settingsItem = CustomsItems.getGlassPane((byte) 6, "§6Range will be limited to:", lore);
 		return settingsItem;
 	}
@@ -46,7 +48,5 @@ public class RangeUpgrade extends Upgrade{
 		range = (range + 1) % 8;
 		return getSettingsItem();
 	}
-	
-	
-	
+
 }

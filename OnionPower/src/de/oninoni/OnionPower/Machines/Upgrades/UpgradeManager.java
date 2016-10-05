@@ -18,98 +18,110 @@ import org.bukkit.inventory.ItemStack;
 import de.oninoni.OnionPower.OnionPower;
 import de.oninoni.OnionPower.Items.CustomsItems;
 import de.oninoni.OnionPower.Machines.Machine;
-import de.oninoni.OnionPower.Machines.Machine.UpgradeType;
 
 public class UpgradeManager {
-	
+
+	public enum UpgradeType {
+		Upgrade, RangeUpgrade, RedstoneUpgrade, EfficiencyUpgrade, LavaUpgrade,
+	}
+
 	protected static OnionPower plugin = OnionPower.get();
-	
+
 	private Machine machine;
 	private Inventory inv;
-	
+
 	HashMap<Integer, Upgrade> upgrades;
-	
-	public UpgradeManager(Machine m){
+
+	public UpgradeManager(Machine m) {
 		this(m, load(m));
 	}
-	
-	private UpgradeManager(Machine m, HashMap<Integer, Upgrade> upgrades){
+
+	private UpgradeManager(Machine m, HashMap<Integer, Upgrade> upgrades) {
 		this.upgrades = upgrades;
 		machine = m;
-		
-		inv = plugin.getServer().createInventory((InventoryHolder) machine.getPosition().getBlock().getState(), 18, getName());
-		for(int i = 0; i < 9; i++)inv.setItem(i + 9, CustomsItems.getGlassPane((byte) 15, "§4NO Upgrade in this Slot"));
+
+		inv = plugin.getServer().createInventory((InventoryHolder) machine.getPosition().getBlock().getState(), 18,
+				getName());
+		for (int i = 0; i < 9; i++)
+			inv.setItem(i + 9, CustomsItems.getGlassPane((byte) 15, "§4NO Upgrade in this Slot"));
 
 		Set<Integer> keySet = upgrades.keySet();
 		for (Integer key : keySet) {
 			Upgrade u = upgrades.get(key);
-			//plugin.getLogger().info("Loaded: " + u.getName());
+			// plugin.getLogger().info("Loaded: " + u.getName());
 			ItemStack uItem = Upgrade.getItem(u.getType());
 			inv.setItem(key, uItem);
 			inv.setItem(key + 9, u.getSettingsItem());
 		}
 	}
-	
+
 	@SuppressWarnings("incomplete-switch")
-	private static HashMap<Integer, Upgrade> load(Machine m){
-		//plugin.getLogger().info("Loading... Upgrades...");
+	private static HashMap<Integer, Upgrade> load(Machine m) {
+		// plugin.getLogger().info("Loading... Upgrades...");
 		HashMap<Integer, Upgrade> loaded = new HashMap<>();
-		
+
 		List<String> lore = m.getPowerCore().getItemMeta().getLore();
 		lore = lore.subList(5, lore.size());
-		
+
 		for (String line : lore) {
 			line = line.substring(2);
 			String[] splitted = line.split(":");
-			if(splitted.length == 3){
+			if (splitted.length == 3) {
 				int id = Integer.parseInt(splitted[0]);
 				UpgradeType type = UpgradeType.values()[Integer.parseInt(splitted[1])];
 				int value = Integer.parseInt(splitted[2]);
-				//plugin.getLogger().info(type + " / " + UpgradeType.RedstoneUpgrade.toString());
-				//plugin.getLogger().info(id + "|" + type + "|" + value);
+				// plugin.getLogger().info(type + " / " +
+				// UpgradeType.RedstoneUpgrade.toString());
+				// plugin.getLogger().info(id + "|" + type + "|" + value);
 				switch (type) {
 				case RedstoneUpgrade:
-					loaded.put(id, new RedstoneUpgrade(value));
+					loaded.put(id, new RedstoneUpgrade(m, value));
 					break;
 				case EfficiencyUpgrade:
 					break;
 				case RangeUpgrade:
-					loaded.put(id, new RangeUpgrade(value));
+					loaded.put(id, new RangeUpgrade(m, value));
+					break;
+				case LavaUpgrade:
+					loaded.put(id, new LavaUpgrade(m, value));
 					break;
 				}
 			}
 		}
-		
-		//plugin.getLogger().info("Loaded " + loaded.size() + " Upgrades");
-		
+
+		// plugin.getLogger().info("Loaded " + loaded.size() + " Upgrades");
+
 		return loaded;
 	}
-	
-	public List<String> getPowerCoreLore(){
+
+	public List<String> getPowerCoreLore() {
 		List<String> lore = new ArrayList<>();
 		Set<Integer> keySet = upgrades.keySet();
 		for (Integer key : keySet) {
 			Upgrade u = upgrades.get(key);
-			if(u instanceof RedstoneUpgrade){
-				lore.add("§h" + key + ":" + u.getType().ordinal() + ":" + ((RedstoneUpgrade) u).getPowerSetting().ordinal());
-			}else if(u instanceof RangeUpgrade){
+			if (u instanceof RedstoneUpgrade) {
+				lore.add("§h" + key + ":" + u.getType().ordinal() + ":"
+						+ ((RedstoneUpgrade) u).getPowerSetting().ordinal());
+			} else if (u instanceof RangeUpgrade) {
 				lore.add("§h" + key + ":" + u.getType().ordinal() + ":" + ((RangeUpgrade) u).getRange());
+			} else if (u instanceof LavaUpgrade) {
+				lore.add("§h" + key + ":" + u.getType().ordinal() + ":" + ((LavaUpgrade) u).getState());
 			}
 		}
 		return lore;
 	}
-	
-	public String getName(){
+
+	public String getName() {
 		return "§4Upgrades:";
 	}
-	
-	public void openInterface(HumanEntity p){
+
+	public void openInterface(HumanEntity p) {
 		p.openInventory(inv);
 	}
-	
-	public void updateIventories(){
+
+	public void updateIventories() {
 		machine.setUpgradeLore();
-		
+
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {
@@ -119,76 +131,87 @@ public class UpgradeManager {
 			}
 		}, 1L);
 	}
-	
-	public void onClick(InventoryClickEvent e){
-		if(e.getSlot() >= 0 && e.getSlot() <= 8){
-			//Removing all Upgrades
-			if(e.getCurrentItem() != null && e.getCurrentItem().getType() != Material.AIR){
-				if(Upgrade.isUpgrade(e.getCurrentItem(), UpgradeType.Upgrade)){
+
+	public void onClick(InventoryClickEvent e) {
+		if (e.getSlot() >= 0 && e.getSlot() <= 8) {
+			// Removing all Upgrades
+			if (e.getCurrentItem() != null && e.getCurrentItem().getType() != Material.AIR) {
+				if (Upgrade.isUpgrade(e.getCurrentItem(), UpgradeType.Upgrade)) {
 					upgrades.remove(e.getSlot());
-					e.getInventory().setItem(e.getSlot() + 9, CustomsItems.getGlassPane((byte) 15, "§4NO Upgrade in this Slot"));
+					e.getInventory().setItem(e.getSlot() + 9,
+							CustomsItems.getGlassPane((byte) 15, "§4NO Upgrade in this Slot"));
 				}
 			}
-			//Adding all Upgrades
-			if(e.getCursor() != null && e.getCursor().getType() != Material.AIR){
-				if(Upgrade.isUpgrade(e.getCursor(), UpgradeType.RedstoneUpgrade) && machine.upgradeAvailable(UpgradeType.RedstoneUpgrade)){
-					//plugin.getLogger().info("Adding " + Upgrade.getName(UpgradeType.RedstoneUpgrade) + " to " + e.getSlot());
-					RedstoneUpgrade upgrade = new RedstoneUpgrade();
+			// Adding all Upgrades
+			if (e.getCursor() != null && e.getCursor().getType() != Material.AIR) {
+				if (Upgrade.isUpgrade(e.getCursor(), UpgradeType.RedstoneUpgrade)
+						&& machine.upgradeAvailable(UpgradeType.RedstoneUpgrade)) {
+					// plugin.getLogger().info("Adding " +
+					// Upgrade.getName(UpgradeType.RedstoneUpgrade) + " to " +
+					// e.getSlot());
+					RedstoneUpgrade upgrade = new RedstoneUpgrade(machine);
 					upgrades.put(e.getSlot(), upgrade);
 					e.getInventory().setItem(e.getSlot() + 9, upgrade.getSettingsItem());
-				}else if(Upgrade.isUpgrade(e.getCursor(), UpgradeType.RangeUpgrade) && machine.upgradeAvailable(UpgradeType.RangeUpgrade)){
-					RangeUpgrade upgrade = new RangeUpgrade();
+				} else if (Upgrade.isUpgrade(e.getCursor(), UpgradeType.RangeUpgrade)
+						&& machine.upgradeAvailable(UpgradeType.RangeUpgrade)) {
+					RangeUpgrade upgrade = new RangeUpgrade(machine);
 					upgrades.put(e.getSlot(), upgrade);
 					e.getInventory().setItem(e.getSlot() + 9, upgrade.getSettingsItem());
-				}else{
-					//plugin.getLogger().info("ABORT!" + e.getCursor());
+				} else if (Upgrade.isUpgrade(e.getCursor(), UpgradeType.LavaUpgrade)
+						&& machine.upgradeAvailable(UpgradeType.LavaUpgrade)) {
+					LavaUpgrade upgrade = new LavaUpgrade(machine);
+					upgrades.put(e.getSlot(), upgrade);
+					e.getInventory().setItem(e.getSlot() + 9, upgrade.getSettingsItem());
+				} else {
+					// plugin.getLogger().info("ABORT!" + e.getCursor());
 					e.setCancelled(true);
 				}
 			}
 			updateIventories();
-		}else if(e.getSlot() >= 9 && e.getSlot() <= 17){
-			//plugin.getLogger().info("Clicked in Slot: " + e.getSlot());
-			if(e.getCurrentItem() != null && e.getCurrentItem().getType() != Material.AIR && upgrades.containsKey(e.getSlot() - 9)){
+		} else if (e.getSlot() >= 9 && e.getSlot() <= 17) {
+			// plugin.getLogger().info("Clicked in Slot: " + e.getSlot());
+			if (e.getCurrentItem() != null && e.getCurrentItem().getType() != Material.AIR
+					&& upgrades.containsKey(e.getSlot() - 9)) {
 				Upgrade u = upgrades.get(e.getSlot() - 9);
 				e.getInventory().setItem(e.getSlot(), u.onClickSetting());
 				e.setCancelled(true);
-			}else{
-				if(e.getSlot() == 10)
+			} else {
+				if (e.getSlot() == 10)
 					e.getWhoClicked().getInventory().addItem(Upgrade.getItem(UpgradeType.RedstoneUpgrade));
 				else
-					e.getWhoClicked().getInventory().addItem(Upgrade.getItem(UpgradeType.RangeUpgrade));
+					e.getWhoClicked().getInventory().addItem(Upgrade.getItem(UpgradeType.LavaUpgrade));
 				e.setCancelled(true);
 			}
 			updateIventories();
-		}else{
+		} else {
 			plugin.getLogger().warning("Upgrade Slot: " + e.getSlot() + " selected!");
 		}
 	}
-	
-	public Upgrade getUpgrade(UpgradeType type){
+
+	public Upgrade getUpgrade(UpgradeType type) {
 		Set<Integer> keySet = upgrades.keySet();
 		for (Integer key : keySet) {
 			Upgrade u = upgrades.get(key);
-			if(u.getType() == type){
+			if (u.getType() == type) {
 				return u;
 			}
 		}
 		return null;
 	}
-	
-	public void onBreak(){
+
+	public void onBreak() {
 		Set<Integer> keySet = upgrades.keySet();
 		for (Integer key : keySet) {
 			Upgrade u = upgrades.get(key);
 			machine.getPosition().getWorld().dropItemNaturally(machine.getPosition(), u.getItem());
 		}
 	}
-	
-	public void onBoom(){
+
+	public void onBoom() {
 		Random r = new Random();
 		Set<Integer> keySet = upgrades.keySet();
 		for (Integer key : keySet) {
-			if(r.nextInt(2) == 0){
+			if (r.nextInt(2) == 0) {
 				Upgrade u = upgrades.get(key);
 				machine.getPosition().getWorld().dropItemNaturally(machine.getPosition(), u.getItem());
 			}

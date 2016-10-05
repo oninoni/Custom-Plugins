@@ -11,37 +11,37 @@ import org.bukkit.event.inventory.InventoryPickupItemEvent;
 
 import de.oninoni.OnionPower.OnionPower;
 
-public class InventoryListener implements Listener{
-	
+public class InventoryListener implements Listener {
+
 	private static OnionPower plugin = OnionPower.get();
-	
+
 	@EventHandler
-	public void onClick(InventoryClickEvent e){
+	public void onClick(InventoryClickEvent e) {
 		plugin.getMachineManager().onClick(e);
 	}
-	
+
 	@EventHandler
-	public void onClose(InventoryCloseEvent e){
+	public void onClose(InventoryCloseEvent e) {
 		plugin.getMachineManager().onClose(e);
 	}
-	
+
 	@EventHandler
-	public void onMove(InventoryMoveItemEvent e){
+	public void onMove(InventoryMoveItemEvent e) {
 		plugin.getMachineManager().onMove(e);
 	}
-	
+
 	@EventHandler
-	public void onPickup(InventoryPickupItemEvent e){
+	public void onPickup(InventoryPickupItemEvent e) {
 		plugin.getMachineManager().onPickup(e);
 	}
-	
+
 	@EventHandler
-	public void onDrag(InventoryDragEvent e){
+	public void onDrag(InventoryDragEvent e) {
 		plugin.getMachineManager().onDrag(e);
 	}
-	
+
 	@EventHandler
-	public void onDispense(BlockDispenseEvent e){
+	public void onDispense(BlockDispenseEvent e) {
 		plugin.getMachineManager().onDispense(e);
 	}
 }
