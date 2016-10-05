@@ -44,7 +44,6 @@ public class InternalTank {
 		tank.setItemMeta(itemMeta);
 	}
 
-	@SuppressWarnings("deprecation")
 	public static ItemStack setLavaMode(FluidHandler fH) {
 		return create(fH.getLevel(), fH.getMaxLevel(), fH.isLavaMode());
 	}

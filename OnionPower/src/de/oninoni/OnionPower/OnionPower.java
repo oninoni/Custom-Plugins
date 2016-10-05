@@ -28,7 +28,20 @@ public class OnionPower extends JavaPlugin {
 		return JavaPlugin.getPlugin(OnionPower.class);
 	}
 
+	public static String getMinecraftVersion() {
+		String s = Bukkit.getBukkitVersion();
+		return s;
+	}
+
 	public void onEnable() {
+		getLogger().info(getMinecraftVersion());
+		
+		if(getMinecraftVersion().equals("1.10.2-R0.1-SNAPSHOT")){
+			getLogger().info("1.10.2 Mode Activated!");
+		}else if(getMinecraftVersion().equals("1.9.4-R0.1-SNAPSHOT")){
+			getLogger().info("1.9.4 Mode Activated!");
+		}
+			
 		protocolManager = ProtocolLibrary.getProtocolManager();
 		protocolLibManager = new ProtocolLibManager(protocolManager);
 		protocolLibManager.addLoreListener();
