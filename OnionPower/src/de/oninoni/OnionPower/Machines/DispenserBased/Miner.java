@@ -9,8 +9,9 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Jukebox;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
@@ -116,22 +117,22 @@ public class Miner extends MachineDispenser {
 		return MAXRANGE;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public boolean onClick(InventoryClickEvent e) {
-		if (!super.onClick(e)) {
-			if (dispenser.getInventory().getItem(7) == null && e.getSlot() == 7 && e.getCursor() != null
-					&& e.getCursor().getType() == Material.IRON_PICKAXE) {
-				ItemStack i = CustomsItems.getMinerPickAxe(e.getCursor().getDurability());
-				e.setCursor(i);
-			} else {
-				e.setCancelled(true);
-			}
-			return false;
+	public boolean onClickFixed(Inventory inv, int slot, ItemStack cursor, Player p) {
+		if (dispenser.getInventory().getItem(7) == null && slot == 7 && cursor != null
+				&& cursor.getType() == Material.IRON_PICKAXE) {
+			Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+				@Override
+				public void run() {
+					inv.setItem(slot, CustomsItems.getMinerPickAxe(cursor.getDurability()));
+				}
+			}, 1L);
+		} else {
+			return true;
 		}
-		return true;
+		return false;
 	}
-
+	
 	@Override
 	public void onMoveFrom(InventoryMoveItemEvent e) {
 		e.setCancelled(true);
@@ -156,8 +157,8 @@ public class Miner extends MachineDispenser {
 
 	@Override
 	protected void setAvailableUpgrades() {
-		availableUpgrades.add(UpgradeType.RedstoneUpgrade);
-		availableUpgrades.add(UpgradeType.RangeUpgrade);
+		upgradesAvailable.add(UpgradeType.RedstoneUpgrade);
+		upgradesAvailable.add(UpgradeType.RangeUpgrade);
 	}
 
 	@Override

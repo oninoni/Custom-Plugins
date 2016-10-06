@@ -4,7 +4,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Dispenser;
 import org.bukkit.event.block.BlockDispenseEvent;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 
@@ -44,10 +43,6 @@ public abstract class MachineDispenser extends Machine {
 	public void load() {
 		super.load();
 		dispenser = (Dispenser) invHolder;
-	}
-
-	public boolean onClick(InventoryClickEvent e) {
-		return super.onClick(e);
 	}
 
 	@Override

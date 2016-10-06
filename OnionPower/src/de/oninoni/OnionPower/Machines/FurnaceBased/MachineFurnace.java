@@ -3,7 +3,6 @@ package de.oninoni.OnionPower.Machines.FurnaceBased;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Furnace;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 
@@ -41,11 +40,6 @@ public abstract class MachineFurnace extends Machine {
 	public void load() {
 		super.load();
 		furnace = (Furnace) getPosition().getBlock().getState();
-	}
-
-	@Override
-	public boolean onClick(InventoryClickEvent e) {
-		return super.onClick(e);
 	}
 
 	@Override

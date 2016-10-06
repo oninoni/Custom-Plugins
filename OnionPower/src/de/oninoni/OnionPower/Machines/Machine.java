@@ -111,14 +111,11 @@ public abstract class Machine {
 		return result;
 	}
 
-	protected EnumSet<UpgradeType> availableUpgrades;
-
-	protected boolean needsUpdate = false;
-
-	protected ArrayList<ArmorStand> designEntities;
+	protected InventoryHolder invHolder;
 
 	protected int coreSlot;
 
+	protected EnumSet<UpgradeType> upgradesAvailable;
 	protected UpgradeManager upgradeManager;
 
 	protected boolean[] allowedInputs = { true, true, true, true, true, true };
@@ -127,21 +124,21 @@ public abstract class Machine {
 	private MachineManager machineManager;
 
 	protected Location position;
-
-	protected InventoryHolder invHolder;
-
 	private Vector vec;
-
 	private String world;
-	protected int power;
-
-	protected int powerIntputTotal, powerOutputTotal;
-	private int oldPower;
-
-	private int oldPowerInputTotal, oldPowerOutputTotal;
-	private List<Machine> sender = new ArrayList<>();
 
 	private boolean isLoaded;
+
+	protected int power;
+	private int powerOld;
+	protected int powerIntputTotal, powerOutputTotal;
+	private int powerInputTotalOld, powerOutputTotalOld;
+
+	private List<Machine> sender = new ArrayList<>();
+
+	protected boolean needsUpdate = false;
+
+	protected ArrayList<ArmorStand> designEntities;
 
 	public Machine(Location position, MachineManager machineManager) {
 		setCoreSlot();
@@ -299,7 +296,7 @@ public abstract class Machine {
 		designEntities.ensureCapacity(getDesignEntityCount());
 		spawnDesignEntities();
 
-		availableUpgrades = EnumSet.noneOf(UpgradeType.class);
+		upgradesAvailable = EnumSet.noneOf(UpgradeType.class);
 
 		setAvailableUpgrades();
 		upgradeManager = new UpgradeManager(this);
@@ -341,19 +338,48 @@ public abstract class Machine {
 		upgradeManager.onBreak();
 	}
 
-	public boolean onClick(InventoryClickEvent e) {
+	public void onClick(InventoryClickEvent e) {
 		if (e.getInventory().getName() == upgradeManager.getName()) {
 			upgradeManager.onClick(e);
-			return true;
+		}else{
+			if (coreSlot == e.getRawSlot()) {
+				e.setCancelled(true);
+				upgradeManager.openInterface(e.getWhoClicked());
+			}
+			int slot;
+			ItemStack cursor;
+			//plugin.getLogger().info("Click at " + e.getSlot() + " / " + e.getRawSlot());
+			//plugin.getLogger().info("Cursor: " + e.getCursor() + " / Current: " + e.getCurrentItem());
+			if(e.isShiftClick()){
+				cursor = e.getCurrentItem();
+				if(e.getRawSlot() > invHolder.getInventory().getSize()){
+					//plugin.getLogger().info("Shift from outside!");
+					slot = -1;
+					if(e.getCursor() != null && e.getCursor().getType() != null){
+						slot = invHolder.getInventory().first(e.getCursor().getType());
+						if(slot == -1){
+							slot = invHolder.getInventory().firstEmpty();
+							if(slot == -1){
+								return;
+							}
+						}
+					}
+				}else{
+					slot = e.getRawSlot();
+				}
+			}else{
+				slot = e.getRawSlot();
+				cursor = e.getCursor();
+			}
+			if(slot >= invHolder.getInventory().getSize())return;
+			//plugin.getLogger().info("Clicking in machine at: " + slot + " with: " + cursor);
+			e.setCancelled(onClickFixed(e.getView().getTopInventory(), slot, cursor, (Player) e.getWhoClicked()));
 		}
-		int convertSlot = e.getView().convertSlot(e.getRawSlot());
-		if (convertSlot == coreSlot) {
-			e.setCancelled(true);
-			upgradeManager.openInterface(e.getWhoClicked());
-		}
-		return false;
+		
 	}
 	
+	public abstract boolean onClickFixed(Inventory inv, int slot, ItemStack cursor, Player p);
+
 	public abstract void onClose(InventoryCloseEvent e);
 
 	public abstract void onMoveFrom(InventoryMoveItemEvent e);
@@ -457,7 +483,7 @@ public abstract class Machine {
 		invHolder.getInventory().setItem(coreSlot, powerCore);
 	}
 
-	public void setUpgradeLore() {
+	public void saveUpgradeAsLore() {
 		ItemStack powerCore = getPowerCore();
 		ItemMeta itemMeta = powerCore.getItemMeta();
 		List<String> lore = itemMeta.getLore();
@@ -548,17 +574,17 @@ public abstract class Machine {
 		// plugin.getLogger().info("Power: " + power + " / OldPower: " +
 		// oldPower);
 
-		if (oldPower != power || oldPowerInputTotal != powerIntputTotal || oldPowerOutputTotal != powerOutputTotal
+		if (powerOld != power || powerInputTotalOld != powerIntputTotal || powerOutputTotalOld != powerOutputTotal
 				|| needsUpdate) {
 			updateDisplay();
-			oldPower = power;
-			oldPowerInputTotal = powerIntputTotal;
-			oldPowerOutputTotal = powerOutputTotal;
+			powerOld = power;
+			powerInputTotalOld = powerIntputTotal;
+			powerOutputTotalOld = powerOutputTotal;
 			needsUpdate = false;
 		}
 	}
 
 	public boolean upgradeAvailable(UpgradeType type) {
-		return availableUpgrades.contains(type);
+		return upgradesAvailable.contains(type);
 	}
 }

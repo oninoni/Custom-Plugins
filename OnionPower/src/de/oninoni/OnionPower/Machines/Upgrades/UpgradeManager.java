@@ -207,7 +207,7 @@ public class UpgradeManager {
 	}
 
 	public void updateIventories() {
-		machine.setUpgradeLore();
+		machine.saveUpgradeAsLore();
 
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override

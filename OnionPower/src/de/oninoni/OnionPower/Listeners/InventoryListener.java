@@ -17,7 +17,6 @@ public class InventoryListener implements Listener {
 
 	@EventHandler
 	public void onClick(InventoryClickEvent e) {
-		plugin.getLogger().info("OnClick");
 		plugin.getMachineManager().onClick(e);
 	}
 

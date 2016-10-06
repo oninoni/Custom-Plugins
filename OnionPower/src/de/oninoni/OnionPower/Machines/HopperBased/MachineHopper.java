@@ -3,7 +3,6 @@ package de.oninoni.OnionPower.Machines.HopperBased;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Hopper;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
@@ -42,10 +41,6 @@ public abstract class MachineHopper extends Machine {
 	public void load() {
 		super.load();
 		hopper = (Hopper) invHolder;
-	}
-
-	public boolean onClick(InventoryClickEvent e) {
-		return super.onClick(e);
 	}
 
 	@Override

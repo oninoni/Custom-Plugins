@@ -3,8 +3,9 @@ package de.oninoni.OnionPower.Machines.FurnaceBased;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import de.oninoni.OnionPower.Items.Batrod;
@@ -62,14 +63,11 @@ public class Generator extends MachineFurnace {
 	}
 
 	@Override
-	public boolean onClick(InventoryClickEvent e) {
-		if (!super.onClick(e)) {
-			if (disableSmeltingSlot && e.getRawSlot() == 0) {
-				e.setCancelled(true);
-			}
-			return false;
+	public boolean onClickFixed(Inventory inv, int slot, ItemStack cursor, Player p) {
+		if (disableSmeltingSlot && slot == 0) {
+			return true;
 		}
-		return true;
+		return false;
 	}
 	
 	@Override
@@ -111,7 +109,7 @@ public class Generator extends MachineFurnace {
 
 	@Override
 	protected void setAvailableUpgrades() {
-		availableUpgrades.add(UpgradeType.RedstoneUpgrade);
+		upgradesAvailable.add(UpgradeType.RedstoneUpgrade);
 	}
 
 	@Override

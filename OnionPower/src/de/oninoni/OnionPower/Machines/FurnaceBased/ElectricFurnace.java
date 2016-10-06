@@ -3,7 +3,8 @@ package de.oninoni.OnionPower.Machines.FurnaceBased;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import de.oninoni.OnionPower.Items.Batrod;
@@ -60,10 +61,10 @@ public class ElectricFurnace extends MachineFurnace {
 	}
 
 	@Override
-	public boolean onClick(InventoryClickEvent e) {
-		return super.onClick(e);
+	public boolean onClickFixed(Inventory inv, int slot, ItemStack cursor, Player p) {
+		return false;
 	}
-
+	
 	@Override
 	protected void resetItemAt(int id) {
 		if (id == coreSlot) {
@@ -75,7 +76,7 @@ public class ElectricFurnace extends MachineFurnace {
 
 	@Override
 	protected void setAvailableUpgrades() {
-		availableUpgrades.add(UpgradeType.RedstoneUpgrade);
+		upgradesAvailable.add(UpgradeType.RedstoneUpgrade);
 	}
 
 	@Override

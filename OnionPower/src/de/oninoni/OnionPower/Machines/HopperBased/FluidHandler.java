@@ -5,9 +5,10 @@ import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import de.oninoni.OnionPower.Items.Batrod;
@@ -114,57 +115,54 @@ public class FluidHandler extends MachineHopper {
 	}
 
 	@Override
-	public boolean onClick(InventoryClickEvent e) {
-		if (!super.onClick(e)) {
-			if (e.getSlot() == 3 || e.getSlot() == 4) {
-				e.setCancelled(true);
-			} else {
-				if (e.getCurrentItem() == null || e.getCurrentItem().getType() == Material.AIR) {
-					if (e.getCursor() == null)
-						return false;
-					if (e.getCursor().getType() == Material.BUCKET) {
-						if (e.getCursor().getAmount() > 1) {
-							ItemStack bucket = e.getCursor().clone();
-							bucket.setAmount(1);
-							e.setCurrentItem(bucket);
-							ItemStack leftOver = e.getCursor();
-							leftOver.setAmount(leftOver.getAmount() - 1);
-							e.setCancelled(true);
-						}
-					} else {
-						e.setCancelled(true);
+	public boolean onClickFixed(Inventory inv, int slot, ItemStack cursor, Player p) {
+		if (slot == 3 || slot == 4) {
+			return true;
+		} else {
+			if (inv.getItem(slot) == null || inv.getItem(slot).getType() == Material.AIR) {
+				if (cursor == null)
+					return false;
+				if (cursor.getType() == Material.BUCKET) {
+					if (cursor.getAmount() > 1) {
+						ItemStack bucket = cursor.clone();
+						bucket.setAmount(1);
+						inv.setItem(slot, bucket);
+						ItemStack leftOver = cursor;
+						leftOver.setAmount(leftOver.getAmount() - 1);
+						return true;
 					}
 				} else {
-					if (e.getCurrentItem().getType() == Material.BUCKET) {
-						if (!(e.getCursor() == null || e.getCursor().getType() == Material.AIR))
-							e.setCancelled(true);
-					} else if (e.getCurrentItem().getType() == Material.LAVA_BUCKET
-							|| e.getCurrentItem().getType() == Material.WATER_BUCKET) {
-						if (e.getCursor() == null)
-							return false;
-						if (e.getCursor().getAmount() > 1) {
-							ItemStack filledBucket = e.getCurrentItem();
-							ItemStack bucket = e.getCursor().clone();
-							bucket.setAmount(1);
-							e.setCurrentItem(bucket);
-							ItemStack leftOver = e.getCursor();
-							leftOver.setAmount(leftOver.getAmount() - 1);
-							e.setCancelled(true);
-							HashMap<Integer, ItemStack> overflow = e.getWhoClicked().getInventory()
-									.addItem(filledBucket);
-							if (overflow.size() > 0) {
-								for (int key : overflow.keySet()) {
-									ItemStack drop = overflow.get(key);
-									position.getWorld().dropItemNaturally(e.getWhoClicked().getLocation(), drop);
-								}
+					return true;
+				}
+			} else {
+				if (inv.getItem(slot).getType() == Material.BUCKET) {
+					if (!(cursor == null || cursor.getType() == Material.AIR))
+						return true;
+				} else if (inv.getItem(slot).getType() == Material.LAVA_BUCKET
+						|| inv.getItem(slot).getType() == Material.WATER_BUCKET) {
+					if (cursor == null)
+						return false;
+					if (cursor.getAmount() > 1) {
+						ItemStack filledBucket = inv.getItem(slot);
+						ItemStack bucket = cursor.clone();
+						bucket.setAmount(1);
+						inv.setItem(slot, bucket);
+						ItemStack leftOver = cursor;
+						leftOver.setAmount(leftOver.getAmount() - 1);
+						HashMap<Integer, ItemStack> overflow = p.getInventory()
+								.addItem(filledBucket);
+						if (overflow.size() > 0) {
+							for (int key : overflow.keySet()) {
+								ItemStack drop = overflow.get(key);
+								position.getWorld().dropItemNaturally(p.getLocation(), drop);
 							}
 						}
+						return true;
 					}
 				}
 			}
-			return false;
 		}
-		return true;
+		return false;
 	}
 
 	@Override
@@ -229,8 +227,8 @@ public class FluidHandler extends MachineHopper {
 
 	@Override
 	protected void setAvailableUpgrades() {
-		availableUpgrades.add(UpgradeType.RedstoneUpgrade);
-		availableUpgrades.add(UpgradeType.LavaUpgrade);
+		upgradesAvailable.add(UpgradeType.RedstoneUpgrade);
+		upgradesAvailable.add(UpgradeType.LavaUpgrade);
 	}
 
 	@Override

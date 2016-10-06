@@ -3,8 +3,9 @@ package de.oninoni.OnionPower.Machines.DispenserBased;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import de.oninoni.OnionPower.Items.Batrod;
@@ -68,14 +69,11 @@ public class BatrodBox extends MachineDispenser {
 	}
 
 	@Override
-	public boolean onClick(InventoryClickEvent e) {
-		if (!super.onClick(e)) {
-			if (e.getRawSlot() >= coreSlot - 1 && e.getRawSlot() <= coreSlot + 1) {
-				e.setCancelled(true);
-			}
-			return false;
+	public boolean onClickFixed(Inventory inv, int slot, ItemStack cursor, Player p) {
+		if (slot >= coreSlot - 1 && slot <= coreSlot + 1) {
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	@Override
@@ -97,7 +95,7 @@ public class BatrodBox extends MachineDispenser {
 
 	@Override
 	protected void setAvailableUpgrades() {
-		availableUpgrades.add(UpgradeType.RedstoneUpgrade);
+		upgradesAvailable.add(UpgradeType.RedstoneUpgrade);
 	}
 
 	@Override
