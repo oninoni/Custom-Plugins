@@ -19,11 +19,6 @@ import de.oninoni.OnionPower.Machines.MachineManager;
 
 public class OnionPower extends JavaPlugin {
 
-	private ProtocolManager protocolManager;
-	private ProtocolLibManager protocolLibManager;
-
-	private MachineManager machineManager;
-
 	public static OnionPower get() {
 		return JavaPlugin.getPlugin(OnionPower.class);
 	}
@@ -33,15 +28,42 @@ public class OnionPower extends JavaPlugin {
 		return s;
 	}
 
+	private ProtocolManager protocolManager;
+
+	private ProtocolLibManager protocolLibManager;
+
+	private MachineManager machineManager;
+
+	public MachineManager getMachineManager() {
+		return machineManager;
+	}
+
+	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+
+		if (command.getName().equalsIgnoreCase("batrod")) {
+			if (sender instanceof Player) {
+				Player player = (Player) sender;
+				player.getInventory().addItem(Batrod.create());
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public void onDisable() {
+		machineManager.saveData();
+		machineManager.killAllNames();
+	}
+
 	public void onEnable() {
 		getLogger().info(getMinecraftVersion());
-		
-		if(getMinecraftVersion().equals("1.10.2-R0.1-SNAPSHOT")){
+
+		if (getMinecraftVersion().equals("1.10.2-R0.1-SNAPSHOT")) {
 			getLogger().info("1.10.2 Mode Activated!");
-		}else if(getMinecraftVersion().equals("1.9.4-R0.1-SNAPSHOT")){
+		} else if (getMinecraftVersion().equals("1.9.4-R0.1-SNAPSHOT")) {
 			getLogger().info("1.9.4 Mode Activated!");
 		}
-			
+
 		protocolManager = ProtocolLibrary.getProtocolManager();
 		protocolLibManager = new ProtocolLibManager(protocolManager);
 		protocolLibManager.addLoreListener();
@@ -84,26 +106,5 @@ public class OnionPower extends JavaPlugin {
 		}, 20L * 60L);
 
 		machineManager.loadData();
-	}
-
-	public void onDisable() {
-		machineManager.saveData();
-		machineManager.killAllNames();
-	}
-
-	public MachineManager getMachineManager() {
-		return machineManager;
-	}
-
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
-		if (command.getName().equalsIgnoreCase("batrod")) {
-			if (sender instanceof Player) {
-				Player player = (Player) sender;
-				player.getInventory().addItem(Batrod.create());
-				return true;
-			}
-		}
-		return false;
 	}
 }

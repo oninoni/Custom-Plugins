@@ -25,11 +25,24 @@ public class InternalTank {
 		return tank;
 	}
 
+	public static boolean getLavaMode(ItemStack tank) {
+		String name = tank.getItemMeta().getDisplayName();
+		if (name.contains("Lava")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	public static int readTankLevel(ItemStack tank) {
 		if (tank == null || tank.getItemMeta().getLore() == null)
 			return 0;
 		List<String> lore = tank.getItemMeta().getLore();
 		return Integer.parseInt(lore.get(1).substring(2));
+	}
+
+	public static ItemStack setLavaMode(FluidHandler fH) {
+		return create(fH.getLevel(), fH.getMaxLevel(), fH.isLavaMode());
 	}
 
 	public static void setTankLevel(ItemStack tank, FluidHandler fH) {
@@ -42,18 +55,5 @@ public class InternalTank {
 		lore.set(1, "§h" + fH.getLevel());
 		itemMeta.setLore(lore);
 		tank.setItemMeta(itemMeta);
-	}
-
-	public static ItemStack setLavaMode(FluidHandler fH) {
-		return create(fH.getLevel(), fH.getMaxLevel(), fH.isLavaMode());
-	}
-
-	public static boolean getLavaMode(ItemStack tank) {
-		String name = tank.getItemMeta().getDisplayName();
-		if (name.contains("Lava")) {
-			return true;
-		} else {
-			return false;
-		}
 	}
 }

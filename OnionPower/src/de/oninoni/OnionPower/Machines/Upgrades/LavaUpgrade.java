@@ -15,6 +15,8 @@ public class LavaUpgrade extends Upgrade {
 		Water, ShouldLava, Lava, ShouldWater
 	}
 
+	protected LavaUpgradeState state;
+
 	public LavaUpgrade(Machine m) {
 		this(m, LavaUpgradeState.Water.ordinal());
 	}
@@ -22,21 +24,6 @@ public class LavaUpgrade extends Upgrade {
 	public LavaUpgrade(Machine m, int value) {
 		super(m);
 		state = LavaUpgradeState.values()[value];
-	}
-
-	protected LavaUpgradeState state;
-
-	public int getState() {
-		return state.ordinal();
-	}
-
-	public boolean isLava() {
-		return state == LavaUpgradeState.Lava || state == LavaUpgradeState.ShouldWater;
-	}
-
-	@Override
-	public UpgradeType getType() {
-		return UpgradeType.LavaUpgrade;
 	}
 
 	@Override
@@ -53,6 +40,19 @@ public class LavaUpgrade extends Upgrade {
 
 		ItemStack settingsItem = CustomsItems.getGlassPane((byte) 6, "§6Active Mode:", lore);
 		return settingsItem;
+	}
+
+	public int getState() {
+		return state.ordinal();
+	}
+
+	@Override
+	public UpgradeType getType() {
+		return UpgradeType.LavaUpgrade;
+	}
+
+	public boolean isLava() {
+		return state == LavaUpgradeState.Lava || state == LavaUpgradeState.ShouldWater;
 	}
 
 	@Override

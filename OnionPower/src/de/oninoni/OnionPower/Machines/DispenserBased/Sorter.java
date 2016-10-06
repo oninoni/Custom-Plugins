@@ -43,6 +43,16 @@ public class Sorter extends MachineDispenser {
 
 	private int particlesTimeout = 0;
 
+	public Sorter(Location position, MachineManager machineManager) {
+		super(position, machineManager);
+		for (int i = 0; i < 4; i++) {
+			filters.add(new Material[] { Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR,
+					Material.AIR, Material.AIR, Material.AIR, Material.AIR });
+		}
+		loadFilters();
+		setupPowerIO();
+	}
+
 	public Sorter(Location position, MachineManager machineManager, int power) {
 		super(position, machineManager, power);
 		for (int i = 0; i < 4; i++) {
@@ -84,25 +94,39 @@ public class Sorter extends MachineDispenser {
 		setupPowerIO();
 	}
 
-	public Sorter(Location position, MachineManager machineManager) {
-		super(position, machineManager);
-		for (int i = 0; i < 4; i++) {
-			filters.add(new Material[] { Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR,
-					Material.AIR, Material.AIR, Material.AIR, Material.AIR });
-		}
-		loadFilters();
-		setupPowerIO();
+	@Override
+	protected boolean doesExplode() {
+		return true;
 	}
 
-	private void setupPowerIO() {
-		@SuppressWarnings("deprecation")
-		int direction = directionAdapter[dispenser.getRawData()];
-		for (int i = 0; i < 6; i++) {
-			allowedOutputs[i] = false;
-			if (i == direction) {
-				allowedInputs[i] = false;
+	@Override
+	public int getDesignEntityCount() {
+		return 0;
+	}
+
+	@Override
+	public String getDisplayName() {
+		return "§6§lElectrical Sorter";
+	}
+
+	@Override
+	public int getMaxPowerInput() {
+		return 100;
+	}
+
+	@Override
+	public int getMaxPowerOutput() {
+		return 0;
+	}
+
+	private boolean isInFilter(Material m, int id) {
+		Material[] filter = filters.get(id);
+		for (int i = 0; i < filter.length; i++) {
+			if (m == filter[i]) {
+				return true;
 			}
 		}
+		return false;
 	}
 
 	private void loadFilter(int id) {
@@ -120,88 +144,6 @@ public class Sorter extends MachineDispenser {
 		for (int i = 0; i < 4; i++) {
 			loadFilter(i);
 		}
-	}
-
-	private void saveFilter(int id) {
-		Material[] filter = filters.get(id);
-		int slotID = id * 2 + 1;
-		ItemStack item = dispenser.getInventory().getItem(slotID);
-		ItemMeta itemMeta = item.getItemMeta();
-		List<String> lore = itemMeta.getLore();
-		for (int i = 0; i < 9; i++) {
-			lore.set(i + 3, "§h" + filter[i].name());
-		}
-		itemMeta.setLore(lore);
-		item.setItemMeta(itemMeta);
-	}
-
-	private void saveFilters() {
-		for (int i = 0; i < 4; i++) {
-			saveFilter(i);
-		}
-	}
-
-	private boolean isInFilter(Material m, int id) {
-		Material[] filter = filters.get(id);
-		for (int i = 0; i < filter.length; i++) {
-			if (m == filter[i]) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	@Override
-	protected void setCoreSlot() {
-		coreSlot = 0;
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public void updateBlock() {
-		ItemStack item = dispenser.getInventory().getItem(4);
-		if (item != null && power >= 20 * item.getAmount()) {
-			Material material = item.getType();
-			Location target;
-			if (isInFilter(material, 0)) { // Red Filter
-				target = dispenser.getLocation().add(filterDirections[directionAdapter[dispenser.getRawData() % 8]][0]);
-			} else if (isInFilter(material, 1)) { // Green Filter
-				target = dispenser.getLocation().add(filterDirections[directionAdapter[dispenser.getRawData() % 8]][1]);
-			} else if (isInFilter(material, 2)) { // Blue Filter
-				target = dispenser.getLocation().add(filterDirections[directionAdapter[dispenser.getRawData() % 8]][2]);
-			} else if (isInFilter(material, 3)) { // Yellow Filter
-				target = dispenser.getLocation().add(filterDirections[directionAdapter[dispenser.getRawData() % 8]][3]);
-			} else { // No Filter
-				target = dispenser.getLocation()
-						.add(MachineManager.directions[directionAdapter[dispenser.getRawData() % 8]]);
-			}
-			int itemCountMoved = pushOneItemInto(4, dispenser.getInventory(), target);
-			if (itemCountMoved > -1) {
-				power -= 20 * itemCountMoved;
-			}
-		}
-		if (particlesTimeout > 0) {
-			particlesTimeout--;
-			renderParticleSideColored(filterDirections[directionAdapter[dispenser.getRawData() % 8]][0], Color.RED);
-			renderParticleSideColored(filterDirections[directionAdapter[dispenser.getRawData() % 8]][1], Color.GREEN);
-			renderParticleSideColored(filterDirections[directionAdapter[dispenser.getRawData() % 8]][2], Color.BLUE);
-			renderParticleSideColored(filterDirections[directionAdapter[dispenser.getRawData() % 8]][3], Color.YELLOW);
-		}
-	}
-
-	@Override
-	public String getDisplayName() {
-		return "§6§lElectrical Sorter";
-	}
-
-	@Override
-	public int getMaxPowerOutput() {
-		return 0;
-	}
-
-	@Override
-	public int getMaxPowerInput() {
-		return 100;
 	}
 
 	@Override
@@ -255,16 +197,6 @@ public class Sorter extends MachineDispenser {
 	}
 
 	@Override
-	public void onMoveInto(InventoryMoveItemEvent e) {
-		return;
-	}
-
-	@Override
-	public void onMoveFrom(InventoryMoveItemEvent e) {
-		e.setCancelled(true);
-	}
-
-	@Override
 	public void onClose(InventoryCloseEvent e) {
 		if (e.getInventory().getType() == InventoryType.CHEST && e.getInventory().getSize() == 9) {
 			int filterID = -1;
@@ -293,6 +225,16 @@ public class Sorter extends MachineDispenser {
 	}
 
 	@Override
+	public void onMoveFrom(InventoryMoveItemEvent e) {
+		e.setCancelled(true);
+	}
+
+	@Override
+	public void onMoveInto(InventoryMoveItemEvent e) {
+		return;
+	}
+
+	@Override
 	protected void resetItemAt(int id) {
 		if (id != 4) {
 			if (id % 2 == 0) {
@@ -305,14 +247,44 @@ public class Sorter extends MachineDispenser {
 		}
 	}
 
-	@Override
-	protected boolean doesExplode() {
-		return true;
+	private void saveFilter(int id) {
+		Material[] filter = filters.get(id);
+		int slotID = id * 2 + 1;
+		ItemStack item = dispenser.getInventory().getItem(slotID);
+		ItemMeta itemMeta = item.getItemMeta();
+		List<String> lore = itemMeta.getLore();
+		for (int i = 0; i < 9; i++) {
+			lore.set(i + 3, "§h" + filter[i].name());
+		}
+		itemMeta.setLore(lore);
+		item.setItemMeta(itemMeta);
+	}
+
+	private void saveFilters() {
+		for (int i = 0; i < 4; i++) {
+			saveFilter(i);
+		}
 	}
 
 	@Override
-	public int getDesignEntityCount() {
-		return 0;
+	protected void setAvailableUpgrades() {
+		availableUpgrades.add(UpgradeType.RedstoneUpgrade);
+	}
+
+	@Override
+	protected void setCoreSlot() {
+		coreSlot = 0;
+	}
+
+	private void setupPowerIO() {
+		@SuppressWarnings("deprecation")
+		int direction = directionAdapter[dispenser.getRawData()];
+		for (int i = 0; i < 6; i++) {
+			allowedOutputs[i] = false;
+			if (i == direction) {
+				allowedInputs[i] = false;
+			}
+		}
 	}
 
 	@Override
@@ -320,9 +292,37 @@ public class Sorter extends MachineDispenser {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	protected void setAvailableUpgrades() {
-		availableUpgrades.add(UpgradeType.RedstoneUpgrade);
+	public void updateBlock() {
+		ItemStack item = dispenser.getInventory().getItem(4);
+		if (item != null && power >= 20 * item.getAmount()) {
+			Material material = item.getType();
+			Location target;
+			if (isInFilter(material, 0)) { // Red Filter
+				target = dispenser.getLocation().add(filterDirections[directionAdapter[dispenser.getRawData() % 8]][0]);
+			} else if (isInFilter(material, 1)) { // Green Filter
+				target = dispenser.getLocation().add(filterDirections[directionAdapter[dispenser.getRawData() % 8]][1]);
+			} else if (isInFilter(material, 2)) { // Blue Filter
+				target = dispenser.getLocation().add(filterDirections[directionAdapter[dispenser.getRawData() % 8]][2]);
+			} else if (isInFilter(material, 3)) { // Yellow Filter
+				target = dispenser.getLocation().add(filterDirections[directionAdapter[dispenser.getRawData() % 8]][3]);
+			} else { // No Filter
+				target = dispenser.getLocation()
+						.add(MachineManager.directions[directionAdapter[dispenser.getRawData() % 8]]);
+			}
+			int itemCountMoved = pushOneItemInto(4, dispenser.getInventory(), target);
+			if (itemCountMoved > -1) {
+				power -= 20 * itemCountMoved;
+			}
+		}
+		if (particlesTimeout > 0) {
+			particlesTimeout--;
+			renderParticleSideColored(filterDirections[directionAdapter[dispenser.getRawData() % 8]][0], Color.RED);
+			renderParticleSideColored(filterDirections[directionAdapter[dispenser.getRawData() % 8]][1], Color.GREEN);
+			renderParticleSideColored(filterDirections[directionAdapter[dispenser.getRawData() % 8]][2], Color.BLUE);
+			renderParticleSideColored(filterDirections[directionAdapter[dispenser.getRawData() % 8]][3], Color.YELLOW);
+		}
 	}
 
 }

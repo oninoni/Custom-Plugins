@@ -15,6 +15,18 @@ public class PowerCore {
 
 	private static final String NAME = "§4Power Core";
 
+	public static boolean check(ItemStack item) {
+		if (item == null)
+			return false;
+		ItemMeta itemMeta = item.getItemMeta();
+		if (itemMeta != null) {
+			if (itemMeta.getDisplayName().equalsIgnoreCase(NAME)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public static ItemStack create(Machine m) {
 		ItemStack powerCore = new ItemStack(Material.END_CRYSTAL);
 
@@ -42,16 +54,10 @@ public class PowerCore {
 		return powerCore;
 	}
 
-	public static boolean check(ItemStack item) {
-		if (item == null)
-			return false;
-		ItemMeta itemMeta = item.getItemMeta();
-		if (itemMeta != null) {
-			if (itemMeta.getDisplayName().equalsIgnoreCase(NAME)) {
-				return true;
-			}
-		}
-		return false;
+	public static int getPowerLevel(ItemStack powerCore) {
+		if (powerCore == null)
+			return -1;
+		return Integer.parseInt(powerCore.getItemMeta().getLore().get(4).substring(2));
 	}
 
 	public static void setPowerLevel(ItemStack powerCore, Machine m) {
@@ -78,11 +84,5 @@ public class PowerCore {
 		lore.set(4, "§h" + m.getPower());
 		itemMeta.setLore(lore);
 		powerCore.setItemMeta(itemMeta);
-	}
-
-	public static int getPowerLevel(ItemStack powerCore) {
-		if (powerCore == null)
-			return -1;
-		return Integer.parseInt(powerCore.getItemMeta().getLore().get(4).substring(2));
 	}
 }

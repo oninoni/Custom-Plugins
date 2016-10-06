@@ -14,6 +14,24 @@ public class ItemData {
 
 	public static final HashMap<Material, Material> smeltable;
 
+	static {
+		burnTime = new HashMap<>();
+		initBurnTimes();
+		smeltable = new HashMap<>();
+		initBurnable();
+	}
+
+	static void initBurnable() {
+		Iterator<Recipe> recipeIterator = Bukkit.recipeIterator();
+		while (recipeIterator.hasNext()) {
+			Recipe recipe = recipeIterator.next();
+			if (recipe instanceof FurnaceRecipe) {
+				FurnaceRecipe furnaceRecipe = ((FurnaceRecipe) recipe);
+				smeltable.put(furnaceRecipe.getInput().getType(), furnaceRecipe.getResult().getType());
+			}
+		}
+	}
+
 	static void initBurnTimes() {
 		burnTime.put(Material.LAVA_BUCKET, (short) 20000);
 		burnTime.put(Material.COAL_BLOCK, (short) 16000);
@@ -44,24 +62,6 @@ public class ItemData {
 		burnTime.put(Material.WOOD_STEP, (short) 150);
 		burnTime.put(Material.SAPLING, (short) 100);
 		burnTime.put(Material.STICK, (short) 100);
-	}
-
-	static void initBurnable() {
-		Iterator<Recipe> recipeIterator = Bukkit.recipeIterator();
-		while (recipeIterator.hasNext()) {
-			Recipe recipe = recipeIterator.next();
-			if (recipe instanceof FurnaceRecipe) {
-				FurnaceRecipe furnaceRecipe = ((FurnaceRecipe) recipe);
-				smeltable.put(furnaceRecipe.getInput().getType(), furnaceRecipe.getResult().getType());
-			}
-		}
-	}
-
-	static {
-		burnTime = new HashMap<>();
-		initBurnTimes();
-		smeltable = new HashMap<>();
-		initBurnable();
 	}
 
 }

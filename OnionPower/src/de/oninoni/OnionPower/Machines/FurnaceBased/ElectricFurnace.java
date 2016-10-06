@@ -16,6 +16,10 @@ public class ElectricFurnace extends MachineFurnace {
 	private Material cookingInto;
 	private Material cookingFrom;
 
+	public ElectricFurnace(Location position, MachineManager machineManager) {
+		super(position, machineManager);
+	}
+
 	public ElectricFurnace(Location position, MachineManager machineManager, int power) {
 		super(position, machineManager, power);
 
@@ -30,8 +34,48 @@ public class ElectricFurnace extends MachineFurnace {
 		}, 1L);
 	}
 
-	public ElectricFurnace(Location position, MachineManager machineManager) {
-		super(position, machineManager);
+	@Override
+	protected boolean doesExplode() {
+		return true;
+	}
+
+	@Override
+	public int getDesignEntityCount() {
+		return 0;
+	}
+
+	@Override
+	public String getDisplayName() {
+		return "§6§lElectrical Furnace";
+	}
+
+	@Override
+	public int getMaxPowerInput() {
+		return 100;
+	}
+
+	@Override
+	public int getMaxPowerOutput() {
+		return 0;
+	}
+
+	@Override
+	public boolean onClick(InventoryClickEvent e) {
+		return super.onClick(e);
+	}
+
+	@Override
+	protected void resetItemAt(int id) {
+		if (id == coreSlot) {
+			ItemStack batrod = Batrod.create();
+			Batrod.setPower(batrod, getPower());
+			furnace.getInventory().setItem(id, batrod);
+		}
+	}
+
+	@Override
+	protected void setAvailableUpgrades() {
+		availableUpgrades.add(UpgradeType.RedstoneUpgrade);
 	}
 
 	@Override
@@ -40,8 +84,8 @@ public class ElectricFurnace extends MachineFurnace {
 	}
 
 	@Override
-	public String getDisplayName() {
-		return "§6§lElectrical Furnace";
+	public void spawnDesignEntity(int id) {
+
 	}
 
 	@Override
@@ -84,49 +128,5 @@ public class ElectricFurnace extends MachineFurnace {
 			furnace.setBurnTime((short) 0);
 			furnace.setCookTime((short) 0);
 		}
-	}
-
-	@Override
-	public boolean onClick(InventoryClickEvent e) {
-		return super.onClick(e);
-	}
-
-	@Override
-	public int getMaxPowerInput() {
-		return 100;
-	}
-
-	@Override
-	public int getMaxPowerOutput() {
-		return 0;
-	}
-
-	@Override
-	protected void resetItemAt(int id) {
-		if (id == coreSlot) {
-			ItemStack batrod = Batrod.create();
-			Batrod.setPower(batrod, getPower());
-			furnace.getInventory().setItem(id, batrod);
-		}
-	}
-
-	@Override
-	protected boolean doesExplode() {
-		return true;
-	}
-
-	@Override
-	public int getDesignEntityCount() {
-		return 0;
-	}
-
-	@Override
-	public void spawnDesignEntity(int id) {
-
-	}
-
-	@Override
-	protected void setAvailableUpgrades() {
-		availableUpgrades.add(UpgradeType.RedstoneUpgrade);
 	}
 }

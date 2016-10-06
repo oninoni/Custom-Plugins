@@ -20,13 +20,16 @@ import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager.UpgradeType;
 
 public class FluidHandler extends MachineHopper {
 
-	private int fluidLevel;
-
 	private static final int MAXFLUIDLEVEL = 64;
+
+	private int fluidLevel;
 
 	private boolean isLava = false;
 
-	// TODO Move into Slots wich Stack up
+	public FluidHandler(Location position, MachineManager machineManager) {
+		super(position, machineManager);
+		fluidLevel = InternalTank.readTankLevel(hopper.getInventory().getItem(3));
+	}
 
 	public FluidHandler(Location position, MachineManager machineManager, int power) {
 		super(position, machineManager, power);
@@ -40,23 +43,6 @@ public class FluidHandler extends MachineHopper {
 			}
 		}, 1L);
 		fluidLevel = 0;
-	}
-
-	public FluidHandler(Location position, MachineManager machineManager) {
-		super(position, machineManager);
-		fluidLevel = InternalTank.readTankLevel(hopper.getInventory().getItem(3));
-	}
-
-	public int getLevel() {
-		return fluidLevel;
-	}
-
-	public int getMaxLevel() {
-		return MAXFLUIDLEVEL;
-	}
-
-	public boolean isLavaMode() {
-		return isLava;
 	}
 
 	public int addFluid(int ammount) {
@@ -74,29 +60,8 @@ public class FluidHandler extends MachineHopper {
 	}
 
 	@Override
-	protected void setAvailableUpgrades() {
-		availableUpgrades.add(UpgradeType.RedstoneUpgrade);
-		availableUpgrades.add(UpgradeType.LavaUpgrade);
-	}
-
-	@Override
-	protected void setCoreSlot() {
-		coreSlot = 2;
-	}
-
-	@Override
-	public String getDisplayName() {
-		return "§6§lFluid Handler";
-	}
-
-	@Override
-	public int getMaxPowerOutput() {
-		return 0;
-	}
-
-	@Override
-	public int getMaxPowerInput() {
-		return 100;
+	protected boolean doesExplode() {
+		return true;
 	}
 
 	private void fillSlot(int id) {
@@ -117,67 +82,35 @@ public class FluidHandler extends MachineHopper {
 	}
 
 	@Override
-	public void updateBlock() {
-		LavaUpgrade lavaUpgrade = (LavaUpgrade) upgradeManager.getUpgrade(UpgradeType.LavaUpgrade);
-		if (lavaUpgrade != null && isLava != lavaUpgrade.isLava()) {
-			isLava = lavaUpgrade.isLava();
-			hopper.getInventory().setItem(3, InternalTank.setLavaMode(this));
-			needsUpdate = true;
-		}
-		fillSlot(0);
-		fillSlot(1);
-	}
-
-	@Override
-	public void onMoveFrom(InventoryMoveItemEvent e) {
-		super.onMoveFrom(e);
-		if (!(e.getItem().getType() == Material.LAVA_BUCKET || e.getItem().getType() == Material.WATER_BUCKET)) {
-			e.setCancelled(true);
-		}
-	}
-
-	@Override
-	public void onMoveInto(InventoryMoveItemEvent e) {
-		super.onMoveInto(e);
-		if (e.getItem().getType() != Material.BUCKET) {
-			e.setCancelled(true);
-		} else {
-			if (e.getDestination().contains(Material.BUCKET)) {
-				e.setCancelled(true);
-			} else if (e.getItem().getAmount() > 1) {
-				ItemStack overflow = e.getItem().clone();
-				overflow.setAmount(e.getItem().getAmount() - 1);
-				e.getItem().setAmount(1);
-				e.getInitiator().addItem(overflow);
-			}
-		}
-	}
-
-	@Override
 	public int getDesignEntityCount() {
 		return 0;
 	}
 
 	@Override
-	public void spawnDesignEntity(int id) {
-		return;
+	public String getDisplayName() {
+		return "§6§lFluid Handler";
+	}
+
+	public int getLevel() {
+		return fluidLevel;
+	}
+
+	public int getMaxLevel() {
+		return MAXFLUIDLEVEL;
 	}
 
 	@Override
-	protected void resetItemAt(int id) {
-		switch (id) {
-		case 2:
-			ItemStack batrod = Batrod.create();
-			Batrod.setPower(batrod, PowerCore.getPowerLevel(getPowerCore()));
-			hopper.getInventory().setItem(id, batrod);
-			break;
-		case 3:
-			hopper.getInventory().setItem(id, new ItemStack(Material.GLASS));
-			break;
-		case 4:
-			hopper.getInventory().setItem(id, new ItemStack(Material.WORKBENCH));
-			break;
-		}
+	public int getMaxPowerInput() {
+		return 100;
+	}
+
+	@Override
+	public int getMaxPowerOutput() {
+		return 0;
+	}
+
+	public boolean isLavaMode() {
+		return isLava;
 	}
 
 	@Override
@@ -235,8 +168,28 @@ public class FluidHandler extends MachineHopper {
 	}
 
 	@Override
-	protected boolean doesExplode() {
-		return true;
+	public void onMoveFrom(InventoryMoveItemEvent e) {
+		super.onMoveFrom(e);
+		if (!(e.getItem().getType() == Material.LAVA_BUCKET || e.getItem().getType() == Material.WATER_BUCKET)) {
+			e.setCancelled(true);
+		}
+	}
+
+	@Override
+	public void onMoveInto(InventoryMoveItemEvent e) {
+		super.onMoveInto(e);
+		if (e.getItem().getType() != Material.BUCKET) {
+			e.setCancelled(true);
+		} else {
+			if (e.getDestination().contains(Material.BUCKET)) {
+				e.setCancelled(true);
+			} else if (e.getItem().getAmount() > 1) {
+				ItemStack overflow = e.getItem().clone();
+				overflow.setAmount(e.getItem().getAmount() - 1);
+				e.getItem().setAmount(1);
+				e.getInitiator().addItem(overflow);
+			}
+		}
 	}
 
 	@Override
@@ -255,5 +208,50 @@ public class FluidHandler extends MachineHopper {
 				e.getInventory().addItem(oneBucket);
 			}
 		}
+	}
+
+	@Override
+	protected void resetItemAt(int id) {
+		switch (id) {
+		case 2:
+			ItemStack batrod = Batrod.create();
+			Batrod.setPower(batrod, PowerCore.getPowerLevel(getPowerCore()));
+			hopper.getInventory().setItem(id, batrod);
+			break;
+		case 3:
+			hopper.getInventory().setItem(id, new ItemStack(Material.GLASS));
+			break;
+		case 4:
+			hopper.getInventory().setItem(id, new ItemStack(Material.WORKBENCH));
+			break;
+		}
+	}
+
+	@Override
+	protected void setAvailableUpgrades() {
+		availableUpgrades.add(UpgradeType.RedstoneUpgrade);
+		availableUpgrades.add(UpgradeType.LavaUpgrade);
+	}
+
+	@Override
+	protected void setCoreSlot() {
+		coreSlot = 2;
+	}
+
+	@Override
+	public void spawnDesignEntity(int id) {
+		return;
+	}
+
+	@Override
+	public void updateBlock() {
+		LavaUpgrade lavaUpgrade = (LavaUpgrade) upgradeManager.getUpgrade(UpgradeType.LavaUpgrade);
+		if (lavaUpgrade != null && isLava != lavaUpgrade.isLava()) {
+			isLava = lavaUpgrade.isLava();
+			hopper.getInventory().setItem(3, InternalTank.setLavaMode(this));
+			needsUpdate = true;
+		}
+		fillSlot(0);
+		fillSlot(1);
 	}
 }

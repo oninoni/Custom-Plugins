@@ -37,241 +37,9 @@ import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager.UpgradeType;
 
 public abstract class Machine {
 
-	protected EnumSet<UpgradeType> availableUpgrades;
-
-	protected abstract void setAvailableUpgrades();
-
-	protected boolean needsUpdate = false;
-
-	public boolean upgradeAvailable(UpgradeType type) {
-		return availableUpgrades.contains(type);
-	}
-
 	protected static OnionPower plugin = OnionPower.get();
 
-	protected ArrayList<ArmorStand> designEntities;
-
-	public ArrayList<ArmorStand> getDesignEntities() {
-		return designEntities;
-	}
-
-	protected int coreSlot;
-
-	public ItemStack getPowerCore() {
-		ItemStack powerCore = invHolder.getInventory().getItem(coreSlot);
-		return powerCore;
-	}
-
-	public void setPowerCore(ItemStack powerCore) {
-		invHolder.getInventory().setItem(coreSlot, powerCore);
-	}
-
-	protected UpgradeManager upgradeManager;
-
 	private static final int MAX_CABLE_LENGTH = 16;
-
-	protected boolean[] allowedInputs = { true, true, true, true, true, true };
-
-	protected boolean[] allowedOutputs = { false, false, false, false, false, false };
-
-	private MachineManager machineManager;
-
-	protected Location position;
-	protected InventoryHolder invHolder;
-
-	private Vector vec;
-	private String world;
-
-	protected int power;
-	protected int powerIntputTotal, powerOutputTotal;
-
-	private int oldPower;
-	private int oldPowerInputTotal, oldPowerOutputTotal;
-
-	private List<Machine> sender = new ArrayList<>();
-
-	public Machine(Location position, MachineManager machineManager, int power) {
-		setCoreSlot();
-		invHolder = (InventoryHolder) position.getBlock().getState();
-		this.power = power;
-		setPowerCore(PowerCore.create(this));
-		initValues(position, machineManager);
-	}
-
-	public Machine(Location position, MachineManager machineManager) {
-		setCoreSlot();
-
-		BlockState state = position.getBlock().getState();
-		if (state instanceof InventoryHolder) {
-			invHolder = (InventoryHolder) position.getBlock().getState();
-			this.power = PowerCore.getPowerLevel(getPowerCore());
-		} else {
-			plugin.getLogger().warning("Machine at " + position + "is not an Inventory anymore!");
-			this.power = 0;
-		}
-
-		initValues(position, machineManager);
-	}
-
-	public void setUpgradeLore() {
-		ItemStack powerCore = getPowerCore();
-		ItemMeta itemMeta = powerCore.getItemMeta();
-		List<String> lore = itemMeta.getLore();
-		lore = lore.subList(0, 5);
-		lore.addAll(upgradeManager.getPowerCoreLore());
-		itemMeta.setLore(lore);
-		powerCore.setItemMeta(itemMeta);
-		setPowerCore(powerCore);
-	}
-
-	private void initValues(Location position, MachineManager machineManager) {
-
-		this.position = position;
-		this.machineManager = machineManager;
-
-		isLoaded = true;
-
-		vec = position.toVector();
-		world = position.getWorld().getName();
-
-		designEntities = new ArrayList<>();
-		designEntities.ensureCapacity(getDesignEntityCount());
-		spawnDesignEntities();
-
-		availableUpgrades = EnumSet.noneOf(UpgradeType.class);
-
-		setAvailableUpgrades();
-		upgradeManager = new UpgradeManager(this);
-	}
-
-	protected abstract boolean isMaterial(Material material);
-
-	protected abstract void setCoreSlot();
-
-	public abstract int getMaxPower();
-
-	public abstract String getDisplayName();
-
-	public abstract int getMaxPowerOutput();
-
-	public abstract int getMaxPowerInput();
-
-	public abstract void updateBlock();
-
-	public abstract int getDesignEntityCount();
-
-	public abstract void spawnDesignEntity(int id);
-
-	protected void setEntity(int id, ArmorStand a) {
-		if (designEntities.size() <= id) {
-			designEntities.add(a);
-		} else {
-			designEntities.set(id, a);
-		}
-	}
-
-	protected void spawnDesignEntities() {
-		for (int i = 0; i < getDesignEntityCount(); i++) {
-			spawnDesignEntity(i);
-		}
-	}
-
-	public boolean onClick(InventoryClickEvent e) {
-		if (e.getInventory().getName() == upgradeManager.getName()) {
-			upgradeManager.onClick(e);
-			return true;
-		}
-		int convertSlot = e.getView().convertSlot(e.getRawSlot());
-		if (convertSlot == coreSlot) {
-			e.setCancelled(true);
-			upgradeManager.openInterface(e.getWhoClicked());
-		}
-		return false;
-	}
-
-	public abstract void onMoveInto(InventoryMoveItemEvent e);
-
-	public abstract void onMoveFrom(InventoryMoveItemEvent e);
-
-	public abstract void onClose(InventoryCloseEvent e);
-
-	protected abstract void resetItemAt(int id);
-
-	protected abstract boolean doesExplode();
-
-	public void updateDisplay() {
-		// plugin.getLogger().info("Update!");
-		ItemStack powerCore = getPowerCore();
-		PowerCore.setPowerLevel(powerCore, this);
-		setPowerCore(powerCore);
-		updateInventories();
-	}
-
-	public void onBreak(BlockEvent e) {
-		for (int i = 0; i < invHolder.getInventory().getSize(); i++) {
-			resetItemAt(i);
-		}
-		upgradeManager.onBreak();
-	}
-
-	public boolean onBoom(Block e) {
-		if (doesExplode()) {
-			Random r = new Random();
-			for (int i = 0; i < invHolder.getInventory().getSize(); i++) {
-				if (r.nextInt(2) == 0) {
-					resetItemAt(i);
-				} else {
-					invHolder.getInventory().setItem(i, new ItemStack(Material.AIR));
-				}
-			}
-			upgradeManager.onBoom();
-			return true;
-		}
-		return false;
-	}
-
-	private boolean isLoaded;
-
-	public void closeInventories() {
-		Object[] viewers = (invHolder).getInventory().getViewers().toArray();
-		for (Object humanEntity : viewers) {
-			((HumanEntity) humanEntity).closeInventory();
-		}
-	}
-
-	public void updateInventories() {
-		Object[] viewers = (invHolder).getInventory().getViewers().toArray();
-		for (Object humanEntity : viewers) {
-			((Player) humanEntity).updateInventory();
-		}
-	}
-
-	public void reOpenInventories() {
-		Object[] viewers = (invHolder).getInventory().getViewers().toArray();
-		for (Object humanEntity : viewers) {
-			((HumanEntity) humanEntity).closeInventory();
-			((HumanEntity) humanEntity).openInventory(invHolder.getInventory());
-		}
-	}
-
-	public static int getBatrodPower(InventoryClickEvent e, String key, InventoryType type) {
-		int result = 0;
-
-		Material[] template = MachineTemplates.buildTemplates.get(key);
-
-		for (int i = 0; i < template.length; i++) {
-			Material material = template[i];
-			// plugin.getLogger().info("I = " + i + " Mat = " + material + "
-			// Item = " + e.getView().getTopInventory().getContents());
-			if (material == Material.BARRIER) {
-				ItemStack batrod;
-				batrod = e.getInventory().getItem(i);
-				result += Batrod.readPower(batrod);
-			}
-		}
-
-		return result;
-	}
 
 	@SuppressWarnings("deprecation")
 	public static boolean canCreate(InventoryClickEvent e, String key, InventoryType type) {
@@ -324,13 +92,104 @@ public abstract class Machine {
 		return true;
 	}
 
-	public void requestPower(Machine requester) {
-		sender.add(requester);
+	public static int getAllBatrodsPower(InventoryClickEvent e, String key, InventoryType type) {
+		int result = 0;
+
+		Material[] template = MachineTemplates.buildTemplates.get(key);
+
+		for (int i = 0; i < template.length; i++) {
+			Material material = template[i];
+			// plugin.getLogger().info("I = " + i + " Mat = " + material + "
+			// Item = " + e.getView().getTopInventory().getContents());
+			if (material == Material.BARRIER) {
+				ItemStack batrod;
+				batrod = e.getInventory().getItem(i);
+				result += Batrod.readPower(batrod);
+			}
+		}
+
+		return result;
 	}
 
-	private int getFreeSpace() {
-		return getMaxPower() - power;
+	protected EnumSet<UpgradeType> availableUpgrades;
+
+	protected boolean needsUpdate = false;
+
+	protected ArrayList<ArmorStand> designEntities;
+
+	protected int coreSlot;
+
+	protected UpgradeManager upgradeManager;
+
+	protected boolean[] allowedInputs = { true, true, true, true, true, true };
+	protected boolean[] allowedOutputs = { false, false, false, false, false, false };
+
+	private MachineManager machineManager;
+
+	protected Location position;
+
+	protected InventoryHolder invHolder;
+
+	private Vector vec;
+
+	private String world;
+	protected int power;
+
+	protected int powerIntputTotal, powerOutputTotal;
+	private int oldPower;
+
+	private int oldPowerInputTotal, oldPowerOutputTotal;
+	private List<Machine> sender = new ArrayList<>();
+
+	private boolean isLoaded;
+
+	public Machine(Location position, MachineManager machineManager) {
+		setCoreSlot();
+		BlockState state = position.getBlock().getState();
+		if (state instanceof InventoryHolder) {
+			invHolder = (InventoryHolder) position.getBlock().getState();
+			this.power = PowerCore.getPowerLevel(getPowerCore());
+		} else {
+			plugin.getLogger().warning("Machine at " + position + "is not an Inventory anymore!");
+			this.power = 0;
+		}
+		initValues(position, machineManager);
 	}
+
+	public Machine(Location position, MachineManager machineManager, int power) {
+		setCoreSlot();
+		invHolder = (InventoryHolder) position.getBlock().getState();
+		this.power = power;
+		setPowerCore(PowerCore.create(this));
+		initValues(position, machineManager);
+	}
+
+	protected void chargeRod(ItemStack item) {
+		if (Batrod.check(item)) {
+			int rodPower = Batrod.readPower(item);
+			int powerTransfered = Math.min(Batrod.MAX_POWER - rodPower, Math.min(getMaxPowerOutput(), power));
+			Batrod.setPower(item, rodPower + powerTransfered);
+			power -= powerTransfered;
+		}
+	}
+
+	public void closeInventories() {
+		Object[] viewers = (invHolder).getInventory().getViewers().toArray();
+		for (Object humanEntity : viewers) {
+			((HumanEntity) humanEntity).closeInventory();
+		}
+	}
+
+	protected void dechargeRod(ItemStack item) {
+		if (Batrod.check(item) && power < getMaxPower()) {
+			int rodPower = Batrod.readPower(item);
+			int powerTransfered = Math.min(getMaxPower() - power, Math.min(rodPower, getMaxPowerInput()));
+			Batrod.setPower(item, rodPower - powerTransfered);
+			power += powerTransfered;
+		}
+	}
+
+	protected abstract boolean doesExplode();
 
 	private List<PathToMachine> getConnectedMachines() {
 		List<PathToMachine> result = new ArrayList<>();
@@ -383,16 +242,27 @@ public abstract class Machine {
 		return result;
 	}
 
-	protected void requestFromConnected() {
-		List<PathToMachine> machines = getConnectedMachines();
-
-		for (PathToMachine ptm : machines) {
-			ptm.machine.requestPower(this);
-		}
-		if (machines.size() == 0) {
-			position.getWorld().spawnParticle(Particle.BARRIER, position.clone().add(0.5, 1.5, 0.5), 1, 0, 0, 0, 0.1);
-		}
+	public ArrayList<ArmorStand> getDesignEntities() {
+		return designEntities;
 	}
+
+	public abstract int getDesignEntityCount();
+
+	public abstract String getDisplayName();
+
+	private int getFreeSpace() {
+		return getMaxPower() - power;
+	}
+
+	public boolean getIsLoaded() {
+		return isLoaded;
+	}
+
+	public abstract int getMaxPower();
+
+	public abstract int getMaxPowerInput();
+
+	public abstract int getMaxPowerOutput();
 
 	public Location getPosition() {
 		return position;
@@ -400,6 +270,11 @@ public abstract class Machine {
 
 	public int getPower() {
 		return power;
+	}
+
+	public ItemStack getPowerCore() {
+		ItemStack powerCore = invHolder.getInventory().getItem(coreSlot);
+		return powerCore;
 	}
 
 	public int getPowerIntputTotal() {
@@ -410,13 +285,80 @@ public abstract class Machine {
 		return powerOutputTotal;
 	}
 
-	public void resetIO() {
-		if (!isLoaded)
-			return;
+	private void initValues(Location position, MachineManager machineManager) {
 
-		powerIntputTotal = 0;
-		powerOutputTotal = 0;
+		this.position = position;
+		this.machineManager = machineManager;
+
+		isLoaded = true;
+
+		vec = position.toVector();
+		world = position.getWorld().getName();
+
+		designEntities = new ArrayList<>();
+		designEntities.ensureCapacity(getDesignEntityCount());
+		spawnDesignEntities();
+
+		availableUpgrades = EnumSet.noneOf(UpgradeType.class);
+
+		setAvailableUpgrades();
+		upgradeManager = new UpgradeManager(this);
 	}
+
+	protected boolean isActive() {
+		RedstoneUpgrade redstoneUpgrade = (RedstoneUpgrade) upgradeManager.getUpgrade(UpgradeType.RedstoneUpgrade);
+		return redstoneUpgrade != null && !redstoneUpgrade.isMachineOnline(this);
+	}
+
+	protected abstract boolean isMaterial(Material material);
+
+	public void load() {
+		position = new Location(Bukkit.getWorld(world), vec.getX(), vec.getY(), vec.getZ());
+		isLoaded = true;
+		invHolder = (InventoryHolder) position.getBlock().getState();
+	}
+
+	public boolean onBoom(Block e) {
+		if (doesExplode()) {
+			Random r = new Random();
+			for (int i = 0; i < invHolder.getInventory().getSize(); i++) {
+				if (r.nextInt(2) == 0) {
+					resetItemAt(i);
+				} else {
+					invHolder.getInventory().setItem(i, new ItemStack(Material.AIR));
+				}
+			}
+			upgradeManager.onBoom();
+			return true;
+		}
+		return false;
+	}
+
+	public void onBreak(BlockEvent e) {
+		for (int i = 0; i < invHolder.getInventory().getSize(); i++) {
+			resetItemAt(i);
+		}
+		upgradeManager.onBreak();
+	}
+
+	public boolean onClick(InventoryClickEvent e) {
+		if (e.getInventory().getName() == upgradeManager.getName()) {
+			upgradeManager.onClick(e);
+			return true;
+		}
+		int convertSlot = e.getView().convertSlot(e.getRawSlot());
+		if (convertSlot == coreSlot) {
+			e.setCancelled(true);
+			upgradeManager.openInterface(e.getWhoClicked());
+		}
+		return false;
+	}
+	
+	public abstract void onClose(InventoryCloseEvent e);
+
+	public abstract void onMoveFrom(InventoryMoveItemEvent e);
+
+	public abstract void onMoveInto(InventoryMoveItemEvent e);
 
 	public void processPowerTransfer() {
 		if (!isLoaded)
@@ -437,6 +379,102 @@ public abstract class Machine {
 
 		sender.clear();
 	}
+
+	protected int pushOneItemInto(int itemPos, Inventory source, Location target) {
+		ItemStack items = source.getItem(itemPos);
+		BlockState state = target.getBlock().getState();
+		if (state instanceof InventoryHolder) {
+			Inventory targetInventory = ((InventoryHolder) state).getInventory();
+
+			HashMap<Integer, ItemStack> itemsNotMoved = targetInventory.addItem(items);
+
+			if (itemsNotMoved.size() > 0) {
+				int itemNotCountMoved = itemsNotMoved.get(0).getAmount();
+				ItemStack notMoved = source.getItem(4);
+				notMoved.setAmount(itemNotCountMoved);
+				source.setItem(4, notMoved);
+				return items.getAmount() - itemNotCountMoved;
+			} else {
+				source.setItem(4, new ItemStack(Material.AIR));
+				return items.getAmount();
+			}
+		}
+		return -1;
+	}
+
+	protected void renderParticleSideColored(Vector d, Color c) {
+		Vector direction = d.clone().add(new Vector(0.5, 0.5, 0.5)).subtract(d.clone().multiply(0.4));
+		position.getWorld().spawnParticle(Particle.REDSTONE, position.clone().add(direction), 0,
+				c.getRed() / 255.0f + 0.01f, c.getGreen() / 255.0f, c.getBlue() / 255.0f, 1);
+	}
+
+	public void reOpenInventories() {
+		Object[] viewers = (invHolder).getInventory().getViewers().toArray();
+		for (Object humanEntity : viewers) {
+			((HumanEntity) humanEntity).closeInventory();
+			((HumanEntity) humanEntity).openInventory(invHolder.getInventory());
+		}
+	}
+
+	protected void requestFromConnected() {
+		List<PathToMachine> machines = getConnectedMachines();
+
+		for (PathToMachine ptm : machines) {
+			ptm.machine.requestPower(this);
+		}
+		if (machines.size() == 0) {
+			position.getWorld().spawnParticle(Particle.BARRIER, position.clone().add(0.5, 1.5, 0.5), 1, 0, 0, 0, 0.1);
+		}
+	}
+
+	public void requestPower(Machine requester) {
+		sender.add(requester);
+	}
+
+	public void resetIO() {
+		if (!isLoaded)
+			return;
+
+		powerIntputTotal = 0;
+		powerOutputTotal = 0;
+	}
+
+	protected abstract void resetItemAt(int id);
+
+	protected abstract void setAvailableUpgrades();
+
+	protected abstract void setCoreSlot();
+
+	protected void setEntity(int id, ArmorStand a) {
+		if (designEntities.size() <= id) {
+			designEntities.add(a);
+		} else {
+			designEntities.set(id, a);
+		}
+	}
+
+	public void setPowerCore(ItemStack powerCore) {
+		invHolder.getInventory().setItem(coreSlot, powerCore);
+	}
+
+	public void setUpgradeLore() {
+		ItemStack powerCore = getPowerCore();
+		ItemMeta itemMeta = powerCore.getItemMeta();
+		List<String> lore = itemMeta.getLore();
+		lore = lore.subList(0, 5);
+		lore.addAll(upgradeManager.getPowerCoreLore());
+		itemMeta.setLore(lore);
+		powerCore.setItemMeta(itemMeta);
+		setPowerCore(powerCore);
+	}
+
+	protected void spawnDesignEntities() {
+		for (int i = 0; i < getDesignEntityCount(); i++) {
+			spawnDesignEntity(i);
+		}
+	}
+
+	public abstract void spawnDesignEntity(int id);
 
 	private void transferPowerTo(Machine requester) {
 		// plugin.getLogger().info("Power Transferring...");
@@ -468,6 +506,41 @@ public abstract class Machine {
 		requester.powerIntputTotal += transPower;
 	}
 
+	public void unload() {
+		isLoaded = false;
+	}
+
+	public void update() {
+		if (!isLoaded)
+			return;
+
+		if (getDisplayName() != "§6§lGenerator") {
+			requestFromConnected();
+
+			if (isActive())
+				return;
+		}
+
+		updateBlock();
+	}
+
+	public abstract void updateBlock();
+
+	public void updateDisplay() {
+		// plugin.getLogger().info("Update!");
+		ItemStack powerCore = getPowerCore();
+		PowerCore.setPowerLevel(powerCore, this);
+		setPowerCore(powerCore);
+		updateInventories();
+	}
+
+	public void updateInventories() {
+		Object[] viewers = (invHolder).getInventory().getViewers().toArray();
+		for (Object humanEntity : viewers) {
+			((Player) humanEntity).updateInventory();
+		}
+	}
+
 	public void updateUI() {
 		if (!isLoaded)
 			return;
@@ -485,82 +558,7 @@ public abstract class Machine {
 		}
 	}
 
-	protected boolean isActive() {
-		RedstoneUpgrade redstoneUpgrade = (RedstoneUpgrade) upgradeManager.getUpgrade(UpgradeType.RedstoneUpgrade);
-		return redstoneUpgrade != null && !redstoneUpgrade.isMachineOnline(this);
-	}
-
-	public void update() {
-		if (!isLoaded)
-			return;
-
-		if (getDisplayName() != "§6§lGenerator") {
-			requestFromConnected();
-
-			if (isActive())
-				return;
-		}
-
-		updateBlock();
-	}
-
-	public void load() {
-		position = new Location(Bukkit.getWorld(world), vec.getX(), vec.getY(), vec.getZ());
-		isLoaded = true;
-		invHolder = (InventoryHolder) position.getBlock().getState();
-	}
-
-	public void unload() {
-		isLoaded = false;
-	}
-
-	public boolean getIsLoaded() {
-		return isLoaded;
-	}
-
-	protected void chargeRod(ItemStack item) {
-		if (Batrod.check(item)) {
-			int rodPower = Batrod.readPower(item);
-			int powerTransfered = Math.min(Batrod.MAX_POWER - rodPower, Math.min(getMaxPowerOutput(), power));
-			Batrod.setPower(item, rodPower + powerTransfered);
-			power -= powerTransfered;
-		}
-	}
-
-	protected void dechargeRod(ItemStack item) {
-		if (Batrod.check(item) && power < getMaxPower()) {
-			int rodPower = Batrod.readPower(item);
-			int powerTransfered = Math.min(getMaxPower() - power, Math.min(rodPower, getMaxPowerInput()));
-			Batrod.setPower(item, rodPower - powerTransfered);
-			power += powerTransfered;
-		}
-	}
-
-	protected int pushOneItemInto(int itemPos, Inventory source, Location target) {
-		ItemStack items = source.getItem(itemPos);
-		BlockState state = target.getBlock().getState();
-		if (state instanceof InventoryHolder) {
-			Inventory targetInventory = ((InventoryHolder) state).getInventory();
-
-			HashMap<Integer, ItemStack> itemsNotMoved = targetInventory.addItem(items);
-
-			if (itemsNotMoved.size() > 0) {
-				int itemNotCountMoved = itemsNotMoved.get(0).getAmount();
-				ItemStack notMoved = source.getItem(4);
-				notMoved.setAmount(itemNotCountMoved);
-				source.setItem(4, notMoved);
-				return items.getAmount() - itemNotCountMoved;
-			} else {
-				source.setItem(4, new ItemStack(Material.AIR));
-				return items.getAmount();
-			}
-		}
-		return -1;
-	}
-
-	protected void renderParticleSideColored(Vector d, Color c) {
-		Vector direction = d.clone().add(new Vector(0.5, 0.5, 0.5)).subtract(d.clone().multiply(0.4));
-		position.getWorld().spawnParticle(Particle.REDSTONE, position.clone().add(direction), 0,
-				c.getRed() / 255.0f + 0.01f, c.getGreen() / 255.0f, c.getBlue() / 255.0f, 1);
+	public boolean upgradeAvailable(UpgradeType type) {
+		return availableUpgrades.contains(type);
 	}
 }

@@ -14,29 +14,17 @@ import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager.UpgradeType;
 
 public abstract class Upgrade {
 
-	protected Machine machine;
-
-	public Upgrade(Machine m) {
-		machine = m;
-	}
-
 	protected static OnionPower plugin = OnionPower.get();
 
-	public abstract UpgradeType getType();
-
-	public abstract ItemStack getSettingsItem();
-
-	public abstract ItemStack onClickSetting();
-
-	public static String getName(UpgradeType type) {
-		switch (type) {
-		case RedstoneUpgrade:
-			return "§6Upgrade: §aRedstone";
-		case RangeUpgrade:
-			return "§6Upgrade: §aRange";
-		default:
-			return "§6Upgrade: §a";
-		}
+	public static ItemStack getItem(UpgradeType type) {
+		ItemStack itemStack = new ItemStack(Material.PAPER);
+		ItemMeta itemMeta = itemStack.getItemMeta();
+		itemMeta.setDisplayName(getName(type));
+		itemMeta.setLore(getLore(type));
+		itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+		itemMeta.addEnchant(Enchantment.DURABILITY, 1, false);
+		itemStack.setItemMeta(itemMeta);
+		return itemStack;
 	}
 
 	private static ArrayList<String> getLore(UpgradeType type) {
@@ -56,31 +44,43 @@ public abstract class Upgrade {
 		return lore;
 	}
 
-	public String getName() {
-		return getName(getType());
-	}
-
-	public static ItemStack getItem(UpgradeType type) {
-		ItemStack itemStack = new ItemStack(Material.PAPER);
-		ItemMeta itemMeta = itemStack.getItemMeta();
-		itemMeta.setDisplayName(getName(type));
-		itemMeta.setLore(getLore(type));
-		itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-		itemMeta.addEnchant(Enchantment.DURABILITY, 1, false);
-		itemStack.setItemMeta(itemMeta);
-		return itemStack;
-	}
-
-	public ItemStack getItem() {
-		return getItem(getType());
-	}
-
-	public static boolean isUpgrade(ItemStack i, UpgradeType type) {
-		return i.getType() == Material.PAPER && i.getItemMeta().getDisplayName().startsWith(getName(type));
+	public static String getName(UpgradeType type) {
+		switch (type) {
+		case RedstoneUpgrade:
+			return "§6Upgrade: §aRedstone";
+		case RangeUpgrade:
+			return "§6Upgrade: §aRange";
+		default:
+			return "§6Upgrade: §a";
+		}
 	}
 
 	public static boolean isUpgrade(ItemStack i) {
 		return i.getType() == Material.PAPER
 				&& i.getItemMeta().getDisplayName().startsWith(getName(UpgradeType.Upgrade));
 	}
+
+	public static boolean isUpgrade(ItemStack i, UpgradeType type) {
+		return i.getType() == Material.PAPER && i.getItemMeta().getDisplayName().startsWith(getName(type));
+	}
+
+	protected Machine machine;
+
+	public Upgrade(Machine m) {
+		machine = m;
+	}
+
+	public ItemStack getItem() {
+		return getItem(getType());
+	}
+
+	public String getName() {
+		return getName(getType());
+	}
+
+	public abstract ItemStack getSettingsItem();
+
+	public abstract UpgradeType getType();
+
+	public abstract ItemStack onClickSetting();
 }

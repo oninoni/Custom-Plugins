@@ -17,11 +17,11 @@ public class ProtocolLibManager {
 
 	private static OnionPower plugin = OnionPower.get();
 
+	private ProtocolManager protocolManager;
+
 	public ProtocolLibManager(ProtocolManager protocolManager) {
 		this.protocolManager = protocolManager;
 	}
-
-	private ProtocolManager protocolManager;
 
 	public void addLoreListener() {
 		protocolManager.addPacketListener(new PacketAdapter(plugin, ListenerPriority.NORMAL,

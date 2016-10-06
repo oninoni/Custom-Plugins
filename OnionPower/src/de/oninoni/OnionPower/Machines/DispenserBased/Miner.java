@@ -25,9 +25,14 @@ import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager.UpgradeType;
 
 public class Miner extends MachineDispenser {
 
+	private static final int MAXRANGE = 64;
+
 	private int idleTimer = 0;
 
-	private static final int MAXRANGE = 64;
+	public Miner(Location position, MachineManager machineManager) {
+		super(position, machineManager);
+		SetupPowerIO();
+	}
 
 	public Miner(Location position, MachineManager machineManager, int power) {
 		super(position, machineManager, power);
@@ -50,45 +55,6 @@ public class Miner extends MachineDispenser {
 			}
 		}, 1L);
 		SetupPowerIO();
-	}
-
-	public Miner(Location position, MachineManager machineManager) {
-		super(position, machineManager);
-		SetupPowerIO();
-	}
-
-	private void SetupPowerIO() {
-		for (int i = 0; i < 6; i++) {
-			allowedOutputs[i] = false;
-		}
-	}
-
-	@Override
-	protected void setCoreSlot() {
-		coreSlot = 1;
-	}
-
-	@Override
-	public String getDisplayName() {
-		return "§6§lElectrical Stripminer";
-	}
-
-	@Override
-	public int getMaxPowerOutput() {
-		return 0;
-	}
-
-	@Override
-	public int getMaxPowerInput() {
-		return 500;
-	}
-
-	private int getRange() {
-		RangeUpgrade upgrade = ((RangeUpgrade) upgradeManager.getUpgrade(UpgradeType.RangeUpgrade));
-		if (upgrade != null) {
-			return upgrade.getRange();
-		}
-		return MAXRANGE;
 	}
 
 	private boolean checkFluidHandler(Block b) {
@@ -115,6 +81,99 @@ public class Miner extends MachineDispenser {
 			}
 		}
 		return success;
+	}
+
+	@Override
+	protected boolean doesExplode() {
+		return false;
+	}
+
+	@Override
+	public int getDesignEntityCount() {
+		return 0;
+	}
+
+	@Override
+	public String getDisplayName() {
+		return "§6§lElectrical Stripminer";
+	}
+
+	@Override
+	public int getMaxPowerInput() {
+		return 500;
+	}
+
+	@Override
+	public int getMaxPowerOutput() {
+		return 0;
+	}
+
+	private int getRange() {
+		RangeUpgrade upgrade = ((RangeUpgrade) upgradeManager.getUpgrade(UpgradeType.RangeUpgrade));
+		if (upgrade != null) {
+			return upgrade.getRange();
+		}
+		return MAXRANGE;
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public boolean onClick(InventoryClickEvent e) {
+		if (!super.onClick(e)) {
+			if (dispenser.getInventory().getItem(7) == null && e.getSlot() == 7 && e.getCursor() != null
+					&& e.getCursor().getType() == Material.IRON_PICKAXE) {
+				ItemStack i = CustomsItems.getMinerPickAxe(e.getCursor().getDurability());
+				e.setCursor(i);
+			} else {
+				e.setCancelled(true);
+			}
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public void onMoveFrom(InventoryMoveItemEvent e) {
+		e.setCancelled(true);
+	}
+
+	@Override
+	protected void resetItemAt(int id) {
+		if (id == 1) {
+			ItemStack batrod = Batrod.create();
+			Batrod.setPower(batrod, getPower());
+			dispenser.getInventory().setItem(id, batrod);
+		} else if (id == 4) {
+			dispenser.getInventory().setItem(id, new ItemStack(Material.REDSTONE_BLOCK));
+		} else if (id == 7) {
+			ItemStack i = new ItemStack(Material.IRON_PICKAXE);
+			i.setDurability(dispenser.getInventory().getItem(7).getDurability());
+			dispenser.getInventory().setItem(id, i);
+		} else {
+			dispenser.getInventory().setItem(id, new ItemStack(Material.AIR));
+		}
+	}
+
+	@Override
+	protected void setAvailableUpgrades() {
+		availableUpgrades.add(UpgradeType.RedstoneUpgrade);
+		availableUpgrades.add(UpgradeType.RangeUpgrade);
+	}
+
+	@Override
+	protected void setCoreSlot() {
+		coreSlot = 1;
+	}
+
+	private void SetupPowerIO() {
+		for (int i = 0; i < 6; i++) {
+			allowedOutputs[i] = false;
+		}
+	}
+
+	@Override
+	public void spawnDesignEntity(int id) {
+		return;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -209,64 +268,5 @@ public class Miner extends MachineDispenser {
 				}
 			}
 		}
-	}
-
-	@Override
-	public void onMoveFrom(InventoryMoveItemEvent e) {
-		e.setCancelled(true);
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public boolean onClick(InventoryClickEvent e) {
-		if (!super.onClick(e)) {
-			if (dispenser.getInventory().getItem(7) == null && e.getSlot() == 7 && e.getCursor() != null
-					&& e.getCursor().getType() == Material.IRON_PICKAXE) {
-				ItemStack i = CustomsItems.getMinerPickAxe(e.getCursor().getDurability());
-				e.setCursor(i);
-			} else {
-				e.setCancelled(true);
-			}
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	protected void resetItemAt(int id) {
-		if (id == 1) {
-			ItemStack batrod = Batrod.create();
-			Batrod.setPower(batrod, getPower());
-			dispenser.getInventory().setItem(id, batrod);
-		} else if (id == 4) {
-			dispenser.getInventory().setItem(id, new ItemStack(Material.REDSTONE_BLOCK));
-		} else if (id == 7) {
-			ItemStack i = new ItemStack(Material.IRON_PICKAXE);
-			i.setDurability(dispenser.getInventory().getItem(7).getDurability());
-			dispenser.getInventory().setItem(id, i);
-		} else {
-			dispenser.getInventory().setItem(id, new ItemStack(Material.AIR));
-		}
-	}
-
-	@Override
-	protected boolean doesExplode() {
-		return false;
-	}
-
-	@Override
-	public int getDesignEntityCount() {
-		return 0;
-	}
-
-	@Override
-	public void spawnDesignEntity(int id) {
-		return;
-	}
-
-	@Override
-	protected void setAvailableUpgrades() {
-		availableUpgrades.add(UpgradeType.RedstoneUpgrade);
-		availableUpgrades.add(UpgradeType.RangeUpgrade);
 	}
 }

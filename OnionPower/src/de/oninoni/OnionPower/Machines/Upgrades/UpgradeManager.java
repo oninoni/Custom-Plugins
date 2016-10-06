@@ -27,34 +27,6 @@ public class UpgradeManager {
 
 	protected static OnionPower plugin = OnionPower.get();
 
-	private Machine machine;
-	private Inventory inv;
-
-	HashMap<Integer, Upgrade> upgrades;
-
-	public UpgradeManager(Machine m) {
-		this(m, load(m));
-	}
-
-	private UpgradeManager(Machine m, HashMap<Integer, Upgrade> upgrades) {
-		this.upgrades = upgrades;
-		machine = m;
-
-		inv = plugin.getServer().createInventory((InventoryHolder) machine.getPosition().getBlock().getState(), 18,
-				getName());
-		for (int i = 0; i < 9; i++)
-			inv.setItem(i + 9, CustomsItems.getGlassPane((byte) 15, "§4NO Upgrade in this Slot"));
-
-		Set<Integer> keySet = upgrades.keySet();
-		for (Integer key : keySet) {
-			Upgrade u = upgrades.get(key);
-			// plugin.getLogger().info("Loaded: " + u.getName());
-			ItemStack uItem = Upgrade.getItem(u.getType());
-			inv.setItem(key, uItem);
-			inv.setItem(key + 9, u.getSettingsItem());
-		}
-	}
-
 	@SuppressWarnings("incomplete-switch")
 	private static HashMap<Integer, Upgrade> load(Machine m) {
 		// plugin.getLogger().info("Loading... Upgrades...");
@@ -94,6 +66,39 @@ public class UpgradeManager {
 		return loaded;
 	}
 
+	private Machine machine;
+
+	private Inventory inv;
+
+	HashMap<Integer, Upgrade> upgrades;
+
+	public UpgradeManager(Machine m) {
+		this(m, load(m));
+	}
+
+	private UpgradeManager(Machine m, HashMap<Integer, Upgrade> upgrades) {
+		this.upgrades = upgrades;
+		machine = m;
+
+		inv = plugin.getServer().createInventory((InventoryHolder) machine.getPosition().getBlock().getState(), 18,
+				getName());
+		for (int i = 0; i < 9; i++)
+			inv.setItem(i + 9, CustomsItems.getGlassPane((byte) 15, "§4NO Upgrade in this Slot"));
+
+		Set<Integer> keySet = upgrades.keySet();
+		for (Integer key : keySet) {
+			Upgrade u = upgrades.get(key);
+			// plugin.getLogger().info("Loaded: " + u.getName());
+			ItemStack uItem = Upgrade.getItem(u.getType());
+			inv.setItem(key, uItem);
+			inv.setItem(key + 9, u.getSettingsItem());
+		}
+	}
+
+	public String getName() {
+		return "§4Upgrades:";
+	}
+
 	public List<String> getPowerCoreLore() {
 		List<String> lore = new ArrayList<>();
 		Set<Integer> keySet = upgrades.keySet();
@@ -111,25 +116,34 @@ public class UpgradeManager {
 		return lore;
 	}
 
-	public String getName() {
-		return "§4Upgrades:";
-	}
-
-	public void openInterface(HumanEntity p) {
-		p.openInventory(inv);
-	}
-
-	public void updateIventories() {
-		machine.setUpgradeLore();
-
-		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
-			@Override
-			public void run() {
-				for (HumanEntity viewer : inv.getViewers()) {
-					((Player) viewer).updateInventory();
-				}
+	public Upgrade getUpgrade(UpgradeType type) {
+		Set<Integer> keySet = upgrades.keySet();
+		for (Integer key : keySet) {
+			Upgrade u = upgrades.get(key);
+			if (u.getType() == type) {
+				return u;
 			}
-		}, 1L);
+		}
+		return null;
+	}
+
+	public void onBoom() {
+		Random r = new Random();
+		Set<Integer> keySet = upgrades.keySet();
+		for (Integer key : keySet) {
+			if (r.nextInt(2) == 0) {
+				Upgrade u = upgrades.get(key);
+				machine.getPosition().getWorld().dropItemNaturally(machine.getPosition(), u.getItem());
+			}
+		}
+	}
+
+	public void onBreak() {
+		Set<Integer> keySet = upgrades.keySet();
+		for (Integer key : keySet) {
+			Upgrade u = upgrades.get(key);
+			machine.getPosition().getWorld().dropItemNaturally(machine.getPosition(), u.getItem());
+		}
 	}
 
 	public void onClick(InventoryClickEvent e) {
@@ -188,33 +202,20 @@ public class UpgradeManager {
 		}
 	}
 
-	public Upgrade getUpgrade(UpgradeType type) {
-		Set<Integer> keySet = upgrades.keySet();
-		for (Integer key : keySet) {
-			Upgrade u = upgrades.get(key);
-			if (u.getType() == type) {
-				return u;
-			}
-		}
-		return null;
+	public void openInterface(HumanEntity p) {
+		p.openInventory(inv);
 	}
 
-	public void onBreak() {
-		Set<Integer> keySet = upgrades.keySet();
-		for (Integer key : keySet) {
-			Upgrade u = upgrades.get(key);
-			machine.getPosition().getWorld().dropItemNaturally(machine.getPosition(), u.getItem());
-		}
-	}
+	public void updateIventories() {
+		machine.setUpgradeLore();
 
-	public void onBoom() {
-		Random r = new Random();
-		Set<Integer> keySet = upgrades.keySet();
-		for (Integer key : keySet) {
-			if (r.nextInt(2) == 0) {
-				Upgrade u = upgrades.get(key);
-				machine.getPosition().getWorld().dropItemNaturally(machine.getPosition(), u.getItem());
+		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+			@Override
+			public void run() {
+				for (HumanEntity viewer : inv.getViewers()) {
+					((Player) viewer).updateInventory();
+				}
 			}
-		}
+		}, 1L);
 	}
 }

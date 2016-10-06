@@ -16,6 +16,11 @@ public class Generator extends MachineFurnace {
 
 	private boolean disableSmeltingSlot = false;
 
+	public Generator(Location position, MachineManager machineManager) {
+		super(position, machineManager);
+		SetupPowerIO();
+	}
+
 	public Generator(Location position, MachineManager machineManager, int power) {
 		super(position, machineManager, power);
 
@@ -31,9 +36,87 @@ public class Generator extends MachineFurnace {
 		SetupPowerIO();
 	}
 
-	public Generator(Location position, MachineManager machineManager) {
-		super(position, machineManager);
-		SetupPowerIO();
+	@Override
+	protected boolean doesExplode() {
+		return true;
+	}
+
+	@Override
+	public int getDesignEntityCount() {
+		return 0;
+	}
+
+	@Override
+	public String getDisplayName() {
+		return "§6§lGenerator";
+	}
+
+	@Override
+	public int getMaxPowerInput() {
+		return 0;
+	}
+
+	@Override
+	public int getMaxPowerOutput() {
+		return 100;
+	}
+
+	@Override
+	public boolean onClick(InventoryClickEvent e) {
+		if (!super.onClick(e)) {
+			if (disableSmeltingSlot && e.getRawSlot() == 0) {
+				e.setCancelled(true);
+			}
+			return false;
+		}
+		return true;
+	}
+	
+	@Override
+	public void onMoveFrom(InventoryMoveItemEvent e) {
+		e.setCancelled(true);
+	}
+	
+	@Override
+	public void onMoveInto(InventoryMoveItemEvent e) {
+		Material mat = e.getItem().getType();
+		int slot = e.getDestination().first(mat);
+		if(slot == -1){
+			slot = e.getDestination().firstEmpty();
+		}
+		switch (slot) {
+		case 0:
+			break;
+		case 1:
+			if(!ItemData.smeltable.containsKey(mat))
+				e.setCancelled(true);
+			break;
+		case 2:
+			e.setCancelled(true);
+			break;
+		default:
+			e.setCancelled(true);
+			break;
+		}
+	}
+
+	@Override
+	protected void resetItemAt(int id) {
+		if (id == coreSlot) {
+			ItemStack batrod = Batrod.create();
+			Batrod.setPower(batrod, getPower());
+			furnace.getInventory().setItem(id, batrod);
+		}
+	}
+
+	@Override
+	protected void setAvailableUpgrades() {
+		availableUpgrades.add(UpgradeType.RedstoneUpgrade);
+	}
+
+	@Override
+	protected void setCoreSlot() {
+		coreSlot = 2;
 	}
 
 	private void SetupPowerIO() {
@@ -44,8 +127,8 @@ public class Generator extends MachineFurnace {
 	}
 
 	@Override
-	protected void setCoreSlot() {
-		coreSlot = 2;
+	public void spawnDesignEntity(int id) {
+
 	}
 
 	@Override
@@ -79,65 +162,5 @@ public class Generator extends MachineFurnace {
 		}
 		chargeRod(furnace.getInventory().getSmelting());
 		dechargeRod(furnace.getInventory().getFuel());
-	}
-
-	@Override
-	public boolean onClick(InventoryClickEvent e) {
-		if (!super.onClick(e)) {
-			if (disableSmeltingSlot && e.getRawSlot() == 0) {
-				e.setCancelled(true);
-			}
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public String getDisplayName() {
-		return "§6§lGenerator";
-	}
-
-	@Override
-	public void onMoveFrom(InventoryMoveItemEvent e) {
-		e.setCancelled(true);
-	}
-
-	@Override
-	public int getMaxPowerOutput() {
-		return 100;
-	}
-
-	@Override
-	public int getMaxPowerInput() {
-		return 0;
-	}
-
-	@Override
-	protected void resetItemAt(int id) {
-		if (id == coreSlot) {
-			ItemStack batrod = Batrod.create();
-			Batrod.setPower(batrod, getPower());
-			furnace.getInventory().setItem(id, batrod);
-		}
-	}
-
-	@Override
-	protected boolean doesExplode() {
-		return true;
-	}
-
-	@Override
-	public int getDesignEntityCount() {
-		return 0;
-	}
-
-	@Override
-	public void spawnDesignEntity(int id) {
-
-	}
-
-	@Override
-	protected void setAvailableUpgrades() {
-		availableUpgrades.add(UpgradeType.RedstoneUpgrade);
 	}
 }

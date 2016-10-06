@@ -21,11 +21,6 @@ public class RangeUpgrade extends Upgrade {
 		range = value;
 	}
 
-	@Override
-	public UpgradeType getType() {
-		return UpgradeType.RangeUpgrade;
-	}
-
 	public int getRange() {
 		return (int) Math.pow(2, range);
 	}
@@ -41,6 +36,11 @@ public class RangeUpgrade extends Upgrade {
 
 		ItemStack settingsItem = CustomsItems.getGlassPane((byte) 6, "§6Range will be limited to:", lore);
 		return settingsItem;
+	}
+
+	@Override
+	public UpgradeType getType() {
+		return UpgradeType.RangeUpgrade;
 	}
 
 	@Override

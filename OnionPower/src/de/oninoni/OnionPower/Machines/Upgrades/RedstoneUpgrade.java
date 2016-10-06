@@ -30,17 +30,6 @@ public class RedstoneUpgrade extends Upgrade {
 	}
 
 	@Override
-	public UpgradeType getType() {
-		return UpgradeType.RedstoneUpgrade;
-	}
-
-	public boolean isMachineOnline(Machine m) {
-		boolean power = m.getPosition().getBlock().getBlockPower() > 0;
-		return (powerSetting == ExpectedPower.Ignore || (powerSetting == ExpectedPower.On && power)
-				|| (powerSetting == ExpectedPower.Off && !power));
-	}
-
-	@Override
 	public ItemStack getSettingsItem() {
 		ArrayList<String> lore = new ArrayList<>();
 		switch (powerSetting) {
@@ -56,6 +45,17 @@ public class RedstoneUpgrade extends Upgrade {
 		}
 		ItemStack settingsItem = CustomsItems.getGlassPane((byte) 6, "§6Redstone State Expected:", lore);
 		return settingsItem;
+	}
+
+	@Override
+	public UpgradeType getType() {
+		return UpgradeType.RedstoneUpgrade;
+	}
+
+	public boolean isMachineOnline(Machine m) {
+		boolean power = m.getPosition().getBlock().getBlockPower() > 0;
+		return (powerSetting == ExpectedPower.Ignore || (powerSetting == ExpectedPower.On && power)
+				|| (powerSetting == ExpectedPower.Off && !power));
 	}
 
 	@Override

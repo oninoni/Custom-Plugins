@@ -17,12 +17,23 @@ public class InventoryListener implements Listener {
 
 	@EventHandler
 	public void onClick(InventoryClickEvent e) {
+		plugin.getLogger().info("OnClick");
 		plugin.getMachineManager().onClick(e);
 	}
 
 	@EventHandler
 	public void onClose(InventoryCloseEvent e) {
 		plugin.getMachineManager().onClose(e);
+	}
+
+	@EventHandler
+	public void onDispense(BlockDispenseEvent e) {
+		plugin.getMachineManager().onDispense(e);
+	}
+
+	@EventHandler
+	public void onDrag(InventoryDragEvent e) {
+		plugin.getMachineManager().onDrag(e);
 	}
 
 	@EventHandler
@@ -33,15 +44,5 @@ public class InventoryListener implements Listener {
 	@EventHandler
 	public void onPickup(InventoryPickupItemEvent e) {
 		plugin.getMachineManager().onPickup(e);
-	}
-
-	@EventHandler
-	public void onDrag(InventoryDragEvent e) {
-		plugin.getMachineManager().onDrag(e);
-	}
-
-	@EventHandler
-	public void onDispense(BlockDispenseEvent e) {
-		plugin.getMachineManager().onDispense(e);
 	}
 }

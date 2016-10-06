@@ -12,13 +12,13 @@ public class BlockBreakListener implements Listener {
 	private static OnionPower plugin = OnionPower.get();
 
 	@EventHandler
-	public void onBreak(BlockBreakEvent e) {
-		plugin.getMachineManager().onBreak(e);
+	public void onBoom(EntityExplodeEvent e) {
+		plugin.getMachineManager().onBoom(e);
 	}
 
 	@EventHandler
-	public void onBoom(EntityExplodeEvent e) {
-		plugin.getMachineManager().onBoom(e);
+	public void onBreak(BlockBreakEvent e) {
+		plugin.getMachineManager().onBreak(e);
 	}
 
 }

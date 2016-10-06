@@ -13,6 +13,18 @@ public class Batrod {
 	private static final String NAME = "§4Batrod";
 	public static final int MAX_POWER = 64000;
 
+	public static boolean check(ItemStack item) {
+		if (item == null)
+			return false;
+		ItemMeta itemMeta = item.getItemMeta();
+		if (itemMeta != null) {
+			if (itemMeta.getDisplayName() != null && itemMeta.getDisplayName().equalsIgnoreCase(NAME)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public static ItemStack create() {
 		ItemStack batterod = new ItemStack(Material.BLAZE_ROD);
 
@@ -28,16 +40,8 @@ public class Batrod {
 		return batterod;
 	}
 
-	public static boolean check(ItemStack item) {
-		if (item == null)
-			return false;
-		ItemMeta itemMeta = item.getItemMeta();
-		if (itemMeta != null) {
-			if (itemMeta.getDisplayName() != null && itemMeta.getDisplayName().equalsIgnoreCase(NAME)) {
-				return true;
-			}
-		}
-		return false;
+	public static int readPower(ItemStack item) {
+		return Integer.parseInt(item.getItemMeta().getLore().get(0).substring(2));
 	}
 
 	public static void setPower(ItemStack item, int power) {
@@ -48,9 +52,5 @@ public class Batrod {
 		lore.set(1, "§6" + power + "/" + MAX_POWER + " " + CustomsItems.UNIT_NAME);
 		itemMeta.setLore(lore);
 		item.setItemMeta(itemMeta);
-	}
-
-	public static int readPower(ItemStack item) {
-		return Integer.parseInt(item.getItemMeta().getLore().get(0).substring(2));
 	}
 }
