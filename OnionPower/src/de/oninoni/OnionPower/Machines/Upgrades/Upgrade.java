@@ -64,12 +64,12 @@ public abstract class Upgrade {
 	}
 
 	public static boolean isUpgrade(ItemStack i) {
-		return i.getType() == Material.PAPER
-				&& i.getItemMeta().getDisplayName().startsWith(getName(UpgradeType.Upgrade));
+		return isUpgrade(i, UpgradeType.Upgrade);
 	}
 
 	public static boolean isUpgrade(ItemStack i, UpgradeType type) {
-		return i.getType() == Material.PAPER && i.getItemMeta().getDisplayName().startsWith(getName(type));
+		return i != null && i.getType() == Material.PAPER
+				&& i.getItemMeta().getDisplayName() != null && i.getItemMeta().getDisplayName().startsWith(getName(type));
 	}
 
 	protected Machine machine;

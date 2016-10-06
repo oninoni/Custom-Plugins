@@ -34,6 +34,7 @@ import de.oninoni.OnionPower.Machines.DispenserBased.BatrodBox;
 import de.oninoni.OnionPower.Machines.DispenserBased.MachineDispenser;
 import de.oninoni.OnionPower.Machines.DispenserBased.Miner;
 import de.oninoni.OnionPower.Machines.DispenserBased.Sorter;
+import de.oninoni.OnionPower.Machines.DispenserBased.UpgradeStation;
 import de.oninoni.OnionPower.Machines.FurnaceBased.ElectricFurnace;
 import de.oninoni.OnionPower.Machines.FurnaceBased.Generator;
 import de.oninoni.OnionPower.Machines.HopperBased.FluidHandler;
@@ -126,6 +127,7 @@ public class MachineManager {
 				Location l = new Location(w, x, y, z);
 				if (MachineClass == Generator.class) {
 					machines.put(l, new Generator(l, this));
+				} else if (MachineClass == ElectricFurnace.class) {
 					machines.put(l, new ElectricFurnace(l, this));
 				} else if (MachineClass == BatrodBox.class) {
 					machines.put(l, new BatrodBox(l, this));
@@ -135,6 +137,8 @@ public class MachineManager {
 					machines.put(l, new Miner(l, this));
 				} else if (MachineClass == FluidHandler.class) {
 					machines.put(l, new FluidHandler(l, this));
+				} else if (MachineClass == UpgradeStation.class) {
+					machines.put(l, new UpgradeStation(l, this));
 				}
 			}
 			plugin.getLogger().info(machines.size() + " Machine/s loaded!");
@@ -177,24 +181,27 @@ public class MachineManager {
 			if (e.getRawSlot() != e.getView().convertSlot(e.getRawSlot()) || e.getSlot() >= e.getInventory().getSize())
 				return;
 			Location location = e.getView().getTopInventory().getLocation();
-			if (Generator.canCreate(e, Generator.class.getName(), InventoryType.FURNACE))
+			if (Machine.canCreate(e, Generator.class.getName(), InventoryType.FURNACE))
 				machines.put(location, new Generator(location, this,
-						Generator.getAllBatrodsPower(e, Generator.class.getName(), InventoryType.FURNACE)));
-			if (ElectricFurnace.canCreate(e, ElectricFurnace.class.getName(), InventoryType.FURNACE))
+						Machine.getAllBatrodsPower(e, Generator.class.getName(), InventoryType.FURNACE)));
+			if (Machine.canCreate(e, ElectricFurnace.class.getName(), InventoryType.FURNACE))
 				machines.put(location, new ElectricFurnace(location, this,
-						ElectricFurnace.getAllBatrodsPower(e, ElectricFurnace.class.getName(), InventoryType.FURNACE)));
-			if (BatrodBox.canCreate(e, BatrodBox.class.getName(), InventoryType.DISPENSER))
+						Machine.getAllBatrodsPower(e, ElectricFurnace.class.getName(), InventoryType.FURNACE)));
+			if (Machine.canCreate(e, BatrodBox.class.getName(), InventoryType.DISPENSER))
 				machines.put(location, new BatrodBox(location, this,
-						BatrodBox.getAllBatrodsPower(e, BatrodBox.class.getName(), InventoryType.DISPENSER)));
-			if (Sorter.canCreate(e, Sorter.class.getName(), InventoryType.DISPENSER))
+						Machine.getAllBatrodsPower(e, BatrodBox.class.getName(), InventoryType.DISPENSER)));
+			if (Machine.canCreate(e, Sorter.class.getName(), InventoryType.DISPENSER))
 				machines.put(location, new Sorter(location, this,
-						Sorter.getAllBatrodsPower(e, Sorter.class.getName(), InventoryType.DISPENSER)));
-			if (Miner.canCreate(e, Miner.class.getName(), InventoryType.DISPENSER))
+						Machine.getAllBatrodsPower(e, Sorter.class.getName(), InventoryType.DISPENSER)));
+			if (Machine.canCreate(e, Miner.class.getName(), InventoryType.DISPENSER))
 				machines.put(location, new Miner(location, this,
-						Miner.getAllBatrodsPower(e, Miner.class.getName(), InventoryType.DISPENSER)));
-			if (FluidHandler.canCreate(e, FluidHandler.class.getName(), InventoryType.HOPPER))
+						Machine.getAllBatrodsPower(e, Miner.class.getName(), InventoryType.DISPENSER)));
+			if (Machine.canCreate(e, FluidHandler.class.getName(), InventoryType.HOPPER))
 				machines.put(location, new FluidHandler(location, this,
-						FluidHandler.getAllBatrodsPower(e, FluidHandler.class.getName(), InventoryType.HOPPER)));
+						Machine.getAllBatrodsPower(e, FluidHandler.class.getName(), InventoryType.HOPPER)));
+			if (Machine.canCreate(e, UpgradeStation.class.getName(), InventoryType.DISPENSER))
+				machines.put(location, new UpgradeStation(location, this, 
+						Machine.getAllBatrodsPower(e, UpgradeStation.class.getName(), InventoryType.DISPENSER)));
 			if (machines.get(e.getInventory().getLocation()) != null)
 				saveData();
 		} else {

@@ -338,6 +338,8 @@ public abstract class Machine {
 		upgradeManager.onBreak();
 	}
 
+	//TODO coreslot is locked upgradeManager for some reason (Tested in Upgrade Station)
+	
 	public void onClick(InventoryClickEvent e) {
 		Inventory inv = e.getView().getTopInventory();
 		if (coreSlot == e.getRawSlot()) {
