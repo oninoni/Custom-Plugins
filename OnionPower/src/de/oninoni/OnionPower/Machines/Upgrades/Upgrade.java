@@ -44,7 +44,8 @@ public abstract class Upgrade {
 			lore.add("§3lava.");
 			break;
 		default:
-			lore.add("§9Oninoni forgot to add a description here....");
+			lore.add("§9Basic Upgrade. Can be modified");
+			lore.add("§9in the §3Upgrade Station");
 		}
 		return lore;
 	}

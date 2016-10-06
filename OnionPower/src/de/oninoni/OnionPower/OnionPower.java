@@ -10,6 +10,7 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 
 import de.oninoni.OnionPower.Items.Batrod;
+import de.oninoni.OnionPower.Items.CraftingRecipes;
 import de.oninoni.OnionPower.Listeners.BlockBreakListener;
 import de.oninoni.OnionPower.Listeners.ChunkListener;
 import de.oninoni.OnionPower.Listeners.EntityListener;
@@ -106,5 +107,7 @@ public class OnionPower extends JavaPlugin {
 		}, 20L * 60L);
 
 		machineManager.loadData();
+		
+		CraftingRecipes.setAllRecipes();
 	}
 }

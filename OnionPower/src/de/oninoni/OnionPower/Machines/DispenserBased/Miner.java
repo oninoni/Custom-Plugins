@@ -176,9 +176,23 @@ public class Miner extends MachineDispenser {
 		}
 	}
 
+	//@SuppressWarnings("deprecation")
 	@Override
 	public void spawnDesignEntity(int id) {
-		return;
+		/*switch (id) {
+		case 0:
+			Vector direction = MachineManager.directions[directionAdapter[((Dispenser) position.getBlock().getState()).getRawData() % 8]].clone();
+			direction.multiply(0.5);
+			ArmorStand armorStand = (ArmorStand) position.getWorld().spawnEntity(position.clone().add(0.5f, 0.0f, 0.5f).add(direction), EntityType.ARMOR_STAND);
+			armorStand.setGravity(false);
+			armorStand.setSmall(true);
+			armorStand.setHeadPose(new EulerAngle(Math.PI, 0.0f, 0.0f));
+			armorStand.setVisible(false);
+			armorStand.setInvulnerable(true);
+			armorStand.
+			armorStand.setHelmet(new ItemStack(Material.STAINED_GLASS, 1, (short) 10));
+			break;
+		}*/
 	}
 
 	@SuppressWarnings("deprecation")
@@ -216,13 +230,15 @@ public class Miner extends MachineDispenser {
 							}
 							double distance = position.distance(newPos);
 							if (getPower() > 5 * distance) {
-
+								Miner thisOne = this;
 								MinerShot shot = new MinerShot(this, b);
 								Runnable r = new Runnable() {
 									@Override
 									public void run() {
 										power -= 5;
 										if (shot.update()) {
+											ArrayList<InventoryHolder> targetInventories = plugin.getMachineManager()
+												.getAdjacentInventoryHolders(thisOne, dispenser.getRawData() % 8);
 											Collection<ItemStack> drops = b
 													.getDrops(new ItemStack(Material.IRON_PICKAXE));
 											ArrayList<ItemStack> totalLeftOver = new ArrayList<>();
