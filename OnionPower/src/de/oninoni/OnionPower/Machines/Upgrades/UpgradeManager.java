@@ -10,7 +10,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -145,61 +144,63 @@ public class UpgradeManager {
 			machine.getPosition().getWorld().dropItemNaturally(machine.getPosition(), u.getItem());
 		}
 	}
-
-	public void onClick(InventoryClickEvent e) {
-		if (e.getSlot() >= 0 && e.getSlot() <= 8) {
+	
+	public boolean onClickFixed(Inventory inv, int slot, ItemStack cursor, Player p){
+		if (slot >= 0 && slot <= 8) {
 			// Removing all Upgrades
-			if (e.getCurrentItem() != null && e.getCurrentItem().getType() != Material.AIR) {
-				if (Upgrade.isUpgrade(e.getCurrentItem(), UpgradeType.Upgrade)) {
-					upgrades.remove(e.getSlot());
-					e.getInventory().setItem(e.getSlot() + 9,
+			if (inv.getItem(slot) != null && inv.getItem(slot).getType() != Material.AIR) {
+				if (Upgrade.isUpgrade(inv.getItem(slot), UpgradeType.Upgrade)) {
+					upgrades.remove(slot);
+					inv.setItem(slot + 9,
 							CustomsItems.getGlassPane((byte) 15, "§4NO Upgrade in this Slot"));
 				}
 			}
 			// Adding all Upgrades
-			if (e.getCursor() != null && e.getCursor().getType() != Material.AIR) {
-				if (Upgrade.isUpgrade(e.getCursor(), UpgradeType.RedstoneUpgrade)
+			if (cursor != null && cursor.getType() != Material.AIR) {
+				if (Upgrade.isUpgrade(cursor, UpgradeType.RedstoneUpgrade)
 						&& machine.upgradeAvailable(UpgradeType.RedstoneUpgrade)) {
 					// plugin.getLogger().info("Adding " +
 					// Upgrade.getName(UpgradeType.RedstoneUpgrade) + " to " +
-					// e.getSlot());
+					// slot);
 					RedstoneUpgrade upgrade = new RedstoneUpgrade(machine);
-					upgrades.put(e.getSlot(), upgrade);
-					e.getInventory().setItem(e.getSlot() + 9, upgrade.getSettingsItem());
-				} else if (Upgrade.isUpgrade(e.getCursor(), UpgradeType.RangeUpgrade)
+					upgrades.put(slot, upgrade);
+					inv.setItem(slot + 9, upgrade.getSettingsItem());
+				} else if (Upgrade.isUpgrade(cursor, UpgradeType.RangeUpgrade)
 						&& machine.upgradeAvailable(UpgradeType.RangeUpgrade)) {
 					RangeUpgrade upgrade = new RangeUpgrade(machine);
-					upgrades.put(e.getSlot(), upgrade);
-					e.getInventory().setItem(e.getSlot() + 9, upgrade.getSettingsItem());
-				} else if (Upgrade.isUpgrade(e.getCursor(), UpgradeType.LavaUpgrade)
+					upgrades.put(slot, upgrade);
+					inv.setItem(slot + 9, upgrade.getSettingsItem());
+				} else if (Upgrade.isUpgrade(cursor, UpgradeType.LavaUpgrade)
 						&& machine.upgradeAvailable(UpgradeType.LavaUpgrade)) {
 					LavaUpgrade upgrade = new LavaUpgrade(machine);
-					upgrades.put(e.getSlot(), upgrade);
-					e.getInventory().setItem(e.getSlot() + 9, upgrade.getSettingsItem());
+					upgrades.put(slot, upgrade);
+					inv.setItem(slot + 9, upgrade.getSettingsItem());
 				} else {
 					// plugin.getLogger().info("ABORT!" + e.getCursor());
-					e.setCancelled(true);
+					return true;
 				}
 			}
 			updateIventories();
-		} else if (e.getSlot() >= 9 && e.getSlot() <= 17) {
-			// plugin.getLogger().info("Clicked in Slot: " + e.getSlot());
-			if (e.getCurrentItem() != null && e.getCurrentItem().getType() != Material.AIR
-					&& upgrades.containsKey(e.getSlot() - 9)) {
-				Upgrade u = upgrades.get(e.getSlot() - 9);
-				e.getInventory().setItem(e.getSlot(), u.onClickSetting());
-				e.setCancelled(true);
+		} else if (slot >= 9 && slot <= 17) {
+			// plugin.getLogger().info("Clicked in Slot: " + slot);
+			if (inv.getItem(slot) != null && inv.getItem(slot).getType() != Material.AIR
+					&& upgrades.containsKey(slot - 9)) {
+				Upgrade u = upgrades.get(slot - 9);
+				inv.setItem(slot, u.onClickSetting());
+				updateIventories();
+				return true;
 			} else {
-				if (e.getSlot() == 10)
-					e.getWhoClicked().getInventory().addItem(Upgrade.getItem(UpgradeType.RedstoneUpgrade));
+				if (slot == 10)
+					p.getInventory().addItem(Upgrade.getItem(UpgradeType.RedstoneUpgrade));
 				else
-					e.getWhoClicked().getInventory().addItem(Upgrade.getItem(UpgradeType.LavaUpgrade));
-				e.setCancelled(true);
+					p.getInventory().addItem(Upgrade.getItem(UpgradeType.LavaUpgrade));
+				updateIventories();
+				return true;
 			}
-			updateIventories();
 		} else {
-			plugin.getLogger().warning("Upgrade Slot: " + e.getSlot() + " selected!");
+			plugin.getLogger().warning("Upgrade Slot: " + slot + " selected!");
 		}
+		return false;
 	}
 
 	public void openInterface(HumanEntity p) {

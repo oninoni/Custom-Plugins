@@ -126,7 +126,6 @@ public class MachineManager {
 				Location l = new Location(w, x, y, z);
 				if (MachineClass == Generator.class) {
 					machines.put(l, new Generator(l, this));
-				} else if (MachineClass == ElectricFurnace.class) {
 					machines.put(l, new ElectricFurnace(l, this));
 				} else if (MachineClass == BatrodBox.class) {
 					machines.put(l, new BatrodBox(l, this));
@@ -138,6 +137,7 @@ public class MachineManager {
 					machines.put(l, new FluidHandler(l, this));
 				}
 			}
+			plugin.getLogger().info(machines.size() + " Machine/s loaded!");
 		}
 	}
 
@@ -172,7 +172,7 @@ public class MachineManager {
 	public void onClick(InventoryClickEvent e) {
 		if (e.getInventory().getHolder() == null)
 			return;
-		Machine machine = machines.get(e.getView().getTopInventory().getLocation());
+		Machine machine = machines.get(e.getView().getTopInventory().getHolder().getInventory().getLocation());
 		if (machine == null) {
 			if (e.getRawSlot() != e.getView().convertSlot(e.getRawSlot()) || e.getSlot() >= e.getInventory().getSize())
 				return;

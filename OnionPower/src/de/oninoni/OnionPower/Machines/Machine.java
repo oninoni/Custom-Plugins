@@ -339,43 +339,43 @@ public abstract class Machine {
 	}
 
 	public void onClick(InventoryClickEvent e) {
-		if (e.getInventory().getName() == upgradeManager.getName()) {
-			upgradeManager.onClick(e);
-		}else{
-			if (coreSlot == e.getRawSlot()) {
-				e.setCancelled(true);
-				upgradeManager.openInterface(e.getWhoClicked());
-			}
-			int slot;
-			ItemStack cursor;
-			//plugin.getLogger().info("Click at " + e.getSlot() + " / " + e.getRawSlot());
-			//plugin.getLogger().info("Cursor: " + e.getCursor() + " / Current: " + e.getCurrentItem());
-			if(e.isShiftClick()){
-				cursor = e.getCurrentItem();
-				if(e.getRawSlot() > invHolder.getInventory().getSize()){
-					//plugin.getLogger().info("Shift from outside!");
-					slot = -1;
-					if(e.getCursor() != null && e.getCursor().getType() != null){
-						slot = invHolder.getInventory().first(e.getCursor().getType());
+		Inventory inv = e.getView().getTopInventory();
+		if (coreSlot == e.getRawSlot()) {
+			e.setCancelled(true);
+			upgradeManager.openInterface(e.getWhoClicked());
+		}
+		int slot;
+		ItemStack cursor;
+		//plugin.getLogger().info("Click at " + e.getSlot() + " / " + e.getRawSlot());
+		//plugin.getLogger().info("Cursor: " + e.getCursor() + " / Current: " + e.getCurrentItem());
+		if(e.isShiftClick()){
+			cursor = e.getCurrentItem();
+			if(e.getRawSlot() > inv.getSize()){
+				//plugin.getLogger().info("Shift from outside!");
+				slot = -1;
+				if(e.getCursor() != null && e.getCursor().getType() != null){
+					slot = inv.first(e.getCursor().getType());
+					if(slot == -1){
+						slot = inv.firstEmpty();
 						if(slot == -1){
-							slot = invHolder.getInventory().firstEmpty();
-							if(slot == -1){
-								return;
-							}
+							return;
 						}
 					}
-				}else{
-					slot = e.getRawSlot();
 				}
 			}else{
 				slot = e.getRawSlot();
-				cursor = e.getCursor();
 			}
-			if(slot >= invHolder.getInventory().getSize())return;
-			//plugin.getLogger().info("Clicking in machine at: " + slot + " with: " + cursor);
-			e.setCancelled(onClickFixed(e.getView().getTopInventory(), slot, cursor, (Player) e.getWhoClicked()));
+		}else{
+			slot = e.getRawSlot();
+			cursor = e.getCursor();
 		}
-		
+		if(slot >= inv.getSize())return;
+		//plugin.getLogger().info("Clicking in machine at: " + slot + " with: " + cursor);
+		if (inv.getName() == upgradeManager.getName()) {
+			e.setCancelled(upgradeManager.onClickFixed(inv, slot, cursor, (Player) e.getWhoClicked()));
+		}else{
+			e.setCancelled(onClickFixed(inv, slot, cursor, (Player) e.getWhoClicked()));
+		}
 	}
 	
 	public abstract boolean onClickFixed(Inventory inv, int slot, ItemStack cursor, Player p);

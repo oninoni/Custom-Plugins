@@ -31,12 +31,17 @@ public abstract class Upgrade {
 		ArrayList<String> lore = new ArrayList<>();
 		switch (type) {
 		case RedstoneUpgrade:
-			lore.add("§9This upgrade allows a Machine,");
+			lore.add("§9This upgrade allows a §3Machine§9,");
 			lore.add("§9to be controlled by §3Redstone§9.");
 			break;
 		case RangeUpgrade:
 			lore.add("§9This can change the range");
 			lore.add("§9of an §3Electrical Stripminer§9.");
+			break;
+		case LavaUpgrade:
+			lore.add("§9If placed inside a §3Fluid");
+			lore.add("§3Handler§9 this will make it");
+			lore.add("§3lava.");
 			break;
 		default:
 			lore.add("§9Oninoni forgot to add a description here....");
@@ -50,6 +55,8 @@ public abstract class Upgrade {
 			return "§6Upgrade: §aRedstone";
 		case RangeUpgrade:
 			return "§6Upgrade: §aRange";
+		case LavaUpgrade:
+			return "§6Upgrade: §aLava";
 		default:
 			return "§6Upgrade: §a";
 		}
