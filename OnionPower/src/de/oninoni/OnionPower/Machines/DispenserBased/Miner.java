@@ -40,17 +40,15 @@ public class Miner extends MachineDispenser {
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {
-				dispenser.getInventory().setItem(0, CustomsItems.getGlassPane((byte) 8, "§4§kSecret§r §4§kMessage"));
+				dispenser.getInventory().setItem(0, CustomsItems.getGlassPane((byte) 7, "§4§kSecret§r §4§kMessage"));
 				// dispenser.getInventory().setItem(1, getPowerCore());
-				dispenser.getInventory().setItem(2, CustomsItems.getGlassPane((byte) 8, "§4§kLol§r §4§kROFL"));
+				dispenser.getInventory().setItem(2, CustomsItems.getGlassPane((byte) 7, "§4§kLol§r §4§kROFL"));
 				dispenser.getInventory().setItem(4, CustomsItems.getLaserPrism());
-				dispenser.getInventory().setItem(3, CustomsItems.getGlassPane((byte) 8, "§4§kZweiundvierzig§r"));
-				dispenser.getInventory().setItem(5,
-						CustomsItems.getGlassPane((byte) 8, "§4§kIch§r §4§kmag§r §4§kZüge"));
-				dispenser.getInventory().setItem(6, CustomsItems.getGlassPane((byte) 8, "§4§k42§r §4§k256"));
+				dispenser.getInventory().setItem(3, CustomsItems.getGlassPane((byte) 7, "§4§kZweiundvierzig§r"));
+				dispenser.getInventory().setItem(5, CustomsItems.getGlassPane((byte) 7, "§4§kIch§r §4§kmag§r §4§kZüge"));
+				dispenser.getInventory().setItem(6, CustomsItems.getGlassPane((byte) 7, "§4§k42§r §4§k256"));
 				dispenser.getInventory().setItem(7, CustomsItems.getMinerPickAxe());
-				dispenser.getInventory().setItem(8,
-						CustomsItems.getGlassPane((byte) 8, "§4§kPossseidon§r §4§kstinkt!"));
+				dispenser.getInventory().setItem(8, CustomsItems.getGlassPane((byte) 7, "§4§kPossseidon§r §4§kstinkt!"));
 
 				reOpenInventories();
 			}
@@ -131,6 +129,12 @@ public class Miner extends MachineDispenser {
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public void onMoveInto(InventoryMoveItemEvent e) {
+		if(e.getItem().getType() == Material.IRON_PICKAXE)
+			e.setItem(CustomsItems.getMinerPickAxe(e.getItem().getDurability()));
 	}
 	
 	@Override
