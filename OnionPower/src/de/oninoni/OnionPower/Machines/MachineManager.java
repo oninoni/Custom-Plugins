@@ -246,18 +246,7 @@ public class MachineManager {
 	}
 
 	public void onEntityDeath(EntityDeathEvent e) {
-		for (Location pos : machines.keySet()) {
-			ArrayList<ArmorStand> designEntities = machines.get(pos).getDesignEntities();
-			plugin.getLogger().info("Size: " + designEntities.size());
-			for (ArmorStand armorStand : designEntities) {
-				plugin.getLogger().info("UUID DIES: " + e.getEntity().getUniqueId());
-				plugin.getLogger().info("UUID COMPARE: " + armorStand.getUniqueId());
-				if (e.getEntity().getUniqueId() == armorStand.getUniqueId()) {
-					machines.get(pos).spawnDesignEntity(designEntities.indexOf(armorStand));
-					Bukkit.broadcastMessage("LOL it died!");
-				}
-			}
-		}
+		//TODO Redo
 	}
 
 	public void onLoad(ChunkLoadEvent e) {

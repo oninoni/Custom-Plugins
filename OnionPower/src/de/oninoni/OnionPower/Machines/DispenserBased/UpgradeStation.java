@@ -6,6 +6,8 @@ import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -27,6 +29,7 @@ public class UpgradeStation extends MachineDispenser{
 			Material.REDSTONE_TORCH_ON, Material.REDSTONE,			 Material.REDSTONE_TORCH_ON,
 			Material.REDSTONE,			Material.REDSTONE_TORCH_ON,	 Material.REDSTONE
 		});
+		//TODO Moar Recipes
 	}
 	
 	private enum State{
@@ -45,8 +48,8 @@ public class UpgradeStation extends MachineDispenser{
 	}
 	
 	public UpgradeStation(Location position, MachineManager machineManager, int power) {
-		//TODO Always Up
 		super(position, machineManager, power);
+		setUpwards();
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {
@@ -56,6 +59,13 @@ public class UpgradeStation extends MachineDispenser{
 			}
 		}, 1L);
 	}
+	
+	@SuppressWarnings("deprecation")
+	private void setUpwards(){
+		plugin.getLogger().info(dispenser.getRawData() + "");
+		dispenser.getBlock().setData((byte) 1);
+		plugin.getLogger().info(dispenser.getRawData() + "");
+	}
 
 	@Override
 	protected boolean doesExplode() {
@@ -64,7 +74,7 @@ public class UpgradeStation extends MachineDispenser{
 
 	@Override
 	public int getDesignEntityCount() {
-		return 0;
+		return 1;
 	}
 
 	@Override
@@ -84,12 +94,18 @@ public class UpgradeStation extends MachineDispenser{
 
 	@Override
 	public boolean onClickFixed(Inventory inv, int slot, ItemStack cursor, Player p) {
-		//TODO Showing what is crafting
-		//TODO Removing Recipe when ready -> Idle
+		if(state == State.Working)return true;
 		if(slot == 1){
 			if(state != State.Ready)return true;
 			for(int i = 0; i < 6; i++){
-				dispenser.getInventory().clear(i + 3);
+				ItemStack item = dispenser.getInventory().getItem(i + 3);
+				int ammount = item.getAmount() - 1;
+				if(ammount == 0){
+					item.setType(Material.AIR);
+				}else{
+					item.setAmount(ammount);
+				}
+				dispenser.getInventory().setItem(i + 3, item);
 			}
 			state = State.Working;
 			setCraftingCoreLore();
@@ -122,6 +138,8 @@ public class UpgradeStation extends MachineDispenser{
 			if(Upgrade.isUpgrade(cursor)){
 				return true;
 			}
+			state = State.Idle;
+			setCraftingCoreLore();
 		}
 		return false;
 	}
@@ -154,8 +172,14 @@ public class UpgradeStation extends MachineDispenser{
 	}
 
 	@Override
-	public void spawnDesignEntity(int id) {
-		return;
+	protected ArmorStand spawnDesignEntityInternal(int id){
+		switch (id) {
+		case 0:
+			ArmorStand armorStand = (ArmorStand) position.getWorld().spawnEntity(position.clone().add(0.5, -0.75, 0.5), EntityType.ARMOR_STAND);
+			armorStand.setHelmet(new ItemStack(Material.WORKBENCH));
+			return armorStand;
+		}
+		return null;
 	}
 	
 	public boolean checkRecipe(Material[] recipe){
@@ -176,12 +200,15 @@ public class UpgradeStation extends MachineDispenser{
 			break;
 		case Charging:
 			lore.add("§9Charging...");
+			lore.add(Upgrade.getName(target));
 			break;
 		case Ready:
 			lore.add("§9Press to start!");
+			lore.add(Upgrade.getName(target));
 			break;
 		case Working:
-			lore.add("§9Processing... " + working + "%");
+			lore.add("§9Processing... §4" + working + "%");
+			lore.add(Upgrade.getName(target));
 			break;
 		}
 		itemMeta.setLore(lore);
@@ -219,6 +246,7 @@ public class UpgradeStation extends MachineDispenser{
 				power -=10;
 				setCraftingCoreLore();
 			}else{
+				working = 0;
 				dispenser.getInventory().setItem(2, Upgrade.getItem(target));
 				state = State.Idle;
 				setCraftingCoreLore();

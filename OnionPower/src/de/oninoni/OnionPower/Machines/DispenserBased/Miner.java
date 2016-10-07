@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Jukebox;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.Inventory;
@@ -178,7 +179,7 @@ public class Miner extends MachineDispenser {
 
 	//@SuppressWarnings("deprecation")
 	@Override
-	public void spawnDesignEntity(int id) {
+	public ArmorStand spawnDesignEntityInternal(int id) {
 		/*switch (id) {
 		case 0:
 			Vector direction = MachineManager.directions[directionAdapter[((Dispenser) position.getBlock().getState()).getRawData() % 8]].clone();
@@ -193,6 +194,7 @@ public class Miner extends MachineDispenser {
 			armorStand.setHelmet(new ItemStack(Material.STAINED_GLASS, 1, (short) 10));
 			break;
 		}*/
+		return null;
 	}
 
 	@SuppressWarnings("deprecation")

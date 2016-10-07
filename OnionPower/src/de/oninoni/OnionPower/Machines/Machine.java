@@ -1,6 +1,7 @@
 package de.oninoni.OnionPower.Machines;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -15,6 +16,7 @@ import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockEvent;
@@ -239,10 +241,6 @@ public abstract class Machine {
 		return result;
 	}
 
-	public ArrayList<ArmorStand> getDesignEntities() {
-		return designEntities;
-	}
-
 	public abstract int getDesignEntityCount();
 
 	public abstract String getDisplayName();
@@ -337,14 +335,13 @@ public abstract class Machine {
 		}
 		upgradeManager.onBreak();
 	}
-
-	//TODO coreslot is locked upgradeManager for some reason (Tested in Upgrade Station)
 	
 	public void onClick(InventoryClickEvent e) {
 		Inventory inv = e.getView().getTopInventory();
-		if (coreSlot == e.getRawSlot()) {
+		if (coreSlot == e.getRawSlot() && inv.getName() != upgradeManager.getName()) {
 			e.setCancelled(true);
 			upgradeManager.openInterface(e.getWhoClicked());
+			return;
 		}
 		int slot;
 		ItemStack cursor;
@@ -497,12 +494,34 @@ public abstract class Machine {
 	}
 
 	protected void spawnDesignEntities() {
+		ArrayList<Integer> foundIDS = new ArrayList<>();
+		Collection<Entity> entitiesNearby = position.getWorld().getNearbyEntities(position, 1.0f, 1.0f, 1.0f);
+		for(Entity entity : entitiesNearby){
+			if(entity instanceof ArmorStand){
+				ArmorStand armorStand = (ArmorStand) entity;
+				String[] parts = armorStand.getCustomName().split(":");
+				if(parts.length == 4 && parts[0] == position.getBlockX()+"" && parts[1] == position.getBlockY()+"" && parts[2] == position.getBlockZ()+""){
+					plugin.getLogger().info("Detected ");
+					foundIDS.add(Integer.parseInt(parts[3]));
+				}
+			}
+		}
 		for (int i = 0; i < getDesignEntityCount(); i++) {
-			spawnDesignEntity(i);
+			if(!foundIDS.contains(i))
+				spawnDesignEntity(i);
 		}
 	}
 
-	public abstract void spawnDesignEntity(int id);
+	public void spawnDesignEntity(int id) {
+		ArmorStand armorStand = spawnDesignEntityInternal(id);
+		armorStand.setVisible(false);
+		armorStand.setGravity(false);
+		armorStand.setInvulnerable(true);
+		armorStand.setCustomName(position.getBlockX() + ":" + position.getBlockY() + ":" + position.getBlockZ() + ":" + id);
+		designEntities.add(id, armorStand);
+	}
+	
+	protected abstract ArmorStand spawnDesignEntityInternal(int id);
 
 	private void transferPowerTo(Machine requester) {
 		// plugin.getLogger().info("Power Transferring...");

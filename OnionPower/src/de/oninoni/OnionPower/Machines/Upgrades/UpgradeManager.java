@@ -159,24 +159,23 @@ public class UpgradeManager {
 			if (cursor != null && cursor.getType() != Material.AIR) {
 				if (Upgrade.isUpgrade(cursor, UpgradeType.RedstoneUpgrade)
 						&& machine.upgradeAvailable(UpgradeType.RedstoneUpgrade)) {
-					// plugin.getLogger().info("Adding " +
-					// Upgrade.getName(UpgradeType.RedstoneUpgrade) + " to " +
-					// slot);
+					if(getUpgrade(UpgradeType.RedstoneUpgrade) != null)return true;
 					RedstoneUpgrade upgrade = new RedstoneUpgrade(machine);
 					upgrades.put(slot, upgrade);
 					inv.setItem(slot + 9, upgrade.getSettingsItem());
 				} else if (Upgrade.isUpgrade(cursor, UpgradeType.RangeUpgrade)
 						&& machine.upgradeAvailable(UpgradeType.RangeUpgrade)) {
+					if(getUpgrade(UpgradeType.RangeUpgrade) != null)return true;
 					RangeUpgrade upgrade = new RangeUpgrade(machine);
 					upgrades.put(slot, upgrade);
 					inv.setItem(slot + 9, upgrade.getSettingsItem());
 				} else if (Upgrade.isUpgrade(cursor, UpgradeType.LavaUpgrade)
 						&& machine.upgradeAvailable(UpgradeType.LavaUpgrade)) {
+					if(getUpgrade(UpgradeType.LavaUpgrade) != null)return true;
 					LavaUpgrade upgrade = new LavaUpgrade(machine);
 					upgrades.put(slot, upgrade);
 					inv.setItem(slot + 9, upgrade.getSettingsItem());
 				} else {
-					// plugin.getLogger().info("ABORT!" + e.getCursor());
 					return true;
 				}
 			}
@@ -190,11 +189,6 @@ public class UpgradeManager {
 				updateIventories();
 				return true;
 			} else {
-				if (slot == 10)
-					p.getInventory().addItem(Upgrade.getItem(UpgradeType.RedstoneUpgrade));
-				else
-					p.getInventory().addItem(Upgrade.getItem(UpgradeType.LavaUpgrade));
-				updateIventories();
 				return true;
 			}
 		} else {

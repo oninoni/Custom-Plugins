@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
@@ -285,8 +286,8 @@ public class Sorter extends MachineDispenser {
 	}
 
 	@Override
-	public void spawnDesignEntity(int id) {
-
+	public ArmorStand spawnDesignEntityInternal(int id) {
+		return null;
 	}
 
 	@SuppressWarnings("deprecation")

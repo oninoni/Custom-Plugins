@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
@@ -237,8 +238,8 @@ public class FluidHandler extends MachineHopper {
 	}
 
 	@Override
-	public void spawnDesignEntity(int id) {
-		return;
+	public ArmorStand spawnDesignEntityInternal(int id) {
+		return null;
 	}
 
 	@Override
