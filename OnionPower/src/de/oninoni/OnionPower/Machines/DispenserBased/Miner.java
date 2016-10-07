@@ -219,11 +219,13 @@ public class Miner extends MachineDispenser {
 								idleTimer = 20;
 								break;
 							}
-							if (b.getType() == Material.WATER || b.getType() == Material.STATIONARY_WATER
-									|| b.getType() == Material.LAVA || b.getType() == Material.STATIONARY_LAVA) {
-
+							if (b.getType() == Material.WATER || b.getType() == Material.LAVA ){
+								continue;
+							}
+							if (b.getType() == Material.STATIONARY_WATER || b.getType() == Material.STATIONARY_LAVA) {
+								if(b.getData() > 0)continue;
 								if (!checkFluidHandler(b)) {
-									if (b.getType() == Material.WATER || b.getType() == Material.STATIONARY_WATER) {
+									if (b.getType() == Material.STATIONARY_WATER) {
 										continue;
 									} else {
 										break;

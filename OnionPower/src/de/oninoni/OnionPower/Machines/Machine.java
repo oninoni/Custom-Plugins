@@ -504,25 +504,25 @@ public abstract class Machine {
 	protected void spawnDesignEntities() {
 		ArrayList<Integer> foundIDS = new ArrayList<>();
 		Collection<Entity> entitiesNearby = position.getWorld().getNearbyEntities(position, 1.0f, 1.0f, 1.0f);
-		plugin.getLogger().info("Found " + entitiesNearby.size() + " Entities nearby!");
+		//plugin.getLogger().info("Found " + entitiesNearby.size() + " Entities nearby!");
 		for(Entity entity : entitiesNearby){
 			if(entity instanceof ArmorStand){
 				ArmorStand armorStand = (ArmorStand) entity;
 				String[] parts = armorStand.getCustomName().split(":");
-				plugin.getLogger().info(parts[0] + "/" + parts[1] + "/" + parts[2] + "/" + parts[3]);
-				plugin.getLogger().info(position.getBlockX() + "/" + position.getBlockY() + "/" + position.getBlockZ() + "/");
 				if(parts.length == 4 && 
 						parts[0].equalsIgnoreCase(""+position.getBlockX()) && 
 						parts[1].equalsIgnoreCase(""+position.getBlockY()) && 
 						parts[2].equalsIgnoreCase(""+position.getBlockZ())){
-					plugin.getLogger().info("Detected ");
+					//plugin.getLogger().info("Detected ");
 					foundIDS.add(Integer.parseInt(parts[3]));
+					designEntities.add(armorStand);
 				}
 			}
 		}
 		for (int i = 0; i < getDesignEntityCount(); i++) {
-			if(!foundIDS.contains(i))
+			if(!foundIDS.contains(i)){
 				spawnDesignEntity(i);
+			}
 		}
 	}
 
@@ -531,6 +531,7 @@ public abstract class Machine {
 		armorStand.setVisible(false);
 		armorStand.setGravity(false);
 		armorStand.setInvulnerable(true);
+		armorStand.setCollidable(false);
 		armorStand.setCustomName(position.getBlockX() + ":" + position.getBlockY() + ":" + position.getBlockZ() + ":" + id);
 		designEntities.add(id, armorStand);
 	}

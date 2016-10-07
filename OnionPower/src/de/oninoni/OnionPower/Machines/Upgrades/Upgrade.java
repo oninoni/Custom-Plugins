@@ -41,7 +41,7 @@ public abstract class Upgrade {
 		case LavaUpgrade:
 			lore.add("§9If placed inside a §3Fluid");
 			lore.add("§3Handler§9 this will make it");
-			lore.add("§3lava.");
+			lore.add("§9store §3lava.");
 			break;
 		default:
 			lore.add("§9Basic Upgrade. Can be modified");
