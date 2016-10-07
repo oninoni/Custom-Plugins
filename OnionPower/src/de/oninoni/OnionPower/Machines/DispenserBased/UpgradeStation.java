@@ -26,10 +26,17 @@ public class UpgradeStation extends MachineDispenser{
 	static{
 		recipes = new HashMap<>();
 		recipes.put(UpgradeType.RedstoneUpgrade, new Material[]{
-			Material.REDSTONE_TORCH_ON, Material.REDSTONE,			 Material.REDSTONE_TORCH_ON,
-			Material.REDSTONE,			Material.REDSTONE_TORCH_ON,	 Material.REDSTONE
+				Material.REDSTONE_TORCH_ON, Material.REDSTONE,				Material.REDSTONE_TORCH_ON,
+				Material.REDSTONE,			Material.REDSTONE_TORCH_ON,		Material.REDSTONE
 		});
-		//TODO Moar Recipes
+		recipes.put(UpgradeType.RangeUpgrade, new Material[]{
+				Material.REDSTONE_TORCH_ON,	Material.REDSTONE,				Material.REDSTONE_TORCH_ON,
+				Material.REDSTONE,			Material.IRON_PICKAXE,			Material.REDSTONE
+		});
+		recipes.put(UpgradeType.LavaUpgrade, new Material[]{
+				Material.BUCKET,			Material.REDSTONE,				Material.BUCKET,
+				Material.REDSTONE,			Material.BUCKET,				Material.REDSTONE
+		});
 	}
 	
 	private enum State{
@@ -153,10 +160,10 @@ public class UpgradeStation extends MachineDispenser{
 			dispenser.getInventory().setItem(id, batrod);
 			break;
 		case 1:
-			dispenser.getInventory().setItem(0, new ItemStack(Material.WORKBENCH));
+			dispenser.getInventory().setItem(id, new ItemStack(Material.WORKBENCH));
 			break;
 		case 2:
-			dispenser.getInventory().setItem(0, new ItemStack(Material.DIAMOND));
+			dispenser.getInventory().setItem(id, new ItemStack(Material.DIAMOND));
 			break;
 		}
 	}

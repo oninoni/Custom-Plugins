@@ -314,6 +314,7 @@ public abstract class Machine {
 	}
 
 	public boolean onBoom(Block e) {
+		killDesignEnities();
 		if (doesExplode()) {
 			Random r = new Random();
 			for (int i = 0; i < invHolder.getInventory().getSize(); i++) {
@@ -328,8 +329,15 @@ public abstract class Machine {
 		}
 		return false;
 	}
+	
+	private void killDesignEnities(){
+		for (ArmorStand armorStand : designEntities) {
+			armorStand.remove();
+		}
+	}
 
 	public void onBreak(BlockEvent e) {
+		killDesignEnities();
 		for (int i = 0; i < invHolder.getInventory().getSize(); i++) {
 			resetItemAt(i);
 		}
@@ -496,11 +504,17 @@ public abstract class Machine {
 	protected void spawnDesignEntities() {
 		ArrayList<Integer> foundIDS = new ArrayList<>();
 		Collection<Entity> entitiesNearby = position.getWorld().getNearbyEntities(position, 1.0f, 1.0f, 1.0f);
+		plugin.getLogger().info("Found " + entitiesNearby.size() + " Entities nearby!");
 		for(Entity entity : entitiesNearby){
 			if(entity instanceof ArmorStand){
 				ArmorStand armorStand = (ArmorStand) entity;
 				String[] parts = armorStand.getCustomName().split(":");
-				if(parts.length == 4 && parts[0] == position.getBlockX()+"" && parts[1] == position.getBlockY()+"" && parts[2] == position.getBlockZ()+""){
+				plugin.getLogger().info(parts[0] + "/" + parts[1] + "/" + parts[2] + "/" + parts[3]);
+				plugin.getLogger().info(position.getBlockX() + "/" + position.getBlockY() + "/" + position.getBlockZ() + "/");
+				if(parts.length == 4 && 
+						parts[0].equalsIgnoreCase(""+position.getBlockX()) && 
+						parts[1].equalsIgnoreCase(""+position.getBlockY()) && 
+						parts[2].equalsIgnoreCase(""+position.getBlockZ())){
 					plugin.getLogger().info("Detected ");
 					foundIDS.add(Integer.parseInt(parts[3]));
 				}
