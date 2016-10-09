@@ -11,6 +11,7 @@ import de.oninoni.OnionPower.Machines.DispenserBased.UpgradeStation;
 import de.oninoni.OnionPower.Machines.FurnaceBased.ElectricFurnace;
 import de.oninoni.OnionPower.Machines.FurnaceBased.Generator;
 import de.oninoni.OnionPower.Machines.HopperBased.FluidHandler;
+import de.oninoni.OnionPower.Machines.HopperBased.SolarHopper;
 
 public class MachineTemplates {
 
@@ -39,6 +40,8 @@ public class MachineTemplates {
 
 		buildTemplates.put(FluidHandler.class.getName(),
 				new Material[] { Material.AIR, Material.AIR, Material.BARRIER, Material.GLASS, Material.WORKBENCH });
+		buildTemplates.put(SolarHopper.class.getName(),
+				new Material[]{	Material.GLASS, Material.LAPIS_BLOCK, Material.BARRIER, Material.LAPIS_BLOCK, Material.GLASS});
 	}
 
 }

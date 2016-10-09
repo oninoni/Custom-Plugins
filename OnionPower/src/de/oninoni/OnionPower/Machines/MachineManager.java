@@ -15,7 +15,7 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDispenseEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -23,9 +23,11 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.util.Vector;
 
@@ -39,6 +41,7 @@ import de.oninoni.OnionPower.Machines.FurnaceBased.ElectricFurnace;
 import de.oninoni.OnionPower.Machines.FurnaceBased.Generator;
 import de.oninoni.OnionPower.Machines.HopperBased.FluidHandler;
 import de.oninoni.OnionPower.Machines.HopperBased.MachineHopper;
+import de.oninoni.OnionPower.Machines.HopperBased.SolarHopper;
 
 public class MachineManager {
 
@@ -139,6 +142,8 @@ public class MachineManager {
 					machines.put(l, new FluidHandler(l, this));
 				} else if (MachineClass == UpgradeStation.class) {
 					machines.put(l, new UpgradeStation(l, this));
+				} else if (MachineClass == SolarHopper.class){
+					machines.put(l, new SolarHopper(l, this));
 				}
 			}
 			plugin.getLogger().info(machines.size() + " Machine/s loaded!");
@@ -176,7 +181,8 @@ public class MachineManager {
 	public void onClick(InventoryClickEvent e) {
 		if (e.getInventory().getHolder() == null)
 			return;
-		Machine machine = machines.get(e.getView().getTopInventory().getHolder().getInventory().getLocation());
+		Inventory inv = e.getView().getTopInventory().getHolder().getInventory();
+		Machine machine = machines.get(inv.getLocation());
 		if (machine == null) {
 			if (e.getRawSlot() != e.getView().convertSlot(e.getRawSlot()) || e.getSlot() >= e.getInventory().getSize())
 				return;
@@ -202,6 +208,9 @@ public class MachineManager {
 			if (Machine.canCreate(e, UpgradeStation.class.getName(), InventoryType.DISPENSER))
 				machines.put(location, new UpgradeStation(location, this, 
 						Machine.getAllBatrodsPower(e, UpgradeStation.class.getName(), InventoryType.DISPENSER)));
+			if (Machine.canCreate(e, SolarHopper.class.getName(), InventoryType.HOPPER))
+				machines.put(location, new SolarHopper(location, this, 
+						Machine.getAllBatrodsPower(e, SolarHopper.class.getName(), InventoryType.HOPPER)));
 			if (machines.get(e.getInventory().getLocation()) != null)
 				saveData();
 		} else {
@@ -245,8 +254,8 @@ public class MachineManager {
 		}
 	}
 
-	public void onEntityDeath(EntityDeathEvent e) {
-		//TODO Redo
+	public void onEntityDeath(EntityDamageEvent e) {
+		
 	}
 
 	public void onLoad(ChunkLoadEvent e) {
@@ -362,5 +371,22 @@ public class MachineManager {
 		for (Location location : removeThis) {
 			displayTimeout.remove(location);
 		}
+	}
+	
+	public void onArmorStandManipulate(PlayerArmorStandManipulateEvent e){
+		String name = e.getRightClicked().getCustomName();
+		String[] split = name.split(":");
+		if(split.length == 4){
+			int x = Integer.parseInt(split[0]);
+			int y = Integer.parseInt(split[1]);
+			int z = Integer.parseInt(split[2]);
+			//int id= Integer.parseInt(split[3]);
+			
+			Location l = new Location(e.getRightClicked().getWorld(), x, y, z);
+			if(machines.containsKey(l)){
+				//Machine m = machines.get(l);
+				e.setCancelled(true);
+			}
+		}		
 	}
 }

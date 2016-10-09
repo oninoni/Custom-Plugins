@@ -57,7 +57,6 @@ public abstract class Machine {
 
 		int cursorPos = e.getSlot();
 		for (int i = 0; i < template.length; i++) {
-
 			ItemStack check;
 			if (i == cursorPos) {
 				check = e.getCursor();
@@ -76,6 +75,9 @@ public abstract class Machine {
 					return false;
 				}
 			}
+			// Check for higher Stacks
+			if( check.getAmount() > 1)
+				return false;
 			// Check for Batrod Slots
 			if (template[i] == Material.BARRIER) {
 				Batrod batrod = new Batrod(check);
@@ -582,7 +584,7 @@ public abstract class Machine {
 		if (!isLoaded)
 			return;
 
-		if (getDisplayName() != "§6§lGenerator") {
+		if (getDisplayName() != "§6§lGenerator" && getDisplayName() != "§6§lSolar Hopper") {
 			requestFromConnected();
 
 			if (isActive())

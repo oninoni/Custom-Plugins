@@ -3,6 +3,7 @@ package de.oninoni.OnionPower.Listeners;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
@@ -38,6 +39,12 @@ public class PlayerListener implements Listener {
 				e.setCancelled(true);
 			}
 		}
+	}
+	
+
+	@EventHandler
+	public void onArmorStandManipulate(PlayerArmorStandManipulateEvent e){
+		plugin.getMachineManager().onArmorStandManipulate(e);
 	}
 
 }
