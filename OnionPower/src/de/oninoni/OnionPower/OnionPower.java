@@ -9,8 +9,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 
-import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.CraftingRecipes;
+import de.oninoni.OnionPower.Items.PowerItems.ElectricalDiamondPickaxe;
 import de.oninoni.OnionPower.Listeners.BlockBreakListener;
 import de.oninoni.OnionPower.Listeners.ChunkListener;
 import de.oninoni.OnionPower.Listeners.EntityListener;
@@ -44,7 +44,8 @@ public class OnionPower extends JavaPlugin {
 		if (command.getName().equalsIgnoreCase("batrod")) {
 			if (sender instanceof Player) {
 				Player player = (Player) sender;
-				player.getInventory().addItem(Batrod.create());
+				//player.getInventory().addItem(Batrod.create());
+				player.getInventory().addItem(new ElectricalDiamondPickaxe());
 				return true;
 			}
 		}

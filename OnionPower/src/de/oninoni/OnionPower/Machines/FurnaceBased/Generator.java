@@ -9,8 +9,8 @@ import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.ItemData;
+import de.oninoni.OnionPower.Items.PowerItems.Batrod;
 import de.oninoni.OnionPower.Machines.MachineManager;
 import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager.UpgradeType;
 
@@ -102,8 +102,8 @@ public class Generator extends MachineFurnace {
 	@Override
 	protected void resetItemAt(int id) {
 		if (id == coreSlot) {
-			ItemStack batrod = Batrod.create();
-			Batrod.setPower(batrod, getPower());
+			Batrod batrod = new Batrod();
+			batrod.setPower(getPower());
 			furnace.getInventory().setItem(id, batrod);
 		}
 	}
@@ -134,7 +134,7 @@ public class Generator extends MachineFurnace {
 	public void updateBlock() {
 		if (furnace.getBurnTime() <= 0) {
 			ItemStack fuel = furnace.getInventory().getFuel();
-			if (Batrod.check(fuel) || isActive())
+			if (fuel instanceof Batrod || isActive())
 				return;
 			if (fuel != null) {
 				Material mat = fuel.getType();

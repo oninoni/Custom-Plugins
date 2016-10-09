@@ -8,8 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.ItemData;
+import de.oninoni.OnionPower.Items.PowerItems.Batrod;
 import de.oninoni.OnionPower.Machines.MachineManager;
 import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager.UpgradeType;
 
@@ -69,8 +69,8 @@ public class ElectricFurnace extends MachineFurnace {
 	@Override
 	protected void resetItemAt(int id) {
 		if (id == coreSlot) {
-			ItemStack batrod = Batrod.create();
-			Batrod.setPower(batrod, getPower());
+			Batrod batrod = new Batrod();
+			batrod.setPower(getPower());
 			furnace.getInventory().setItem(id, batrod);
 		}
 	}

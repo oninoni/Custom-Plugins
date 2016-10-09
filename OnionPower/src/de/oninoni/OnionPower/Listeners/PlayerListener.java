@@ -6,7 +6,7 @@ import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import de.oninoni.OnionPower.OnionPower;
-import de.oninoni.OnionPower.Items.Batrod;
+import de.oninoni.OnionPower.Items.PowerItems.Batrod;
 
 public class PlayerListener implements Listener {
 
@@ -19,8 +19,8 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler
 	public void onPrepareCrafting(PrepareItemCraftEvent e){
-		if(Batrod.check(e.getInventory().getResult())){
-			e.getInventory().setResult(Batrod.create());
+		if(e.getInventory().getResult() instanceof Batrod){
+			e.getInventory().setResult(new Batrod());
 		}
 	}
 

@@ -12,10 +12,10 @@ import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.CustomsItems;
 import de.oninoni.OnionPower.Items.InternalTank;
 import de.oninoni.OnionPower.Items.PowerCore;
+import de.oninoni.OnionPower.Items.PowerItems.Batrod;
 import de.oninoni.OnionPower.Machines.MachineManager;
 import de.oninoni.OnionPower.Machines.Upgrades.LavaUpgrade;
 import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager.UpgradeType;
@@ -213,8 +213,8 @@ public class FluidHandler extends MachineHopper {
 	protected void resetItemAt(int id) {
 		switch (id) {
 		case 2:
-			ItemStack batrod = Batrod.create();
-			Batrod.setPower(batrod, PowerCore.getPowerLevel(getPowerCore()));
+			Batrod batrod = new Batrod();
+			batrod.setPower(PowerCore.getPowerLevel(getPowerCore()));
 			hopper.getInventory().setItem(id, batrod);
 			break;
 		case 3:

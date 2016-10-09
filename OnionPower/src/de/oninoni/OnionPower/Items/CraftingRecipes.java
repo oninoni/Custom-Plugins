@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ShapedRecipe;
 
 import de.oninoni.OnionPower.OnionPower;
+import de.oninoni.OnionPower.Items.PowerItems.Batrod;
 import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
 import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager.UpgradeType;
 
@@ -12,7 +13,7 @@ public class CraftingRecipes {
 	protected static OnionPower plugin = OnionPower.get();
 
 	public static void setAllRecipes(){
-		ShapedRecipe r = new ShapedRecipe(Batrod.create());
+		ShapedRecipe r = new ShapedRecipe(new Batrod());
 
 		r.shape("RRR",
 				"GBG",

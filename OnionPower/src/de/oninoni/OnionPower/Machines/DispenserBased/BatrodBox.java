@@ -9,7 +9,7 @@ import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import de.oninoni.OnionPower.Items.Batrod;
+import de.oninoni.OnionPower.Items.PowerItems.Batrod;
 import de.oninoni.OnionPower.Machines.MachineManager;
 import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager.UpgradeType;
 
@@ -89,8 +89,8 @@ public class BatrodBox extends MachineDispenser {
 
 	@Override
 	protected void resetItemAt(int id) {
-		ItemStack batrod = Batrod.create();
-		Batrod.setPower(batrod, getPower() / 10);
+		Batrod batrod = new Batrod();
+		batrod.setPower(getPower() / 10);
 		dispenser.getInventory().setItem(id, batrod);
 	}
 

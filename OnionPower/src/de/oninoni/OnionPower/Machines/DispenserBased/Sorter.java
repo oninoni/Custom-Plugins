@@ -17,8 +17,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
-import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.CustomsItems;
+import de.oninoni.OnionPower.Items.PowerItems.Batrod;
 import de.oninoni.OnionPower.Machines.MachineManager;
 import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager.UpgradeType;
 
@@ -236,8 +236,8 @@ public class Sorter extends MachineDispenser {
 	protected void resetItemAt(int id) {
 		if (id != 4) {
 			if (id % 2 == 0) {
-				ItemStack batrod = Batrod.create();
-				Batrod.setPower(batrod, getPower());
+				Batrod batrod = new Batrod();
+				batrod.setPower(getPower());
 				dispenser.getInventory().setItem(id, batrod);
 			} else {
 				dispenser.getInventory().setItem(id, new ItemStack(Material.CHEST));

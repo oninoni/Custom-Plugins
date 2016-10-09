@@ -17,8 +17,8 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import de.oninoni.OnionPower.Items.Batrod;
 import de.oninoni.OnionPower.Items.CustomsItems;
+import de.oninoni.OnionPower.Items.PowerItems.Batrod;
 import de.oninoni.OnionPower.Machines.Machine;
 import de.oninoni.OnionPower.Machines.MachineManager;
 import de.oninoni.OnionPower.Machines.HopperBased.FluidHandler;
@@ -146,8 +146,8 @@ public class Miner extends MachineDispenser {
 	@Override
 	protected void resetItemAt(int id) {
 		if (id == 1) {
-			ItemStack batrod = Batrod.create();
-			Batrod.setPower(batrod, getPower());
+			Batrod batrod = new Batrod();
+			batrod.setPower(getPower());
 			dispenser.getInventory().setItem(id, batrod);
 		} else if (id == 4) {
 			dispenser.getInventory().setItem(id, new ItemStack(Material.REDSTONE_BLOCK));
