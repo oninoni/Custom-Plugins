@@ -69,9 +69,7 @@ public class ElectricFurnace extends MachineFurnace {
 	@Override
 	protected void resetItemAt(int id) {
 		if (id == coreSlot) {
-			Batrod batrod = new Batrod();
-			batrod.setPower(getPower());
-			furnace.getInventory().setItem(id, batrod);
+			furnace.getInventory().setItem(id, new Batrod(getPower()));
 		}
 	}
 

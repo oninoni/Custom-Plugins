@@ -155,9 +155,7 @@ public class UpgradeStation extends MachineDispenser{
 	protected void resetItemAt(int id) {
 		switch (id) {
 		case 0:
-			Batrod batrod = new Batrod();
-			batrod.setPower(getPower());
-			dispenser.getInventory().setItem(id, batrod);
+			dispenser.getInventory().setItem(id, new Batrod(getPower()));
 			break;
 		case 1:
 			dispenser.getInventory().setItem(id, new ItemStack(Material.WORKBENCH));

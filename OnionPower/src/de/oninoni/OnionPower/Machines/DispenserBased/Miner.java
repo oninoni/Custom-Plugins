@@ -146,9 +146,7 @@ public class Miner extends MachineDispenser {
 	@Override
 	protected void resetItemAt(int id) {
 		if (id == 1) {
-			Batrod batrod = new Batrod();
-			batrod.setPower(getPower());
-			dispenser.getInventory().setItem(id, batrod);
+			dispenser.getInventory().setItem(id, new Batrod(getPower()));
 		} else if (id == 4) {
 			dispenser.getInventory().setItem(id, new ItemStack(Material.REDSTONE_BLOCK));
 		} else if (id == 7) {

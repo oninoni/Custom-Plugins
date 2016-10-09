@@ -102,9 +102,7 @@ public class Generator extends MachineFurnace {
 	@Override
 	protected void resetItemAt(int id) {
 		if (id == coreSlot) {
-			Batrod batrod = new Batrod();
-			batrod.setPower(getPower());
-			furnace.getInventory().setItem(id, batrod);
+			furnace.getInventory().setItem(id, new Batrod(getPower()));
 		}
 	}
 
@@ -134,7 +132,8 @@ public class Generator extends MachineFurnace {
 	public void updateBlock() {
 		if (furnace.getBurnTime() <= 0) {
 			ItemStack fuel = furnace.getInventory().getFuel();
-			if (fuel instanceof Batrod || isActive())
+			Batrod batrod = new Batrod(fuel);
+			if (batrod.check() || isActive())
 				return;
 			if (fuel != null) {
 				Material mat = fuel.getType();
@@ -159,7 +158,7 @@ public class Generator extends MachineFurnace {
 			power += 20;
 			powerIntputTotal = 20;
 		}
-		chargeRod(furnace.getInventory().getSmelting());
-		dechargeRod(furnace.getInventory().getFuel());
+		chargeItem(furnace.getInventory(), 0);
+		dechargeRod(furnace.getInventory(), 1);
 	}
 }

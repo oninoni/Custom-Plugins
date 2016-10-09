@@ -89,9 +89,7 @@ public class BatrodBox extends MachineDispenser {
 
 	@Override
 	protected void resetItemAt(int id) {
-		Batrod batrod = new Batrod();
-		batrod.setPower(getPower() / 10);
-		dispenser.getInventory().setItem(id, batrod);
+		dispenser.getInventory().setItem(id, new Batrod(getPower() / 10));
 	}
 
 	@Override
@@ -125,8 +123,8 @@ public class BatrodBox extends MachineDispenser {
 	@Override
 	public void updateBlock() {
 		for (int i = 0; i < 3; i++) {
-			chargeRod(dispenser.getInventory().getItem(i));
-			dechargeRod(dispenser.getInventory().getItem(i + 6));
+			chargeItem(dispenser.getInventory(), i);
+			dechargeRod(dispenser.getInventory(), i + 6);
 		}
 	}
 }

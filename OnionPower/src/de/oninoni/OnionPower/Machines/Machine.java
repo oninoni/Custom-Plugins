@@ -33,6 +33,7 @@ import org.bukkit.util.Vector;
 import de.oninoni.OnionPower.OnionPower;
 import de.oninoni.OnionPower.Items.PowerCore;
 import de.oninoni.OnionPower.Items.PowerItems.Batrod;
+import de.oninoni.OnionPower.Items.PowerItems.PowerItem;
 import de.oninoni.OnionPower.Machines.Upgrades.RedstoneUpgrade;
 import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager;
 import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager.UpgradeType;
@@ -77,7 +78,8 @@ public abstract class Machine {
 			}
 			// Check for Batrod Slots
 			if (template[i] == Material.BARRIER) {
-				if (check instanceof Batrod) {
+				Batrod batrod = new Batrod(check);
+				if (batrod.check()) {
 					continue;
 				} else {
 					return false;
@@ -104,8 +106,9 @@ public abstract class Machine {
 			// plugin.getLogger().info("I = " + i + " Mat = " + material + "
 			// Item = " + e.getView().getTopInventory().getContents());
 			if (material == Material.BARRIER) {
-				Batrod batrod = (Batrod) e.getInventory().getItem(i);
-				result += batrod.readPower();
+				Batrod batrod = new Batrod(e.getInventory().getItem(i));
+				if(batrod.check())
+					result += batrod.readPower();
 			}
 		}
 
@@ -162,12 +165,13 @@ public abstract class Machine {
 		initValues(position, machineManager);
 	}
 
-	protected void chargeRod(ItemStack item) {
-		if (item instanceof Batrod) {
-			Batrod batrod = (Batrod) item;
-			int rodPower = batrod.readPower();
-			int powerTransfered = Math.min(batrod.maxPower - rodPower, Math.min(getMaxPowerOutput(), power));
-			batrod.setPower(rodPower + powerTransfered);
+	protected void chargeItem(Inventory inv, int id) {
+		PowerItem powerItem = new PowerItem(inv.getItem(id));
+		if (powerItem.check()) {
+			int rodPower = powerItem.readPower();
+			int powerTransfered = Math.min(powerItem.maxPower - rodPower, Math.min(getMaxPowerOutput(), power));
+			powerItem.setPower(rodPower + powerTransfered);
+			inv.setItem(id, powerItem);
 			power -= powerTransfered;
 		}
 	}
@@ -179,12 +183,13 @@ public abstract class Machine {
 		}
 	}
 
-	protected void dechargeRod(ItemStack item) {
-		if (item instanceof Batrod && power < getMaxPower()) {
-			Batrod batrod = (Batrod) item;
-			int rodPower = batrod.readPower();
+	protected void dechargeRod(Inventory inv, int id) {
+		PowerItem powerItem = new PowerItem(inv.getItem(id));
+		if (powerItem.check() && power < getMaxPower()) {
+			int rodPower = powerItem.readPower();
 			int powerTransfered = Math.min(getMaxPower() - power, Math.min(rodPower, getMaxPowerInput()));
-			batrod.setPower(rodPower - powerTransfered);
+			powerItem.setPower(rodPower - powerTransfered);
+			inv.setItem(id, powerItem);
 			power += powerTransfered;
 		}
 	}

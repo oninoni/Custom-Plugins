@@ -13,7 +13,7 @@ public class CraftingRecipes {
 	protected static OnionPower plugin = OnionPower.get();
 
 	public static void setAllRecipes(){
-		ShapedRecipe r = new ShapedRecipe(new Batrod());
+		ShapedRecipe r = new ShapedRecipe(new Batrod(0));
 
 		r.shape("RRR",
 				"GBG",

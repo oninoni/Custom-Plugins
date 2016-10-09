@@ -236,9 +236,7 @@ public class Sorter extends MachineDispenser {
 	protected void resetItemAt(int id) {
 		if (id != 4) {
 			if (id % 2 == 0) {
-				Batrod batrod = new Batrod();
-				batrod.setPower(getPower());
-				dispenser.getInventory().setItem(id, batrod);
+				dispenser.getInventory().setItem(id, new Batrod(getPower()));
 			} else {
 				dispenser.getInventory().setItem(id, new ItemStack(Material.CHEST));
 			}
