@@ -8,7 +8,6 @@ import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import de.oninoni.OnionPower.OnionPower;
-import de.oninoni.OnionPower.Items.PowerItems.Batrod;
 import de.oninoni.OnionPower.Items.PowerItems.PowerItem;
 
 public class PlayerListener implements Listener {
@@ -22,8 +21,9 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler
 	public void onPrepareCrafting(PrepareItemCraftEvent e){
-		if(e.getInventory().getResult() instanceof Batrod){
-			e.getInventory().setResult(new Batrod(0));
+		PowerItem powerItem = new PowerItem(e.getInventory().getResult());
+		if(powerItem.check()){
+			powerItem.onCraft(e);
 		}
 	}
 	

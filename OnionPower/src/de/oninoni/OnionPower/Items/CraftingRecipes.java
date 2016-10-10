@@ -3,9 +3,11 @@ package de.oninoni.OnionPower.Items;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.ShapelessRecipe;
 
 import de.oninoni.OnionPower.OnionPower;
 import de.oninoni.OnionPower.Items.PowerItems.Batrod;
+import de.oninoni.OnionPower.Items.PowerItems.ElectricalAxe;
 import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
 import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager.UpgradeType;
 
@@ -36,5 +38,12 @@ public class CraftingRecipes {
 		r.setIngredient('R', Material.REDSTONE);
 		
 		Bukkit.addRecipe(r);
+		
+		ShapelessRecipe sr = new ShapelessRecipe(new ElectricalAxe(0, (short) 0));
+		
+		sr.addIngredient(Material.BLAZE_ROD);
+		sr.addIngredient(Material.GOLD_AXE);
+		
+		Bukkit.addRecipe(sr);
 	}
 }

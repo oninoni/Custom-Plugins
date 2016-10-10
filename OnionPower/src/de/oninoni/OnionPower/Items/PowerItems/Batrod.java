@@ -1,6 +1,7 @@
 package de.oninoni.OnionPower.Items.PowerItems;
 
 import org.bukkit.Material;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class Batrod extends PowerItem{
@@ -12,5 +13,10 @@ public class Batrod extends PowerItem{
 	
 	public Batrod(ItemStack item){
 		super(item, NAME);
+	}
+	
+	@Override
+	public void onCraft(PrepareItemCraftEvent e) {
+		e.getInventory().setResult(new Batrod(0));
 	}
 }

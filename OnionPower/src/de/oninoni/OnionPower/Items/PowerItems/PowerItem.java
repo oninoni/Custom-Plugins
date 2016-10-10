@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Material;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -36,6 +37,20 @@ public class PowerItem extends ItemStack{
 	
 	public PowerItem(ItemStack item){
 		this(item, "");
+	}
+	
+	public void onCraft(PrepareItemCraftEvent e){
+		ItemStack result = e.getInventory().getResult();
+		Material mat = result.getType();
+		if(mat == Material.BLAZE_ROD){
+			Batrod batrod = new Batrod(result);
+			if(batrod.check())
+				batrod.onCraft(e);
+		}else if(mat == Material.GOLD_AXE){
+			ElectricalAxe electricalAxe = new ElectricalAxe(result);
+			if(electricalAxe.check())
+				electricalAxe.onCraft(e);
+		}
 	}
 	
 	private void create(int power){

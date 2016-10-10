@@ -11,7 +11,6 @@ import com.comphenix.protocol.ProtocolManager;
 
 import de.oninoni.OnionPower.Items.CraftingRecipes;
 import de.oninoni.OnionPower.Items.PowerItems.Batrod;
-import de.oninoni.OnionPower.Items.PowerItems.ElectricalDiamondPickaxe;
 import de.oninoni.OnionPower.Listeners.BlockBreakListener;
 import de.oninoni.OnionPower.Listeners.ChunkListener;
 import de.oninoni.OnionPower.Listeners.EntityListener;
@@ -46,7 +45,6 @@ public class OnionPower extends JavaPlugin {
 			if (sender instanceof Player) {
 				Player player = (Player) sender;
 				player.getInventory().addItem(new Batrod(0));
-				player.getInventory().addItem(new ElectricalDiamondPickaxe());
 				return true;
 			}
 		}
