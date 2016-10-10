@@ -27,15 +27,15 @@ public class PlayerListener implements Listener {
 		}
 	}
 	
-	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onItemDamage(PlayerItemDamageEvent e){
+		//plugin.getServer().broadcastMessage("Damage on Tool detected!");
 		PowerItem powerItem = new PowerItem(e.getItem());
 		if(powerItem.check()){
 			int power = powerItem.readPower();
 			if(power > 0){
-				powerItem.setPower(Math.max(power - e.getDamage(), 0));
-				e.getPlayer().setItemInHand(powerItem);
+				powerItem.setPower(Math.max(power - e.getDamage() * 20, 0));
+				e.getPlayer().getInventory().setItemInMainHand(powerItem);
 				e.setCancelled(true);
 			}
 		}

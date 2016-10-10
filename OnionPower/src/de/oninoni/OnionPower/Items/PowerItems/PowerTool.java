@@ -13,8 +13,8 @@ public class PowerTool extends PowerItem{
 		super(mat, ammount, damage, name, power);
 	}
 	
-	public PowerTool(ItemStack item, String NAME) {
-		super(item);
+	public PowerTool(ItemStack item, String name) {
+		super(item, name);
 	}
 	
 	@Override
@@ -31,13 +31,15 @@ public class PowerTool extends PowerItem{
 				initialBatrodPower = batrod.readPower();
 			}else{
 				PowerItem powerItem = new PowerItem(item);
-				plugin.getLogger().info(item+"");
+				//plugin.getLogger().info(item+"");
 				if(!powerItem.check()){
 					initialDurability = batrod.getDurability();
-				}else{
-					e.getInventory().setResult(new ItemStack(Material.AIR));
 				}
 			}
+		}
+		
+		if(initialBatrodPower == -1 || initialDurability == -1){
+			e.getInventory().setResult(new ItemStack(Material.AIR));
 		}
 	}
 

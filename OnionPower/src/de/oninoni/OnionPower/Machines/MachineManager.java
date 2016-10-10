@@ -240,6 +240,7 @@ public class MachineManager {
 	}
 
 	public void onDrag(InventoryDragEvent e) {
+		if(e.getView().getTopInventory().getHolder() == null)return;
 		Machine machine = machines.get(e.getView().getTopInventory().getHolder().getInventory().getLocation());
 		if (machine == null)
 			return;

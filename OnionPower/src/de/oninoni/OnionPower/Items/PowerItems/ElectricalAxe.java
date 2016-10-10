@@ -19,7 +19,8 @@ public class ElectricalAxe extends PowerTool{
 	public void onCraft(PrepareItemCraftEvent e) {
 		super.onCraft(e);
 		plugin.getLogger().info(initialBatrodPower + "/" + initialDurability);
-		if(initialBatrodPower != -1 && initialDurability != -1)
+		if(initialBatrodPower != -1 && initialDurability != -1){
 			e.getInventory().setResult(new ElectricalAxe(initialBatrodPower, initialDurability));
+		}
 	}
 }

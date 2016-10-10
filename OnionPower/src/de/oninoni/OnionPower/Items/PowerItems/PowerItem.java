@@ -1,5 +1,6 @@
 package de.oninoni.OnionPower.Items.PowerItems;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -16,6 +17,22 @@ import de.oninoni.OnionPower.Items.CustomsItems;
 public class PowerItem extends ItemStack{
 	protected static OnionPower plugin = OnionPower.get();
 
+	private static final ArrayList<Class<? extends PowerItem>> classes;
+	
+	static {
+		classes = new ArrayList<>();
+		classes.add(ElectricalAxe.class);
+		classes.add(ElectricalPickaxe.class);
+		classes.add(ElectricalHoe.class);
+		classes.add(ElectricalShovel.class);
+		classes.add(ElectricalSword.class);
+		classes.add(ElectricalHelmet.class);
+		classes.add(ElectricalChestplate.class);
+		classes.add(ElectricalLeggings.class);
+		classes.add(ElectricalBoots.class);
+		classes.add(Batrod.class);
+	}
+	
 	private String itemName;
 	public int maxPower;
 	
@@ -41,15 +58,20 @@ public class PowerItem extends ItemStack{
 	
 	public void onCraft(PrepareItemCraftEvent e){
 		ItemStack result = e.getInventory().getResult();
-		Material mat = result.getType();
-		if(mat == Material.BLAZE_ROD){
-			Batrod batrod = new Batrod(result);
-			if(batrod.check())
-				batrod.onCraft(e);
-		}else if(mat == Material.GOLD_AXE){
-			ElectricalAxe electricalAxe = new ElectricalAxe(result);
-			if(electricalAxe.check())
-				electricalAxe.onCraft(e);
+		
+		for (Class<? extends PowerItem> c : classes)
+		{
+			try {
+				PowerItem item = (PowerItem) c.getConstructor(ItemStack.class).newInstance(result);
+				if (item.check()){
+					//plugin.getServer().broadcastMessage("" + c.getName());
+					item.onCraft(e);
+					break;
+				}
+			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException | NoSuchMethodException | SecurityException e1) {
+				e1.printStackTrace();
+			}
 		}
 	}
 	
@@ -67,12 +89,17 @@ public class PowerItem extends ItemStack{
 	
 	public boolean check(){
 		ItemMeta itemMeta = getItemMeta();
-		if(itemMeta == null || getType() == Material.AIR)return false;
-		if(itemMeta.getDisplayName() == null)return false;
+		if(itemMeta == null || getType() == Material.AIR)
+			return false;
+		if(itemMeta.getDisplayName() == null)
+			return false;
 		List<String> lore = itemMeta.getLore();
-		if(lore == null || lore.size() <= 2)return false;
-		if(!(lore.get(0).startsWith("§h") && lore.get(1).startsWith("§6") && lore.get(2).startsWith("§h")))return false;
-		if(itemName != "" && !itemMeta.getDisplayName().equals(itemName))return false;
+		if(lore == null || lore.size() <= 2)
+			return false;
+		if(!(lore.get(0).startsWith("§h") && lore.get(1).startsWith("§6") && lore.get(2).startsWith("§h")))
+			return false;
+		if(itemName != "" && !itemMeta.getDisplayName().equals(itemName))
+			return false;
 		return true;
 	}
 
