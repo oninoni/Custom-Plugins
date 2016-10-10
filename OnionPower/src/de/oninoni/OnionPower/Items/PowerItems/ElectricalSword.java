@@ -18,7 +18,6 @@ public class ElectricalSword extends PowerTool{
 	@Override
 	public void onCraft(PrepareItemCraftEvent e) {
 		super.onCraft(e);
-		plugin.getLogger().info(initialBatrodPower + "/" + initialDurability);
 		if(initialBatrodPower != -1 && initialDurability != -1)
 			e.getInventory().setResult(new ElectricalSword(initialBatrodPower, initialDurability));
 	}
