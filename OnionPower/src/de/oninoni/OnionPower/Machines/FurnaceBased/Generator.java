@@ -4,10 +4,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.EulerAngle;
 
 import de.oninoni.OnionPower.Items.ItemData;
 import de.oninoni.OnionPower.Items.PowerItems.Batrod;
@@ -45,7 +47,7 @@ public class Generator extends MachineFurnace {
 
 	@Override
 	public int getDesignEntityCount() {
-		return 0;
+		return 1;
 	}
 
 	@Override
@@ -55,7 +57,7 @@ public class Generator extends MachineFurnace {
 
 	@Override
 	public int getMaxPowerInput() {
-		return 0;
+		return 1;
 	}
 
 	@Override
@@ -125,7 +127,26 @@ public class Generator extends MachineFurnace {
 
 	@Override
 	public ArmorStand spawnDesignEntityInternal(int id) {
-		return null;
+		int data = (position.getBlock().getData() - 2) % 4;
+		plugin.getLogger().info(""+data);
+		Location p = position.clone().add(0.5f, 0.0f, 0.5f).add((MachineManager.directions[directionAdapter[data]]).multiply(0.7));
+		switch (data) {
+		case 1:
+			p.setYaw(180.0f);
+			break;
+		case 2:
+			p.setYaw(270.0f);
+			break;
+		case 3:
+			p.setYaw(90.0f);
+			break;
+		}
+		ArmorStand armorStand = (ArmorStand) position.getWorld().spawnEntity(p, EntityType.ARMOR_STAND);
+		armorStand.setSmall(true);
+		armorStand.setHelmet(new ItemStack(Material.IRON_FENCE));
+		armorStand.setHeadPose(new EulerAngle(Math.PI, 0.0f, 0.0f));
+		armorStand.setMarker(true);
+		return armorStand;
 	}
 
 	@Override

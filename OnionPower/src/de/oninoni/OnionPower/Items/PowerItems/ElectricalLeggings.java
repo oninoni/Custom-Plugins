@@ -8,7 +8,7 @@ public class ElectricalLeggings extends PowerTool{
 	private static final String NAME = "§4Electrical Leggings";
 	
 	public ElectricalLeggings(int power, short damage){
-		super(Material.GOLD_LEGGINGS, 1, damage, NAME, power);
+		super(Material.DIAMOND_LEGGINGS, 1, damage, NAME, power);
 	}
 	
 	public ElectricalLeggings(ItemStack item){
@@ -20,5 +20,10 @@ public class ElectricalLeggings extends PowerTool{
 		super.onCraft(e);
 		if(initialBatrodPower != -1 && initialDurability != -1)
 			e.getInventory().setResult(new ElectricalLeggings(initialBatrodPower, initialDurability));
+	}
+	
+	@Override
+	public Material getVisibleType() {
+		return Material.GOLD_LEGGINGS;
 	}
 }

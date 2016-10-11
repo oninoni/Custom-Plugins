@@ -180,8 +180,9 @@ public class UpgradeStation extends MachineDispenser{
 	protected ArmorStand spawnDesignEntityInternal(int id){
 		switch (id) {
 		case 0:
-			ArmorStand armorStand = (ArmorStand) position.getWorld().spawnEntity(position.clone().add(0.5, -0.75, 0.5), EntityType.ARMOR_STAND);
+			ArmorStand armorStand = (ArmorStand) position.getWorld().spawnEntity(position.clone().add(0.5, 0.075f, 0.5), EntityType.ARMOR_STAND);
 			armorStand.setHelmet(new ItemStack(Material.WORKBENCH));
+			armorStand.setSmall(true);
 			return armorStand;
 		}
 		return null;

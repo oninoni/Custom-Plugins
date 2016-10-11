@@ -8,7 +8,7 @@ public class ElectricalPickaxe extends PowerTool{
 	private static final String NAME = "§4Electrical Pickaxe";
 	
 	public ElectricalPickaxe(int power, short damage){
-		super(Material.GOLD_PICKAXE, 1, damage, NAME, power);
+		super(Material.DIAMOND_PICKAXE, 1, damage, NAME, power);
 	}
 	
 	public ElectricalPickaxe(ItemStack item){
@@ -20,5 +20,10 @@ public class ElectricalPickaxe extends PowerTool{
 		super.onCraft(e);
 		if(initialBatrodPower != -1 && initialDurability != -1)
 			e.getInventory().setResult(new ElectricalPickaxe(initialBatrodPower, initialDurability));
+	}
+	
+	@Override
+	public Material getVisibleType() {
+		return Material.GOLD_PICKAXE;
 	}
 }

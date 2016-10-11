@@ -8,7 +8,7 @@ public class ElectricalHelmet extends PowerTool{
 	private static final String NAME = "§4Electrical Helmet";
 	
 	public ElectricalHelmet(int power, short damage){
-		super(Material.GOLD_HELMET, 1, damage, NAME, power);
+		super(Material.DIAMOND_HELMET, 1, damage, NAME, power);
 	}
 	
 	public ElectricalHelmet(ItemStack item){
@@ -20,5 +20,10 @@ public class ElectricalHelmet extends PowerTool{
 		super.onCraft(e);
 		if(initialBatrodPower != -1 && initialDurability != -1)
 			e.getInventory().setResult(new ElectricalHelmet(initialBatrodPower, initialDurability));
+	}
+	
+	@Override
+	public Material getVisibleType() {
+		return Material.GOLD_HELMET;
 	}
 }

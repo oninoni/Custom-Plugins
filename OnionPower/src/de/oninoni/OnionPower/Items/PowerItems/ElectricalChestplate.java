@@ -8,7 +8,7 @@ public class ElectricalChestplate extends PowerTool{
 	private static final String NAME = "§4Electrical Chestplate";
 	
 	public ElectricalChestplate(int power, short damage){
-		super(Material.GOLD_CHESTPLATE, 1, damage, NAME, power);
+		super(Material.DIAMOND_CHESTPLATE, 1, damage, NAME, power);
 	}
 	
 	public ElectricalChestplate(ItemStack item){
@@ -20,5 +20,10 @@ public class ElectricalChestplate extends PowerTool{
 		super.onCraft(e);
 		if(initialBatrodPower != -1 && initialDurability != -1)
 			e.getInventory().setResult(new ElectricalChestplate(initialBatrodPower, initialDurability));
+	}
+	
+	@Override
+	public Material getVisibleType() {
+		return Material.GOLD_CHESTPLATE;
 	}
 }

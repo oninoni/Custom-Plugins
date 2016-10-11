@@ -1,9 +1,11 @@
 package de.oninoni.OnionPower.Listeners;
 
+import org.bukkit.GameMode;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
@@ -45,6 +47,13 @@ public class PlayerListener implements Listener {
 	@EventHandler
 	public void onArmorStandManipulate(PlayerArmorStandManipulateEvent e){
 		plugin.getMachineManager().onArmorStandManipulate(e);
+	}
+	
+	@EventHandler
+	public void onPGMChange(PlayerGameModeChangeEvent e){
+		if(e.getNewGameMode() == GameMode.CREATIVE){
+			plugin.getLogger().info("H:"+e.getPlayer().getItemInHand());
+		}
 	}
 
 }

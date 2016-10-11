@@ -18,7 +18,7 @@ public class BlockBreakListener implements Listener {
 
 	@EventHandler
 	public void onBreak(BlockBreakEvent e) {
+		plugin.getLogger().info(""+e.getPlayer().getItemInHand());
 		plugin.getMachineManager().onBreak(e);
 	}
-
 }

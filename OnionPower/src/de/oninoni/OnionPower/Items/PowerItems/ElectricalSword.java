@@ -8,7 +8,7 @@ public class ElectricalSword extends PowerTool{
 	private static final String NAME = "§4Electrical Sword";
 	
 	public ElectricalSword(int power, short damage){
-		super(Material.GOLD_SWORD, 1, damage, NAME, power);
+		super(Material.DIAMOND_SWORD, 1, damage, NAME, power);
 	}
 	
 	public ElectricalSword(ItemStack item){
@@ -20,5 +20,10 @@ public class ElectricalSword extends PowerTool{
 		super.onCraft(e);
 		if(initialBatrodPower != -1 && initialDurability != -1)
 			e.getInventory().setResult(new ElectricalSword(initialBatrodPower, initialDurability));
+	}
+	
+	@Override
+	public Material getVisibleType() {
+		return Material.GOLD_SWORD;
 	}
 }

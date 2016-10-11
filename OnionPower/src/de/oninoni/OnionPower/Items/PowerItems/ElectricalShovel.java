@@ -8,7 +8,7 @@ public class ElectricalShovel extends PowerTool{
 	private static final String NAME = "§4Electrical Shovel";
 	
 	public ElectricalShovel(int power, short damage){
-		super(Material.GOLD_SPADE, 1, damage, NAME, power);
+		super(Material.DIAMOND_SPADE, 1, damage, NAME, power);
 	}
 	
 	public ElectricalShovel(ItemStack item){
@@ -20,5 +20,10 @@ public class ElectricalShovel extends PowerTool{
 		super.onCraft(e);
 		if(initialBatrodPower != -1 && initialDurability != -1)
 			e.getInventory().setResult(new ElectricalShovel(initialBatrodPower, initialDurability));
+	}
+	
+	@Override
+	public Material getVisibleType() {
+		return Material.GOLD_SPADE;
 	}
 }

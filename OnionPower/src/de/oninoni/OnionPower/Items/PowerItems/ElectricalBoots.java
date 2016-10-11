@@ -8,7 +8,7 @@ public class ElectricalBoots extends PowerTool{
 	private static final String NAME = "§4Electrical Boots";
 	
 	public ElectricalBoots(int power, short damage){
-		super(Material.GOLD_BOOTS, 1, damage, NAME, power);
+		super(Material.DIAMOND_BOOTS, 1, damage, NAME, power);
 	}
 	
 	public ElectricalBoots(ItemStack item){
@@ -20,5 +20,10 @@ public class ElectricalBoots extends PowerTool{
 		super.onCraft(e);
 		if(initialBatrodPower != -1 && initialDurability != -1)
 			e.getInventory().setResult(new ElectricalBoots(initialBatrodPower, initialDurability));
+	}
+	
+	@Override
+	public Material getVisibleType() {
+		return Material.GOLD_BOOTS;
 	}
 }

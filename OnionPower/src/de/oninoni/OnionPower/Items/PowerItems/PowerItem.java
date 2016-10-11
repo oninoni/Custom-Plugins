@@ -17,7 +17,7 @@ import de.oninoni.OnionPower.Items.CustomsItems;
 public class PowerItem extends ItemStack{
 	protected static OnionPower plugin = OnionPower.get();
 
-	private static final ArrayList<Class<? extends PowerItem>> classes;
+	public static final ArrayList<Class<? extends PowerItem>> classes;
 	
 	static {
 		classes = new ArrayList<>();
@@ -31,6 +31,10 @@ public class PowerItem extends ItemStack{
 		classes.add(ElectricalLeggings.class);
 		classes.add(ElectricalBoots.class);
 		classes.add(Batrod.class);
+	}
+	
+	public Material getVisibleType(){
+		return getType();
 	}
 	
 	private String itemName;

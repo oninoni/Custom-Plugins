@@ -8,7 +8,7 @@ public class ElectricalHoe extends PowerTool{
 	private static final String NAME = "§4Electrical Hoe";
 	
 	public ElectricalHoe(int power, short damage){
-		super(Material.GOLD_HOE, 1, damage, NAME, power);
+		super(Material.DIAMOND_HOE, 1, damage, NAME, power);
 	}
 	
 	public ElectricalHoe(ItemStack item){
@@ -20,5 +20,10 @@ public class ElectricalHoe extends PowerTool{
 		super.onCraft(e);
 		if(initialBatrodPower != -1 && initialDurability != -1)
 			e.getInventory().setResult(new ElectricalHoe(initialBatrodPower, initialDurability));
+	}
+	
+	@Override
+	public Material getVisibleType() {
+		return Material.GOLD_HOE;
 	}
 }

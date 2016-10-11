@@ -12,6 +12,8 @@ import de.oninoni.OnionPower.Machines.MachineManager;
 
 public abstract class MachineFurnace extends Machine {
 
+	protected final static int[] directionAdapter = {5, 2, 3, 0};
+
 	protected Furnace furnace;
 
 	public MachineFurnace(Location position, MachineManager machineManager) {

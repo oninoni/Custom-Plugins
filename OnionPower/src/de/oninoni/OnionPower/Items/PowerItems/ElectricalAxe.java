@@ -8,7 +8,7 @@ public class ElectricalAxe extends PowerTool{
 	private static final String NAME = "§4Electrical Axe";
 	
 	public ElectricalAxe(int power, short damage){
-		super(Material.GOLD_AXE, 1, damage, NAME, power);
+		super(Material.DIAMOND_AXE, 1, damage, NAME, power);
 	}
 	
 	public ElectricalAxe(ItemStack item){
@@ -21,5 +21,10 @@ public class ElectricalAxe extends PowerTool{
 		if(initialBatrodPower != -1 && initialDurability != -1){
 			e.getInventory().setResult(new ElectricalAxe(initialBatrodPower, initialDurability));
 		}
+	}
+	
+	@Override
+	public Material getVisibleType() {
+		return Material.GOLD_AXE;
 	}
 }
