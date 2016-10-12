@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import org.bukkit.block.Dispenser;
 import org.bukkit.block.Furnace;
 import org.bukkit.block.Hopper;
+import org.bukkit.entity.Player;
 
 public class NMSAdapter {
 
@@ -62,5 +63,12 @@ public class NMSAdapter {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static void sendTitle(Player p, String titleText, int fadeIn, int stayOnScreen, int fadeOut){
+		titleText = "{\"text\": \"" + titleText + "\"}";
+		net.minecraft.server.v1_10_R1.IChatBaseComponent chatTitle = net.minecraft.server.v1_10_R1.IChatBaseComponent.ChatSerializer.a(titleText);
+		net.minecraft.server.v1_10_R1.PacketPlayOutChat title = new net.minecraft.server.v1_10_R1.PacketPlayOutChat(chatTitle, (byte) 2);
+		((org.bukkit.craftbukkit.v1_10_R1.entity.CraftPlayer) p).getHandle().playerConnection.sendPacket(title);
 	}
 }

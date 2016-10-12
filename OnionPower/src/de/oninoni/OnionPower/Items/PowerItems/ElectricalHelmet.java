@@ -8,11 +8,16 @@ public class ElectricalHelmet extends PowerTool{
 	private static final String NAME = "§4Electrical Helmet";
 	
 	public ElectricalHelmet(int power, short damage){
-		super(Material.DIAMOND_HELMET, 1, damage, NAME, power);
+		super(1, damage, NAME, power);
 	}
 	
 	public ElectricalHelmet(ItemStack item){
 		super(item, NAME);
+	}
+	
+	@Override
+	protected Material getOriginalType() {
+		return Material.DIAMOND_HELMET;
 	}
 	
 	@Override

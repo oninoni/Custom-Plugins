@@ -40,11 +40,13 @@ public class PowerItem extends ItemStack{
 	private String itemName;
 	public int maxPower;
 	
-	public PowerItem(Material mat, int ammount, short damage, String name, int power) {
-		super(mat, ammount, damage);
+	public PowerItem(int ammount, short damage, String name, int power) {
+		super(Material.SPONGE, ammount, damage);
 		
 		itemName = name;
 		maxPower = 64000;
+		
+		setType(getOriginalType());
 		
 		create(power);
 	}
@@ -58,6 +60,10 @@ public class PowerItem extends ItemStack{
 	
 	public PowerItem(ItemStack item){
 		this(item, "");
+	}
+	
+	protected Material getOriginalType(){
+		return Material.SPONGE;
 	}
 	
 	public void onCraft(PrepareItemCraftEvent e){
@@ -92,19 +98,39 @@ public class PowerItem extends ItemStack{
 	}
 	
 	public boolean check(){
+		if(!checkName())
+			return false;
 		ItemMeta itemMeta = getItemMeta();
-		if(itemMeta == null || getType() == Material.AIR)
-			return false;
-		if(itemMeta.getDisplayName() == null)
-			return false;
 		List<String> lore = itemMeta.getLore();
 		if(lore == null || lore.size() <= 2)
 			return false;
 		if(!(lore.get(0).startsWith("§h") && lore.get(1).startsWith("§6") && lore.get(2).startsWith("§h")))
 			return false;
+		return true;
+	}
+	
+	public boolean checkName(){
+		ItemMeta itemMeta = getItemMeta();
+		if(itemMeta == null || getType() == Material.AIR)
+			return false;
+		if(itemMeta.getDisplayName() == null)
+			return false;
 		if(itemName != "" && !itemMeta.getDisplayName().equals(itemName))
 			return false;
 		return true;
+	}
+	
+	public void fixItemFromCreativeSet(ItemStack item){
+		//plugin.getLogger().info(item.getType() + "/" + getOriginalType());
+		item.setType(getOriginalType());
+		
+		ItemMeta itemMeta = getItemMeta();
+		List<String> lore = itemMeta.getLore();
+		create(Integer.parseInt(lore.get(0).split("/")[0].substring(2)));
+		
+		itemMeta = item.getItemMeta();
+		itemMeta.setLore(getItemMeta().getLore());
+		item.setItemMeta(itemMeta);
 	}
 
 	public int readPower() {

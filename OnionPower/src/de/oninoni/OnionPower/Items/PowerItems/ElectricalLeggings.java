@@ -8,11 +8,16 @@ public class ElectricalLeggings extends PowerTool{
 	private static final String NAME = "§4Electrical Leggings";
 	
 	public ElectricalLeggings(int power, short damage){
-		super(Material.DIAMOND_LEGGINGS, 1, damage, NAME, power);
+		super(1, damage, NAME, power);
 	}
 	
 	public ElectricalLeggings(ItemStack item){
 		super(item, NAME);
+	}
+	
+	@Override
+	protected Material getOriginalType() {
+		return Material.DIAMOND_LEGGINGS;
 	}
 	
 	@Override

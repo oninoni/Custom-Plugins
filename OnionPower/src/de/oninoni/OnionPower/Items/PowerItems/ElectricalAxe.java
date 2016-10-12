@@ -8,11 +8,16 @@ public class ElectricalAxe extends PowerTool{
 	private static final String NAME = "§4Electrical Axe";
 	
 	public ElectricalAxe(int power, short damage){
-		super(Material.DIAMOND_AXE, 1, damage, NAME, power);
+		super(1, damage, NAME, power);
 	}
 	
 	public ElectricalAxe(ItemStack item){
 		super(item, NAME);
+	}
+	
+	@Override
+	protected Material getOriginalType() {
+		return Material.DIAMOND_AXE;
 	}
 	
 	@Override

@@ -8,11 +8,16 @@ public class ElectricalChestplate extends PowerTool{
 	private static final String NAME = "§4Electrical Chestplate";
 	
 	public ElectricalChestplate(int power, short damage){
-		super(Material.DIAMOND_CHESTPLATE, 1, damage, NAME, power);
+		super(1, damage, NAME, power);
 	}
 	
 	public ElectricalChestplate(ItemStack item){
 		super(item, NAME);
+	}
+	
+	@Override
+	protected Material getOriginalType() {
+		return Material.DIAMOND_CHESTPLATE;
 	}
 	
 	@Override

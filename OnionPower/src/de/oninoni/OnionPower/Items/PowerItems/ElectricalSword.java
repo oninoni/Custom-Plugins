@@ -8,11 +8,16 @@ public class ElectricalSword extends PowerTool{
 	private static final String NAME = "§4Electrical Sword";
 	
 	public ElectricalSword(int power, short damage){
-		super(Material.DIAMOND_SWORD, 1, damage, NAME, power);
+		super(1, damage, NAME, power);
 	}
 	
 	public ElectricalSword(ItemStack item){
 		super(item, NAME);
+	}
+	
+	@Override
+	protected Material getOriginalType() {
+		return Material.DIAMOND_SWORD;
 	}
 	
 	@Override

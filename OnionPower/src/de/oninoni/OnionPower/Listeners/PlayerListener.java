@@ -1,13 +1,15 @@
 package de.oninoni.OnionPower.Listeners;
 
-import org.bukkit.GameMode;
+import java.lang.reflect.InvocationTargetException;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
-import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.inventory.ItemStack;
 
 import de.oninoni.OnionPower.OnionPower;
 import de.oninoni.OnionPower.Items.PowerItems.PowerItem;
@@ -50,10 +52,21 @@ public class PlayerListener implements Listener {
 	}
 	
 	@EventHandler
-	public void onPGMChange(PlayerGameModeChangeEvent e){
-		if(e.getNewGameMode() == GameMode.CREATIVE){
-			plugin.getLogger().info("H:"+e.getPlayer().getItemInHand());
+	public void onPickup(PlayerPickupItemEvent e){
+		ItemStack item = e.getItem().getItemStack();
+		for (Class<? extends PowerItem> c : PowerItem.classes){
+			//plugin.getLogger().info("+++");
+			try {
+				PowerItem pitem = (PowerItem) c.getConstructor(ItemStack.class).newInstance(item);
+				if (pitem.checkName()){
+					//plugin.getLogger().info("Pickup: " + pitem);
+					pitem.fixItemFromCreativeSet(item);
+					break;
+				}
+			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException | NoSuchMethodException | SecurityException e1) {
+				e1.printStackTrace();
+			}
 		}
 	}
-
 }

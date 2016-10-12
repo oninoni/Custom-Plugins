@@ -125,6 +125,7 @@ public class Generator extends MachineFurnace {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public ArmorStand spawnDesignEntityInternal(int id) {
 		int data = (position.getBlock().getData() - 2) % 4;

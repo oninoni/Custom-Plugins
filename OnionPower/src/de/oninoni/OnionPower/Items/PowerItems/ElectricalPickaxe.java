@@ -8,11 +8,16 @@ public class ElectricalPickaxe extends PowerTool{
 	private static final String NAME = "§4Electrical Pickaxe";
 	
 	public ElectricalPickaxe(int power, short damage){
-		super(Material.DIAMOND_PICKAXE, 1, damage, NAME, power);
+		super(1, damage, NAME, power);
 	}
 	
 	public ElectricalPickaxe(ItemStack item){
 		super(item, NAME);
+	}
+	
+	@Override
+	protected Material getOriginalType() {
+		return Material.DIAMOND_PICKAXE;
 	}
 	
 	@Override

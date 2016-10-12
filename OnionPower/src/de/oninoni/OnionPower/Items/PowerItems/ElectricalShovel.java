@@ -8,11 +8,16 @@ public class ElectricalShovel extends PowerTool{
 	private static final String NAME = "§4Electrical Shovel";
 	
 	public ElectricalShovel(int power, short damage){
-		super(Material.DIAMOND_SPADE, 1, damage, NAME, power);
+		super(1, damage, NAME, power);
 	}
 	
 	public ElectricalShovel(ItemStack item){
 		super(item, NAME);
+	}
+	
+	@Override
+	protected Material getOriginalType() {
+		return Material.DIAMOND_SPADE;
 	}
 	
 	@Override
