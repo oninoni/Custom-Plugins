@@ -44,7 +44,7 @@ public class OnionPower extends JavaPlugin {
 		if (command.getName().equalsIgnoreCase("batrod")) {
 			if (sender instanceof Player) {
 				Player player = (Player) sender;
-				player.getInventory().addItem(new Batrod(0));
+				player.getInventory().addItem(new Batrod(6400));
 				return true;
 			}
 		}

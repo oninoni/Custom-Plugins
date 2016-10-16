@@ -7,12 +7,13 @@ import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 
-import de.oninoni.OnionPower.NMSAdapter;
 import de.oninoni.OnionPower.Machines.Machine;
 import de.oninoni.OnionPower.Machines.MachineManager;
 
 public abstract class MachineDispenser extends Machine {
 
+	//TODO Directions need to be redone in Machine not here
+	
 	protected final static int[] directionAdapter = { 4, 1, 5, 2, 3, 0 };
 
 	protected Dispenser dispenser;
@@ -20,13 +21,11 @@ public abstract class MachineDispenser extends Machine {
 	public MachineDispenser(Location position, MachineManager machineManager) {
 		super(position, machineManager);
 		dispenser = ((Dispenser) position.getBlock().getState());
-		NMSAdapter.setInvNameDispenser(dispenser, getDisplayName());
 	}
 
 	public MachineDispenser(Location position, MachineManager machineManager, int power) {
 		super(position, machineManager, power);
 		dispenser = (Dispenser) invHolder;
-		NMSAdapter.setInvNameDispenser(dispenser, getDisplayName());
 	}
 
 	@Override

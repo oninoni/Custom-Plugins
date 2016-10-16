@@ -1,28 +1,29 @@
-package de.oninoni.OnionPower.Machines.FurnaceBased;
+package de.oninoni.OnionPower.Machines.DropperBasedMultiblock;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Furnace;
+import org.bukkit.block.Dropper;
+import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 
 import de.oninoni.OnionPower.Machines.Machine;
 import de.oninoni.OnionPower.Machines.MachineManager;
 
-public abstract class MachineFurnace extends Machine {
+public abstract class MachineDropper extends Machine {
 
-	protected final static int[] directionAdapter = {5, 2, 3, 0};
+	protected final static int[] directionAdapter = { 4, 1, 5, 2, 3, 0 };
 
-	protected Furnace furnace;
+	protected Dropper dropper;
 
-	public MachineFurnace(Location position, MachineManager machineManager) {
+	public MachineDropper(Location position, MachineManager machineManager) {
 		super(position, machineManager);
-		furnace = ((Furnace) position.getBlock().getState());
+		dropper = ((Dropper) position.getBlock().getState());
 	}
 
-	public MachineFurnace(Location position, MachineManager machineManager, int power) {
+	public MachineDropper(Location position, MachineManager machineManager, int power) {
 		super(position, machineManager, power);
-		furnace = ((Furnace) position.getBlock().getState());
+		dropper = (Dropper) invHolder;
 	}
 
 	@Override
@@ -32,18 +33,22 @@ public abstract class MachineFurnace extends Machine {
 
 	@Override
 	protected boolean isMaterial(Material material) {
-		return material == Material.FURNACE || material == Material.BURNING_FURNACE;
+		return material == Material.DISPENSER;
 	}
 
 	@Override
 	public void load() {
 		super.load();
-		furnace = (Furnace) getPosition().getBlock().getState();
+		dropper = (Dropper) invHolder;
 	}
 
 	@Override
 	public void onClose(InventoryCloseEvent e) {
 		return;
+	}
+
+	public void onDispense(BlockDispenseEvent e) {
+		e.setCancelled(true);
 	}
 
 	@Override

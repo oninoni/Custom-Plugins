@@ -8,6 +8,7 @@ import de.oninoni.OnionPower.Machines.DispenserBased.BatrodBox;
 import de.oninoni.OnionPower.Machines.DispenserBased.Miner;
 import de.oninoni.OnionPower.Machines.DispenserBased.Sorter;
 import de.oninoni.OnionPower.Machines.DispenserBased.UpgradeStation;
+import de.oninoni.OnionPower.Machines.DropperBasedMultiblock.ArkFurnace;
 import de.oninoni.OnionPower.Machines.FurnaceBased.ElectricFurnace;
 import de.oninoni.OnionPower.Machines.FurnaceBased.Generator;
 import de.oninoni.OnionPower.Machines.HopperBased.FluidHandler;
@@ -42,6 +43,9 @@ public class MachineTemplates {
 				new Material[] { Material.AIR, Material.AIR, Material.BARRIER, Material.GLASS, Material.WORKBENCH });
 		buildTemplates.put(SolarHopper.class.getName(),
 				new Material[]{	Material.GLASS, Material.LAPIS_BLOCK, Material.BARRIER, Material.LAPIS_BLOCK, Material.GLASS});
+		
+		buildTemplates.put(ArkFurnace.class.getName(), 
+				new Material[]{ Material.COMMAND, Material.COMMAND, Material.COMMAND, Material.COMMAND, Material.BARRIER});
 	}
 
 }

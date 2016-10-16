@@ -19,6 +19,7 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -30,6 +31,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
+import de.oninoni.OnionPower.NMSAdapter;
 import de.oninoni.OnionPower.OnionPower;
 import de.oninoni.OnionPower.Items.PowerCore;
 import de.oninoni.OnionPower.Items.PowerItems.Batrod;
@@ -98,20 +100,13 @@ public abstract class Machine {
 		return true;
 	}
 
-	public static int getAllBatrodsPower(InventoryClickEvent e, String key, InventoryType type) {
+	public static int getAllBatrodsPower(Inventory inv) {
 		int result = 0;
 
-		Material[] template = MachineTemplates.buildTemplates.get(key);
-
-		for (int i = 0; i < template.length; i++) {
-			Material material = template[i];
-			// plugin.getLogger().info("I = " + i + " Mat = " + material + "
-			// Item = " + e.getView().getTopInventory().getContents());
-			if (material == Material.BARRIER) {
-				Batrod batrod = new Batrod(e.getInventory().getItem(i));
-				if(batrod.check())
-					result += batrod.readPower();
-			}
+		for (ItemStack item : inv.getContents()) {
+			Batrod batrod = new Batrod(item);
+			if(batrod.check())
+				result += batrod.readPower();
 		}
 
 		return result;
@@ -164,6 +159,7 @@ public abstract class Machine {
 		invHolder = (InventoryHolder) position.getBlock().getState();
 		this.power = power;
 		setPowerCore(PowerCore.create(this));
+		NMSAdapter.setInvName(invHolder, getDisplayName());
 		initValues(position, machineManager);
 	}
 
@@ -630,5 +626,16 @@ public abstract class Machine {
 
 	public boolean upgradeAvailable(UpgradeType type) {
 		return upgradesAvailable.contains(type);
+	}
+	
+	public void destroyMachine(){
+		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+			@Override
+			public void run() {
+				plugin.getServer().getPluginManager().callEvent(new BlockBreakEvent(position.getBlock(), null));
+				//NMSAdapter.setInvNameDropper(invHolder, "Dropper");
+				//TODO General SetInvName and ResetInvName
+			}
+		}, 0L);
 	}
 }
