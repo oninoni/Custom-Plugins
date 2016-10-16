@@ -55,4 +55,12 @@ public class CustomsItems {
 		pick.setDurability(durability);
 		return pick;
 	}
+	
+	public static ItemStack getArkFurnaceFurnace() {
+		ItemStack furnace = new ItemStack(Material.FURNACE);
+		ItemMeta meta = furnace.getItemMeta();
+		meta.setDisplayName("§4Ark Furnace");
+		furnace.setItemMeta(meta);
+		return furnace;
+	}
 }

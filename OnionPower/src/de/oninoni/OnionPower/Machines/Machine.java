@@ -45,6 +45,10 @@ public abstract class Machine {
 	protected static OnionPower plugin = OnionPower.get();
 
 	private static final int MAX_CABLE_LENGTH = 16;
+	
+	protected Vector effectOffset;
+
+	//TODO Rewrite Constructor for init Function so you can check before Generating
 
 	@SuppressWarnings("deprecation")
 	public static boolean canCreate(InventoryClickEvent e, String key, InventoryType type) {
@@ -285,7 +289,6 @@ public abstract class Machine {
 	}
 
 	private void initValues(Location position, MachineManager machineManager) {
-
 		this.position = position;
 		this.machineManager = machineManager;
 
@@ -302,6 +305,8 @@ public abstract class Machine {
 
 		setAvailableUpgrades();
 		upgradeManager = new UpgradeManager(this);
+		
+		effectOffset = new Vector();
 	}
 
 	protected boolean isActive() {
@@ -460,7 +465,7 @@ public abstract class Machine {
 			ptm.machine.requestPower(this);
 		}
 		if (machines.size() == 0) {
-			position.getWorld().spawnParticle(Particle.BARRIER, position.clone().add(0.5, 1.5, 0.5), 1, 0, 0, 0, 0.1);
+			position.getWorld().spawnParticle(Particle.BARRIER, position.clone().add(0.5, 1.5, 0.5).add(effectOffset), 1, 0, 0, 0, 0.1);
 		}
 	}
 
@@ -507,7 +512,7 @@ public abstract class Machine {
 
 	protected void spawnDesignEntities() {
 		ArrayList<Integer> foundIDS = new ArrayList<>();
-		Collection<Entity> entitiesNearby = position.getWorld().getNearbyEntities(position, 1.0f, 1.0f, 1.0f);
+		Collection<Entity> entitiesNearby = position.getWorld().getNearbyEntities(position, 2.0f, 2.0f, 2.0f);
 		//plugin.getLogger().info("Found " + entitiesNearby.size() + " Entities nearby!");
 		for(Entity entity : entitiesNearby){
 			if(entity instanceof ArmorStand){
@@ -633,9 +638,12 @@ public abstract class Machine {
 			@Override
 			public void run() {
 				plugin.getServer().getPluginManager().callEvent(new BlockBreakEvent(position.getBlock(), null));
-				//NMSAdapter.setInvNameDropper(invHolder, "Dropper");
-				//TODO General SetInvName and ResetInvName
+				NMSAdapter.resetInvName(invHolder);
 			}
 		}, 0L);
+	}
+	
+	public Vector getEffectOffset() {
+		return effectOffset;
 	}
 }

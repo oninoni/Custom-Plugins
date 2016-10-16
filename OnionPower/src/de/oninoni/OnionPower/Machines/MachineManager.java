@@ -40,6 +40,8 @@ import de.oninoni.OnionPower.Machines.DispenserBased.Miner;
 import de.oninoni.OnionPower.Machines.DispenserBased.Sorter;
 import de.oninoni.OnionPower.Machines.DispenserBased.UpgradeStation;
 import de.oninoni.OnionPower.Machines.DropperBasedMultiblock.ArkFurnace;
+import de.oninoni.OnionPower.Machines.DropperBasedMultiblock.GoldArkFurnace;
+import de.oninoni.OnionPower.Machines.DropperBasedMultiblock.IronArkFurnace;
 import de.oninoni.OnionPower.Machines.DropperBasedMultiblock.MachineDropperMultiblock;
 import de.oninoni.OnionPower.Machines.FurnaceBased.ElectricFurnace;
 import de.oninoni.OnionPower.Machines.FurnaceBased.Generator;
@@ -160,8 +162,12 @@ public class MachineManager {
 					machines.put(l, new UpgradeStation(l, this));
 				} else if (MachineClass == SolarHopper.class){
 					machines.put(l, new SolarHopper(l, this));
-				} else if (MachineClass == ArkFurnace.class){
-					ArkFurnace aF = new ArkFurnace(l, this);
+				} else if (MachineClass == GoldArkFurnace.class){
+					ArkFurnace aF = new GoldArkFurnace(l, this);
+					machines.put(l, aF);
+					addProtectedBlock(aF);
+				} else if (MachineClass == IronArkFurnace.class){
+					ArkFurnace aF = new IronArkFurnace(l, this);
 					machines.put(l, aF);
 					addProtectedBlock(aF);
 				}
@@ -269,8 +275,13 @@ public class MachineManager {
 			if (Machine.canCreate(e, SolarHopper.class.getName(), InventoryType.HOPPER))
 				machines.put(location, new SolarHopper(location, this, 
 						Machine.getAllBatrodsPower(e.getView().getTopInventory())));
-			if (Machine.canCreate(e, ArkFurnace.class.getName(), InventoryType.DROPPER)){
-				ArkFurnace aF = new ArkFurnace(location, this, Machine.getAllBatrodsPower(e.getView().getTopInventory()));
+			if (Machine.canCreate(e, GoldArkFurnace.class.getName(), InventoryType.DROPPER)){
+				ArkFurnace aF = new GoldArkFurnace(location, this, Machine.getAllBatrodsPower(e.getView().getTopInventory()));
+				machines.put(location, aF);
+				addProtectedBlock(aF);
+			}
+			if (Machine.canCreate(e, IronArkFurnace.class.getName(), InventoryType.DROPPER)){
+				ArkFurnace aF = new IronArkFurnace(location, this, Machine.getAllBatrodsPower(e.getView().getTopInventory()));
 				machines.put(location, aF);
 				addProtectedBlock(aF);
 			}
@@ -344,9 +355,10 @@ public class MachineManager {
 		if (target == null)
 			return;
 		if (machines.containsKey(target.getLocation()) && !displayTimeout.containsKey(target.getLocation())) {
+			Machine m = machines.get(target.getLocation());
 			ArmorStand armorstand = (ArmorStand) target.getLocation().getWorld()
-					.spawnEntity(target.getLocation().add(0.5, 1, 0.5), EntityType.ARMOR_STAND);
-			armorstand.setCustomName(machines.get(target.getLocation()).getDisplayName());
+					.spawnEntity(target.getLocation().add(0.5, 1, 0.5).add(m.getEffectOffset()), EntityType.ARMOR_STAND);
+			armorstand.setCustomName(m.getDisplayName());
 			armorstand.setCustomNameVisible(true);
 			armorstand.setMarker(true);
 			armorstand.setBasePlate(false);

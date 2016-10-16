@@ -24,6 +24,18 @@ public class NMSAdapter {
 			setInvNameFurnace((Furnace) block, name);
 		}
 	}
+	
+	public static void resetInvName(InventoryHolder block){
+		if(block instanceof Dispenser){
+			setInvNameDispenser((Dispenser) block, "Dispenser");
+		}else if(block instanceof Dropper){
+			setInvNameDropper((Dropper) block, "Dropper");
+		}else if(block instanceof Hopper){
+			setInvNameHopper((Hopper) block, "Hopper");
+		}else if(block instanceof Furnace){
+			setInvNameFurnace((Furnace) block, "Furnace");
+		}
+	}
 
 	private static void setInvNameDispenser(Dispenser dispenser, String name) {
 		try {

@@ -1,12 +1,15 @@
 package de.oninoni.OnionPower.Machines.DropperBasedMultiblock;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Directional;
@@ -16,40 +19,65 @@ import org.bukkit.material.Stairs;
 import org.bukkit.util.Vector;
 
 import de.oninoni.OnionPower.NMSAdapter;
+import de.oninoni.OnionPower.Items.ArkFurnaceCore;
+import de.oninoni.OnionPower.Items.ArkHeater;
+import de.oninoni.OnionPower.Items.CustomsItems;
 import de.oninoni.OnionPower.Items.PowerItems.Batrod;
 import de.oninoni.OnionPower.Machines.MachineManager;
 
-public class ArkFurnace extends MachineDropperMultiblock {
+public abstract class ArkFurnace extends MachineDropperMultiblock {
 	
 	org.bukkit.block.Hopper inputHopper, outputHopper;
 
 	public ArkFurnace(Location position, MachineManager machineManager) {
 		super(position, machineManager);
+		effectOffset = new Vector(0.0f, 1.0f, 0.0f);
+		
+		getHoppers();
 	}
 	
 	public ArkFurnace(Location position, MachineManager machineManager, int power) {
 		super(position, machineManager, power);
+		effectOffset = new Vector(0.0f, 1.0f, 0.0f);
 		plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {
-				//TODO Set Items;
+				dropper.getInventory().setItem(0, CustomsItems.getArkFurnaceFurnace());
+				dropper.getInventory().setItem(2, CustomsItems.getArkFurnaceFurnace());
+				dropper.getInventory().setItem(3, CustomsItems.getArkFurnaceFurnace());
+				dropper.getInventory().setItem(5, CustomsItems.getArkFurnaceFurnace());
+				dropper.getInventory().setItem(6, CustomsItems.getArkFurnaceFurnace());
+				dropper.getInventory().setItem(8, CustomsItems.getArkFurnaceFurnace());
+				
+				dropper.getInventory().setItem(7, ArkHeater.create(0));
+				dropper.getInventory().setItem(1, ArkFurnaceCore.create(getSmeltingMaterial()));
+				
+				reOpenInventories();
 			}
 		}, 1L);
 		
+		if(!shouldNotGenerate){
+			getHoppers();
+			
+			NMSAdapter.setInvName(inputHopper, getDisplayName() + "§4§l Input");
+			NMSAdapter.setInvName(outputHopper, getDisplayName() + "§4§l Output");
+		}
+	}
+	
+	private void getHoppers(){
 		Vector vecOutput = new Vector( 0,-1, 2);
 		Vector vecInput = new Vector( 0, 1, 1);
 		
-		rotateVector(vecInput, ((Directional)dropper.getData()).getFacing());
-		rotateVector(vecOutput, ((Directional)dropper.getData()).getFacing());
-		
-		//TODO Does this work? Up above...
+		vecInput = rotateVector(vecInput, ((Directional)dropper.getData()).getFacing());
+		vecOutput = rotateVector(vecOutput, ((Directional)dropper.getData()).getFacing());
 		
 		inputHopper = (org.bukkit.block.Hopper) position.clone().add(vecInput).getBlock().getState();
 		outputHopper = (org.bukkit.block.Hopper) position.clone().add(vecOutput).getBlock().getState();
-		
-		NMSAdapter.setInvName(inputHopper, getDisplayName() + "§4 - §lInput");
-		NMSAdapter.setInvName(outputHopper, getDisplayName() + "§4 - §lOutput");
 	}
+	
+	protected abstract Material getSmeltingMaterial();
+	protected abstract Material getSmeltingMaterialBlock();
+	protected abstract Material getSmeltingMaterialOre();
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -70,7 +98,7 @@ public class ArkFurnace extends MachineDropperMultiblock {
 		
 		tiA.put(new Vector( 1, 0, 0), new MaterialData(Material.BRICK));
 		tiA.put(new Vector(-1, 0, 1), new MaterialData(Material.BRICK));
-		//tiA.put(new Vector( 0, 0, 1), new Hopper(BlockFace.SOUTH)); //TODO Make Abstract to Create Iron and Gold Variants
+		tiA.put(new Vector( 0, 0, 1), new MaterialData(getSmeltingMaterialBlock()));
 		tiA.put(new Vector( 1, 0, 1), new MaterialData(Material.BRICK));
 		tiA.put(new Vector(-1, 0, 2), new MaterialData(Material.BRICK));
 		tiA.put(new Vector( 0, 0, 2), new MaterialData(Material.GLASS));
@@ -90,13 +118,14 @@ public class ArkFurnace extends MachineDropperMultiblock {
 		tA.putAll(tiA);
 		
 		Stairs stairs = new Stairs(Material.BRICK_STAIRS);
-		stairs.setFacingDirection(BlockFace.EAST);
+		
+		stairs.setFacingDirection(BlockFace.WEST); // Flipped for some reason
 		
 		tA.put(new Vector(-1, 1, 0), stairs.clone());
 		tA.put(new Vector(-1, 1, 1), stairs.clone());
 		tA.put(new Vector(-1, 1, 2), stairs.clone());
 
-		stairs.setFacingDirection(BlockFace.WEST);
+		stairs.setFacingDirection(BlockFace.EAST); // Flipped for some reason
 		
 		tA.put(new Vector( 1, 1, 0), stairs.clone());
 		tA.put(new Vector( 1, 1, 1), stairs.clone());
@@ -108,22 +137,17 @@ public class ArkFurnace extends MachineDropperMultiblock {
 		tA.put(new Vector( 0, 0, 1), new MaterialData(Material.STATIONARY_LAVA));
 		tA.put(new Vector( 0, 0, 2), new MaterialData(Material.STAINED_GLASS, (byte) 7));
 		
-		setMultiblockTemplates(tiA, tA);
+		putMultiblockTemplates(tiA, tA);
 	}
 
 	@Override
 	protected boolean doesExplode() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public int getDesignEntityCount() {
 		return 0;
-	}
-
-	@Override
-	public String getDisplayName() {
-		return "§6§lArk - Furnace";
 	}
 
 	@Override
@@ -163,8 +187,67 @@ public class ArkFurnace extends MachineDropperMultiblock {
 
 	@Override
 	public void updateBlock() {
-		// TODO Auto-generated method stub
-		
+		for (int i = 0; i < inputHopper.getInventory().getSize(); i++) {
+			ItemStack itemStack = inputHopper.getInventory().getItem(i);
+			if(itemStack == null || itemStack.getType() == Material.AIR)continue;
+			if(itemStack.getType() == getSmeltingMaterialOre()){
+				if(itemStack.getAmount() > 1){
+					itemStack.setAmount(itemStack.getAmount() - 1);
+				}else{
+					itemStack.setType(Material.AIR);
+				}
+				inputHopper.getInventory().setItem(i, itemStack);
+				
+				ArkFurnaceCore.addTime(dropper.getInventory().getItem(1));
+				
+				break;
+			}
+		}
+		List<Long> times = ArkFurnaceCore.getEnterTimes(dropper.getInventory().getItem(1));
+		int heat = ArkHeater.readHeat(dropper.getInventory().getItem(7));
+		if(heat >= 600){
+			for (Long time : times) {
+				if(time <= (System.currentTimeMillis() / 50) - (20 * 60 * (1000.0 / heat))){// 20 * 60 == 1 min Backzeit
+					ArkFurnaceCore.removeTime(dropper.getInventory().getItem(1), time);
+					ItemStack result = new ItemStack(getSmeltingMaterial(), 2);
+					outputHopper.getInventory().addItem(result);
+				}
+			}
+		}
+		if(times.size() > 0){
+			if(heat == 1000){
+				if(power >= 100){
+					power -= 400;
+					powerOutputTotal += 400;
+				}else{
+					ArkHeater.setHeat(dropper.getInventory().getItem(7), Math.max(heat - 1, 0));
+				}
+			}else{
+				if(power >= 200){
+					ArkHeater.setHeat(dropper.getInventory().getItem(7), heat + 1);
+					power -= 1000;
+					powerOutputTotal += 1000;
+				}else{
+					ArkHeater.setHeat(dropper.getInventory().getItem(7), Math.max(heat - 1, 0));
+				}
+			}
+		}else{
+			ArkHeater.setHeat(dropper.getInventory().getItem(7), Math.max(heat - 1, 0));
+		}
+		needsUpdate = true;
 	}
 	
+	@Override
+	public boolean onBoom(Block e) {
+		NMSAdapter.resetInvName(inputHopper);
+		NMSAdapter.resetInvName(outputHopper);
+		return super.onBoom(e);
+	}
+	
+	@Override
+	public void onBreak(BlockEvent e) {
+		NMSAdapter.resetInvName(inputHopper);
+		NMSAdapter.resetInvName(outputHopper);
+		super.onBreak(e);
+	}
 }

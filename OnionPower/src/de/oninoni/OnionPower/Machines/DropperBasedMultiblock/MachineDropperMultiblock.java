@@ -22,8 +22,12 @@ public abstract class MachineDropperMultiblock extends MachineDropper{
 	private HashMap<Vector, MaterialData> templateInActive;
 	private HashMap<Vector, MaterialData> templateActive;
 	
+	boolean shouldNotGenerate = false;
+	
 	public MachineDropperMultiblock(Location position, MachineManager machineManager) {
 		super(position, machineManager);
+		templateInActive = new HashMap<>();
+		templateActive = new HashMap<>();
 		setMutltiblockTemplates();
 		if(!checkActive()){
 			destroyMachine();
@@ -32,39 +36,45 @@ public abstract class MachineDropperMultiblock extends MachineDropper{
 	
 	public MachineDropperMultiblock(Location position, MachineManager machineManager, int power){
 		super(position, machineManager, power);
+		templateInActive = new HashMap<>();
+		templateActive = new HashMap<>();
 		setMutltiblockTemplates();
 		if(checkInActive()){
 			setActive();
 		}else{
+			shouldNotGenerate = true;
 			destroyMachine();
 		}
 	}
 	
 	protected Vector rotateVector(Vector vec, BlockFace face){
+		Vector v = vec.clone();
 		switch (face) {
 		case EAST:
-			vec.setX(-vec.getZ());
-			vec.setZ(vec.getX());
+			v.setX(-vec.getZ());
+			v.setZ(vec.getX());
 			break;
 		case WEST:
-			vec.setX(vec.getZ());
-			vec.setZ(-vec.getX());
+			v.setX(vec.getZ());
+			v.setZ(-vec.getX());
 			break;
 		case SOUTH:
-			vec.setX(-vec.getX());
-			vec.setZ(-vec.getZ());
+			v.setX(-vec.getX());
+			v.setZ(-vec.getZ());
+			break;
+		case NORTH:
 			break;
 		default:
-			break;
+			return null;
 		}
-		return vec;
+		return v;
 	}
 	
 	protected abstract void setMutltiblockTemplates();
 	
-	protected void setMultiblockTemplates(HashMap<Vector, MaterialData> tiA, HashMap<Vector, MaterialData> tA){
-		templateInActive= tiA;
-		templateActive	= tA;
+	protected void putMultiblockTemplates(HashMap<Vector, MaterialData> tiA, HashMap<Vector, MaterialData> tA){
+		templateInActive.putAll(tiA);
+		templateActive.putAll(tA);
 	}
 	
 	protected boolean checkInActive(){
@@ -77,11 +87,12 @@ public abstract class MachineDropperMultiblock extends MachineDropper{
 	
 	private boolean checkTemplate(HashMap<Vector, MaterialData> template){
 		BlockFace forward = ((Directional)dropper.getData()).getFacing();
-		if(template == null)return false;
-		for (Vector vec : template.keySet()) {
-			MaterialData mat = template.get(vec).clone();
+		if(template == null) return false;
+		for (Vector v : template.keySet()) {
+			MaterialData mat = template.get(v).clone();
 			
-			vec = rotateVector(vec, forward);
+			Vector vec = rotateVector(v, forward);
+			if(vec == null) return false;
 			
 			Location targetLocation = position.clone().add(vec);
 			Block targetBlock = targetLocation.getBlock();
@@ -92,11 +103,11 @@ public abstract class MachineDropperMultiblock extends MachineDropper{
 			
 			if(targetBlock.getType() != mat.getItemType()) return false;
 			
-			//TODO Rotate
 			if(template != templateInActive){
 				if(mat instanceof Directional){
 					//plugin.getLogger().info("Directional!");
 					Directional dirMat = (Directional) mat;
+					dirMat.setFacingDirection(rotateBlockFace(dirMat.getFacing(), forward));
 					if(dirMat.getFacing() != ((Directional) targetBlock.getState().getData()).getFacing()) return false;
 				}
 			}
@@ -110,23 +121,43 @@ public abstract class MachineDropperMultiblock extends MachineDropper{
 		return true;
 	}
 	
+	private BlockFace rotateBlockFace(BlockFace face, BlockFace forward){
+		//plugin.getServer().broadcastMessage("Gets: " + face);
+		if(face == BlockFace.DOWN)return face;
+		//plugin.getServer().broadcastMessage("Calculates: " + BlockFace.values()[(face.ordinal() + forward.ordinal()) % 4]);
+		return BlockFace.values()[(face.ordinal() + forward.ordinal()) % 4];
+	}
+	
 	protected void setActive(){
+		//plugin.getServer().broadcastMessage("Active!");
 		setTemplate(templateActive);
 	}
 	
 	protected void setInactive(){
+		//plugin.getServer().broadcastMessage("Inactive!");
 		setTemplate(templateInActive);
 	}
 	
 	private void setTemplate(HashMap<Vector, MaterialData> template){
 		BlockFace forward = ((Directional)dropper.getData()).getFacing();
-		for (Vector vec : template.keySet()) {
-			rotateVector(vec, forward);
-			//TODO Rotation Fails here for some reason
-			MaterialData mat = template.get(vec);
+		for (Vector v : template.keySet()) {
+			Vector vec = rotateVector(v, forward);
+			if(vec == null) return;
+			
+			//plugin.getServer().broadcastMessage("Processing...");
 			Location targetLocation = position.clone().add(vec);
 			Block targetBlock = targetLocation.getBlock();
+			
+			MaterialData mat = template.get(v).clone();
+			
 			targetBlock.setType(mat.getItemType());
+			
+			if(mat instanceof Directional){
+				Directional dirMat = (Directional) mat;
+				dirMat.setFacingDirection(rotateBlockFace(dirMat.getFacing(), forward));
+				mat = (MaterialData) dirMat;
+			}
+			
 			BlockState targetState = targetBlock.getState();
 			targetState.setData(mat);
 			targetState.update();
@@ -136,8 +167,8 @@ public abstract class MachineDropperMultiblock extends MachineDropper{
 	public List<Location> getProtectedBlocks(){
 		List<Location> protectedBlocks = new ArrayList<>();
 		
-		for (Vector vec : templateInActive.keySet()) {
-			vec = rotateVector(vec, ((Directional)dropper.getData()).getFacing());
+		for (Vector v : templateInActive.keySet()) {
+			Vector vec = rotateVector(v, ((Directional)dropper.getData()).getFacing());
 			Location protectedBlock = position.clone();
 			protectedBlock.add(vec);
 			protectedBlocks.add(protectedBlock);
@@ -148,7 +179,24 @@ public abstract class MachineDropperMultiblock extends MachineDropper{
 	
 	@Override
 	public void onBreak(BlockEvent e) {
-		setInactive();
+		if(!shouldNotGenerate){
+			setInactive();
+			shouldNotGenerate = false;
+		}
 		super.onBreak(e);
+	}
+	
+	@Override
+	public boolean onBoom(Block e) {
+		if(!shouldNotGenerate){
+			setInactive();
+			shouldNotGenerate = false;
+		}
+		return super.onBoom(e);
+	}
+	
+	@Override
+	public void destroyMachine() {
+		super.destroyMachine();
 	}
 }
