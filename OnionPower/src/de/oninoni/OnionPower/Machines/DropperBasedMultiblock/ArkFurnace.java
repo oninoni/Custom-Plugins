@@ -9,15 +9,19 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Directional;
 import org.bukkit.material.Hopper;
 import org.bukkit.material.MaterialData;
 import org.bukkit.material.Stairs;
 import org.bukkit.util.Vector;
 
+import de.oninoni.OnionPower.NMSAdapter;
 import de.oninoni.OnionPower.Items.PowerItems.Batrod;
 import de.oninoni.OnionPower.Machines.MachineManager;
 
 public class ArkFurnace extends MachineDropperMultiblock {
+	
+	org.bukkit.block.Hopper inputHopper, outputHopper;
 
 	public ArkFurnace(Location position, MachineManager machineManager) {
 		super(position, machineManager);
@@ -25,7 +29,26 @@ public class ArkFurnace extends MachineDropperMultiblock {
 	
 	public ArkFurnace(Location position, MachineManager machineManager, int power) {
 		super(position, machineManager, power);
-		//TODO Set Items
+		plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
+			@Override
+			public void run() {
+				//TODO Set Items;
+			}
+		}, 1L);
+		
+		Vector vecOutput = new Vector( 0,-1, 2);
+		Vector vecInput = new Vector( 0, 1, 1);
+		
+		rotateVector(vecInput, ((Directional)dropper.getData()).getFacing());
+		rotateVector(vecOutput, ((Directional)dropper.getData()).getFacing());
+		
+		//TODO Does this work? Up above...
+		
+		inputHopper = (org.bukkit.block.Hopper) position.clone().add(vecInput).getBlock().getState();
+		outputHopper = (org.bukkit.block.Hopper) position.clone().add(vecOutput).getBlock().getState();
+		
+		NMSAdapter.setInvName(inputHopper, getDisplayName() + "§4 - §lInput");
+		NMSAdapter.setInvName(outputHopper, getDisplayName() + "§4 - §lOutput");
 	}
 
 	@SuppressWarnings("deprecation")

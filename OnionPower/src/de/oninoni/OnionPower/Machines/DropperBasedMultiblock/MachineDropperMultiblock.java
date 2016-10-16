@@ -40,7 +40,7 @@ public abstract class MachineDropperMultiblock extends MachineDropper{
 		}
 	}
 	
-	private Vector rotateVector(Vector vec, BlockFace face){
+	protected Vector rotateVector(Vector vec, BlockFace face){
 		switch (face) {
 		case EAST:
 			vec.setX(-vec.getZ());
@@ -121,22 +121,8 @@ public abstract class MachineDropperMultiblock extends MachineDropper{
 	private void setTemplate(HashMap<Vector, MaterialData> template){
 		BlockFace forward = ((Directional)dropper.getData()).getFacing();
 		for (Vector vec : template.keySet()) {
-			switch (forward) {
-			case EAST:
-				vec.setX(-vec.getZ());
-				vec.setZ(vec.getX());
-				break;
-			case WEST:
-				vec.setX(vec.getZ());
-				vec.setZ(-vec.getX());
-				break;
-			case SOUTH:
-				vec.setX(-vec.getX());
-				vec.setZ(-vec.getZ());
-				break;
-			default:
-				break;
-			}
+			rotateVector(vec, forward);
+			//TODO Rotation Fails here for some reason
 			MaterialData mat = template.get(vec);
 			Location targetLocation = position.clone().add(vec);
 			Block targetBlock = targetLocation.getBlock();
