@@ -85,7 +85,7 @@ public abstract class MachineDropperMultiblock extends MachineDropper{
 		return checkTemplate(templateActive);
 	}
 	
-	private boolean checkTemplate(HashMap<Vector, MaterialData> template){
+	protected boolean checkTemplate(HashMap<Vector, MaterialData> template){
 		BlockFace forward = ((Directional)dropper.getData()).getFacing();
 		if(template == null) return false;
 		for (Vector v : template.keySet()) {

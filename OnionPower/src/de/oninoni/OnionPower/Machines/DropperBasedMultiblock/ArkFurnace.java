@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.ArmorStand;
@@ -28,6 +29,9 @@ import de.oninoni.OnionPower.Machines.MachineManager;
 public abstract class ArkFurnace extends MachineDropperMultiblock {
 	
 	org.bukkit.block.Hopper inputHopper, outputHopper;
+	
+	private int chimneyHeight;
+	private Location smokePosition;
 
 	public ArkFurnace(Location position, MachineManager machineManager) {
 		super(position, machineManager);
@@ -139,7 +143,35 @@ public abstract class ArkFurnace extends MachineDropperMultiblock {
 		
 		putMultiblockTemplates(tiA, tA);
 	}
+	
+	@Override
+	protected boolean checkTemplate(HashMap<Vector, MaterialData> template) {
+		int i;
+		for(i = 0; i < 32; i++){
+			Location checkChimney = position.clone().add(0.0f, 2.0f + i, 0.0f);
+			if(checkChimney.getBlock() == null || checkChimney.getBlock().getType() != Material.BRICK)break;
+		}
+		if(i <= 2)return false;
+		
+		chimneyHeight = i;
+		smokePosition = position.clone().add(0.5f, 2.0f + i, 0.5f);
+		
+		plugin.getServer().broadcastMessage(""+i);
+		
+		return super.checkTemplate(template);
+	}
 
+	@Override
+	public List<Location> getProtectedBlocks() {
+		List<Location> protectedBlocks = super.getProtectedBlocks();
+		
+		for(int i = 0; i < chimneyHeight; i++){
+			protectedBlocks.add(position.clone().add(0.0f, 2.0f + i, 0.0f));
+		}
+		
+		return protectedBlocks;
+	}
+	
 	@Override
 	protected boolean doesExplode() {
 		return true;
@@ -219,6 +251,8 @@ public abstract class ArkFurnace extends MachineDropperMultiblock {
 				if(power >= 100){
 					power -= 400;
 					powerOutputTotal += 400;
+					position.getWorld().spawnParticle(Particle.SMOKE_LARGE, smokePosition, 3, 0.1, 0.0, 0.1, 0);
+					position.getWorld().spawnParticle(Particle.FLAME, smokePosition, 4, 0.1, 0.5, 0.1, 0);
 				}else{
 					ArkHeater.setHeat(dropper.getInventory().getItem(7), Math.max(heat - 1, 0));
 				}
@@ -227,6 +261,8 @@ public abstract class ArkFurnace extends MachineDropperMultiblock {
 					ArkHeater.setHeat(dropper.getInventory().getItem(7), heat + 1);
 					power -= 1000;
 					powerOutputTotal += 1000;
+					position.getWorld().spawnParticle(Particle.SMOKE_LARGE, smokePosition, 7, 0.1, 0.0, 0.1, 0);
+					position.getWorld().spawnParticle(Particle.FLAME, smokePosition, 4, 0.1, 0.5, 0.1, 0);
 				}else{
 					ArkHeater.setHeat(dropper.getInventory().getItem(7), Math.max(heat - 1, 0));
 				}
@@ -234,6 +270,7 @@ public abstract class ArkFurnace extends MachineDropperMultiblock {
 		}else{
 			ArkHeater.setHeat(dropper.getInventory().getItem(7), Math.max(heat - 1, 0));
 		}
+		position.getWorld().spawnParticle(Particle.SMOKE_LARGE, smokePosition, 1, 0.1, 0.0, 0.1, 0);
 		needsUpdate = true;
 	}
 	
