@@ -19,6 +19,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -464,5 +465,17 @@ public class MachineManager {
 				e.setCancelled(true);
 			}
 		}		
+	}
+	
+	public void onTeleport(EntityTeleportEvent e){
+		plugin.getLogger().info(""+e.getEntity());
+		for (Location loc : machines.keySet()) {
+			Machine m = machines.get(loc);
+			for (ArmorStand armorStand : m.designEntities) {
+				if(armorStand.getUniqueId() == e.getEntity().getUniqueId()){
+					e.setCancelled(true);
+				}
+			}
+		}
 	}
 }

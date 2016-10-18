@@ -144,19 +144,20 @@ public abstract class ArkFurnace extends MachineDropperMultiblock {
 		putMultiblockTemplates(tiA, tA);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	protected boolean checkTemplate(HashMap<Vector, MaterialData> template) {
 		int i;
+		Location checkChimney = position;
 		for(i = 0; i < 32; i++){
-			Location checkChimney = position.clone().add(0.0f, 2.0f + i, 0.0f);
+			checkChimney = position.clone().add(0.0f, 2.0f + i, 0.0f);
 			if(checkChimney.getBlock() == null || checkChimney.getBlock().getType() != Material.BRICK)break;
 		}
 		if(i <= 2)return false;
-		
+		//plugin.getLogger().info(checkChimney.getBlock().getType() + " / " + checkChimney.getBlock().getData());
+		if(checkChimney.getBlock() == null || checkChimney.getBlock().getType() != Material.STEP || checkChimney.getBlock().getData() != 0)return false;
 		chimneyHeight = i;
 		smokePosition = position.clone().add(0.5f, 2.0f + i, 0.5f);
-		
-		plugin.getServer().broadcastMessage(""+i);
 		
 		return super.checkTemplate(template);
 	}
@@ -165,7 +166,7 @@ public abstract class ArkFurnace extends MachineDropperMultiblock {
 	public List<Location> getProtectedBlocks() {
 		List<Location> protectedBlocks = super.getProtectedBlocks();
 		
-		for(int i = 0; i < chimneyHeight; i++){
+		for(int i = 0; i <= chimneyHeight; i++){
 			protectedBlocks.add(position.clone().add(0.0f, 2.0f + i, 0.0f));
 		}
 		

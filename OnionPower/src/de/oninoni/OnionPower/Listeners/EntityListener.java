@@ -4,11 +4,17 @@ import org.bukkit.event.Listener;
 
 public class EntityListener implements Listener {
 
-	/*private static OnionPower plugin = OnionPower.get();
+	//	private static OnionPower plugin = OnionPower.get();
 
-	@EventHandler
+	/*@EventHandler
 	public void onDeath( e) {
 		plugin.getLogger().info("Death");
 		//plugin.getMachineManager().onEntityDeath(e);
+	}*/
+	
+	/*@EventHandler
+	public void onStuff(TeleportCause){
+		plugin.getLogger().info("Teleport!");
+		plugin.getMachineManager().onTeleport(e);
 	}*/
 }
