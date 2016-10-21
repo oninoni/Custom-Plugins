@@ -16,6 +16,7 @@ import de.oninoni.OnionPower.Items.CustomsItems;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalAxe;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalBoots;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalChestplate;
+import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalElytra;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalHelmet;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalHoe;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalLeggings;
@@ -41,6 +42,7 @@ public class PowerItem extends ItemStack{
 		classes.add(ElectricalLeggings.class);
 		classes.add(ElectricalBoots.class);
 		classes.add(Batrod.class);
+		classes.add(ElectricalElytra.class);
 	}
 	
 	public Material getVisibleType(){

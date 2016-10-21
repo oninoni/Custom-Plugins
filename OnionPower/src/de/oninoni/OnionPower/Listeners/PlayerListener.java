@@ -38,8 +38,21 @@ public class PlayerListener implements Listener {
 		if(powerItem.check()){
 			int power = powerItem.getPower();
 			if(power > 0){
+				//plugin.getLogger().info(""+powerItem);
+				int slotFound = -1;
+				for (int i = 0; i < e.getPlayer().getInventory().getSize(); i++) {
+					ItemStack item = e.getPlayer().getInventory().getItem(i);
+					if(item == null)continue;
+					//plugin.getLogger().info(""+item);
+					if(powerItem.isSimilar(item)){
+						//plugin.getServer().broadcastMessage("Found");
+						slotFound = i;
+						break;
+					}
+				}
+				
 				powerItem.setPower(Math.max(power - e.getDamage() * 20, 0));
-				e.getPlayer().getInventory().setItemInMainHand(powerItem);
+				e.getPlayer().getInventory().setItem(slotFound, powerItem);
 				e.setCancelled(true);
 			}
 		}

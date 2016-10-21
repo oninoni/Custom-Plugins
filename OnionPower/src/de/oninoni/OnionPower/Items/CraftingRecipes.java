@@ -10,6 +10,7 @@ import de.oninoni.OnionPower.Items.PowerItems.Batrod;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalAxe;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalBoots;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalChestplate;
+import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalElytra;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalHelmet;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalHoe;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalLeggings;
@@ -107,6 +108,13 @@ public class CraftingRecipes {
 		
 		sr.addIngredient(Material.BLAZE_ROD);
 		sr.addIngredient(Material.GOLD_BOOTS);
+		
+		Bukkit.addRecipe(sr);
+		
+		sr = new ShapelessRecipe(new ElectricalElytra(0, (short) 0));
+		
+		sr.addIngredient(Material.BLAZE_ROD);
+		sr.addIngredient(Material.ELYTRA);
 		
 		Bukkit.addRecipe(sr);
 	}
