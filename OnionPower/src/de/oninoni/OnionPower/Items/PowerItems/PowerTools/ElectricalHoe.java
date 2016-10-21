@@ -1,34 +1,34 @@
-package de.oninoni.OnionPower.Items.PowerItems;
+package de.oninoni.OnionPower.Items.PowerItems.PowerTools;
 
 import org.bukkit.Material;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class ElectricalShovel extends PowerTool{
-	private static final String NAME = "§4Electrical Shovel";
+public class ElectricalHoe extends PowerTools{
+	private static final String NAME = "§4Electrical Hoe";
 	
-	public ElectricalShovel(int power, short damage){
+	public ElectricalHoe(int power, short damage){
 		super(1, damage, NAME, power);
 	}
 	
-	public ElectricalShovel(ItemStack item){
+	public ElectricalHoe(ItemStack item){
 		super(item, NAME);
 	}
 	
 	@Override
 	protected Material getOriginalType() {
-		return Material.DIAMOND_SPADE;
+		return Material.DIAMOND_HOE;
 	}
 	
 	@Override
 	public void onCraft(PrepareItemCraftEvent e) {
 		super.onCraft(e);
 		if(initialBatrodPower != -1 && initialDurability != -1)
-			e.getInventory().setResult(new ElectricalShovel(initialBatrodPower, initialDurability));
+			e.getInventory().setResult(new ElectricalHoe(initialBatrodPower, initialDurability));
 	}
 	
 	@Override
 	public Material getVisibleType() {
-		return Material.GOLD_SPADE;
+		return Material.GOLD_HOE;
 	}
 }

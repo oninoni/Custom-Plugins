@@ -1,19 +1,22 @@
-package de.oninoni.OnionPower.Items.PowerItems;
+package de.oninoni.OnionPower.Items.PowerItems.PowerTools;
 
 import org.bukkit.Material;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class PowerTool extends PowerItem{
+import de.oninoni.OnionPower.Items.PowerItems.Batrod;
+import de.oninoni.OnionPower.Items.PowerItems.PowerItem;
+
+public class PowerTools extends PowerItem{
 
 	short initialDurability = -1;
 	int initialBatrodPower = -1;
 	
-	public PowerTool(int ammount, short damage, String name, int power){
+	public PowerTools(int ammount, short damage, String name, int power){
 		super(ammount, damage, name, power);
 	}
 	
-	public PowerTool(ItemStack item, String name) {
+	public PowerTools(ItemStack item, String name) {
 		super(item, name);
 	}
 	

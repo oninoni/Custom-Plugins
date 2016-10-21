@@ -1,10 +1,10 @@
-package de.oninoni.OnionPower.Items.PowerItems;
+package de.oninoni.OnionPower.Items.PowerItems.PowerTools;
 
 import org.bukkit.Material;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class ElectricalAxe extends PowerTool{
+public class ElectricalAxe extends PowerTools{
 	private static final String NAME = "§4Electrical Axe";
 	
 	public ElectricalAxe(int power, short damage){

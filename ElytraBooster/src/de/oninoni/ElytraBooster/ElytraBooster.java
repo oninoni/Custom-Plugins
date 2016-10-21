@@ -34,6 +34,7 @@ public class ElytraBooster extends JavaPlugin{
 		return getBoosterElytra(charge+"");
 	}
 	
+	@SuppressWarnings("deprecation")
 	private void addRechargeRecipe(){
 		final ShapelessRecipe recipe = new ShapelessRecipe(getBoosterElytra("+12.5"));
 		recipe.addIngredient(Material.ELYTRA, -1);

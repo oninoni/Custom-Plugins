@@ -7,15 +7,15 @@ import org.bukkit.inventory.ShapelessRecipe;
 
 import de.oninoni.OnionPower.OnionPower;
 import de.oninoni.OnionPower.Items.PowerItems.Batrod;
-import de.oninoni.OnionPower.Items.PowerItems.ElectricalAxe;
-import de.oninoni.OnionPower.Items.PowerItems.ElectricalBoots;
-import de.oninoni.OnionPower.Items.PowerItems.ElectricalChestplate;
-import de.oninoni.OnionPower.Items.PowerItems.ElectricalHelmet;
-import de.oninoni.OnionPower.Items.PowerItems.ElectricalHoe;
-import de.oninoni.OnionPower.Items.PowerItems.ElectricalLeggings;
-import de.oninoni.OnionPower.Items.PowerItems.ElectricalPickaxe;
-import de.oninoni.OnionPower.Items.PowerItems.ElectricalShovel;
-import de.oninoni.OnionPower.Items.PowerItems.ElectricalSword;
+import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalAxe;
+import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalBoots;
+import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalChestplate;
+import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalHelmet;
+import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalHoe;
+import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalLeggings;
+import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalPickaxe;
+import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalShovel;
+import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalSword;
 import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
 import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager.UpgradeType;
 
