@@ -70,6 +70,7 @@ public class ProtocolLibManager {
 				PacketType.Play.Server.SET_SLOT, 
 				PacketType.Play.Server.WINDOW_ITEMS, 
 				PacketType.Play.Server.SPAWN_ENTITY,
+				PacketType.Play.Server.ENTITY_EQUIPMENT,
 				PacketType.Play.Client.SET_CREATIVE_SLOT
 				){
 					@Override
@@ -97,6 +98,13 @@ public class ProtocolLibManager {
 							for (Entity entity : sm) {
 								if(entity != null && entity.getType() == EntityType.DROPPED_ITEM)
 									handleItem(event.getPlayer(), ((Item) entity).getItemStack());
+							}
+						}
+						if(event.getPacketType() == PacketType.Play.Server.ENTITY_EQUIPMENT){
+							List<ItemStack> sm = packet.getItemModifier().getValues();
+							for (int i = 0; i < sm.size(); i++) {
+								ItemStack item = sm.get(i);
+								handleItem(event.getPlayer(), item);
 							}
 						}
 						

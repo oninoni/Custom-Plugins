@@ -452,6 +452,7 @@ public class MachineManager {
 	
 	public void onArmorStandManipulate(PlayerArmorStandManipulateEvent e){
 		String name = e.getRightClicked().getCustomName();
+		if(name == null)return;
 		String[] split = name.split(":");
 		if(split.length == 4){
 			int x = Integer.parseInt(split[0]);

@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comphenix.protocol.ProtocolLibrary;
@@ -11,6 +12,16 @@ import com.comphenix.protocol.ProtocolManager;
 
 import de.oninoni.OnionPower.Items.CraftingRecipes;
 import de.oninoni.OnionPower.Items.PowerItems.Batrod;
+import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalAxe;
+import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalBoots;
+import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalChestplate;
+import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalElytra;
+import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalHelmet;
+import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalHoe;
+import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalLeggings;
+import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalPickaxe;
+import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalShovel;
+import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalSword;
 import de.oninoni.OnionPower.Listeners.BlockBreakListener;
 import de.oninoni.OnionPower.Listeners.ChunkListener;
 import de.oninoni.OnionPower.Listeners.EntityListener;
@@ -41,10 +52,28 @@ public class OnionPower extends JavaPlugin {
 
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-		if (command.getName().equalsIgnoreCase("batrod")) {
+		if (command.getName().equalsIgnoreCase("poweritems") && sender.isOp()) {
 			if (sender instanceof Player) {
-				Player player = (Player) sender;
-				player.getInventory().addItem(new Batrod(64000));
+				Inventory inv = Bukkit.createInventory((Player) sender, 27, "§4Powered Items");
+				
+				inv.setItem(0 , new Batrod(0));
+				inv.setItem(1 , new Batrod(640000));
+				
+				inv.setItem(9 , new ElectricalAxe(640000, (short) 0));
+				inv.setItem(10, new ElectricalPickaxe(640000, (short) 0));
+				inv.setItem(11, new ElectricalShovel(640000, (short) 0));
+				inv.setItem(12, new ElectricalHoe(640000, (short) 0));
+				
+				inv.setItem(17, new ElectricalSword(640000, (short) 0));
+				
+				inv.setItem(18, new ElectricalHelmet(640000, (short) 0));
+				inv.setItem(19, new ElectricalChestplate(640000, (short) 0));
+				inv.setItem(20, new ElectricalLeggings(640000, (short) 0));
+				inv.setItem(21, new ElectricalBoots(640000, (short) 0));
+				
+				inv.setItem(26, new ElectricalElytra(640000, (short) 0));
+				
+				((Player) sender).openInventory(inv);
 				return true;
 			}
 		}

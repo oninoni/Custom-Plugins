@@ -3,6 +3,6 @@ main: de.oninoni.OnionPower.OnionPower
 description: THIS IS AWESOME POWER THING!
 version: 0.42.006
 commands:
-  batrod:
-    description: give the player a batrod
+  poweritems:
+    description: Opens Items with all PowerItems inside
     usage: Nope
