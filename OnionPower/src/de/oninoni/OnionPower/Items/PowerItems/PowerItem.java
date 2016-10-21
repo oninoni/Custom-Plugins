@@ -72,6 +72,7 @@ public class PowerItem extends ItemStack{
 		setType(getOriginalType());
 		
 		machine = m;
+		plugin.getLogger().info("" + machine);
 		
 		create(m.getPower());
 	}

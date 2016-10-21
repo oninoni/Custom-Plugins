@@ -150,7 +150,7 @@ public abstract class Machine {
 		BlockState state = position.getBlock().getState();
 		if (state instanceof InventoryHolder) {
 			invHolder = (InventoryHolder) position.getBlock().getState();
-			PowerCore powerCore = new PowerCore(getPowerCore());
+			PowerCore powerCore = new PowerCore(getPowerCore(), this);
 			if(powerCore.check()){
 				this.power = powerCore.getPower();
 			}
@@ -602,7 +602,7 @@ public abstract class Machine {
 
 	public void updateDisplay() {
 		// plugin.getLogger().info("Update!");
-		PowerCore powerCore = new PowerCore(getPowerCore());
+		PowerCore powerCore = new PowerCore(getPowerCore(), this);
 		powerCore.setPower(power);
 		setPowerCore(powerCore);
 		updateInventories();

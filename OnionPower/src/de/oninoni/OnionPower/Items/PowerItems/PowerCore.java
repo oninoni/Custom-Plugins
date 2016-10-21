@@ -12,14 +12,13 @@ import de.oninoni.OnionPower.Machines.Machine;
 public class PowerCore extends PowerItem{
 	private static final String NAME = "§4Power Core";
 	
-	Machine machine;
-	
 	public PowerCore(Machine m){
 		super(1, (short) 0, NAME, m);
 	}
 	
-	public PowerCore(ItemStack item){
+	public PowerCore(ItemStack item, Machine m){
 		super(item, NAME);
+		machine = m;
 	}
 	
 	@Override
@@ -30,6 +29,7 @@ public class PowerCore extends PowerItem{
 	@Override
 	protected void create(int power) {
 		super.create(power);
+		plugin.getLogger().info("" + machine);
 		ItemMeta itemMeta = getItemMeta();
 		List<String> lore = itemMeta.getLore();
 		if (machine.getMaxPowerOutput() == 0) {
