@@ -36,7 +36,7 @@ public class PlayerListener implements Listener {
 		//plugin.getServer().broadcastMessage("Damage on Tool detected!");
 		PowerItem powerItem = new PowerItem(e.getItem());
 		if(powerItem.check()){
-			int power = powerItem.readPower();
+			int power = powerItem.getPower();
 			if(power > 0){
 				powerItem.setPower(Math.max(power - e.getDamage() * 20, 0));
 				e.getPlayer().getInventory().setItemInMainHand(powerItem);

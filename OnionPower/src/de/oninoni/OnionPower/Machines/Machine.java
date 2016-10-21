@@ -33,8 +33,8 @@ import org.bukkit.util.Vector;
 
 import de.oninoni.OnionPower.NMSAdapter;
 import de.oninoni.OnionPower.OnionPower;
-import de.oninoni.OnionPower.Items.PowerCore;
 import de.oninoni.OnionPower.Items.PowerItems.Batrod;
+import de.oninoni.OnionPower.Items.PowerItems.PowerCore;
 import de.oninoni.OnionPower.Items.PowerItems.PowerItem;
 import de.oninoni.OnionPower.Machines.Upgrades.RedstoneUpgrade;
 import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager;
@@ -110,7 +110,7 @@ public abstract class Machine {
 		for (ItemStack item : inv.getContents()) {
 			Batrod batrod = new Batrod(item);
 			if(batrod.check())
-				result += batrod.readPower();
+				result += batrod.getPower();
 		}
 
 		return result;
@@ -150,7 +150,10 @@ public abstract class Machine {
 		BlockState state = position.getBlock().getState();
 		if (state instanceof InventoryHolder) {
 			invHolder = (InventoryHolder) position.getBlock().getState();
-			this.power = PowerCore.getPowerLevel(getPowerCore());
+			PowerCore powerCore = new PowerCore(getPowerCore());
+			if(powerCore.check()){
+				this.power = powerCore.getPower();
+			}
 		} else {
 			plugin.getLogger().warning("Machine at " + position + "is not an Inventory anymore!");
 			this.power = 0;
@@ -162,7 +165,7 @@ public abstract class Machine {
 		setCoreSlot();
 		invHolder = (InventoryHolder) position.getBlock().getState();
 		this.power = power;
-		setPowerCore(PowerCore.create(this));
+		setPowerCore(new PowerCore(this));
 		NMSAdapter.setInvName(invHolder, getDisplayName());
 		initValues(position, machineManager);
 	}
@@ -170,7 +173,7 @@ public abstract class Machine {
 	protected void chargeItem(Inventory inv, int id) {
 		PowerItem powerItem = new PowerItem(inv.getItem(id));
 		if (powerItem.check()) {
-			int rodPower = powerItem.readPower();
+			int rodPower = powerItem.getPower();
 			int powerTransfered = Math.min(powerItem.maxPower - rodPower, Math.min(getMaxPowerOutput(), power));
 			powerItem.setPower(rodPower + powerTransfered);
 			inv.setItem(id, powerItem);
@@ -188,7 +191,7 @@ public abstract class Machine {
 	protected void dechargeRod(Inventory inv, int id) {
 		PowerItem powerItem = new PowerItem(inv.getItem(id));
 		if (powerItem.check() && power < getMaxPower()) {
-			int rodPower = powerItem.readPower();
+			int rodPower = powerItem.getPower();
 			int powerTransfered = Math.min(getMaxPower() - power, Math.min(rodPower, getMaxPowerInput()));
 			powerItem.setPower(rodPower - powerTransfered);
 			inv.setItem(id, powerItem);
@@ -599,8 +602,8 @@ public abstract class Machine {
 
 	public void updateDisplay() {
 		// plugin.getLogger().info("Update!");
-		ItemStack powerCore = getPowerCore();
-		PowerCore.setPowerLevel(powerCore, this);
+		PowerCore powerCore = new PowerCore(getPowerCore());
+		powerCore.setPower(power);
 		setPowerCore(powerCore);
 		updateInventories();
 	}

@@ -22,6 +22,7 @@ import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalLeggings;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalPickaxe;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalShovel;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalSword;
+import de.oninoni.OnionPower.Machines.Machine;
 
 public class PowerItem extends ItemStack{
 	protected static OnionPower plugin = OnionPower.get();
@@ -49,6 +50,8 @@ public class PowerItem extends ItemStack{
 	private String itemName;
 	public int maxPower;
 	
+	Machine machine;
+	
 	public PowerItem(int ammount, short damage, String name, int power) {
 		super(Material.SPONGE, ammount, damage);
 		
@@ -58,6 +61,19 @@ public class PowerItem extends ItemStack{
 		setType(getOriginalType());
 		
 		create(power);
+	}
+	
+	public PowerItem(int ammount, short damage, String name, Machine m){
+		super(Material.SPONGE, ammount, damage);
+		
+		itemName = name;
+		maxPower = 64000;
+		
+		setType(getOriginalType());
+		
+		machine = m;
+		
+		create(m.getPower());
 	}
 	
 	public PowerItem(ItemStack item, String name){
@@ -94,7 +110,7 @@ public class PowerItem extends ItemStack{
 		}
 	}
 	
-	private void create(int power){
+	protected void create(int power){
 		ItemMeta itemMeta = getItemMeta();
 		itemMeta.setDisplayName(itemName);
 		List<String> lore = new ArrayList<>();
@@ -142,7 +158,7 @@ public class PowerItem extends ItemStack{
 		item.setItemMeta(itemMeta);
 	}
 
-	public int readPower() {
+	public int getPower() {
 		return Integer.parseInt(getItemMeta().getLore().get(0).substring(2));
 	}
 

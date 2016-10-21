@@ -31,7 +31,7 @@ public class PowerTools extends PowerItem{
 			if(item.getType() == Material.AIR)continue;
 			Batrod batrod = new Batrod(item);
 			if(batrod.check()){
-				initialBatrodPower = batrod.readPower();
+				initialBatrodPower = batrod.getPower();
 			}else{
 				PowerItem powerItem = new PowerItem(item);
 				//plugin.getLogger().info(item+"");
