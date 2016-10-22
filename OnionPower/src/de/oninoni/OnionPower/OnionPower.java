@@ -1,10 +1,13 @@
 package de.oninoni.OnionPower;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.map.MapView;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comphenix.protocol.ProtocolLibrary;
@@ -28,6 +31,7 @@ import de.oninoni.OnionPower.Listeners.EntityListener;
 import de.oninoni.OnionPower.Listeners.InventoryListener;
 import de.oninoni.OnionPower.Listeners.PlayerListener;
 import de.oninoni.OnionPower.Machines.MachineManager;
+import de.oninoni.OnionPower.Map.CustomMapRenderer;
 
 public class OnionPower extends JavaPlugin {
 
@@ -50,6 +54,7 @@ public class OnionPower extends JavaPlugin {
 		return machineManager;
 	}
 
+	@SuppressWarnings("deprecation")
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
 		if (command.getName().equalsIgnoreCase("poweritems") && sender.isOp()) {
@@ -72,6 +77,14 @@ public class OnionPower extends JavaPlugin {
 				inv.setItem(21, new ElectricalBoots(640000, (short) 0));
 				
 				inv.setItem(26, new ElectricalElytra(640000, (short) 0));
+				
+				ItemStack itemStack = new ItemStack(Material.MAP);
+				
+				MapView mV = getServer().createMap(((Player) sender).getWorld());
+				mV.addRenderer(new CustomMapRenderer());
+
+				itemStack.setDurability(mV.getId());
+				inv.setItem(25, itemStack);
 				
 				((Player) sender).openInventory(inv);
 				return true;
