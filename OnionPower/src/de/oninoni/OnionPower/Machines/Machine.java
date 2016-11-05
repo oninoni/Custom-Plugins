@@ -637,13 +637,8 @@ public abstract class Machine {
 	}
 	
 	public void destroyMachine(){
-		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
-			@Override
-			public void run() {
-				plugin.getServer().getPluginManager().callEvent(new BlockBreakEvent(position.getBlock(), null));
-				NMSAdapter.resetInvName(invHolder);
-			}
-		}, 0L);
+		plugin.getMachineManager().onBreak(new BlockBreakEvent(position.getBlock(), null));
+		NMSAdapter.resetInvName(invHolder);
 	}
 	
 	public Vector getEffectOffset() {

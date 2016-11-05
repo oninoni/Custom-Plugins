@@ -41,6 +41,7 @@ import de.oninoni.OnionPower.Machines.DispenserBased.Miner;
 import de.oninoni.OnionPower.Machines.DispenserBased.Sorter;
 import de.oninoni.OnionPower.Machines.DispenserBased.UpgradeStation;
 import de.oninoni.OnionPower.Machines.DropperBasedMultiblock.ArkFurnace;
+import de.oninoni.OnionPower.Machines.DropperBasedMultiblock.Enricher;
 import de.oninoni.OnionPower.Machines.DropperBasedMultiblock.GoldArkFurnace;
 import de.oninoni.OnionPower.Machines.DropperBasedMultiblock.IronArkFurnace;
 import de.oninoni.OnionPower.Machines.DropperBasedMultiblock.MachineDropperMultiblock;
@@ -171,6 +172,10 @@ public class MachineManager {
 					ArkFurnace aF = new IronArkFurnace(l, this);
 					machines.put(l, aF);
 					addProtectedBlock(aF);
+				} else if (MachineClass == Enricher.class){
+					Enricher enricher = new Enricher(l, this);
+					machines.put(l, enricher);
+					addProtectedBlock(enricher);
 				}
 			}
 			plugin.getLogger().info(machines.size() + " Machine/s loaded!");
@@ -199,12 +204,12 @@ public class MachineManager {
 			protectedBlocks.remove(loc);
 		}
 		
-		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
+		/*Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {
 				l.getBlock().setType(Material.AIR);
 			}
-		}, 0L);
+		}, 0L);*/
 	}
 
 	public void onBoom(EntityExplodeEvent e) {
@@ -285,6 +290,11 @@ public class MachineManager {
 				ArkFurnace aF = new IronArkFurnace(location, this, Machine.getAllBatrodsPower(e.getView().getTopInventory()));
 				machines.put(location, aF);
 				addProtectedBlock(aF);
+			}
+			if (Machine.canCreate(e, Enricher.class.getName(), InventoryType.DROPPER)){
+				Enricher enricher = new Enricher(location, this, Machine.getAllBatrodsPower(e.getView().getTopInventory()));
+				machines.put(location, enricher);
+				addProtectedBlock(enricher);
 			}
 			if (machines.get(e.getInventory().getLocation()) != null)
 				saveData();
@@ -469,7 +479,6 @@ public class MachineManager {
 	}
 	
 	public void onTeleport(EntityTeleportEvent e){
-		plugin.getLogger().info(""+e.getEntity());
 		for (Location loc : machines.keySet()) {
 			Machine m = machines.get(loc);
 			for (ArmorStand armorStand : m.designEntities) {

@@ -200,7 +200,14 @@ public abstract class ArkFurnace extends MachineDropperMultiblock {
 
 	@Override
 	protected void resetItemAt(int id) {
-		if(id == 4)dropper.getInventory().setItem(id, new Batrod(getPower()));
+		if(id == 4) dropper.getInventory().setItem(id, new Batrod(getPower()));
+		
+		if(id == 0 || id == 2 || id == 3 || id == 5 || id == 6 || id == 8){
+			dropper.getInventory().setItem(id, new ItemStack(Material.FURNACE));
+		}
+		
+		if(id == 7) dropper.getInventory().setItem(7, new ItemStack(Material.MAGMA));
+		if(id == 1) dropper.getInventory().setItem(1, new ItemStack(getSmeltingMaterial()));
 	}
 
 	@Override

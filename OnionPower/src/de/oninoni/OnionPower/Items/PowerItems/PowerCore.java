@@ -29,7 +29,7 @@ public class PowerCore extends PowerItem{
 	@Override
 	protected void create(int power) {
 		super.create(power);
-		plugin.getLogger().info("" + machine);
+		//plugin.getLogger().info("" + machine);
 		ItemMeta itemMeta = getItemMeta();
 		List<String> lore = itemMeta.getLore();
 		if (machine.getMaxPowerOutput() == 0) {

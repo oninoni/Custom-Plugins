@@ -194,9 +194,4 @@ public abstract class MachineDropperMultiblock extends MachineDropper{
 		}
 		return super.onBoom(e);
 	}
-	
-	@Override
-	public void destroyMachine() {
-		super.destroyMachine();
-	}
 }
