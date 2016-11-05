@@ -12,9 +12,9 @@ import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-import de.oninoni.OnionPower.Items.CustomsItems;
-import de.oninoni.OnionPower.Items.InternalTank;
 import de.oninoni.OnionPower.Items.PowerItems.Batrod;
+import de.oninoni.OnionPower.Items.Statics.CustomsItems;
+import de.oninoni.OnionPower.Items.Statics.InternalTank;
 import de.oninoni.OnionPower.Machines.MachineManager;
 import de.oninoni.OnionPower.Machines.Upgrades.LavaUpgrade;
 import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager.UpgradeType;

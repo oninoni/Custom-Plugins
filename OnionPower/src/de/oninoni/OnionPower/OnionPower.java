@@ -13,7 +13,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 
-import de.oninoni.OnionPower.Items.CraftingRecipes;
 import de.oninoni.OnionPower.Items.PowerItems.Batrod;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalAxe;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalBoots;
@@ -25,6 +24,7 @@ import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalLeggings;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalPickaxe;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalShovel;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalSword;
+import de.oninoni.OnionPower.Items.Statics.CraftingRecipes;
 import de.oninoni.OnionPower.Listeners.BlockBreakListener;
 import de.oninoni.OnionPower.Listeners.ChunkListener;
 import de.oninoni.OnionPower.Listeners.EntityListener;

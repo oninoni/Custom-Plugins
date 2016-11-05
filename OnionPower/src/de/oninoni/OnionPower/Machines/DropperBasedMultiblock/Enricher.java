@@ -21,12 +21,12 @@ import org.bukkit.util.Vector;
 
 import de.oninoni.OnionPower.NMSAdapter;
 import de.oninoni.OnionPower.Items.PowerItems.Batrod;
+import de.oninoni.OnionPower.Items.Statics.UraniumBuffer;
 import de.oninoni.OnionPower.Machines.MachineManager;
 
 public class Enricher extends MachineDropperMultiblock{
 	
-	int rotation = 0;
-	int ticks = 0;
+	private int speed = 0;
 	
 	Hopper inputHopper, outputHopper, outputHopperSecondary;
 	
@@ -40,7 +40,7 @@ public class Enricher extends MachineDropperMultiblock{
 		plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {
-				
+				dropper.getInventory().setItem(7, UraniumBuffer.create());
 				
 				reOpenInventories();
 			}
@@ -164,7 +164,7 @@ public class Enricher extends MachineDropperMultiblock{
 
 	@Override
 	protected void setCoreSlot() {
-		coreSlot = 7;
+		coreSlot = 4;
 	}
 	
 	@Override
@@ -195,9 +195,48 @@ public class Enricher extends MachineDropperMultiblock{
 
 	@Override
 	public void updateBlock() {
-		Location l0 = designEntities.get(0).getLocation();
-		float yaw = l0.getYaw() + 60;
-		l0.setYaw(yaw);
-		designEntities.get(0).teleport(l0);
+		if(speed > 0){
+			Location l0 = designEntities.get(0).getLocation();
+			float yaw = l0.getYaw() + speed;
+			l0.setYaw(yaw);
+			designEntities.get(0).teleport(l0);
+		}
+		if(!isInactive()){
+			if(inputHopper.getInventory().contains(Material.COBBLESTONE)){
+				if(speed == 90){
+					HashMap<Integer, ItemStack> overflow = outputHopper.getInventory().addItem(new ItemStack(Material.GRAVEL));
+					if(overflow.size() == 0){
+						int itemPos = inputHopper.getInventory().first(Material.COBBLESTONE);
+						ItemStack item = inputHopper.getInventory().getItem(itemPos);
+						int amount = item.getAmount();
+						if(amount > 1){
+							item.setAmount(amount - 1);
+							inputHopper.getInventory().setItem(itemPos, item);
+						}else{
+							inputHopper.getInventory().setItem(itemPos, new ItemStack(Material.AIR));
+						}
+						
+						ItemStack uraniumBuffer = dropper.getInventory().getItem(7);
+						if(UraniumBuffer.addLevel(uraniumBuffer)){
+							UraniumBuffer.setLevel(uraniumBuffer, 0);
+						}
+						
+						needsUpdate = true;
+					}else{
+						speed = 0;
+					}
+				}else if(speed < 90){
+					speed++;
+				}
+			}else{
+				if(speed > 0){
+					speed--;
+				}
+			}
+		}else{
+			if(speed > 0){
+				speed--;
+			}
+		}
 	}
 }

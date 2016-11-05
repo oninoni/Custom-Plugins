@@ -20,10 +20,10 @@ import org.bukkit.material.Stairs;
 import org.bukkit.util.Vector;
 
 import de.oninoni.OnionPower.NMSAdapter;
-import de.oninoni.OnionPower.Items.ArkFurnaceCore;
-import de.oninoni.OnionPower.Items.ArkHeater;
-import de.oninoni.OnionPower.Items.CustomsItems;
 import de.oninoni.OnionPower.Items.PowerItems.Batrod;
+import de.oninoni.OnionPower.Items.Statics.ArkFurnaceCore;
+import de.oninoni.OnionPower.Items.Statics.ArkHeater;
+import de.oninoni.OnionPower.Items.Statics.CustomsItems;
 import de.oninoni.OnionPower.Machines.MachineManager;
 import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager.UpgradeType;
 

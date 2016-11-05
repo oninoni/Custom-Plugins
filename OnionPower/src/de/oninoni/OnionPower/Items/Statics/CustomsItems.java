@@ -1,4 +1,4 @@
-package de.oninoni.OnionPower.Items;
+package de.oninoni.OnionPower.Items.Statics;
 
 import java.util.List;
 

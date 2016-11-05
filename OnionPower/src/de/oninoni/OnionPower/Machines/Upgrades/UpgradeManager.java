@@ -15,7 +15,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 import de.oninoni.OnionPower.OnionPower;
-import de.oninoni.OnionPower.Items.CustomsItems;
+import de.oninoni.OnionPower.Items.Statics.CustomsItems;
 import de.oninoni.OnionPower.Machines.Machine;
 
 public class UpgradeManager {

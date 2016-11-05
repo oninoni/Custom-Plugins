@@ -6,7 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import de.oninoni.OnionPower.Items.CustomsItems;
+import de.oninoni.OnionPower.Items.Statics.CustomsItems;
 import de.oninoni.OnionPower.Machines.Machine;
 
 public class PowerCore extends PowerItem{

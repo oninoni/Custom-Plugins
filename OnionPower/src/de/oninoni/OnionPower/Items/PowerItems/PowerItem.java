@@ -12,7 +12,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import de.oninoni.OnionPower.OnionPower;
-import de.oninoni.OnionPower.Items.CustomsItems;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalAxe;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalBoots;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalChestplate;
@@ -23,6 +22,7 @@ import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalLeggings;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalPickaxe;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalShovel;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalSword;
+import de.oninoni.OnionPower.Items.Statics.CustomsItems;
 import de.oninoni.OnionPower.Machines.Machine;
 
 public class PowerItem extends ItemStack{

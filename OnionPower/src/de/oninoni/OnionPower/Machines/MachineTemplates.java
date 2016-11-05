@@ -51,6 +51,6 @@ public class MachineTemplates {
 		buildTemplates.put(IronArkFurnace.class.getName(), 
 				new Material[]{ Material.FURNACE, Material.IRON_INGOT, Material.FURNACE, Material.FURNACE, Material.BARRIER, Material.FURNACE, Material.FURNACE, Material.MAGMA, Material.FURNACE});
 		buildTemplates.put(Enricher.class.getName(), 
-				new Material[]{ Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.BARRIER, Material.AIR,});
+				new Material[]{ Material.IRON_BLOCK, Material.IRON_BLOCK, Material.IRON_BLOCK, Material.THIN_GLASS, Material.BARRIER, Material.THIN_GLASS, Material.IRON_BLOCK, Material.HOPPER, Material.IRON_BLOCK,});
 	}
 }

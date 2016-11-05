@@ -13,8 +13,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import de.oninoni.OnionPower.Items.CustomsItems;
 import de.oninoni.OnionPower.Items.PowerItems.Batrod;
+import de.oninoni.OnionPower.Items.Statics.CustomsItems;
 import de.oninoni.OnionPower.Machines.MachineManager;
 import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
 import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager.UpgradeType;

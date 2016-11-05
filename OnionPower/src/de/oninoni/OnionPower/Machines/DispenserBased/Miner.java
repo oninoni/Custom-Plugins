@@ -17,8 +17,8 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import de.oninoni.OnionPower.Items.CustomsItems;
 import de.oninoni.OnionPower.Items.PowerItems.Batrod;
+import de.oninoni.OnionPower.Items.Statics.CustomsItems;
 import de.oninoni.OnionPower.Machines.Machine;
 import de.oninoni.OnionPower.Machines.MachineManager;
 import de.oninoni.OnionPower.Machines.HopperBased.FluidHandler;
