@@ -25,6 +25,7 @@ import de.oninoni.OnionPower.Items.ArkHeater;
 import de.oninoni.OnionPower.Items.CustomsItems;
 import de.oninoni.OnionPower.Items.PowerItems.Batrod;
 import de.oninoni.OnionPower.Machines.MachineManager;
+import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager.UpgradeType;
 
 public abstract class ArkFurnace extends MachineDropperMultiblock {
 	
@@ -212,7 +213,7 @@ public abstract class ArkFurnace extends MachineDropperMultiblock {
 
 	@Override
 	protected void setAvailableUpgrades() {
-		// TODO Rework Redstone Upgrade Using into every Machine itself
+		upgradesAvailable.add(UpgradeType.RedstoneUpgrade);
 	}
 
 	@Override
@@ -227,6 +228,8 @@ public abstract class ArkFurnace extends MachineDropperMultiblock {
 
 	@Override
 	public void updateBlock() {
+		position.getWorld().spawnParticle(Particle.SMOKE_LARGE, smokePosition, 1, 0.1, 0.0, 0.1, 0);
+		if(isInactive())return;
 		for (int i = 0; i < inputHopper.getInventory().getSize(); i++) {
 			ItemStack itemStack = inputHopper.getInventory().getItem(i);
 			if(itemStack == null || itemStack.getType() == Material.AIR)continue;
@@ -278,7 +281,6 @@ public abstract class ArkFurnace extends MachineDropperMultiblock {
 		}else{
 			ArkHeater.setHeat(dropper.getInventory().getItem(7), Math.max(heat - 1, 0));
 		}
-		position.getWorld().spawnParticle(Particle.SMOKE_LARGE, smokePosition, 1, 0.1, 0.0, 0.1, 0);
 		needsUpdate = true;
 	}
 	

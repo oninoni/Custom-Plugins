@@ -126,6 +126,7 @@ public class SolarHopper extends MachineHopper{
 
 	@Override
 	public void updateBlock() {
+		if(isInactive())return;
 		int lightLevel = hopper.getBlock().getLightFromSky();
 		if(lightLevel == 15){
 			power++;

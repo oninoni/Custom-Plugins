@@ -176,14 +176,6 @@ public class Enricher extends MachineDropperMultiblock{
 		
 		return armorStand;
 	}
-
-	@Override
-	public void updateBlock() {
-		Location l0 = designEntities.get(0).getLocation();
-		float yaw = l0.getYaw() + 60;
-		l0.setYaw(yaw);
-		designEntities.get(0).teleport(l0);
-	}
 	
 	@Override
 	public boolean onBoom(Block e) {
@@ -199,5 +191,13 @@ public class Enricher extends MachineDropperMultiblock{
 		NMSAdapter.resetInvName(outputHopper);
 		NMSAdapter.resetInvName(outputHopperSecondary);
 		super.onBreak(e);
+	}
+
+	@Override
+	public void updateBlock() {
+		Location l0 = designEntities.get(0).getLocation();
+		float yaw = l0.getYaw() + 60;
+		l0.setYaw(yaw);
+		designEntities.get(0).teleport(l0);
 	}
 }

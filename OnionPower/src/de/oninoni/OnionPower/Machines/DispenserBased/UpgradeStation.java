@@ -224,6 +224,7 @@ public class UpgradeStation extends MachineDispenser{
 
 	@Override
 	public void updateBlock() {
+		if(isInactive())return;
 		switch (state) {
 		case Idle:
 			ItemStack upgrade = dispenser.getInventory().getItem(2);

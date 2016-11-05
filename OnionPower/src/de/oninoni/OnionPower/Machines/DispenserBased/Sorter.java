@@ -291,6 +291,7 @@ public class Sorter extends MachineDispenser {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void updateBlock() {
+		if(isInactive())return;
 		ItemStack item = dispenser.getInventory().getItem(4);
 		if (item != null && power >= 20 * item.getAmount()) {
 			Material material = item.getType();

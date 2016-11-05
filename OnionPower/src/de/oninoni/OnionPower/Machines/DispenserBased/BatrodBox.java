@@ -122,6 +122,7 @@ public class BatrodBox extends MachineDispenser {
 
 	@Override
 	public void updateBlock() {
+		if(isInactive())return;
 		for (int i = 0; i < 3; i++) {
 			chargeItem(dispenser.getInventory(), i);
 			dechargeRod(dispenser.getInventory(), i + 6);

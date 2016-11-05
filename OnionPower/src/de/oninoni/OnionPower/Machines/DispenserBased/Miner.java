@@ -198,6 +198,7 @@ public class Miner extends MachineDispenser {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void updateBlock() {
+		if(isInactive())return;
 		if (dispenser.getInventory().getItem(7) != null) {
 			if (dispenser.getInventory().getItem(7).getDurability() >= 250) {
 				dispenser.getInventory().clear(7);

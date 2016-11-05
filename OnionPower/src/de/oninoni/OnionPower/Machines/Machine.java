@@ -312,7 +312,7 @@ public abstract class Machine {
 		effectOffset = new Vector();
 	}
 
-	protected boolean isActive() {
+	protected boolean isInactive() {
 		RedstoneUpgrade redstoneUpgrade = (RedstoneUpgrade) upgradeManager.getUpgrade(UpgradeType.RedstoneUpgrade);
 		return redstoneUpgrade != null && !redstoneUpgrade.isMachineOnline(this);
 	}
@@ -591,8 +591,8 @@ public abstract class Machine {
 		if (getDisplayName() != "§6§lGenerator" && getDisplayName() != "§6§lSolar Hopper") {
 			requestFromConnected();
 
-			if (isActive())
-				return;
+//			if (isInactive())
+//				return;
 		}
 
 		updateBlock();

@@ -116,6 +116,7 @@ public class ElectricFurnace extends MachineFurnace {
 
 	@Override
 	public void updateBlock() {
+		if(isInactive())return;
 		if (furnace.getInventory().getSmelting() != null) {
 			ItemStack smelting = furnace.getInventory().getSmelting();
 			if (furnace.getCookTime() <= 0 && ItemData.smeltable.containsKey(smelting.getType())) {

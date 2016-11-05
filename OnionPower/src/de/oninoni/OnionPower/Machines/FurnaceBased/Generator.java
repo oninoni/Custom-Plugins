@@ -157,10 +157,11 @@ public class Generator extends MachineFurnace {
 
 	@Override
 	public void updateBlock() {
+		if(isInactive())return;
 		if (furnace.getBurnTime() <= 0) {
 			ItemStack fuel = furnace.getInventory().getFuel();
 			Batrod batrod = new Batrod(fuel);
-			if (batrod.check() || isActive())
+			if (batrod.check() || isInactive())
 				return;
 			if (fuel != null) {
 				Material mat = fuel.getType();

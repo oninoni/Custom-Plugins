@@ -241,6 +241,7 @@ public class FluidHandler extends MachineHopper {
 
 	@Override
 	public void updateBlock() {
+		if(isInactive())return;
 		LavaUpgrade lavaUpgrade = (LavaUpgrade) upgradeManager.getUpgrade(UpgradeType.LavaUpgrade);
 		if (lavaUpgrade != null && isLava != lavaUpgrade.isLava()) {
 			isLava = lavaUpgrade.isLava();
