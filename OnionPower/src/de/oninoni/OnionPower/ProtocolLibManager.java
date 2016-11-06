@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
@@ -29,7 +30,7 @@ public class ProtocolLibManager {
 		this.protocolManager = protocolManager;
 	}
 	
-	private void handleItem(Player p, ItemStack item){
+	private void handleItem(Player p, ItemStack item, boolean showElytra){
 		if (item != null) {
 			//plugin.getLogger().info("Server: " + item.toString());
 			PowerItem powerItem = new PowerItem(item);
@@ -40,6 +41,12 @@ public class ProtocolLibManager {
 						PowerItem pitem = (PowerItem) c.getConstructor(ItemStack.class).newInstance(item);
 						if (pitem.check()){
 							//plugin.getServer().broadcastMessage("" + c.getName());
+							if(showElytra && pitem.getType() == Material.ELYTRA){
+								if(p.getEquipment().getChestplate() != null && item.getItemMeta() != null && p.getEquipment().getChestplate().getItemMeta() != null && p.getEquipment().getChestplate().getItemMeta().getDisplayName() == item.getItemMeta().getDisplayName()){
+									item.setType(pitem.getType());
+									continue;
+								}
+							}
 							item.setType(pitem.getVisibleType());
 							break;
 						}
@@ -80,7 +87,7 @@ public class ProtocolLibManager {
 							List<ItemStack> sm = packet.getItemModifier().getValues();
 							for (int i = 0; i < sm.size(); i++) {
 								ItemStack item = sm.get(i);
-								handleItem(event.getPlayer(), item);
+								handleItem(event.getPlayer(), item, true);
 							}
 						}
 						if (event.getPacketType() == PacketType.Play.Server.WINDOW_ITEMS) {
@@ -89,7 +96,7 @@ public class ProtocolLibManager {
 								ItemStack[] smStack =  sm.get(i);
 								for (int j = 0; j < smStack.length; j++) {
 									ItemStack item = smStack[j];
-									handleItem(event.getPlayer(), item);
+									handleItem(event.getPlayer(), item, true);
 								}
 							}
 						}
@@ -97,14 +104,14 @@ public class ProtocolLibManager {
 							List<Entity> sm = packet.getEntityModifier(event).getValues();
 							for (Entity entity : sm) {
 								if(entity != null && entity.getType() == EntityType.DROPPED_ITEM)
-									handleItem(event.getPlayer(), ((Item) entity).getItemStack());
+									handleItem(event.getPlayer(), ((Item) entity).getItemStack(), false);
 							}
 						}
 						if(event.getPacketType() == PacketType.Play.Server.ENTITY_EQUIPMENT){
 							List<ItemStack> sm = packet.getItemModifier().getValues();
 							for (int i = 0; i < sm.size(); i++) {
 								ItemStack item = sm.get(i);
-								handleItem(event.getPlayer(), item);
+								handleItem(event.getPlayer(), item, true);
 							}
 						}
 						

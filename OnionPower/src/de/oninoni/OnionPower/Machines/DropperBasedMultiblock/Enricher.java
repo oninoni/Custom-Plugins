@@ -20,6 +20,7 @@ import org.bukkit.material.Stairs;
 import org.bukkit.util.Vector;
 
 import de.oninoni.OnionPower.NMSAdapter;
+import de.oninoni.OnionPower.Items.Uranium;
 import de.oninoni.OnionPower.Items.PowerItems.Batrod;
 import de.oninoni.OnionPower.Items.Statics.UraniumBuffer;
 import de.oninoni.OnionPower.Machines.MachineManager;
@@ -218,14 +219,18 @@ public class Enricher extends MachineDropperMultiblock{
 						
 						ItemStack uraniumBuffer = dropper.getInventory().getItem(7);
 						if(UraniumBuffer.addLevel(uraniumBuffer)){
-							UraniumBuffer.setLevel(uraniumBuffer, 0);
+							HashMap<Integer, ItemStack> overflowSecondary = outputHopperSecondary.getInventory().addItem(new Uranium());
+							if(overflowSecondary.size() == 0){
+								UraniumBuffer.setLevel(uraniumBuffer, 0);
+							}
 						}
 						
 						needsUpdate = true;
 					}else{
 						speed = 0;
 					}
-				}else if(speed < 90){
+				}
+				if(speed < 90){
 					speed++;
 				}
 			}else{

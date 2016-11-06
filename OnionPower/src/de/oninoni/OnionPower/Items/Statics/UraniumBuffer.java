@@ -3,7 +3,6 @@ package de.oninoni.OnionPower.Items.Statics;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -29,7 +28,6 @@ public class UraniumBuffer {
 		ItemMeta itemMeta = item.getItemMeta();
 		List<String> lore = itemMeta.getLore();
 		String data = lore.get(0);
-		Bukkit.getLogger().info("Data: " + data);
 		return Integer.parseInt(data.substring(2));
 	}
 	
