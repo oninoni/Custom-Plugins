@@ -21,6 +21,11 @@ public class ElectricalElytra extends PowerTools{
 	}
 	
 	@Override
+	public Material getVisibleType() {
+		return Material.FEATHER;
+	}
+	
+	@Override
 	public void onCraft(PrepareItemCraftEvent e) {
 		super.onCraft(e);
 		if(initialBatrodPower != -1 && initialDurability != -1)

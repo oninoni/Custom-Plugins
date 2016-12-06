@@ -9,6 +9,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class UraniumBuffer {
 	
+	private static final int MAX_SIZE = 128;
+	
 	public static ItemStack create(){
 		ItemStack hopper = new ItemStack(Material.HOPPER);
 		ItemMeta itemMeta = hopper.getItemMeta();
@@ -17,7 +19,7 @@ public class UraniumBuffer {
 		
 		List<String> lore = new ArrayList<>();
 		lore.add(0, "§h0");
-		lore.add(1, "§60/512g Uranium");
+		lore.add(1, "§60/" + MAX_SIZE + "g Uranium");
 		
 		itemMeta.setLore(lore);
 		hopper.setItemMeta(itemMeta);
@@ -35,7 +37,7 @@ public class UraniumBuffer {
 		int level = getLevel(item);
 		level++;
 		setLevel(item, level);
-		if(level == 512) return true;
+		if(level == MAX_SIZE) return true;
 		return false;
 	}
 	
@@ -43,7 +45,7 @@ public class UraniumBuffer {
 		ItemMeta itemMeta = item.getItemMeta();
 		List<String> lore = itemMeta.getLore();
 		lore.set(0, "§h" + level);
-		lore.set(1, "§6" + level + "/512g Uranium");
+		lore.set(1, "§6" + level + "/" + MAX_SIZE + "g Uranium");
 		itemMeta.setLore(lore);
 		item.setItemMeta(itemMeta);
 	}

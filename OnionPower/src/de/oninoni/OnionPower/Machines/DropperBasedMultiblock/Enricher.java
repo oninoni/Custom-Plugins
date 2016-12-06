@@ -1,6 +1,7 @@
 package de.oninoni.OnionPower.Machines.DropperBasedMultiblock;
 
 import java.util.HashMap;
+import java.util.Random;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -205,7 +206,11 @@ public class Enricher extends MachineDropperMultiblock{
 		if(!isInactive()){
 			if(inputHopper.getInventory().contains(Material.COBBLESTONE)){
 				if(speed == 90){
-					HashMap<Integer, ItemStack> overflow = outputHopper.getInventory().addItem(new ItemStack(Material.GRAVEL));
+					Random r = new Random();
+					int r1 = r.nextInt(10);
+					HashMap<Integer, ItemStack> overflow = new HashMap<>();
+					if(r1 != 0)
+						overflow = outputHopper.getInventory().addItem(new ItemStack(Material.GRAVEL));
 					if(overflow.size() == 0){
 						int itemPos = inputHopper.getInventory().first(Material.COBBLESTONE);
 						ItemStack item = inputHopper.getInventory().getItem(itemPos);
@@ -218,10 +223,14 @@ public class Enricher extends MachineDropperMultiblock{
 						}
 						
 						ItemStack uraniumBuffer = dropper.getInventory().getItem(7);
-						if(UraniumBuffer.addLevel(uraniumBuffer)){
-							HashMap<Integer, ItemStack> overflowSecondary = outputHopperSecondary.getInventory().addItem(new Uranium());
-							if(overflowSecondary.size() == 0){
-								UraniumBuffer.setLevel(uraniumBuffer, 0);
+						int r2  =r.nextInt(8);
+						if(r2 == 0){
+							//TODO playSound Geigerzaehler
+							if(UraniumBuffer.addLevel(uraniumBuffer)){
+								HashMap<Integer, ItemStack> overflowSecondary = outputHopperSecondary.getInventory().addItem(new Uranium());
+								if(overflowSecondary.size() == 0){
+									UraniumBuffer.setLevel(uraniumBuffer, 0);
+								}
 							}
 						}
 						

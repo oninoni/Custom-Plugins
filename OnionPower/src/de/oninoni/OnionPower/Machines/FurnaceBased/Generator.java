@@ -157,6 +157,8 @@ public class Generator extends MachineFurnace {
 
 	@Override
 	public void updateBlock() {
+		chargeItem(furnace.getInventory(), 0);
+		dechargeRod(furnace.getInventory(), 1);
 		if(isInactive())return;
 		if (furnace.getBurnTime() <= 0) {
 			ItemStack fuel = furnace.getInventory().getFuel();
@@ -186,7 +188,5 @@ public class Generator extends MachineFurnace {
 			power += 20;
 			powerIntputTotal = 20;
 		}
-		chargeItem(furnace.getInventory(), 0);
-		dechargeRod(furnace.getInventory(), 1);
 	}
 }

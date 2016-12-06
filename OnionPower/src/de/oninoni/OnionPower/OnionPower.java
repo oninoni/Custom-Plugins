@@ -25,6 +25,7 @@ import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalPickaxe;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalShovel;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalSword;
 import de.oninoni.OnionPower.Items.Statics.CraftingRecipes;
+import de.oninoni.OnionPower.Items.TutorialBook.TutorialBook;
 import de.oninoni.OnionPower.Listeners.BlockBreakListener;
 import de.oninoni.OnionPower.Listeners.ChunkListener;
 import de.oninoni.OnionPower.Listeners.EntityListener;
@@ -85,6 +86,7 @@ public class OnionPower extends JavaPlugin {
 
 				itemStack.setDurability(mV.getId());
 				inv.setItem(25, itemStack);
+				inv.setItem(24, new TutorialBook());
 				
 				((Player) sender).openInventory(inv);
 				return true;
@@ -101,12 +103,17 @@ public class OnionPower extends JavaPlugin {
 	public void onEnable() {
 		getLogger().info(getMinecraftVersion());
 
-		if (getMinecraftVersion().equals("1.10.2-R0.1-SNAPSHOT")) {
-			getLogger().info("1.10.2 Mode Activated!");
-		} else if (getMinecraftVersion().equals("1.9.4-R0.1-SNAPSHOT")) {
+		if (getMinecraftVersion().equals("1.9.4-R0.1-SNAPSHOT")) {
 			getLogger().info("1.9.4 Mode Activated!");
+			NMSAdapter.version = "1.9.4-R0.1-SNAPSHOT";
+		} else if (getMinecraftVersion().equals("1.10.2-R0.1-SNAPSHOT")) {
+			getLogger().info("1.10.2 Mode Activated!");
+			NMSAdapter.version = "1.10.2-R0.1-SNAPSHOT";
+		} else if (getMinecraftVersion().equals("1.11-R0.1-SNAPSHOT")){
+			getLogger().info("1.11 Mode Activated!");
+			NMSAdapter.version = "1.11-R0.1-SNAPSHOT";
 		}
-
+		
 		protocolManager = ProtocolLibrary.getProtocolManager();
 		protocolLibManager = new ProtocolLibManager(protocolManager);
 		protocolLibManager.addLoreListener();

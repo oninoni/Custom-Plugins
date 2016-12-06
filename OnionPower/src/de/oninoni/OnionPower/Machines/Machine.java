@@ -174,7 +174,7 @@ public abstract class Machine {
 		PowerItem powerItem = new PowerItem(inv.getItem(id));
 		if (powerItem.check()) {
 			int rodPower = powerItem.getPower();
-			int powerTransfered = Math.min(powerItem.maxPower - rodPower, Math.min(getMaxPowerOutput(), power));
+			int powerTransfered = Math.min(powerItem.maxPower - rodPower, Math.min(100, power));
 			powerItem.setPower(rodPower + powerTransfered);
 			inv.setItem(id, powerItem);
 			power -= powerTransfered;
@@ -190,9 +190,9 @@ public abstract class Machine {
 
 	protected void dechargeRod(Inventory inv, int id) {
 		PowerItem powerItem = new PowerItem(inv.getItem(id));
-		if (powerItem.check() && power < getMaxPower()) {
+		if (powerItem.check()) {
 			int rodPower = powerItem.getPower();
-			int powerTransfered = Math.min(getMaxPower() - power, Math.min(rodPower, getMaxPowerInput()));
+			int powerTransfered = Math.min(getMaxPower() - power, Math.min(rodPower, 100));
 			powerItem.setPower(rodPower - powerTransfered);
 			inv.setItem(id, powerItem);
 			power += powerTransfered;

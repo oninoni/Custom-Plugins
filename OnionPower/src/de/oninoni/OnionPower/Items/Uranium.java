@@ -17,5 +17,4 @@ public class Uranium extends ItemStack{
 	public boolean equals(Object obj) {
 		return super.equals(obj) && getItemMeta().getDisplayName().equals("§4Uranium");
 	}
-	
 }
