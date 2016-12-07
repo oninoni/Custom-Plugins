@@ -1,4 +1,4 @@
-package de.oninoni.OnionPower;
+package de.oninoni.OnionPower.NMS;
 
 import java.lang.reflect.Field;
 
@@ -9,7 +9,7 @@ import org.bukkit.block.Hopper;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
 
-public class NMSAdapter {
+public abstract class NMSAdapter {
 
 	public static String version = "";
 	
@@ -121,26 +121,9 @@ public class NMSAdapter {
 		}
 	}
 	
-	public static void sendTitle(Player p, String titleText, int fadeIn, int stayOnScreen, int fadeOut){
+	public void sendTitle(Player p, String titleText, int fadeIn, int stayOnScreen, int fadeOut){
 		sendTitleInternal(p, titleText, fadeIn, stayOnScreen, fadeOut);
 	}
 	
-	private static void sendTitleInternal(Player p, String titleText, int fadeIn, int stayOnScreen, int fadeOut){
-		titleText = "{\"text\": \"" + titleText + "\"}";
-		if(version.equals("1.9.4-R0.1-SNAPSHOT")){
-			net.minecraft.server.v1_9_R2.IChatBaseComponent chatTitle = net.minecraft.server.v1_9_R2.IChatBaseComponent.ChatSerializer.a(titleText);
-			net.minecraft.server.v1_9_R2.PacketPlayOutChat title = new net.minecraft.server.v1_9_R2.PacketPlayOutChat(chatTitle, (byte) 2);
-			((org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer) p).getHandle().playerConnection.sendPacket((net.minecraft.server.v1_9_R2.Packet<?>) title);
-		}
-		if(version.equals("1.10.2-R0.1-SNAPSHOT")){
-			net.minecraft.server.v1_10_R1.IChatBaseComponent chatTitle = net.minecraft.server.v1_10_R1.IChatBaseComponent.ChatSerializer.a(titleText);
-			net.minecraft.server.v1_10_R1.PacketPlayOutChat title = new net.minecraft.server.v1_10_R1.PacketPlayOutChat(chatTitle, (byte) 2);
-			((org.bukkit.craftbukkit.v1_10_R1.entity.CraftPlayer) p).getHandle().playerConnection.sendPacket((net.minecraft.server.v1_10_R1.Packet<?>)title);
-		}
-		if (version.equals("1.11-R0.1-SNAPSHOT")){
-			net.minecraft.server.v1_11_R1.IChatBaseComponent chatTitle = net.minecraft.server.v1_11_R1.IChatBaseComponent.ChatSerializer.a(titleText);
-			net.minecraft.server.v1_11_R1.PacketPlayOutChat title = new net.minecraft.server.v1_11_R1.PacketPlayOutChat(chatTitle, (byte) 2);
-			((org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer) p).getHandle().playerConnection.sendPacket((net.minecraft.server.v1_11_R1.Packet<?>)title);
-		}
-	}
+	protected abstract void sendTitleInternal(Player p, String titleText, int fadeIn, int stayOnScreen, int fadeOut);
 }

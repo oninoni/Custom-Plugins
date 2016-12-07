@@ -19,13 +19,13 @@ import org.bukkit.material.MaterialData;
 import org.bukkit.material.Stairs;
 import org.bukkit.util.Vector;
 
-import de.oninoni.OnionPower.NMSAdapter;
 import de.oninoni.OnionPower.Items.PowerItems.Batrod;
 import de.oninoni.OnionPower.Items.Statics.ArkFurnaceCore;
 import de.oninoni.OnionPower.Items.Statics.ArkHeater;
 import de.oninoni.OnionPower.Items.Statics.CustomsItems;
 import de.oninoni.OnionPower.Machines.MachineManager;
 import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager.UpgradeType;
+import de.oninoni.OnionPower.NMS.NMSAdapter;
 
 public abstract class ArkFurnace extends MachineDropperMultiblock {
 	

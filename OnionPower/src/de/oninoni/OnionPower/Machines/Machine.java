@@ -31,7 +31,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
-import de.oninoni.OnionPower.NMSAdapter;
 import de.oninoni.OnionPower.OnionPower;
 import de.oninoni.OnionPower.Items.PowerItems.Batrod;
 import de.oninoni.OnionPower.Items.PowerItems.PowerCore;
@@ -39,6 +38,7 @@ import de.oninoni.OnionPower.Items.PowerItems.PowerItem;
 import de.oninoni.OnionPower.Machines.Upgrades.RedstoneUpgrade;
 import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager;
 import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager.UpgradeType;
+import de.oninoni.OnionPower.NMS.NMSAdapter;
 
 public abstract class Machine {
 

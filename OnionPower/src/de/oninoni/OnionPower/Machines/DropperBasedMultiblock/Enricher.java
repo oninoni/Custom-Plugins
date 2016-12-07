@@ -20,11 +20,11 @@ import org.bukkit.material.MaterialData;
 import org.bukkit.material.Stairs;
 import org.bukkit.util.Vector;
 
-import de.oninoni.OnionPower.NMSAdapter;
 import de.oninoni.OnionPower.Items.Uranium;
 import de.oninoni.OnionPower.Items.PowerItems.Batrod;
 import de.oninoni.OnionPower.Items.Statics.UraniumBuffer;
 import de.oninoni.OnionPower.Machines.MachineManager;
+import de.oninoni.OnionPower.NMS.NMSAdapter;
 
 public class Enricher extends MachineDropperMultiblock{
 	

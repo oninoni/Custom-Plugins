@@ -31,8 +31,7 @@ public class ProtocolLibManager {
 	}
 	
 	private void handleItem(Player p, ItemStack item, boolean showElytra){
-		if (item != null) {
-			//plugin.getLogger().info("Server: " + item.toString());
+		if (item != null && item.getType() != Material.AIR) {
 			PowerItem powerItem = new PowerItem(item);
 			if(powerItem.check()){
 				for (Class<? extends PowerItem> c : PowerItem.classes)
@@ -74,14 +73,15 @@ public class ProtocolLibManager {
 
 	public void addLoreListener() {
 		protocolManager.addPacketListener(new PacketAdapter(plugin,
-				PacketType.Play.Server.SET_SLOT, 
-				PacketType.Play.Server.WINDOW_ITEMS, 
+				PacketType.Play.Server.SET_SLOT,
+				PacketType.Play.Server.WINDOW_ITEMS,
 				PacketType.Play.Server.SPAWN_ENTITY,
 				PacketType.Play.Server.ENTITY_EQUIPMENT,
 				PacketType.Play.Client.SET_CREATIVE_SLOT
 				){
 					@Override
 					public void onPacketSending(PacketEvent event) {
+						//plugin.getLogger().info("" + event.getPacketType());
 						PacketContainer packet = event.getPacket().deepClone();
 						if (event.getPacketType() == PacketType.Play.Server.SET_SLOT) {
 							List<ItemStack> sm = packet.getItemModifier().getValues();
@@ -91,11 +91,11 @@ public class ProtocolLibManager {
 							}
 						}
 						if (event.getPacketType() == PacketType.Play.Server.WINDOW_ITEMS) {
-							List<ItemStack[]> sm = packet.getItemArrayModifier().getValues();
+							List<List<ItemStack>> sm = packet.getItemListModifier().getValues();
 							for (int i = 0; i < sm.size(); i++) {
-								ItemStack[] smStack =  sm.get(i);
-								for (int j = 0; j < smStack.length; j++) {
-									ItemStack item = smStack[j];
+								List<ItemStack> smStack =  sm.get(i);
+								for (int j = 0; j < smStack.size(); j++) {
+									ItemStack item = smStack.get(j);
 									handleItem(event.getPlayer(), item, true);
 								}
 							}

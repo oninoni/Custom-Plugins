@@ -33,6 +33,10 @@ import de.oninoni.OnionPower.Listeners.InventoryListener;
 import de.oninoni.OnionPower.Listeners.PlayerListener;
 import de.oninoni.OnionPower.Machines.MachineManager;
 import de.oninoni.OnionPower.Map.CustomMapRenderer;
+import de.oninoni.OnionPower.NMS.NMSAdapter;
+import de.oninoni.OnionPower.NMS.NMSAdapter_1_10;
+import de.oninoni.OnionPower.NMS.NMSAdapter_1_11;
+import de.oninoni.OnionPower.NMS.NMSAdapter_1_9;
 
 public class OnionPower extends JavaPlugin {
 
@@ -50,6 +54,8 @@ public class OnionPower extends JavaPlugin {
 	private ProtocolLibManager protocolLibManager;
 
 	private MachineManager machineManager;
+	
+	private NMSAdapter nmsAdapter;
 
 	public MachineManager getMachineManager() {
 		return machineManager;
@@ -105,12 +111,15 @@ public class OnionPower extends JavaPlugin {
 
 		if (getMinecraftVersion().equals("1.9.4-R0.1-SNAPSHOT")) {
 			getLogger().info("1.9.4 Mode Activated!");
+			nmsAdapter = new NMSAdapter_1_9();
 			NMSAdapter.version = "1.9.4-R0.1-SNAPSHOT";
 		} else if (getMinecraftVersion().equals("1.10.2-R0.1-SNAPSHOT")) {
 			getLogger().info("1.10.2 Mode Activated!");
+			nmsAdapter = new NMSAdapter_1_10();
 			NMSAdapter.version = "1.10.2-R0.1-SNAPSHOT";
 		} else if (getMinecraftVersion().equals("1.11-R0.1-SNAPSHOT")){
 			getLogger().info("1.11 Mode Activated!");
+			nmsAdapter = new NMSAdapter_1_11();
 			NMSAdapter.version = "1.11-R0.1-SNAPSHOT";
 		}
 		
@@ -158,5 +167,9 @@ public class OnionPower extends JavaPlugin {
 		machineManager.loadData();
 		
 		CraftingRecipes.setAllRecipes();
+	}
+	
+	public NMSAdapter getNMSAdapter(){
+		return nmsAdapter;
 	}
 }
