@@ -81,7 +81,6 @@ public class ProtocolLibManager {
 				){
 					@Override
 					public void onPacketSending(PacketEvent event) {
-						//plugin.getLogger().info("" + event.getPacketType());
 						PacketContainer packet = event.getPacket().deepClone();
 						if (event.getPacketType() == PacketType.Play.Server.SET_SLOT) {
 							List<ItemStack> sm = packet.getItemModifier().getValues();

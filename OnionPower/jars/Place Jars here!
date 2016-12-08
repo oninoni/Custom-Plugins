@@ -1,1 +1,5 @@
-ProtocolLib.yml
+ProtocolLib.jar
+spigot-1.10.2.jar
+spigot-1.11.jar
+spigot-1.9.4.jar
+spigot-api-1.11-R0.1-SNAPSHOT-shaded.jar

@@ -121,9 +121,5 @@ public abstract class NMSAdapter {
 		}
 	}
 	
-	public void sendTitle(Player p, String titleText, int fadeIn, int stayOnScreen, int fadeOut){
-		sendTitleInternal(p, titleText, fadeIn, stayOnScreen, fadeOut);
-	}
-	
-	protected abstract void sendTitleInternal(Player p, String titleText, int fadeIn, int stayOnScreen, int fadeOut);
+	public abstract void sendTitle(Player p, String titleText, int fadeIn, int stayOnScreen, int fadeOut);
 }

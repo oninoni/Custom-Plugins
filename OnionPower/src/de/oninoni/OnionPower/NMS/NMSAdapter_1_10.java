@@ -10,7 +10,7 @@ import net.minecraft.server.v1_10_R1.PacketPlayOutChat;
 public class NMSAdapter_1_10 extends NMSAdapter{
 
 	@Override
-	protected void sendTitleInternal(Player p, String titleText, int fadeIn, int stayOnScreen, int fadeOut) {
+	public void sendTitle(Player p, String titleText, int fadeIn, int stayOnScreen, int fadeOut) {
 		IChatBaseComponent chatTitle = IChatBaseComponent.ChatSerializer.a(titleText);
 		Packet<?> title = new PacketPlayOutChat(chatTitle, (byte) 2);
 		((CraftPlayer) p).getHandle().playerConnection.sendPacket(title);
