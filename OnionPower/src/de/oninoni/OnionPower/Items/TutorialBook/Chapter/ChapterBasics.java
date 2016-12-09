@@ -8,20 +8,22 @@ public class ChapterBasics extends Chapter{
 	public List<String> getChapter() {
 		List<String> chapter = new ArrayList<>();
 		
-		chapter.add(""
+		chapter.add("{\"text\":\""
 				+ "§4§lBasics:§r§0\n"
 				+ "\n§r"
 				+ "This mod add a unit of §4§lelectrical power§r§0 to minecraft.\n"
 				+ "You will be able to use this power to your advantage and create §4§lMachines§r§0 and §4§lTools§r§0 to aid you in your adventure.\n"
+				+ "\"}"
 		);
 		
-		chapter.add(""
+		chapter.add("{\"text\":\""
 				+ "§4§lBatrod:§r§0\n"
 				+ "\n"
 				+ "The §4§lBatrod§r§0\nstores energy and is the base ingredient for all machines!\n"
+				+ "\"}"
 		);
 		
-		chapter.add(""
+		chapter.add("{\"text\":\""
 				+ "§4§lBatrod:§r§0\n"
 				+ "\n"
 				+ "Recipe:\n"
@@ -33,6 +35,7 @@ public class ChapterBasics extends Chapter{
 				+ "§4R  §4R  §4R\n"
 				+ "§eG  §6B  §eG\n"
 				+ "§4R  §4R  §4R"
+				+ "\"}"
 		);
 		
 		return chapter;

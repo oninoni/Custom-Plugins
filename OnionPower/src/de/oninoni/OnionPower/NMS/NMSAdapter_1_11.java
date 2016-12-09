@@ -1,15 +1,19 @@
 package de.oninoni.OnionPower.NMS;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 import org.bukkit.block.Dispenser;
 import org.bukkit.block.Dropper;
 import org.bukkit.block.Furnace;
 import org.bukkit.block.Hopper;
 import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_11_R1.inventory.CraftMetaBook;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.meta.BookMeta;
 
 import net.minecraft.server.v1_11_R1.IChatBaseComponent;
+import net.minecraft.server.v1_11_R1.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_11_R1.Packet;
 import net.minecraft.server.v1_11_R1.PacketPlayOutChat;
 import net.minecraft.server.v1_11_R1.TileEntityDispenser;
@@ -72,5 +76,20 @@ public class NMSAdapter_1_11 extends NMSAdapter{
 		IChatBaseComponent chatTitle = IChatBaseComponent.ChatSerializer.a(titleText);
 		Packet<?> title = new PacketPlayOutChat(chatTitle, (byte) 2);
 		((CraftPlayer) p).getHandle().playerConnection.sendPacket(title);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void addPage(BookMeta meta, String json) {
+		try {
+			Field pagesField = CraftMetaBook.class.getDeclaredField("pages");
+			pagesField.setAccessible(true);
+			List<IChatBaseComponent> pages = (List<IChatBaseComponent>) pagesField.get(meta);
+			IChatBaseComponent page = ChatSerializer.a(json);
+			pages.add(page);
+		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
