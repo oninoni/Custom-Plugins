@@ -24,7 +24,6 @@ import de.oninoni.OnionPower.Items.Uranium;
 import de.oninoni.OnionPower.Items.PowerItems.Batrod;
 import de.oninoni.OnionPower.Items.Statics.UraniumBuffer;
 import de.oninoni.OnionPower.Machines.MachineManager;
-import de.oninoni.OnionPower.NMS.NMSAdapter;
 
 public class Enricher extends MachineDropperMultiblock{
 	
@@ -47,11 +46,13 @@ public class Enricher extends MachineDropperMultiblock{
 				reOpenInventories();
 			}
 		}, 1L);
-		getHoppers();
+		
 		if(!shouldNotGenerate){
-			NMSAdapter.setInvName(inputHopper, "§4§lInput");
-			NMSAdapter.setInvName(outputHopper, "§4§lOutput - Primary");
-			NMSAdapter.setInvName(outputHopperSecondary, "§4§lOutput - Secondary");
+			getHoppers();
+			
+			plugin.getNMSAdapter().setInvName(inputHopper, "§4§lInput");
+			plugin.getNMSAdapter().setInvName(outputHopper, "§4§lOutput - Primary");
+			plugin.getNMSAdapter().setInvName(outputHopperSecondary, "§4§lOutput - Secondary");
 		}
 	}
 
@@ -181,17 +182,19 @@ public class Enricher extends MachineDropperMultiblock{
 	
 	@Override
 	public boolean onBoom(Block e) {
-		NMSAdapter.resetInvName(inputHopper);
-		NMSAdapter.resetInvName(outputHopper);
-		NMSAdapter.resetInvName(outputHopperSecondary);
+		plugin.getNMSAdapter().resetInvName(inputHopper);
+		plugin.getNMSAdapter().resetInvName(outputHopper);
+		plugin.getNMSAdapter().resetInvName(outputHopperSecondary);
+		
 		return super.onBoom(e);
 	}
 	
 	@Override
 	public void onBreak(BlockEvent e) {
-		NMSAdapter.resetInvName(inputHopper);
-		NMSAdapter.resetInvName(outputHopper);
-		NMSAdapter.resetInvName(outputHopperSecondary);
+		plugin.getNMSAdapter().resetInvName(inputHopper);
+		plugin.getNMSAdapter().resetInvName(outputHopper);
+		plugin.getNMSAdapter().resetInvName(outputHopperSecondary);
+		
 		super.onBreak(e);
 	}
 

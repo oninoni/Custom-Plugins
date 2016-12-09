@@ -32,6 +32,8 @@ import de.oninoni.OnionPower.Listeners.EntityListener;
 import de.oninoni.OnionPower.Listeners.InventoryListener;
 import de.oninoni.OnionPower.Listeners.PlayerListener;
 import de.oninoni.OnionPower.Machines.MachineManager;
+import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
+import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager.UpgradeType;
 import de.oninoni.OnionPower.Map.CustomMapRenderer;
 import de.oninoni.OnionPower.NMS.NMSAdapter;
 import de.oninoni.OnionPower.NMS.NMSAdapter_1_10;
@@ -97,6 +99,17 @@ public class OnionPower extends JavaPlugin {
 				((Player) sender).openInventory(inv);
 				return true;
 			}
+		}else if(command.getName().equalsIgnoreCase("upgrades") && sender.isOp()){
+			if(sender instanceof Player){
+				Inventory inv = Bukkit.createInventory((Player) sender, 27, "§4Powered Items");
+				 
+				inv.setItem(0, Upgrade.getItem(UpgradeType.RedstoneUpgrade));
+				inv.setItem(1, Upgrade.getItem(UpgradeType.RangeUpgrade));
+				inv.setItem(2, Upgrade.getItem(UpgradeType.LavaUpgrade));
+				
+				((Player) sender).openInventory(inv);
+				return true;
+			}
 		}
 		return false;
 	}
@@ -112,15 +125,12 @@ public class OnionPower extends JavaPlugin {
 		if (getMinecraftVersion().equals("1.9.4-R0.1-SNAPSHOT")) {
 			getLogger().info("1.9.4 Mode Activated!");
 			nmsAdapter = new NMSAdapter_1_9();
-			NMSAdapter.version = "1.9.4-R0.1-SNAPSHOT";
 		} else if (getMinecraftVersion().equals("1.10.2-R0.1-SNAPSHOT")) {
 			getLogger().info("1.10.2 Mode Activated!");
 			nmsAdapter = new NMSAdapter_1_10();
-			NMSAdapter.version = "1.10.2-R0.1-SNAPSHOT";
 		} else if (getMinecraftVersion().equals("1.11-R0.1-SNAPSHOT")){
 			getLogger().info("1.11 Mode Activated!");
 			nmsAdapter = new NMSAdapter_1_11();
-			NMSAdapter.version = "1.11-R0.1-SNAPSHOT";
 		}
 		
 		protocolManager = ProtocolLibrary.getProtocolManager();

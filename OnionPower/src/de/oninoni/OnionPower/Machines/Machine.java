@@ -38,7 +38,6 @@ import de.oninoni.OnionPower.Items.PowerItems.PowerItem;
 import de.oninoni.OnionPower.Machines.Upgrades.RedstoneUpgrade;
 import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager;
 import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager.UpgradeType;
-import de.oninoni.OnionPower.NMS.NMSAdapter;
 
 public abstract class Machine {
 
@@ -166,7 +165,7 @@ public abstract class Machine {
 		invHolder = (InventoryHolder) position.getBlock().getState();
 		this.power = power;
 		setPowerCore(new PowerCore(this));
-		NMSAdapter.setInvName(invHolder, getDisplayName());
+		plugin.getNMSAdapter().setInvName(invHolder, getDisplayName());
 		initValues(position, machineManager);
 	}
 
@@ -638,7 +637,7 @@ public abstract class Machine {
 	
 	public void destroyMachine(){
 		plugin.getMachineManager().onBreak(new BlockBreakEvent(position.getBlock(), null));
-		NMSAdapter.resetInvName(invHolder);
+		plugin.getNMSAdapter().resetInvName(invHolder);
 	}
 	
 	public Vector getEffectOffset() {

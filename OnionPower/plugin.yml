@@ -4,5 +4,8 @@ description: THIS IS AWESOME POWER THING!
 version: 0.42.006
 commands:
   poweritems:
-    description: Opens Items with all PowerItems inside
+    description: Opens Inventory with all PowerItems inside
+    usage: Nope
+  upgrades:
+    description: Opens Inventory with all Upgrades inside
     usage: Nope

@@ -25,7 +25,6 @@ import de.oninoni.OnionPower.Items.Statics.ArkHeater;
 import de.oninoni.OnionPower.Items.Statics.CustomsItems;
 import de.oninoni.OnionPower.Machines.MachineManager;
 import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager.UpgradeType;
-import de.oninoni.OnionPower.NMS.NMSAdapter;
 
 public abstract class ArkFurnace extends MachineDropperMultiblock {
 	
@@ -64,8 +63,8 @@ public abstract class ArkFurnace extends MachineDropperMultiblock {
 		if(!shouldNotGenerate){
 			getHoppers();
 			
-			NMSAdapter.setInvName(inputHopper, getDisplayName() + "§4§l Input");
-			NMSAdapter.setInvName(outputHopper, getDisplayName() + "§4§l Output");
+			plugin.getNMSAdapter().setInvName(inputHopper, getDisplayName() + "§4§l Input");
+			plugin.getNMSAdapter().setInvName(outputHopper, getDisplayName() + "§4§l Output");
 		}
 	}
 	
@@ -286,15 +285,17 @@ public abstract class ArkFurnace extends MachineDropperMultiblock {
 	
 	@Override
 	public boolean onBoom(Block e) {
-		NMSAdapter.resetInvName(inputHopper);
-		NMSAdapter.resetInvName(outputHopper);
+		plugin.getNMSAdapter().resetInvName(inputHopper);
+		plugin.getNMSAdapter().resetInvName(outputHopper);
+		
 		return super.onBoom(e);
 	}
 	
 	@Override
 	public void onBreak(BlockEvent e) {
-		NMSAdapter.resetInvName(inputHopper);
-		NMSAdapter.resetInvName(outputHopper);
+		plugin.getNMSAdapter().resetInvName(inputHopper);
+		plugin.getNMSAdapter().resetInvName(outputHopper);
+		
 		super.onBreak(e);
 	}
 }
