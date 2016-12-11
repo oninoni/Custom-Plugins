@@ -7,16 +7,16 @@ import org.bukkit.inventory.ItemStack;
 import de.oninoni.OnionPower.Items.PowerItems.Batrod;
 import de.oninoni.OnionPower.Items.PowerItems.PowerItem;
 
-public class PowerTools extends PowerItem{
+public class PowerTool extends PowerItem{
 
 	short initialDurability = -1;
 	int initialBatrodPower = -1;
 	
-	public PowerTools(int ammount, short damage, String name, int power){
+	public PowerTool(int ammount, short damage, String name, int power){
 		super(ammount, damage, name, power);
 	}
 	
-	public PowerTools(ItemStack item, String name) {
+	public PowerTool(ItemStack item, String name) {
 		super(item, name);
 	}
 	

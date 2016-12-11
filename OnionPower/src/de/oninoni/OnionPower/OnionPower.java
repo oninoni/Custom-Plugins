@@ -1,13 +1,10 @@
 package de.oninoni.OnionPower;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.map.MapView;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.comphenix.protocol.ProtocolLibrary;
@@ -20,6 +17,7 @@ import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalChestplate;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalElytra;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalHelmet;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalHoe;
+import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalJetlytra;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalLeggings;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalPickaxe;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalShovel;
@@ -34,7 +32,6 @@ import de.oninoni.OnionPower.Listeners.PlayerListener;
 import de.oninoni.OnionPower.Machines.MachineManager;
 import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
 import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager.UpgradeType;
-import de.oninoni.OnionPower.Map.CustomMapRenderer;
 import de.oninoni.OnionPower.NMS.NMSAdapter;
 import de.oninoni.OnionPower.NMS.NMSAdapter_1_10;
 import de.oninoni.OnionPower.NMS.NMSAdapter_1_11;
@@ -63,7 +60,6 @@ public class OnionPower extends JavaPlugin {
 		return machineManager;
 	}
 
-	@SuppressWarnings("deprecation")
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
 		if (command.getName().equalsIgnoreCase("poweritems") && sender.isOp()) {
@@ -84,17 +80,11 @@ public class OnionPower extends JavaPlugin {
 				inv.setItem(19, new ElectricalChestplate(640000, (short) 0));
 				inv.setItem(20, new ElectricalLeggings(640000, (short) 0));
 				inv.setItem(21, new ElectricalBoots(640000, (short) 0));
-				
-				inv.setItem(26, new ElectricalElytra(640000, (short) 0));
-				
-				ItemStack itemStack = new ItemStack(Material.MAP);
-				
-				MapView mV = getServer().createMap(((Player) sender).getWorld());
-				mV.addRenderer(new CustomMapRenderer());
 
-				itemStack.setDurability(mV.getId());
-				inv.setItem(25, itemStack);
 				inv.setItem(24, new TutorialBook());
+				
+				inv.setItem(25, new ElectricalJetlytra(640000, (short) 0));
+				inv.setItem(26, new ElectricalElytra(640000, (short) 0));
 				
 				((Player) sender).openInventory(inv);
 				return true;

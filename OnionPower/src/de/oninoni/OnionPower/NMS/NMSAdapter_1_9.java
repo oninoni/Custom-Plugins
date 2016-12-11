@@ -88,7 +88,6 @@ public class NMSAdapter_1_9 extends NMSAdapter{
 			IChatBaseComponent page = ChatSerializer.a(json);
 			pages.add(page);
 		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 
 import de.oninoni.OnionPower.OnionPower;
 import de.oninoni.OnionPower.Items.PowerItems.PowerItem;
+import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalJetlytra;
 
 public class PlayerListener implements Listener {
 
@@ -21,6 +22,8 @@ public class PlayerListener implements Listener {
 	@EventHandler
 	public void onMove(PlayerMoveEvent e) {
 		plugin.getMachineManager().onMove(e);
+		
+		ElectricalJetlytra.onMove(e);
 	}
 	
 	@EventHandler

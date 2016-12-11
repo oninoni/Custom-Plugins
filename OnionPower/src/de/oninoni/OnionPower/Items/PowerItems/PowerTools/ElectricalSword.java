@@ -4,7 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class ElectricalSword extends PowerTools{
+public class ElectricalSword extends PowerTool{
 	private static final String NAME = "§4Electrical Sword";
 	
 	public ElectricalSword(int power, short damage){

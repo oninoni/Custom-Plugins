@@ -4,7 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class ElectricalElytra extends PowerTools{
+public class ElectricalElytra extends PowerTool{
 	private static final String NAME = "§4Electrical Elytra";
 	
 	public ElectricalElytra(int power, short damage){
@@ -18,11 +18,6 @@ public class ElectricalElytra extends PowerTools{
 	@Override
 	protected Material getOriginalType() {
 		return Material.ELYTRA;
-	}
-	
-	@Override
-	public Material getVisibleType() {
-		return Material.FEATHER;
 	}
 	
 	@Override
