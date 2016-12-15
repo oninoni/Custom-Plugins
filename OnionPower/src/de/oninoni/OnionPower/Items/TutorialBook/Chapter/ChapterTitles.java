@@ -28,13 +28,14 @@ public class ChapterTitles extends Chapter{
 				+ "\n\"},"
 				+ "{\"text\":\"§1+§2 Basics\n\",\"clickEvent\":{\"action\":\"change_page\",\"value\":\"3\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"Go to Chapter\"}},"
 				+ "{\"text\":\"§1+§2 Power\n\",\"clickEvent\":{\"action\":\"change_page\",\"value\":\"6\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"Go to Chapter\"}},"
-				+ "{\"text\":\"§1+§2 Machines\n\",\"clickEvent\":{\"action\":\"change_page\",\"value\":\"1\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"Go to Chapter\"}},"
+				+ "{\"text\":\"§1+§2 Machines\n\",\"clickEvent\":{\"action\":\"change_page\",\"value\":\"12\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"Go to Chapter\"}},"
 				+ "{\"text\":\"\n\"},"
 				+ "{\"text\":\"§1+§4 Tools\n\",\"clickEvent\":{\"action\":\"change_page\",\"value\":\"1\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"Go to Chapter\"}},"
 				+ "{\"text\":\"§1+§4 Upgrades\n\",\"clickEvent\":{\"action\":\"change_page\",\"value\":\"1\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"Go to Chapter\"}},"
 				+ "{\"text\":\"§1+§4 Multiblocks\n\",\"clickEvent\":{\"action\":\"change_page\",\"value\":\"1\"},\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"Go to Chapter\"}}"
 				+ "]"
 		);
+		
 		return chapter;
 	}
 }
