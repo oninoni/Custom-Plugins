@@ -2,6 +2,7 @@ package de.oninoni.OnionPower.Machines.HopperBased;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Hopper;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
@@ -19,8 +20,8 @@ public abstract class MachineHopper extends Machine {
 		hopper = (Hopper) invHolder;
 	}
 
-	public MachineHopper(Location position, MachineManager machineManager, int power) {
-		super(position, machineManager, power);
+	public MachineHopper(OfflinePlayer owner, Location position, MachineManager machineManager, int power) {
+		super(owner, position, machineManager, power);
 		hopper = (Hopper) invHolder;
 	}
 

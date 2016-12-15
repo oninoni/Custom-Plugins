@@ -1,10 +1,11 @@
-package de.oninoni.OnionPower.Machines.DropperBasedMultiblock;
+package de.oninoni.OnionPower.Machines.DropperBased.Multiblock;
 
 import java.util.HashMap;
 import java.util.Random;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -36,8 +37,8 @@ public class Enricher extends MachineDropperMultiblock{
 		getHoppers();
 	}
 	
-	public Enricher(Location position, MachineManager machineManager, int power) {
-		super(position, machineManager, power);
+	public Enricher(OfflinePlayer owner, Location position, MachineManager machineManager, int power) {
+		super(owner, position, machineManager, power);
 		plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {

@@ -12,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -46,8 +47,6 @@ public abstract class Machine {
 	private static final int MAX_CABLE_LENGTH = 16;
 	
 	protected Vector effectOffset;
-
-	//TODO Rewrite Constructor for init Function so you can check before Generating
 
 	@SuppressWarnings("deprecation")
 	public static boolean canCreate(InventoryClickEvent e, String key, InventoryType type) {
@@ -143,6 +142,8 @@ public abstract class Machine {
 	protected boolean needsUpdate = false;
 
 	protected ArrayList<ArmorStand> designEntities;
+	
+	protected OfflinePlayer owner;
 
 	public Machine(Location position, MachineManager machineManager) {
 		setCoreSlot();
@@ -158,9 +159,14 @@ public abstract class Machine {
 			this.power = 0;
 		}
 		initValues(position, machineManager);
+		PowerCore powerCore = new PowerCore(getPowerCore(), this);
+		this.owner = Bukkit.getServer().getOfflinePlayer(powerCore.getUUID());
+		
+		plugin.getLogger().info(owner.getName());
 	}
 
-	public Machine(Location position, MachineManager machineManager, int power) {
+	public Machine(OfflinePlayer owner, Location position, MachineManager machineManager, int power) {
+		this.owner = owner;
 		setCoreSlot();
 		invHolder = (InventoryHolder) position.getBlock().getState();
 		this.power = power;
@@ -642,5 +648,9 @@ public abstract class Machine {
 	
 	public Vector getEffectOffset() {
 		return effectOffset;
+	}
+	
+	public OfflinePlayer getOwner(){
+		return owner;
 	}
 }

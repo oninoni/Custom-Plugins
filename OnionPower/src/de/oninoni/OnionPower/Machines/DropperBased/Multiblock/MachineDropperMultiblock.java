@@ -1,4 +1,4 @@
-package de.oninoni.OnionPower.Machines.DropperBasedMultiblock;
+package de.oninoni.OnionPower.Machines.DropperBased.Multiblock;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -16,6 +17,7 @@ import org.bukkit.material.MaterialData;
 import org.bukkit.util.Vector;
 
 import de.oninoni.OnionPower.Machines.MachineManager;
+import de.oninoni.OnionPower.Machines.DropperBased.MachineDropper;
 
 public abstract class MachineDropperMultiblock extends MachineDropper{
 	
@@ -34,8 +36,8 @@ public abstract class MachineDropperMultiblock extends MachineDropper{
 		}
 	}
 	
-	public MachineDropperMultiblock(Location position, MachineManager machineManager, int power){
-		super(position, machineManager, power);
+	public MachineDropperMultiblock(OfflinePlayer owner, Location position, MachineManager machineManager, int power){
+		super(owner, position, machineManager, power);
 		templateInActive = new HashMap<>();
 		templateActive = new HashMap<>();
 		setMutltiblockTemplates();

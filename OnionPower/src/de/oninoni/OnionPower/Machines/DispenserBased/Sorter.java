@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -54,8 +55,8 @@ public class Sorter extends MachineDispenser {
 		setupPowerIO();
 	}
 
-	public Sorter(Location position, MachineManager machineManager, int power) {
-		super(position, machineManager, power);
+	public Sorter(OfflinePlayer owner, Location position, MachineManager machineManager, int power) {
+		super(owner, position, machineManager, power);
 		for (int i = 0; i < 4; i++) {
 			filters.add(new Material[] { Material.AIR, Material.AIR, Material.AIR, Material.AIR, Material.AIR,
 					Material.AIR, Material.AIR, Material.AIR, Material.AIR });

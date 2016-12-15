@@ -15,6 +15,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -40,11 +41,11 @@ import de.oninoni.OnionPower.Machines.DispenserBased.MachineDispenser;
 import de.oninoni.OnionPower.Machines.DispenserBased.Miner;
 import de.oninoni.OnionPower.Machines.DispenserBased.Sorter;
 import de.oninoni.OnionPower.Machines.DispenserBased.UpgradeStation;
-import de.oninoni.OnionPower.Machines.DropperBasedMultiblock.ArkFurnace;
-import de.oninoni.OnionPower.Machines.DropperBasedMultiblock.Enricher;
-import de.oninoni.OnionPower.Machines.DropperBasedMultiblock.GoldArkFurnace;
-import de.oninoni.OnionPower.Machines.DropperBasedMultiblock.IronArkFurnace;
-import de.oninoni.OnionPower.Machines.DropperBasedMultiblock.MachineDropperMultiblock;
+import de.oninoni.OnionPower.Machines.DropperBased.Multiblock.ArkFurnace;
+import de.oninoni.OnionPower.Machines.DropperBased.Multiblock.Enricher;
+import de.oninoni.OnionPower.Machines.DropperBased.Multiblock.GoldArkFurnace;
+import de.oninoni.OnionPower.Machines.DropperBased.Multiblock.IronArkFurnace;
+import de.oninoni.OnionPower.Machines.DropperBased.Multiblock.MachineDropperMultiblock;
 import de.oninoni.OnionPower.Machines.FurnaceBased.ElectricFurnace;
 import de.oninoni.OnionPower.Machines.FurnaceBased.Generator;
 import de.oninoni.OnionPower.Machines.HopperBased.FluidHandler;
@@ -249,6 +250,7 @@ public class MachineManager {
 	}
 
 	public void onClick(InventoryClickEvent e) {
+		Player owner = (Player) e.getWhoClicked();
 		if (e.getInventory().getHolder() == null)
 			return;
 		Inventory inv = e.getView().getTopInventory().getHolder().getInventory();
@@ -258,41 +260,41 @@ public class MachineManager {
 				return;
 			Location location = e.getView().getTopInventory().getLocation();
 			if (Machine.canCreate(e, Generator.class.getName(), InventoryType.FURNACE))
-				machines.put(location, new Generator(location, this,
+				machines.put(location, new Generator(owner, location, this,
 						Machine.getAllBatrodsPower(e.getView().getTopInventory())));
 			if (Machine.canCreate(e, ElectricFurnace.class.getName(), InventoryType.FURNACE))
-				machines.put(location, new ElectricFurnace(location, this,
+				machines.put(location, new ElectricFurnace(owner, location, this,
 						Machine.getAllBatrodsPower(e.getView().getTopInventory())));
 			if (Machine.canCreate(e, BatrodBox.class.getName(), InventoryType.DISPENSER))
-				machines.put(location, new BatrodBox(location, this,
+				machines.put(location, new BatrodBox(owner, location, this,
 						Machine.getAllBatrodsPower(e.getView().getTopInventory())));
 			if (Machine.canCreate(e, Sorter.class.getName(), InventoryType.DISPENSER))
-				machines.put(location, new Sorter(location, this,
+				machines.put(location, new Sorter(owner, location, this,
 						Machine.getAllBatrodsPower(e.getView().getTopInventory())));
 			if (Machine.canCreate(e, Miner.class.getName(), InventoryType.DISPENSER))
-				machines.put(location, new Miner(location, this,
+				machines.put(location, new Miner(owner, location, this,
 						Machine.getAllBatrodsPower(e.getView().getTopInventory())));
 			if (Machine.canCreate(e, FluidHandler.class.getName(), InventoryType.HOPPER))
-				machines.put(location, new FluidHandler(location, this,
+				machines.put(location, new FluidHandler(owner, location, this,
 						Machine.getAllBatrodsPower(e.getView().getTopInventory())));
 			if (Machine.canCreate(e, UpgradeStation.class.getName(), InventoryType.DISPENSER))
-				machines.put(location, new UpgradeStation(location, this, 
+				machines.put(location, new UpgradeStation(owner, location, this, 
 						Machine.getAllBatrodsPower(e.getView().getTopInventory())));
 			if (Machine.canCreate(e, SolarHopper.class.getName(), InventoryType.HOPPER))
-				machines.put(location, new SolarHopper(location, this, 
+				machines.put(location, new SolarHopper(owner, location, this, 
 						Machine.getAllBatrodsPower(e.getView().getTopInventory())));
 			if (Machine.canCreate(e, GoldArkFurnace.class.getName(), InventoryType.DROPPER)){
-				ArkFurnace aF = new GoldArkFurnace(location, this, Machine.getAllBatrodsPower(e.getView().getTopInventory()));
+				ArkFurnace aF = new GoldArkFurnace(owner, location, this, Machine.getAllBatrodsPower(e.getView().getTopInventory()));
 				machines.put(location, aF);
 				addProtectedBlock(aF);
 			}
 			if (Machine.canCreate(e, IronArkFurnace.class.getName(), InventoryType.DROPPER)){
-				ArkFurnace aF = new IronArkFurnace(location, this, Machine.getAllBatrodsPower(e.getView().getTopInventory()));
+				ArkFurnace aF = new IronArkFurnace(owner, location, this, Machine.getAllBatrodsPower(e.getView().getTopInventory()));
 				machines.put(location, aF);
 				addProtectedBlock(aF);
 			}
 			if (Machine.canCreate(e, Enricher.class.getName(), InventoryType.DROPPER)){
-				Enricher enricher = new Enricher(location, this, Machine.getAllBatrodsPower(e.getView().getTopInventory()));
+				Enricher enricher = new Enricher(owner, location, this, Machine.getAllBatrodsPower(e.getView().getTopInventory()));
 				machines.put(location, enricher);
 				addProtectedBlock(enricher);
 			}
@@ -415,7 +417,6 @@ public class MachineManager {
 			machineSection.set("Y", pos.getBlockY());
 			machineSection.set("Z", pos.getBlockZ());
 			machineSection.set("world", pos.getWorld().getName());
-			// machineSection.set("power", machine.getPower());
 			machineSection.set("type", machine.getClass().getName());
 		}
 		plugin.saveConfig();

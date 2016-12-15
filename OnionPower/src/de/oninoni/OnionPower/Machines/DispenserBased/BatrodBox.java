@@ -3,6 +3,7 @@ package de.oninoni.OnionPower.Machines.DispenserBased;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
@@ -20,8 +21,8 @@ public class BatrodBox extends MachineDispenser {
 		setupPowerIO();
 	}
 
-	public BatrodBox(Location position, MachineManager machineManager, int power) {
-		super(position, machineManager, power);
+	public BatrodBox(OfflinePlayer owner, Location position, MachineManager machineManager, int power) {
+		super(owner, position, machineManager, power);
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {

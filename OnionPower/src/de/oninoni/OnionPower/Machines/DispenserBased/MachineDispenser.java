@@ -2,6 +2,7 @@ package de.oninoni.OnionPower.Machines.DispenserBased;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Dispenser;
 import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -23,8 +24,8 @@ public abstract class MachineDispenser extends Machine {
 		dispenser = ((Dispenser) position.getBlock().getState());
 	}
 
-	public MachineDispenser(Location position, MachineManager machineManager, int power) {
-		super(position, machineManager, power);
+	public MachineDispenser(OfflinePlayer owner, Location position, MachineManager machineManager, int power) {
+		super(owner, position, machineManager, power);
 		dispenser = (Dispenser) invHolder;
 	}
 

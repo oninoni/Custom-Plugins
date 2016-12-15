@@ -1,7 +1,8 @@
-package de.oninoni.OnionPower.Machines.DropperBasedMultiblock;
+package de.oninoni.OnionPower.Machines.DropperBased.Multiblock;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 
 import de.oninoni.OnionPower.Machines.MachineManager;
 
@@ -11,8 +12,8 @@ public class GoldArkFurnace extends ArkFurnace{
 		super(position, machineManager);
 	}
 	
-	public GoldArkFurnace(Location position, MachineManager machineManager, int power) {
-		super(position, machineManager, power);
+	public GoldArkFurnace(OfflinePlayer owner, Location position, MachineManager machineManager, int power) {
+		super(owner, position, machineManager, power);
 	}
 
 	@Override

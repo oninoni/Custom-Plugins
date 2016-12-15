@@ -2,6 +2,7 @@ package de.oninoni.OnionPower.Machines.FurnaceBased;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Furnace;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
@@ -20,8 +21,8 @@ public abstract class MachineFurnace extends Machine {
 		furnace = ((Furnace) position.getBlock().getState());
 	}
 
-	public MachineFurnace(Location position, MachineManager machineManager, int power) {
-		super(position, machineManager, power);
+	public MachineFurnace(OfflinePlayer owner, Location position, MachineManager machineManager, int power) {
+		super(owner, position, machineManager, power);
 		furnace = ((Furnace) position.getBlock().getState());
 	}
 

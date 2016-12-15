@@ -22,7 +22,7 @@ public class BlockBreakListener implements Listener {
 		if(e.getPlayer() != null){
 			PowerItem pitem = new PowerItem(e.getPlayer().getInventory().getItemInMainHand());
 			if(pitem.check()){
-				if(pitem.getPower() == 0 || true){
+				if(pitem.getPower() == 0){
 					e.setCancelled(true);
 					plugin.getNMSAdapter().sendTitle(e.getPlayer(), "{\"text\":\"§4Please Recharge Your Pickaxe\"}", 2, 20, 20);
 					pitem.setDurability((short) 0);

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.Jukebox;
 import org.bukkit.entity.ArmorStand;
@@ -36,8 +37,8 @@ public class Miner extends MachineDispenser {
 		SetupPowerIO();
 	}
 
-	public Miner(Location position, MachineManager machineManager, int power) {
-		super(position, machineManager, power);
+	public Miner(OfflinePlayer owner, Location position, MachineManager machineManager, int power) {
+		super(owner, position, machineManager, power);
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {

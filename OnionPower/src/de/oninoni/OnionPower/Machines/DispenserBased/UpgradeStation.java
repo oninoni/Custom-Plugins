@@ -6,6 +6,7 @@ import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -54,8 +55,8 @@ public class UpgradeStation extends MachineDispenser{
 		super(position, machineManager);
 	}
 	
-	public UpgradeStation(Location position, MachineManager machineManager, int power) {
-		super(position, machineManager, power);
+	public UpgradeStation(OfflinePlayer owner, Location position, MachineManager machineManager, int power) {
+		super(owner, position, machineManager, power);
 		setUpwards();
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override

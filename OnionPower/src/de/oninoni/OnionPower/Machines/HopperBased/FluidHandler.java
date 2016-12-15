@@ -5,6 +5,7 @@ import java.util.HashMap;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
@@ -32,8 +33,8 @@ public class FluidHandler extends MachineHopper {
 		fluidLevel = InternalTank.readTankLevel(hopper.getInventory().getItem(3));
 	}
 
-	public FluidHandler(Location position, MachineManager machineManager, int power) {
-		super(position, machineManager, power);
+	public FluidHandler(OfflinePlayer owner, Location position, MachineManager machineManager, int power) {
+		super(owner, position, machineManager, power);
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {

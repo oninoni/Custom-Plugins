@@ -1,6 +1,7 @@
 package de.oninoni.OnionPower.Items.PowerItems;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -44,6 +45,8 @@ public class PowerCore extends PowerItem{
 			lore.add(4, "§6Input: " + machine.getPowerIntputTotal() + " / " + machine.getMaxPowerInput() + " "
 					+ CustomsItems.UNIT_NAME);
 		}
+		lore.add(5, "§6Owner: §7" + machine.getOwner().getName());
+		lore.add(6, "§h" + machine.getOwner().getUniqueId().toString());
 		itemMeta.setLore(lore);
 		setItemMeta(itemMeta);
 	}
@@ -67,5 +70,11 @@ public class PowerCore extends PowerItem{
 		}
 		itemMeta.setLore(lore);
 		setItemMeta(itemMeta);
+	}
+	
+	public UUID getUUID(){
+		ItemMeta itemMeta = getItemMeta();
+		List<String> lore = itemMeta.getLore();
+		return UUID.fromString(lore.get(6).substring(2));
 	}
 }

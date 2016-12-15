@@ -1,7 +1,8 @@
-package de.oninoni.OnionPower.Machines.DropperBasedMultiblock;
+package de.oninoni.OnionPower.Machines.DropperBased;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Dropper;
 import org.bukkit.event.block.BlockDispenseEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -21,8 +22,8 @@ public abstract class MachineDropper extends Machine {
 		dropper = ((Dropper) position.getBlock().getState());
 	}
 
-	public MachineDropper(Location position, MachineManager machineManager, int power) {
-		super(position, machineManager, power);
+	public MachineDropper(OfflinePlayer owner, Location position, MachineManager machineManager, int power) {
+		super(owner, position, machineManager, power);
 		dropper = (Dropper) invHolder;
 	}
 

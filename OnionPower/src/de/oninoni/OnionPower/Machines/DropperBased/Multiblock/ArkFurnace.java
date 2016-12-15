@@ -1,10 +1,11 @@
-package de.oninoni.OnionPower.Machines.DropperBasedMultiblock;
+package de.oninoni.OnionPower.Machines.DropperBased.Multiblock;
 
 import java.util.HashMap;
 import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -40,8 +41,8 @@ public abstract class ArkFurnace extends MachineDropperMultiblock {
 		getHoppers();
 	}
 	
-	public ArkFurnace(Location position, MachineManager machineManager, int power) {
-		super(position, machineManager, power);
+	public ArkFurnace(OfflinePlayer owner, Location position, MachineManager machineManager, int power) {
+		super(owner, position, machineManager, power);
 		effectOffset = new Vector(0.0f, 1.0f, 0.0f);
 		plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
