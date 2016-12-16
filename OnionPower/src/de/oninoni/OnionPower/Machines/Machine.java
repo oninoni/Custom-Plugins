@@ -641,8 +641,8 @@ public abstract class Machine {
 		return upgradesAvailable.contains(type);
 	}
 	
-	public void destroyMachine(){
-		plugin.getMachineManager().onBreak(new BlockBreakEvent(position.getBlock(), null));
+	public void destroyMachine(OfflinePlayer destroyer){
+		plugin.getMachineManager().onBreak(new BlockBreakEvent(position.getBlock(), (Player) destroyer));
 		plugin.getNMSAdapter().resetInvName(invHolder);
 	}
 	

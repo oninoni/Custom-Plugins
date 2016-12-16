@@ -8,11 +8,13 @@ import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -183,7 +185,7 @@ public class MachineManager {
 		}
 	}
 	
-	private void destroyProtectedBlock(Location l){
+	private void destroyProtectedBlock(Entity destroyer, Location l){
 		BlockState blockState = l.getBlock().getState();
 		if(blockState instanceof InventoryHolder){
 			List<HumanEntity> viewers = ((InventoryHolder) blockState).getInventory().getViewers();
@@ -191,7 +193,7 @@ public class MachineManager {
 				humanEntity.closeInventory();
 			}
 		}
-		protectedBlocks.get(l).destroyMachine();
+		protectedBlocks.get(l).destroyMachine((OfflinePlayer) destroyer);
 		Set<Location> keySet = protectedBlocks.keySet();
 		List<Location> toBeRemoved = new ArrayList<>();
 		for (Location loc : keySet) {
@@ -204,13 +206,6 @@ public class MachineManager {
 		for (Location loc : toBeRemoved) {
 			protectedBlocks.remove(loc);
 		}
-		
-		/*Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
-			@Override
-			public void run() {
-				l.getBlock().setType(Material.AIR);
-			}
-		}, 0L);*/
 	}
 
 	public void onBoom(EntityExplodeEvent e) {
@@ -227,7 +222,7 @@ public class MachineManager {
 				}
 			}else if(protectedBlocks.containsKey(location)){
 				if(protectedBlocks.get(location).doesExplode()){
-					destroyProtectedBlock(location);
+					destroyProtectedBlock(e.getEntity(), location);
 				}else{
 					notExloding.add(block);
 				}
@@ -245,7 +240,7 @@ public class MachineManager {
 			machines.get(location).onBreak(e);
 			machines.remove(location);
 		}else if(protectedBlocks.containsKey(location)){
-			destroyProtectedBlock(location);
+			destroyProtectedBlock(e.getPlayer(), location);
 		}
 	}
 

@@ -32,7 +32,7 @@ public abstract class MachineDropperMultiblock extends MachineDropper{
 		templateActive = new HashMap<>();
 		setMutltiblockTemplates();
 		if(!checkActive()){
-			destroyMachine();
+			destroyMachine(owner);
 		}
 	}
 	
@@ -45,7 +45,7 @@ public abstract class MachineDropperMultiblock extends MachineDropper{
 			setActive();
 		}else{
 			shouldNotGenerate = true;
-			destroyMachine();
+			destroyMachine(owner);
 		}
 	}
 	
