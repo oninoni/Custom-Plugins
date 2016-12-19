@@ -364,18 +364,22 @@ public class MachineManager {
 			return;
 		if (machines.containsKey(target.getLocation()) && !displayTimeout.containsKey(target.getLocation())) {
 			Machine m = machines.get(target.getLocation());
-			ArmorStand armorstand = (ArmorStand) target.getLocation().getWorld()
-					.spawnEntity(target.getLocation().add(0.5, 1, 0.5).add(m.getEffectOffset()), EntityType.ARMOR_STAND);
-			armorstand.setCustomName(m.getDisplayName());
-			armorstand.setCustomNameVisible(true);
-			armorstand.setMarker(true);
-			armorstand.setBasePlate(false);
-			armorstand.setVisible(false);
-			armorstand.setSmall(true);
-			armorstand.setAI(false);
-			armorstand.setGravity(false);
-			displayEntites.put(target.getLocation(), armorstand);
-			displayTimeout.put(target.getLocation(), 20);
+			if(!(target.getLocation().add(0, 1, 0)).getBlock().getType().isSolid()){
+				ArmorStand armorstand = (ArmorStand) target.getLocation().getWorld()
+						.spawnEntity(target.getLocation().add(0.5, 1, 0.5).add(m.getEffectOffset()), EntityType.ARMOR_STAND);
+				armorstand.setCustomName(m.getDisplayName());
+				armorstand.setCustomNameVisible(true);
+				armorstand.setMarker(true);
+				armorstand.setBasePlate(false);
+				armorstand.setVisible(false);
+				armorstand.setSmall(true);
+				armorstand.setAI(false);
+				armorstand.setGravity(false);
+				displayEntites.put(target.getLocation(), armorstand);
+				displayTimeout.put(target.getLocation(), 20);
+			}
+			String infoText = "{\"text\":\"" + m.getDisplayName() + "§r§0 | §4Charge: " + m.getPower() + "/" + m.getMaxPower() + "\"}";
+			plugin.getNMSAdapter().sendTitle(e.getPlayer(), infoText, 0, 0, 0);
 		}
 	}
 

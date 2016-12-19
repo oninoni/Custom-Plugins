@@ -624,9 +624,6 @@ public abstract class Machine {
 		if (!isLoaded)
 			return;
 
-		// plugin.getLogger().info("Power: " + power + " / OldPower: " +
-		// oldPower);
-
 		if (powerOld != power || powerInputTotalOld != powerIntputTotal || powerOutputTotalOld != powerOutputTotal
 				|| needsUpdate) {
 			updateDisplay();

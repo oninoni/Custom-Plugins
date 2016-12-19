@@ -15,7 +15,8 @@ import org.bukkit.inventory.meta.BookMeta;
 import net.minecraft.server.v1_10_R1.IChatBaseComponent;
 import net.minecraft.server.v1_10_R1.IChatBaseComponent.ChatSerializer;
 import net.minecraft.server.v1_10_R1.Packet;
-import net.minecraft.server.v1_10_R1.PacketPlayOutChat;
+import net.minecraft.server.v1_10_R1.PacketPlayOutTitle;
+import net.minecraft.server.v1_10_R1.PacketPlayOutTitle.EnumTitleAction;
 import net.minecraft.server.v1_10_R1.TileEntityDispenser;
 import net.minecraft.server.v1_10_R1.TileEntityDropper;
 import net.minecraft.server.v1_10_R1.TileEntityFurnace;
@@ -70,11 +71,10 @@ public class NMSAdapter_1_10 extends NMSAdapter{
 			e.printStackTrace();
 		}
 	}
-	
-	@Override
-	public void sendTitle(Player p, String titleText, int fadeIn, int stayOnScreen, int fadeOut) {
+
+	public void sendTitle(Player p, String titleText, int fadeIn, int stayOnScreen, int fadeOut){
 		IChatBaseComponent chatTitle = IChatBaseComponent.ChatSerializer.a(titleText);
-		Packet<?> title = new PacketPlayOutChat(chatTitle, (byte) 2);
+		Packet<?> title = new PacketPlayOutTitle(EnumTitleAction.SUBTITLE, chatTitle, fadeIn, stayOnScreen, fadeOut);
 		((CraftPlayer) p).getHandle().playerConnection.sendPacket(title);
 	}
 
