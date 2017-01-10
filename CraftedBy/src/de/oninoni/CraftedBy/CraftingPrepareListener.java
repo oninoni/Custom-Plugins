@@ -20,7 +20,7 @@ public class CraftingPrepareListener implements Listener{
 		List<String> lore = itemMeta.getLore();
 		if(lore == null) lore = new ArrayList<>();
 		
-		Player player = (Player) e.getViewers().get(0);
+		Player player = (Player) e.getInventory().getHolder();
 		
 		lore.add("§4crafted by " + player.getName());
 		
