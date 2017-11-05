@@ -13,16 +13,16 @@ import de.oninoni.OnionPower.Machines.MachineManager;
 
 public abstract class MachineHopper extends Machine {
 
-	Hopper hopper;
-
+	protected Hopper getHopper(){
+		return (Hopper) getInvHolder();
+	}
+	
 	public MachineHopper(Location position, MachineManager machineManager) {
 		super(position, machineManager);
-		hopper = (Hopper) invHolder;
 	}
 
 	public MachineHopper(OfflinePlayer owner, Location position, MachineManager machineManager, int power) {
 		super(owner, position, machineManager, power);
-		hopper = (Hopper) invHolder;
 	}
 
 	@Override
@@ -38,7 +38,6 @@ public abstract class MachineHopper extends Machine {
 	@Override
 	public void load() {
 		super.load();
-		hopper = (Hopper) invHolder;
 	}
 
 	@Override

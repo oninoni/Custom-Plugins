@@ -8,6 +8,7 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.block.Dispenser;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -64,7 +65,8 @@ public class Sorter extends MachineDispenser {
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {
-				// dispenser.getInventory().setItem(coreSlot, getPowerCore());
+				Dispenser dispenser = getDispenser();
+				
 				dispenser.getInventory().setItem(2, CustomsItems.getGlassPane((byte) 0, "§4Click to Enable Particles"));
 				dispenser.getInventory().setItem(6, CustomsItems.getGlassPane((byte) 0, "§4§kSecret§r §4§kMessage"));
 				dispenser.getInventory().setItem(8,
@@ -134,7 +136,7 @@ public class Sorter extends MachineDispenser {
 	private void loadFilter(int id) {
 		Material[] filter = filters.get(id);
 		int slotID = id * 2 + 1;
-		List<String> lore = dispenser.getInventory().getItem(slotID).getItemMeta().getLore();
+		List<String> lore = getDispenser().getInventory().getItem(slotID).getItemMeta().getLore();
 		for (int i = 0; i < 9; i++) {
 			String name = lore.get(i + 3).substring(2);
 			filter[i] = Material.getMaterial(name);
@@ -173,7 +175,7 @@ public class Sorter extends MachineDispenser {
 						filterInvName = "§9Blue Filter";
 					if (slot == 7)
 						filterInvName = "§eYellow Filter";
-					Inventory filterInv = Bukkit.createInventory(dispenser, 9, filterInvName);
+					Inventory filterInv = Bukkit.createInventory(getDispenser(), 9, filterInvName);
 					for (int i = 0; i < 9; i++) {
 						filterInv.setItem(i, new ItemStack(filters.get(slot / 2)[i]));
 					}
@@ -182,10 +184,15 @@ public class Sorter extends MachineDispenser {
 			}
 		} else {
 			if (slot < 9 && slot >= 0) {
-				if (cursor.getType() != Material.AIR || inv.getItem(slot).getType() != Material.AIR) {
+				if (cursor.getType() != Material.AIR || inv.getItem(slot) != null && inv.getItem(slot).getType() != Material.AIR) {
 					shouldCancel = true;
-					if (inv.getItem(slot).getType() == Material.AIR || cursor.getType() != Material.AIR) {
-						inv.setItem(slot, cursor);
+					if (inv.getItem(slot) == null || inv.getItem(slot).getType() == Material.AIR || cursor.getType() != Material.AIR) {
+						ItemStack filterItem = cursor.clone();
+						filterItem.setAmount(1);
+						// TODO No Item should be enterable twice
+						
+						// TODO Items can be douplicated by doubleclicking to create a stack. -> New Event
+						inv.setItem(slot, filterItem);
 					} else {
 						inv.setItem(slot, new ItemStack(Material.AIR));
 					}
@@ -237,9 +244,9 @@ public class Sorter extends MachineDispenser {
 	protected void resetItemAt(int id) {
 		if (id != 4) {
 			if (id % 2 == 0) {
-				dispenser.getInventory().setItem(id, new Batrod(getPower()));
+				getDispenser().getInventory().setItem(id, new Batrod(getPower()));
 			} else {
-				dispenser.getInventory().setItem(id, new ItemStack(Material.CHEST));
+				getDispenser().getInventory().setItem(id, new ItemStack(Material.CHEST));
 			}
 		}
 	}
@@ -247,7 +254,7 @@ public class Sorter extends MachineDispenser {
 	private void saveFilter(int id) {
 		Material[] filter = filters.get(id);
 		int slotID = id * 2 + 1;
-		ItemStack item = dispenser.getInventory().getItem(slotID);
+		ItemStack item = getDispenser().getInventory().getItem(slotID);
 		ItemMeta itemMeta = item.getItemMeta();
 		List<String> lore = itemMeta.getLore();
 		for (int i = 0; i < 9; i++) {
@@ -275,7 +282,7 @@ public class Sorter extends MachineDispenser {
 
 	private void setupPowerIO() {
 		@SuppressWarnings("deprecation")
-		int direction = directionAdapter[dispenser.getRawData()];
+		int direction = directionAdapter[getDispenser().getRawData()];
 		for (int i = 0; i < 6; i++) {
 			allowedOutputs[i] = false;
 			if (i == direction) {
@@ -292,6 +299,8 @@ public class Sorter extends MachineDispenser {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void updateBlock() {
+		Dispenser dispenser = getDispenser();
+		
 		if(isInactive())return;
 		ItemStack item = dispenser.getInventory().getItem(4);
 		if (item != null && power >= 20 * item.getAmount()) {

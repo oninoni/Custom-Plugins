@@ -10,7 +10,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.meta.BookMeta;
 
+import de.oninoni.OnionPower.OnionPower;
+
 public abstract class NMSAdapter {
+
+	protected static OnionPower plugin = OnionPower.get();
 	
 	public void setInvName(InventoryHolder block, String name){
 		if(block instanceof Dispenser){

@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.block.Hopper;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -29,6 +30,7 @@ public class SolarHopper extends MachineHopper{
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {
+				Hopper hopper = getHopper();
 				
 				hopper.getInventory().setItem(0, CustomsItems.getGlassPane((byte) 11, "§9Solar Cell"));
 				hopper.getInventory().setItem(1, CustomsItems.getGlassPane((byte) 11, "§9Solar Cell"));
@@ -85,6 +87,8 @@ public class SolarHopper extends MachineHopper{
 
 	@Override
 	protected void resetItemAt(int id) {
+		Hopper hopper = getHopper();
+		
 		switch (id) {
 		case 0:
 		case 4:
@@ -127,6 +131,8 @@ public class SolarHopper extends MachineHopper{
 
 	@Override
 	public void updateBlock() {
+		Hopper hopper = getHopper();
+		
 		if(isInactive())return;
 		int lightLevel = hopper.getBlock().getLightFromSky();
 		if(lightLevel == 15){

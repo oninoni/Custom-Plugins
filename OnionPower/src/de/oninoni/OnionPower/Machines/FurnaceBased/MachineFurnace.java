@@ -14,16 +14,16 @@ public abstract class MachineFurnace extends Machine {
 
 	protected final static int[] directionAdapter = {5, 2, 3, 0};
 
-	protected Furnace furnace;
-
+	protected Furnace getFurnace(){
+		return (Furnace) getInvHolder();
+	}
+	
 	public MachineFurnace(Location position, MachineManager machineManager) {
 		super(position, machineManager);
-		furnace = ((Furnace) position.getBlock().getState());
 	}
 
 	public MachineFurnace(OfflinePlayer owner, Location position, MachineManager machineManager, int power) {
 		super(owner, position, machineManager, power);
-		furnace = ((Furnace) position.getBlock().getState());
 	}
 
 	@Override
@@ -39,7 +39,6 @@ public abstract class MachineFurnace extends Machine {
 	@Override
 	public void load() {
 		super.load();
-		furnace = (Furnace) getPosition().getBlock().getState();
 	}
 
 	@Override

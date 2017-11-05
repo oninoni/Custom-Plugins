@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.block.Hopper;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
@@ -30,7 +31,7 @@ public class FluidHandler extends MachineHopper {
 
 	public FluidHandler(Location position, MachineManager machineManager) {
 		super(position, machineManager);
-		fluidLevel = InternalTank.readTankLevel(hopper.getInventory().getItem(3));
+		fluidLevel = InternalTank.readTankLevel(getHopper().getInventory().getItem(3));
 	}
 
 	public FluidHandler(OfflinePlayer owner, Location position, MachineManager machineManager, int power) {
@@ -38,6 +39,8 @@ public class FluidHandler extends MachineHopper {
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {
+				Hopper hopper = getHopper();
+				
 				hopper.getInventory().setItem(3, InternalTank.create(fluidLevel, MAXFLUIDLEVEL, false));
 				hopper.getInventory().setItem(4, CustomsItems.getCraftingCore());
 
@@ -55,7 +58,7 @@ public class FluidHandler extends MachineHopper {
 			fluidLevel = MAXFLUIDLEVEL;
 		}
 		if (ammount != overflow) {
-			InternalTank.setTankLevel(hopper.getInventory().getItem(3), this);
+			InternalTank.setTankLevel(getHopper().getInventory().getItem(3), this);
 			needsUpdate = true;
 		}
 		return overflow;
@@ -67,6 +70,8 @@ public class FluidHandler extends MachineHopper {
 	}
 
 	private void fillSlot(int id) {
+		Hopper hopper = getHopper();
+		
 		ItemStack bucket = hopper.getInventory().getItem(id);
 		if (bucket != null && bucket.getType() == Material.BUCKET) {
 			if (fluidLevel >= bucket.getAmount() && power >= bucket.getAmount() * 10) {
@@ -211,6 +216,8 @@ public class FluidHandler extends MachineHopper {
 
 	@Override
 	protected void resetItemAt(int id) {
+		Hopper hopper = getHopper();
+		
 		switch (id) {
 		case 2:
 			hopper.getInventory().setItem(id, new Batrod(getPower()));
@@ -242,6 +249,8 @@ public class FluidHandler extends MachineHopper {
 
 	@Override
 	public void updateBlock() {
+		Hopper hopper = getHopper();
+		
 		if(isInactive())return;
 		LavaUpgrade lavaUpgrade = (LavaUpgrade) upgradeManager.getUpgrade(UpgradeType.LavaUpgrade);
 		if (lavaUpgrade != null && isLava != lavaUpgrade.isLava()) {

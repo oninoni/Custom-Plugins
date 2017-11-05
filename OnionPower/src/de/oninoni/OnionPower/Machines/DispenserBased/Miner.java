@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
+import org.bukkit.block.Dispenser;
 import org.bukkit.block.Jukebox;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
@@ -42,8 +43,9 @@ public class Miner extends MachineDispenser {
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {
+				Dispenser dispenser = getDispenser();
+				
 				dispenser.getInventory().setItem(0, CustomsItems.getGlassPane((byte) 7, "§4§kSecret§r §4§kMessage"));
-				// dispenser.getInventory().setItem(1, getPowerCore());
 				dispenser.getInventory().setItem(2, CustomsItems.getGlassPane((byte) 7, "§4§kLol§r §4§kROFL"));
 				dispenser.getInventory().setItem(4, CustomsItems.getLaserPrism());
 				dispenser.getInventory().setItem(3, CustomsItems.getGlassPane((byte) 7, "§4§kZweiundvierzig§r"));
@@ -61,7 +63,7 @@ public class Miner extends MachineDispenser {
 	private boolean checkFluidHandler(Block b) {
 		@SuppressWarnings("deprecation")
 		ArrayList<Machine> adjacentMachines = plugin.getMachineManager().getAdjacentMachines(this,
-				dispenser.getRawData() % 8);
+				getDispenser().getRawData() % 8);
 		boolean success = false;
 		for (Machine machine : adjacentMachines) {
 			if (machine instanceof FluidHandler) {
@@ -119,7 +121,7 @@ public class Miner extends MachineDispenser {
 
 	@Override
 	public boolean onClickFixed(Inventory inv, int slot, ItemStack cursor, Player p) {
-		if (dispenser.getInventory().getItem(7) == null && slot == 7 && cursor != null
+		if (getDispenser().getInventory().getItem(7) == null && slot == 7 && cursor != null
 				&& cursor.getType() == Material.IRON_PICKAXE) {
 			Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 				@Override
@@ -146,6 +148,8 @@ public class Miner extends MachineDispenser {
 
 	@Override
 	protected void resetItemAt(int id) {
+		Dispenser dispenser = getDispenser();
+		
 		if (id == 1) {
 			dispenser.getInventory().setItem(id, new Batrod(getPower()));
 		} else if (id == 4) {
@@ -199,7 +203,9 @@ public class Miner extends MachineDispenser {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void updateBlock() {
-		if(isInactive())return;
+		Dispenser dispenser = getDispenser();
+		
+		if(isInactive())return;	
 		if (dispenser.getInventory().getItem(7) != null) {
 			if (dispenser.getInventory().getItem(7).getDurability() >= 250) {
 				dispenser.getInventory().clear(7);

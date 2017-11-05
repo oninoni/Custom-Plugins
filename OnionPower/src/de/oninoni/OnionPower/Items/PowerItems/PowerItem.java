@@ -165,7 +165,6 @@ public class PowerItem extends ItemStack{
 	}
 
 	public void setPower(int power) {
-		plugin.getLogger().info("" + this);
 		power = Math.min(power, maxPower);
 		ItemMeta itemMeta = getItemMeta();
 		List<String> lore = itemMeta.getLore();

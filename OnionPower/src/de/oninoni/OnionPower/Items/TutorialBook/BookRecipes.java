@@ -2,6 +2,7 @@ package de.oninoni.OnionPower.Items.TutorialBook;
 
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -54,7 +55,23 @@ public class BookRecipes {
 				if(i != 0)
 					json += ",";
 				
-				json += "{\"text\":\"[]\"";
+				json += "{\"text\":\"";
+				
+				switch (recipe[i]) {
+				case REDSTONE:
+					json += ChatColor.RED;
+					break;
+				case GOLD_INGOT:
+					json += ChatColor.GOLD;
+					break;
+				case BLAZE_ROD:
+					json += ChatColor.YELLOW;
+					break;
+				default:
+					break;
+				}
+				
+				json += "[]\"";
 				
 				json += ",\"hoverEvent\":{";
 				

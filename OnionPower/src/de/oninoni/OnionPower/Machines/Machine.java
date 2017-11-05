@@ -114,8 +114,6 @@ public abstract class Machine {
 		return result;
 	}
 
-	protected InventoryHolder invHolder;
-
 	protected int coreSlot;
 
 	protected EnumSet<UpgradeType> upgradesAvailable;
@@ -144,22 +142,29 @@ public abstract class Machine {
 	protected ArrayList<ArmorStand> designEntities;
 	
 	protected OfflinePlayer owner;
+	
+	protected InventoryHolder getInvHolder(){
+		return (InventoryHolder) position.getBlock().getState();
+	}
 
 	public Machine(Location position, MachineManager machineManager) {
+		initValues(position, machineManager);
+		
 		setCoreSlot();
 		BlockState state = position.getBlock().getState();
 		if (state instanceof InventoryHolder) {
-			invHolder = (InventoryHolder) position.getBlock().getState();
 			PowerCore powerCore = new PowerCore(getPowerCore(), this);
 			if(powerCore.check()){
 				this.power = powerCore.getPower();
 			}
 		} else {
-			plugin.getLogger().warning("Machine at " + position + "is not an Inventory anymore!");
+			plugin.getLogger().warning("Machine at " + position + " is not an Inventory anymore!");
 			this.power = 0;
 		}
-		initValues(position, machineManager);
 		PowerCore powerCore = new PowerCore(getPowerCore(), this);
+
+		upgradeManager = new UpgradeManager(this);
+		
 		this.owner = Bukkit.getServer().getOfflinePlayer(powerCore.getUUID());
 		
 		plugin.getLogger().info(owner.getName());
@@ -167,12 +172,14 @@ public abstract class Machine {
 
 	public Machine(OfflinePlayer owner, Location position, MachineManager machineManager, int power) {
 		this.owner = owner;
+		initValues(position, machineManager);
+		
 		setCoreSlot();
-		invHolder = (InventoryHolder) position.getBlock().getState();
+		plugin.getNMSAdapter().setInvName(getInvHolder(), getDisplayName());
 		this.power = power;
 		setPowerCore(new PowerCore(this));
-		plugin.getNMSAdapter().setInvName(invHolder, getDisplayName());
-		initValues(position, machineManager);
+		
+		upgradeManager = new UpgradeManager(this);
 	}
 
 	protected void chargeItem(Inventory inv, int id) {
@@ -187,7 +194,7 @@ public abstract class Machine {
 	}
 
 	public void closeInventories() {
-		Object[] viewers = (invHolder).getInventory().getViewers().toArray();
+		Object[] viewers = getInvHolder().getInventory().getViewers().toArray();
 		for (Object humanEntity : viewers) {
 			((HumanEntity) humanEntity).closeInventory();
 		}
@@ -284,8 +291,7 @@ public abstract class Machine {
 	}
 
 	public ItemStack getPowerCore() {
-		ItemStack powerCore = invHolder.getInventory().getItem(coreSlot);
-		return powerCore;
+		return getInvHolder().getInventory().getItem(coreSlot);
 	}
 
 	public int getPowerIntputTotal() {
@@ -312,7 +318,6 @@ public abstract class Machine {
 		upgradesAvailable = EnumSet.noneOf(UpgradeType.class);
 
 		setAvailableUpgrades();
-		upgradeManager = new UpgradeManager(this);
 		
 		effectOffset = new Vector();
 	}
@@ -327,13 +332,13 @@ public abstract class Machine {
 	public void load() {
 		position = new Location(Bukkit.getWorld(world), vec.getX(), vec.getY(), vec.getZ());
 		isLoaded = true;
-		invHolder = (InventoryHolder) position.getBlock().getState();
 	}
 
 	public boolean onBoom(Block e) {
 		killDesignEnities();
 		if (doesExplode()) {
 			Random r = new Random();
+			InventoryHolder invHolder = getInvHolder();
 			for (int i = 0; i < invHolder.getInventory().getSize(); i++) {
 				if (r.nextInt(2) == 0) {
 					resetItemAt(i);
@@ -341,7 +346,6 @@ public abstract class Machine {
 					invHolder.getInventory().setItem(i, new ItemStack(Material.AIR));
 				}
 			}
-			upgradeManager.onBoom();
 			return true;
 		}
 		return false;
@@ -355,7 +359,7 @@ public abstract class Machine {
 
 	public void onBreak(BlockEvent e) {
 		killDesignEnities();
-		for (int i = 0; i < invHolder.getInventory().getSize(); i++) {
+		for (int i = 0; i < getInvHolder().getInventory().getSize(); i++) {
 			resetItemAt(i);
 		}
 		upgradeManager.onBreak();
@@ -363,7 +367,7 @@ public abstract class Machine {
 	
 	public void onClick(InventoryClickEvent e) {
 		Inventory inv = e.getView().getTopInventory();
-		if (coreSlot == e.getRawSlot() && inv.getName() != upgradeManager.getName()) {
+		if (coreSlot == e.getRawSlot() && inv.getName() != upgradeManager.getName() && inv.getName() == getInvHolder().getInventory().getName()) {
 			e.setCancelled(true);
 			upgradeManager.openInterface(e.getWhoClicked());
 			return;
@@ -459,7 +463,8 @@ public abstract class Machine {
 	}
 
 	public void reOpenInventories() {
-		Object[] viewers = (invHolder).getInventory().getViewers().toArray();
+		InventoryHolder invHolder = getInvHolder();
+		Object[] viewers = invHolder.getInventory().getViewers().toArray();
 		for (Object humanEntity : viewers) {
 			((HumanEntity) humanEntity).closeInventory();
 			((HumanEntity) humanEntity).openInventory(invHolder.getInventory());
@@ -504,7 +509,7 @@ public abstract class Machine {
 	}
 
 	public void setPowerCore(ItemStack powerCore) {
-		invHolder.getInventory().setItem(coreSlot, powerCore);
+		getInvHolder().getInventory().setItem(coreSlot, powerCore);
 	}
 
 	public void saveUpgradeAsLore() {
@@ -593,6 +598,7 @@ public abstract class Machine {
 		if (!isLoaded)
 			return;
 
+		// TODO: Wtf are you doing? This is a base class, which should not know anything about its subclasses
 		if (getDisplayName() != "§6§lGenerator" && getDisplayName() != "§6§lSolar Hopper") {
 			requestFromConnected();
 
@@ -614,8 +620,7 @@ public abstract class Machine {
 	}
 
 	public void updateInventories() {
-		Object[] viewers = (invHolder).getInventory().getViewers().toArray();
-		for (Object humanEntity : viewers) {
+		for (HumanEntity humanEntity : getInvHolder().getInventory().getViewers()) {
 			((Player) humanEntity).updateInventory();
 		}
 	}
@@ -640,7 +645,7 @@ public abstract class Machine {
 	
 	public void destroyMachine(OfflinePlayer destroyer){
 		plugin.getMachineManager().onBreak(new BlockBreakEvent(position.getBlock(), (Player) destroyer));
-		plugin.getNMSAdapter().resetInvName(invHolder);
+		plugin.getNMSAdapter().resetInvName(getInvHolder());
 	}
 	
 	public Vector getEffectOffset() {

@@ -28,11 +28,10 @@ public class BatrodBox extends MachineDispenser {
 			public void run() {
 				for (int i = 0; i < 9; i++) {
 					if (i != coreSlot)
-						dispenser.getInventory().setItem(i, new ItemStack(Material.AIR));
+						getDispenser().getInventory().setItem(i, new ItemStack(Material.AIR));
 				}
-				// dispenser.getInventory().setItem(coreSlot, getPowerCore());
-				dispenser.getInventory().setItem(coreSlot - 1, new ItemStack(Material.STAINED_GLASS_PANE));
-				dispenser.getInventory().setItem(coreSlot + 1, new ItemStack(Material.STAINED_GLASS_PANE));
+				getDispenser().getInventory().setItem(coreSlot - 1, new ItemStack(Material.STAINED_GLASS_PANE));
+				getDispenser().getInventory().setItem(coreSlot + 1, new ItemStack(Material.STAINED_GLASS_PANE));
 
 				reOpenInventories();
 			}
@@ -90,7 +89,7 @@ public class BatrodBox extends MachineDispenser {
 
 	@Override
 	protected void resetItemAt(int id) {
-		dispenser.getInventory().setItem(id, new Batrod(getPower() / 10));
+		getDispenser().getInventory().setItem(id, new Batrod(getPower() / 10));
 	}
 
 	@Override
@@ -105,7 +104,7 @@ public class BatrodBox extends MachineDispenser {
 
 	private void setupPowerIO() {
 		@SuppressWarnings("deprecation")
-		int direction = directionAdapter[dispenser.getRawData() % 8];
+		int direction = directionAdapter[getDispenser().getRawData() % 8];
 		for (int i = 0; i < 6; i++) {
 			if (i == direction) {
 				allowedOutputs[i] = true;
@@ -125,8 +124,8 @@ public class BatrodBox extends MachineDispenser {
 	public void updateBlock() {
 		if(isInactive())return;
 		for (int i = 0; i < 3; i++) {
-			chargeItem(dispenser.getInventory(), i);
-			dechargeRod(dispenser.getInventory(), i + 6);
+			chargeItem(getDispenser().getInventory(), i);
+			dechargeRod(getDispenser().getInventory(), i + 6);
 		}
 	}
 }

@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.block.Furnace;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -32,8 +33,7 @@ public class ElectricFurnace extends MachineFurnace {
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {
-				furnace.getInventory().setItem(0, new ItemStack(Material.AIR));
-				// furnace.getInventory().setItem(1, getPowerCore());
+				getFurnace().getInventory().setItem(0, new ItemStack(Material.AIR));
 
 				reOpenInventories();
 			}
@@ -73,7 +73,7 @@ public class ElectricFurnace extends MachineFurnace {
 	@Override
 	protected void resetItemAt(int id) {
 		if (id == coreSlot) {
-			furnace.getInventory().setItem(id, new Batrod(getPower()));
+			getFurnace().getInventory().setItem(id, new Batrod(getPower()));
 		}
 	}
 
@@ -117,6 +117,8 @@ public class ElectricFurnace extends MachineFurnace {
 
 	@Override
 	public void updateBlock() {
+		Furnace furnace = getFurnace();
+		
 		if(isInactive())return;
 		if (furnace.getInventory().getSmelting() != null) {
 			ItemStack smelting = furnace.getInventory().getSmelting();
@@ -124,11 +126,17 @@ public class ElectricFurnace extends MachineFurnace {
 				Material result = ItemData.smeltable.get(smelting.getType());
 				if ((furnace.getInventory().getResult() == null
 						|| furnace.getInventory().getResult().getType() == result) && power >= 2000) {
-					furnace.setBurnTime((short) 200);
+					Furnace f = getFurnace();
+					f.setBurnTime((short) 200);
+					f.update();
+					
 					cookingInto = result;
 					cookingFrom = smelting.getType();
 				} else {
-					furnace.setBurnTime((short) 0);
+					Furnace f = getFurnace();
+					f.setBurnTime((short) 0);
+					f.update();
+					
 					cookingInto = null;
 					cookingFrom = null;
 				}
@@ -137,24 +145,32 @@ public class ElectricFurnace extends MachineFurnace {
 		if (furnace.getBurnTime() > 0) {
 			if (furnace.getInventory().getSmelting() != null
 					&& furnace.getInventory().getSmelting().getType() != cookingFrom) {
-
+				
 			}
 			if (furnace.getInventory().getSmelting() == null
 					|| furnace.getInventory().getSmelting().getType() != cookingFrom) {
-				furnace.setBurnTime((short) 0);
-				furnace.setCookTime((short) 0);
+				Furnace f = getFurnace();
+				f.setBurnTime((short) 0);
+				f.setCookTime((short) 0);
+				f.update();
+				
 				cookingInto = null;
 				cookingFrom = null;
 			} else {
+				Furnace f = getFurnace();
+				f.setBurnTime((short) 200);
+				f.update();
+				
 				power -= 20;
 				powerOutputTotal = 20;
-				furnace.setBurnTime((short) 200);
 			}
 		}
 		if (furnace.getInventory().getSmelting() == null && (furnace.getBurnTime() != 0 || furnace.getCookTime() != 0)
 				&& cookingInto != null) {
-			furnace.setBurnTime((short) 0);
-			furnace.setCookTime((short) 0);
+			Furnace f = getFurnace();
+			f.setBurnTime((short) 0);
+			f.setCookTime((short) 0);
+			f.update();
 		}
 	}
 }

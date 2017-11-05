@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.block.Furnace;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -33,8 +34,7 @@ public class Generator extends MachineFurnace {
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {
-				furnace.getInventory().setItem(1, new ItemStack(Material.AIR));
-				// furnace.getInventory().setItem(coreSlot, getPowerCore());
+				getFurnace().getInventory().setItem(1, new ItemStack(Material.AIR));
 
 				reOpenInventories();
 			}
@@ -106,7 +106,7 @@ public class Generator extends MachineFurnace {
 	@Override
 	protected void resetItemAt(int id) {
 		if (id == coreSlot) {
-			furnace.getInventory().setItem(id, new Batrod(getPower()));
+			getFurnace().getInventory().setItem(id, new Batrod(getPower()));
 		}
 	}
 
@@ -158,6 +158,8 @@ public class Generator extends MachineFurnace {
 
 	@Override
 	public void updateBlock() {
+		Furnace furnace = getFurnace();
+		
 		chargeItem(furnace.getInventory(), 0);
 		dechargeRod(furnace.getInventory(), 1);
 		if(isInactive())return;

@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.block.Dispenser;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -61,6 +62,8 @@ public class UpgradeStation extends MachineDispenser{
 		Bukkit.getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {
+				Dispenser dispenser = getDispenser();
+				
 				dispenser.getInventory().setItem(1, CustomsItems.getCraftingCore());
 				setCraftingCoreLore();
 				dispenser.getInventory().clear(2);
@@ -70,6 +73,8 @@ public class UpgradeStation extends MachineDispenser{
 	
 	@SuppressWarnings("deprecation")
 	private void setUpwards(){
+		Dispenser dispenser = getDispenser();
+		
 		plugin.getLogger().info(dispenser.getRawData() + "");
 		dispenser.getBlock().setData((byte) 1);
 		plugin.getLogger().info(dispenser.getRawData() + "");
@@ -105,6 +110,8 @@ public class UpgradeStation extends MachineDispenser{
 		if(state == State.Working)return true;
 		if(slot == 1){
 			if(state != State.Ready)return true;
+			Dispenser dispenser = getDispenser();
+			
 			for(int i = 0; i < 6; i++){
 				ItemStack item = dispenser.getInventory().getItem(i + 3);
 				int ammount = item.getAmount() - 1;
@@ -156,13 +163,13 @@ public class UpgradeStation extends MachineDispenser{
 	protected void resetItemAt(int id) {
 		switch (id) {
 		case 0:
-			dispenser.getInventory().setItem(id, new Batrod(getPower()));
+			getDispenser().getInventory().setItem(id, new Batrod(getPower()));
 			break;
 		case 1:
-			dispenser.getInventory().setItem(id, new ItemStack(Material.WORKBENCH));
+			getDispenser().getInventory().setItem(id, new ItemStack(Material.WORKBENCH));
 			break;
 		case 2:
-			dispenser.getInventory().setItem(id, new ItemStack(Material.DIAMOND));
+			getDispenser().getInventory().setItem(id, new ItemStack(Material.DIAMOND));
 			break;
 		}
 	}
@@ -190,6 +197,8 @@ public class UpgradeStation extends MachineDispenser{
 	}
 	
 	public boolean checkRecipe(Material[] recipe){
+		Dispenser dispenser = getDispenser();
+		
 		for (int i = 0; i < recipe.length; i++) {
 			ItemStack item = dispenser.getInventory().getItem(i + 3);
 			if(item == null || item.getType() == Material.AIR || item.getType() != recipe[i])return false;
@@ -198,7 +207,7 @@ public class UpgradeStation extends MachineDispenser{
 	}
 	
 	private void setCraftingCoreLore(){
-		ItemStack craftingCore = dispenser.getInventory().getItem(1);
+		ItemStack craftingCore = getDispenser().getInventory().getItem(1);
 		ItemMeta itemMeta = craftingCore.getItemMeta();
 		ArrayList<String> lore = new ArrayList<>();
 		switch (state) {
@@ -225,6 +234,8 @@ public class UpgradeStation extends MachineDispenser{
 
 	@Override
 	public void updateBlock() {
+		Dispenser dispenser = getDispenser();
+		
 		if(isInactive())return;
 		switch (state) {
 		case Idle:

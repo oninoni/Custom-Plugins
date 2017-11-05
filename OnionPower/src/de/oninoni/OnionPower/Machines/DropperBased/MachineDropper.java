@@ -15,8 +15,6 @@ public abstract class MachineDropper extends Machine {
 
 	protected final static int[] directionAdapter = { 4, 1, 5, 2, 3, 0 };
 
-	protected Dropper dropper;
-
 	public MachineDropper(Location position, MachineManager machineManager) {
 		super(position, machineManager);
 		dropper = ((Dropper) position.getBlock().getState());

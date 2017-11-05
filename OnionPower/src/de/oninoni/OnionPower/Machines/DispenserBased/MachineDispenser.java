@@ -17,16 +17,16 @@ public abstract class MachineDispenser extends Machine {
 	
 	protected final static int[] directionAdapter = { 4, 1, 5, 2, 3, 0 };
 
-	protected Dispenser dispenser;
-
+	protected Dispenser getDispenser(){
+		return (Dispenser) getInvHolder();
+	}
+	
 	public MachineDispenser(Location position, MachineManager machineManager) {
 		super(position, machineManager);
-		dispenser = ((Dispenser) position.getBlock().getState());
 	}
 
 	public MachineDispenser(OfflinePlayer owner, Location position, MachineManager machineManager, int power) {
 		super(owner, position, machineManager, power);
-		dispenser = (Dispenser) invHolder;
 	}
 
 	@Override
@@ -42,7 +42,6 @@ public abstract class MachineDispenser extends Machine {
 	@Override
 	public void load() {
 		super.load();
-		dispenser = (Dispenser) invHolder;
 	}
 
 	@Override

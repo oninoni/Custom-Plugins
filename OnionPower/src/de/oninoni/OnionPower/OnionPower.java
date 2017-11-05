@@ -33,9 +33,7 @@ import de.oninoni.OnionPower.Machines.MachineManager;
 import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
 import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager.UpgradeType;
 import de.oninoni.OnionPower.NMS.NMSAdapter;
-import de.oninoni.OnionPower.NMS.NMSAdapter_1_10;
-import de.oninoni.OnionPower.NMS.NMSAdapter_1_11;
-import de.oninoni.OnionPower.NMS.NMSAdapter_1_9;
+import de.oninoni.OnionPower.NMS.NMSAdapter_1_12;
 
 public class OnionPower extends JavaPlugin {
 
@@ -112,15 +110,11 @@ public class OnionPower extends JavaPlugin {
 	public void onEnable() {
 		getLogger().info(getMinecraftVersion());
 
-		if (getMinecraftVersion().equals("1.9.4-R0.1-SNAPSHOT")) {
-			getLogger().info("1.9.4 Mode Activated!");
-			nmsAdapter = new NMSAdapter_1_9();
-		} else if (getMinecraftVersion().equals("1.10.2-R0.1-SNAPSHOT")) {
-			getLogger().info("1.10.2 Mode Activated!");
-			nmsAdapter = new NMSAdapter_1_10();
-		} else if (getMinecraftVersion().equals("1.11-R0.1-SNAPSHOT")){
-			getLogger().info("1.11 Mode Activated!");
-			nmsAdapter = new NMSAdapter_1_11();
+		if (getMinecraftVersion().equals("1.12.2-R0.1-SNAPSHOT")){
+			getLogger().info("1.12 Mode Activated!");
+			nmsAdapter = new NMSAdapter_1_12();
+		} else{
+			getLogger().warning("Minecraft Version not Supported!");
 		}
 		
 		protocolManager = ProtocolLibrary.getProtocolManager();
