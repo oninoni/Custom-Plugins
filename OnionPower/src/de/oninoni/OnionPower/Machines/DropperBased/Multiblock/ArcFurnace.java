@@ -49,15 +49,12 @@ public abstract class ArcFurnace extends MachineDropperMultiblock {
 		plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {
-				dropper.getInventory().setItem(0, CustomsItems.getArcFurnaceFurnace());
-				dropper.getInventory().setItem(2, CustomsItems.getArcFurnaceFurnace());
-				dropper.getInventory().setItem(3, CustomsItems.getArcFurnaceFurnace());
-				dropper.getInventory().setItem(5, CustomsItems.getArcFurnaceFurnace());
-				dropper.getInventory().setItem(6, CustomsItems.getArcFurnaceFurnace());
-				dropper.getInventory().setItem(8, CustomsItems.getArcFurnaceFurnace());
+				for (int i = 0; i < 8; i++)
+					if (i % 3 != 1)
+						dropper.getInventory().setItem(i, CustomsItems.getArcFurnaceFurnace());
 				
-				dropper.getInventory().setItem(7, ArcHeater.create(0));
 				dropper.getInventory().setItem(1, ArcFurnaceCore.create(getSmeltingMaterial()));
+				dropper.getInventory().setItem(7, ArcHeater.create(0));
 				
 				reOpenInventories();
 			}
