@@ -2,6 +2,7 @@ package de.oninoni.OnionPower.Items.Statics;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
@@ -19,6 +20,7 @@ import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalShovel;
 import de.oninoni.OnionPower.Items.PowerItems.PowerTools.ElectricalSword;
 import de.oninoni.OnionPower.Machines.Upgrades.Upgrade;
 import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager.UpgradeType;
+import sun.net.spi.nameservice.NameServiceDescriptor;
 
 public class CraftingRecipes {
 	protected static OnionPower plugin = OnionPower.get();

@@ -9,6 +9,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.Dropper;
 import org.bukkit.block.Hopper;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.EntityType;
@@ -42,6 +43,8 @@ public class Enricher extends MachineDropperMultiblock{
 		plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {
+				Dropper dropper = getDropper();
+				
 				dropper.getInventory().setItem(7, UraniumBuffer.create());
 				
 				reOpenInventories();
@@ -116,6 +119,8 @@ public class Enricher extends MachineDropperMultiblock{
 		Vector vecOutput = new Vector(1, 0, 2);
 		Vector vecOutputSecondary = new Vector(-1, 0,2);
 		
+		Dropper dropper = getDropper();
+		
 		vecInput = rotateVector(vecInput, ((Directional)dropper.getData()).getFacing());
 		vecOutput = rotateVector(vecOutput, ((Directional)dropper.getData()).getFacing());
 		vecOutputSecondary = rotateVector(vecOutputSecondary, ((Directional)dropper.getData()).getFacing());
@@ -157,7 +162,8 @@ public class Enricher extends MachineDropperMultiblock{
 
 	@Override
 	protected void resetItemAt(int id) {
-		if(id == coreSlot)dropper.getInventory().setItem(id, new Batrod(getPower()));
+		if(id == coreSlot)
+			getDropper().getInventory().setItem(id, new Batrod(getPower()));
 		//TODO Auto-generated method stub
 	}
 
@@ -173,7 +179,7 @@ public class Enricher extends MachineDropperMultiblock{
 	
 	@Override
 	protected ArmorStand spawnDesignEntityInternal(int id) {
-		BlockFace forward = ((Directional)((BlockState) invHolder).getData()).getFacing();
+		BlockFace forward = ((Directional)((BlockState) getDropper()).getData()).getFacing();
 		ArmorStand armorStand = (ArmorStand) position.getWorld().spawnEntity(position.clone().add(0.5, -0.2, 0.5).add(rotateVector(new Vector(0, 0, 1), forward)), EntityType.ARMOR_STAND);
 		
 		armorStand.setHelmet(new ItemStack(Material.STAINED_GLASS, 1, (short) 0));
@@ -201,6 +207,8 @@ public class Enricher extends MachineDropperMultiblock{
 
 	@Override
 	public void updateBlock() {
+		Dropper dropper = getDropper();
+		
 		if(speed > 0){
 			Location l0 = designEntities.get(0).getLocation();
 			float yaw = l0.getYaw() + speed;
