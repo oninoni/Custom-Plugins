@@ -54,20 +54,25 @@ public class PowerItem extends ItemStack{
 	
 	Machine machine;
 	
-	public PowerItem(int amount, short damage, String name, int power) {
-		super(Material.SPONGE, amount, damage);
-		
+	private void init(String name, int power)
+	{
 		itemName = name;
 		maxPower = 64000;
-		
-		setType(getOriginalType());
 		
 		create(power);
 	}
 	
+	public PowerItem(int amount, short damage, String name, int power) {
+		super(Material.SPONGE, amount, damage);
+		setType(getOriginalType());
+		init(name, power);
+	}
+	
 	public PowerItem(int amount, short damage, String name, Machine m) {
-		this(amount, damage, name, m.getPower());	
-		machine = m;	
+		super(Material.SPONGE, amount, damage);
+		setType(getOriginalType());
+		machine = m;
+		init(name, m.getPower());
 	}
 
 	public PowerItem(ItemStack item, String name){
@@ -79,6 +84,7 @@ public class PowerItem extends ItemStack{
 	
 	public PowerItem(ItemStack item){
 		this(item, "");
+		// TODO make check better with static function
 	}
 	
 	protected Material getOriginalType(){
