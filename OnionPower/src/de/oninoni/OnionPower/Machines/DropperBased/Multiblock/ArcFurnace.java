@@ -49,7 +49,7 @@ public abstract class ArcFurnace extends MachineDropperMultiblock {
 		plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {
-				for (int i = 0; i < 8; i++)
+				for (int i = 0; i < 9; i++)
 					if (i % 3 != 1)
 						dropper.getInventory().setItem(i, CustomsItems.getArcFurnaceFurnace());
 				
