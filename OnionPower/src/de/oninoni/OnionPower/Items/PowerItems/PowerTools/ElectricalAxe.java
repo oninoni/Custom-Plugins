@@ -10,7 +10,7 @@ public class ElectricalAxe extends PowerTool{
 	public ElectricalAxe(int power, short damage){
 		super(1, damage, NAME, power);
 	}
-	
+
 	public ElectricalAxe(ItemStack item){
 		super(item, NAME);
 	}

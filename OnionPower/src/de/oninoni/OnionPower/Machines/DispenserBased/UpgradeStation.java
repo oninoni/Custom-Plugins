@@ -114,11 +114,11 @@ public class UpgradeStation extends MachineDispenser{
 			
 			for(int i = 0; i < 6; i++){
 				ItemStack item = dispenser.getInventory().getItem(i + 3);
-				int ammount = item.getAmount() - 1;
-				if(ammount == 0){
+				int amount = item.getAmount() - 1;
+				if(amount == 0){
 					item.setType(Material.AIR);
 				}else{
-					item.setAmount(ammount);
+					item.setAmount(amount);
 				}
 				dispenser.getInventory().setItem(i + 3, item);
 			}
@@ -132,9 +132,9 @@ public class UpgradeStation extends MachineDispenser{
 				ItemStack current = inv.getItem(2);
 				if(!cursor.isSimilar(current)){
 					if(cursor.getAmount() > 1){
-						int ammount = cursor.getAmount() - 1;
+						int amount = cursor.getAmount() - 1;
 						ItemStack overflow = cursor.clone();
-						overflow.setAmount(ammount);
+						overflow.setAmount(amount);
 						cursor.setAmount(1);
 						HashMap<Integer, ItemStack> overflow2 = p.getInventory().addItem(overflow);
 						if(overflow2.size() > 0){

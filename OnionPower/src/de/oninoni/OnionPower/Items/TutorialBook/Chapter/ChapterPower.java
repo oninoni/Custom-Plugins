@@ -48,7 +48,7 @@ public class ChapterPower extends Chapter {
 		chapter.add("{\"text\":\""
 				+ "§4§lSolar Hopper:§r§0\n"
 				+ "\n"
-				+ "The §4§lSolar §4§lHopper§r§0 converts sunlight into a small ammount of power.\n"
+				+ "The §4§lSolar §4§lHopper§r§0 converts sunlight into a small amount of power.\n"
 				+ "\n"
 				+ "Only works at day!"
 				+ "\"}"

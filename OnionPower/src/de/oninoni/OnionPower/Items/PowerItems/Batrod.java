@@ -7,10 +7,6 @@ import org.bukkit.inventory.ItemStack;
 public class Batrod extends PowerItem{
 	private static final String NAME = "§4Batrod";
 	
-	public Batrod(int power, short durability){
-		this(power);
-	}
-	
 	public Batrod(int power){
 		super(1, (short) 0, NAME, power);
 	}
@@ -18,7 +14,7 @@ public class Batrod extends PowerItem{
 	public Batrod(ItemStack item){
 		super(item, NAME);
 	}
-	
+
 	@Override
 	protected Material getOriginalType() {
 		return Material.BLAZE_ROD;

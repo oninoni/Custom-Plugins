@@ -6,19 +6,19 @@ import org.bukkit.OfflinePlayer;
 
 import de.oninoni.OnionPower.Machines.MachineManager;
 
-public class IronArkFurnace extends ArkFurnace{
+public class IronArcFurnace extends ArcFurnace{
 
-	public IronArkFurnace(Location position, MachineManager machineManager) {
+	public IronArcFurnace(Location position, MachineManager machineManager) {
 		super(position, machineManager);
 	}
 	
-	public IronArkFurnace(OfflinePlayer owner, Location position, MachineManager machineManager, int power) {
+	public IronArcFurnace(OfflinePlayer owner, Location position, MachineManager machineManager, int power) {
 		super(owner, position, machineManager, power);
 	}
 
 	@Override
 	public String getDisplayName() {
-		return "§6§lIRON - Ark Furnace";
+		return "§6§lIRON - Arc Furnace";
 	}
 
 	@Override

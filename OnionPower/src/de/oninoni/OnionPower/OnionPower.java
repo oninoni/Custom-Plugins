@@ -59,47 +59,71 @@ public class OnionPower extends JavaPlugin {
 	}
 
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
-		if (command.getName().equalsIgnoreCase("poweritems") && sender.isOp()) {
-			if (sender instanceof Player) {
-				Inventory inv = Bukkit.createInventory((Player) sender, 27, "§4Powered Items");
-				
-				inv.setItem(0 , new Batrod(0));
-				inv.setItem(1 , new Batrod(640000));
-				
-				inv.setItem(9 , new ElectricalAxe(640000, (short) 0));
-				inv.setItem(10, new ElectricalPickaxe(640000, (short) 0));
-				inv.setItem(11, new ElectricalShovel(640000, (short) 0));
-				inv.setItem(12, new ElectricalHoe(640000, (short) 0));
-				
-				inv.setItem(17, new ElectricalSword(640000, (short) 0));
-				
-				inv.setItem(18, new ElectricalHelmet(640000, (short) 0));
-				inv.setItem(19, new ElectricalChestplate(640000, (short) 0));
-				inv.setItem(20, new ElectricalLeggings(640000, (short) 0));
-				inv.setItem(21, new ElectricalBoots(640000, (short) 0));
-
-				inv.setItem(24, new TutorialBook());
-				
-				inv.setItem(25, new ElectricalJetlytra(640000, (short) 0));
-				inv.setItem(26, new ElectricalElytra(640000, (short) 0));
-				
-				((Player) sender).openInventory(inv);
-				return true;
+		if (sender instanceof Player)
+		{
+			Player player = (Player)sender;
+			if (player.isOp())
+			{
+				if (command.getName().equalsIgnoreCase("poweritems")) 
+				{
+					Inventory inv = Bukkit.createInventory(player, 27, "§4Powered Items");
+					
+					inv.setItem(0 , new Batrod(0));
+					inv.setItem(1 , new Batrod(640000));
+					
+					inv.setItem(9 , new ElectricalAxe(640000, (short)0));
+					inv.setItem(10, new ElectricalPickaxe(640000, (short)0));
+					inv.setItem(11, new ElectricalShovel(640000, (short)0));
+					inv.setItem(12, new ElectricalHoe(640000, (short)0));
+					
+					inv.setItem(17, new ElectricalSword(640000, (short) 0));
+					
+					inv.setItem(18, new ElectricalHelmet(640000, (short) 0));
+					inv.setItem(19, new ElectricalChestplate(640000, (short) 0));
+					inv.setItem(20, new ElectricalLeggings(640000, (short) 0));
+					inv.setItem(21, new ElectricalBoots(640000, (short) 0));
+	
+					inv.setItem(24, new TutorialBook());
+					
+					inv.setItem(25, new ElectricalJetlytra(640000, (short) 0));
+					inv.setItem(26, new ElectricalElytra(640000, (short) 0));
+					
+					player.openInventory(inv);
+				}
+				else if(command.getName().equalsIgnoreCase("upgrades"))
+				{
+					if (UpgradeType.values().length != 0)
+					{
+						int requiredSlots = (int)Math.ceil(Math.max(1, UpgradeType.values().length) / 9.0) * 9;
+						Inventory inv = Bukkit.createInventory(player, requiredSlots, "§4Available Upgrades");
+						 
+						for (UpgradeType type : UpgradeType.values())
+						{
+							inv.setItem(type.ordinal(), Upgrade.getItem(type));
+						}
+						
+						player.openInventory(inv);	
+					}
+					else
+					{
+						player.sendMessage("§cThere are no upgrades");						
+					}
+				}
+				else
+				{
+					sender.sendMessage("§cOnionPower-Command not implemented");					
+				}
 			}
-		}else if(command.getName().equalsIgnoreCase("upgrades") && sender.isOp()){
-			if(sender instanceof Player){
-				Inventory inv = Bukkit.createInventory((Player) sender, 27, "§4Powered Items");
-				 
-				inv.setItem(0, Upgrade.getItem(UpgradeType.RedstoneUpgrade));
-				inv.setItem(1, Upgrade.getItem(UpgradeType.RangeUpgrade));
-				inv.setItem(2, Upgrade.getItem(UpgradeType.LavaUpgrade));
-				
-				((Player) sender).openInventory(inv);
-				return true;
-			}
+			else
+			{
+				sender.sendMessage("§cOnly operators can use this command");				
+			}			
 		}
-		return false;
+		else
+		{
+			sender.sendMessage("§cOnly players can use this command");
+		}
+		return true;
 	}
 
 	public void onDisable() {

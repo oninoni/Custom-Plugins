@@ -1,6 +1,7 @@
 package de.oninoni.OnionPower.Machines.DropperBased.Multiblock;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import org.bukkit.Location;
@@ -14,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.material.Colorable;
 import org.bukkit.material.Directional;
 import org.bukkit.material.Hopper;
 import org.bukkit.material.MaterialData;
@@ -21,41 +23,41 @@ import org.bukkit.material.Stairs;
 import org.bukkit.util.Vector;
 
 import de.oninoni.OnionPower.Items.PowerItems.Batrod;
-import de.oninoni.OnionPower.Items.Statics.ArkFurnaceCore;
-import de.oninoni.OnionPower.Items.Statics.ArkHeater;
+import de.oninoni.OnionPower.Items.Statics.ArcFurnaceCore;
+import de.oninoni.OnionPower.Items.Statics.ArcHeater;
 import de.oninoni.OnionPower.Items.Statics.CustomsItems;
 import de.oninoni.OnionPower.Machines.MachineManager;
 import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager.UpgradeType;
 
-public abstract class ArkFurnace extends MachineDropperMultiblock {
+public abstract class ArcFurnace extends MachineDropperMultiblock {
 	
 	org.bukkit.block.Hopper inputHopper, outputHopper;
 	
 	private int chimneyHeight;
 	private Location smokePosition;
 
-	public ArkFurnace(Location position, MachineManager machineManager) {
+	public ArcFurnace(Location position, MachineManager machineManager) {
 		super(position, machineManager);
 		effectOffset = new Vector(0.0f, 1.0f, 0.0f);
 		
 		getHoppers();
 	}
 	
-	public ArkFurnace(OfflinePlayer owner, Location position, MachineManager machineManager, int power) {
+	public ArcFurnace(OfflinePlayer owner, Location position, MachineManager machineManager, int power) {
 		super(owner, position, machineManager, power);
 		effectOffset = new Vector(0.0f, 1.0f, 0.0f);
 		plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {
-				dropper.getInventory().setItem(0, CustomsItems.getArkFurnaceFurnace());
-				dropper.getInventory().setItem(2, CustomsItems.getArkFurnaceFurnace());
-				dropper.getInventory().setItem(3, CustomsItems.getArkFurnaceFurnace());
-				dropper.getInventory().setItem(5, CustomsItems.getArkFurnaceFurnace());
-				dropper.getInventory().setItem(6, CustomsItems.getArkFurnaceFurnace());
-				dropper.getInventory().setItem(8, CustomsItems.getArkFurnaceFurnace());
+				dropper.getInventory().setItem(0, CustomsItems.getArcFurnaceFurnace());
+				dropper.getInventory().setItem(2, CustomsItems.getArcFurnaceFurnace());
+				dropper.getInventory().setItem(3, CustomsItems.getArcFurnaceFurnace());
+				dropper.getInventory().setItem(5, CustomsItems.getArcFurnaceFurnace());
+				dropper.getInventory().setItem(6, CustomsItems.getArcFurnaceFurnace());
+				dropper.getInventory().setItem(8, CustomsItems.getArcFurnaceFurnace());
 				
-				dropper.getInventory().setItem(7, ArkHeater.create(0));
-				dropper.getInventory().setItem(1, ArkFurnaceCore.create(getSmeltingMaterial()));
+				dropper.getInventory().setItem(7, ArcHeater.create(0));
+				dropper.getInventory().setItem(1, ArcFurnaceCore.create(getSmeltingMaterial()));
 				
 				reOpenInventories();
 			}
@@ -201,14 +203,20 @@ public abstract class ArkFurnace extends MachineDropperMultiblock {
 
 	@Override
 	protected void resetItemAt(int id) {
-		if(id == 4) dropper.getInventory().setItem(id, new Batrod(getPower()));
-		
-		if(id == 0 || id == 2 || id == 3 || id == 5 || id == 6 || id == 8){
-			dropper.getInventory().setItem(id, new ItemStack(Material.FURNACE));
+		switch (id)
+		{
+		case 1:
+			dropper.getInventory().setItem(1, new ItemStack(getSmeltingMaterial()));
+			break;
+		case 4:
+			dropper.getInventory().setItem(id, new Batrod(getPower()));
+			break;
+		case 7:
+			dropper.getInventory().setItem(7, new ItemStack(Material.MAGMA));
+			break;
+		default:
+			dropper.getInventory().setItem(id, new ItemStack(Material.FURNACE));					
 		}
-		
-		if(id == 7) dropper.getInventory().setItem(7, new ItemStack(Material.MAGMA));
-		if(id == 1) dropper.getInventory().setItem(1, new ItemStack(getSmeltingMaterial()));
 	}
 
 	@Override
@@ -241,17 +249,17 @@ public abstract class ArkFurnace extends MachineDropperMultiblock {
 				}
 				inputHopper.getInventory().setItem(i, itemStack);
 				
-				ArkFurnaceCore.addTime(dropper.getInventory().getItem(1));
+				ArcFurnaceCore.addTime(dropper.getInventory().getItem(1));
 				
 				break;
 			}
 		}
-		List<Long> times = ArkFurnaceCore.getEnterTimes(dropper.getInventory().getItem(1));
-		int heat = ArkHeater.readHeat(dropper.getInventory().getItem(7));
+		List<Long> times = ArcFurnaceCore.getEnterTimes(dropper.getInventory().getItem(1));
+		int heat = ArcHeater.readHeat(dropper.getInventory().getItem(7));
 		if(heat >= 600){
 			for (Long time : times) {
 				if(time <= (System.currentTimeMillis() / 50) - (20 * 60 * (1000.0 / heat))){// 20 * 60 == 1 min Backzeit
-					ArkFurnaceCore.removeTime(dropper.getInventory().getItem(1), time);
+					ArcFurnaceCore.removeTime(dropper.getInventory().getItem(1), time);
 					ItemStack result = new ItemStack(getSmeltingMaterial(), 2);
 					outputHopper.getInventory().addItem(result);
 				}
@@ -265,21 +273,21 @@ public abstract class ArkFurnace extends MachineDropperMultiblock {
 					position.getWorld().spawnParticle(Particle.SMOKE_LARGE, smokePosition, 3, 0.1, 0.0, 0.1, 0);
 					position.getWorld().spawnParticle(Particle.FLAME, smokePosition, 4, 0.1, 0.5, 0.1, 0);
 				}else{
-					ArkHeater.setHeat(dropper.getInventory().getItem(7), Math.max(heat - 1, 0));
+					ArcHeater.setHeat(dropper.getInventory().getItem(7), Math.max(heat - 1, 0));
 				}
 			}else{
 				if(power >= 200){
-					ArkHeater.setHeat(dropper.getInventory().getItem(7), heat + 1);
+					ArcHeater.setHeat(dropper.getInventory().getItem(7), heat + 1);
 					power -= 1000;
 					powerOutputTotal += 1000;
 					position.getWorld().spawnParticle(Particle.SMOKE_LARGE, smokePosition, 7, 0.1, 0.0, 0.1, 0);
 					position.getWorld().spawnParticle(Particle.FLAME, smokePosition, 4, 0.1, 0.5, 0.1, 0);
 				}else{
-					ArkHeater.setHeat(dropper.getInventory().getItem(7), Math.max(heat - 1, 0));
+					ArcHeater.setHeat(dropper.getInventory().getItem(7), Math.max(heat - 1, 0));
 				}
 			}
 		}else{
-			ArkHeater.setHeat(dropper.getInventory().getItem(7), Math.max(heat - 1, 0));
+			ArcHeater.setHeat(dropper.getInventory().getItem(7), Math.max(heat - 1, 0));
 		}
 		needsUpdate = true;
 	}

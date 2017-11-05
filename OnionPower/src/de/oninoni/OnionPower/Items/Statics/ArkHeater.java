@@ -7,7 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class ArkHeater {
+public class ArcHeater {
 	
 	public static ItemStack create(int heat){
 		ItemStack i = new ItemStack(Material.MAGMA);

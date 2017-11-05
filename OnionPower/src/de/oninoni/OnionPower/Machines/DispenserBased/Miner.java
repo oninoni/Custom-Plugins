@@ -180,7 +180,6 @@ public class Miner extends MachineDispenser {
 		}
 	}
 
-	//@SuppressWarnings("deprecation")
 	@Override
 	public ArmorStand spawnDesignEntityInternal(int id) {
 		/*switch (id) {

@@ -12,8 +12,8 @@ public class PowerTool extends PowerItem{
 	short initialDurability = -1;
 	int initialBatrodPower = -1;
 	
-	public PowerTool(int ammount, short damage, String name, int power){
-		super(ammount, damage, name, power);
+	public PowerTool(int amount, short damage, String name, int power){
+		super(amount, damage, name, power);
 	}
 	
 	public PowerTool(ItemStack item, String name) {

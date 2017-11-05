@@ -9,8 +9,8 @@ import de.oninoni.OnionPower.Machines.DispenserBased.Miner;
 import de.oninoni.OnionPower.Machines.DispenserBased.Sorter;
 import de.oninoni.OnionPower.Machines.DispenserBased.UpgradeStation;
 import de.oninoni.OnionPower.Machines.DropperBased.Multiblock.Enricher;
-import de.oninoni.OnionPower.Machines.DropperBased.Multiblock.GoldArkFurnace;
-import de.oninoni.OnionPower.Machines.DropperBased.Multiblock.IronArkFurnace;
+import de.oninoni.OnionPower.Machines.DropperBased.Multiblock.GoldArcFurnace;
+import de.oninoni.OnionPower.Machines.DropperBased.Multiblock.IronArcFurnace;
 import de.oninoni.OnionPower.Machines.FurnaceBased.ElectricFurnace;
 import de.oninoni.OnionPower.Machines.FurnaceBased.Generator;
 import de.oninoni.OnionPower.Machines.HopperBased.FluidHandler;
@@ -46,9 +46,9 @@ public class MachineTemplates {
 		buildTemplates.put(SolarHopper.class.getName(),
 				new Material[]{	Material.GLASS, Material.LAPIS_BLOCK, Material.BARRIER, Material.LAPIS_BLOCK, Material.GLASS});
 		
-		buildTemplates.put(GoldArkFurnace.class.getName(), 
+		buildTemplates.put(GoldArcFurnace.class.getName(), 
 				new Material[]{ Material.FURNACE, Material.GOLD_INGOT, Material.FURNACE, Material.FURNACE, Material.BARRIER, Material.FURNACE, Material.FURNACE, Material.MAGMA, Material.FURNACE});
-		buildTemplates.put(IronArkFurnace.class.getName(), 
+		buildTemplates.put(IronArcFurnace.class.getName(), 
 				new Material[]{ Material.FURNACE, Material.IRON_INGOT, Material.FURNACE, Material.FURNACE, Material.BARRIER, Material.FURNACE, Material.FURNACE, Material.MAGMA, Material.FURNACE});
 		buildTemplates.put(Enricher.class.getName(), 
 				new Material[]{ Material.IRON_BLOCK, Material.IRON_BLOCK, Material.IRON_BLOCK, Material.THIN_GLASS, Material.BARRIER, Material.THIN_GLASS, Material.IRON_BLOCK, Material.HOPPER, Material.IRON_BLOCK,});

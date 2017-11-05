@@ -50,14 +50,14 @@ public class FluidHandler extends MachineHopper {
 		fluidLevel = 0;
 	}
 
-	public int addFluid(int ammount) {
+	public int addFluid(int amount) {
 		int overflow = 0;
-		fluidLevel += ammount;
+		fluidLevel += amount;
 		if (fluidLevel > MAXFLUIDLEVEL) {
 			overflow = fluidLevel - MAXFLUIDLEVEL;
 			fluidLevel = MAXFLUIDLEVEL;
 		}
-		if (ammount != overflow) {
+		if (amount != overflow) {
 			InternalTank.setTankLevel(getHopper().getInventory().getItem(3), this);
 			needsUpdate = true;
 		}

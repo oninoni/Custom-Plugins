@@ -1,6 +1,7 @@
 package de.oninoni.OnionPower.Machines.Upgrades;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -27,40 +28,60 @@ public abstract class Upgrade {
 		return itemStack;
 	}
 
-	private static ArrayList<String> getLore(UpgradeType type) {
-		ArrayList<String> lore = new ArrayList<>();
+	private static List<String> getLore(UpgradeType type) {
+		List<String> lore = new ArrayList<String>();
 		switch (type) {
+		case Upgrade:
+			lore.add("§9Serves as a base for all upgrades.");
+			lore.add("§9Used in an §3Upgrade Station§9.");
+			break;
 		case RedstoneUpgrade:
-			lore.add("§9This upgrade allows a §3Machine§9,");
-			lore.add("§9to be controlled by §3Redstone§9.");
+			lore.add("§9Allows any §3Machine§9 to be");
+			lore.add("§9controlled by §3Redstone§9.");
+			break;
+		case EfficiencyUpgrade:
+			lore.add("§c[TODO]");
 			break;
 		case RangeUpgrade:
-			lore.add("§9This can change the range");
-			lore.add("§9of an §3Electrical Stripminer§9.");
+			lore.add("§9Allows you to increase or decrease");
+			lore.add("§9the range of an §3Electrical Stripminer§9.");
 			break;
 		case LavaUpgrade:
-			lore.add("§9If placed inside a §3Fluid");
-			lore.add("§3Handler§9 this will make it");
-			lore.add("§9store §3lava.");
+			lore.add("§9Allows storage of Lava, when");
+			lore.add("§9placed inside of a §3Fluid Handler§9.");
 			break;
 		default:
-			lore.add("§9Basic Upgrade. Can be modified");
-			lore.add("§9in the §3Upgrade Station");
+			lore.add("§cMissing Lore");
 		}
 		return lore;
 	}
 
 	public static String getName(UpgradeType type) {
-		switch (type) {
-		case RedstoneUpgrade:
-			return "§6Upgrade: §aRedstone";
-		case RangeUpgrade:
-			return "§6Upgrade: §aRange";
-		case LavaUpgrade:
-			return "§6Upgrade: §aLava";
-		default:
-			return "§6Upgrade: §a";
+		if (type == UpgradeType.Upgrade)
+		{
+			return "§6Upgrade-Base";
 		}
+		else
+		{
+			String name;
+			switch (type) {
+			case RedstoneUpgrade:
+				name = "§aRedstone";
+				break;
+			case EfficiencyUpgrade:
+				name = "§aEfficency";
+				break;
+			case RangeUpgrade:
+				name = "§aRange";
+				break;
+			case LavaUpgrade:
+				name = "§aLava";
+				break;
+			default:
+				name = "§cMissing Name";
+			}
+			return "§6Upgrade: " + name;
+		}		
 	}
 
 	public static boolean isUpgrade(ItemStack i) {

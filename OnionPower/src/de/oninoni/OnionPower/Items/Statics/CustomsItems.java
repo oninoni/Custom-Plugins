@@ -56,10 +56,10 @@ public class CustomsItems {
 		return pick;
 	}
 	
-	public static ItemStack getArkFurnaceFurnace() {
+	public static ItemStack getArcFurnaceFurnace() {
 		ItemStack furnace = new ItemStack(Material.FURNACE);
 		ItemMeta meta = furnace.getItemMeta();
-		meta.setDisplayName("§4Ark Furnace");
+		meta.setDisplayName("§4Arc Furnace");
 		furnace.setItemMeta(meta);
 		return furnace;
 	}

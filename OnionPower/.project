@@ -14,4 +14,21 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>jars/ProtocolLib.jar</name>
+			<type>1</type>
+			<locationURI>WORKSPACE_LOC/jars/ProtocolLib.jar</locationURI>
+		</link>
+		<link>
+			<name>jars/spigot-1.12.2.jar</name>
+			<type>1</type>
+			<locationURI>WORKSPACE_LOC/jars/spigot-1.12.2.jar</locationURI>
+		</link>
+		<link>
+			<name>jars/spigot-api-1.12.2-R0.1-SNAPSHOT-shaded.jar</name>
+			<type>1</type>
+			<locationURI>WORKSPACE_LOC/jars/spigot-api-1.12.2-R0.1-SNAPSHOT-shaded.jar</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>

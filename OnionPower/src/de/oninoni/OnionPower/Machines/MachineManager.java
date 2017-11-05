@@ -43,10 +43,10 @@ import de.oninoni.OnionPower.Machines.DispenserBased.MachineDispenser;
 import de.oninoni.OnionPower.Machines.DispenserBased.Miner;
 import de.oninoni.OnionPower.Machines.DispenserBased.Sorter;
 import de.oninoni.OnionPower.Machines.DispenserBased.UpgradeStation;
-import de.oninoni.OnionPower.Machines.DropperBased.Multiblock.ArkFurnace;
+import de.oninoni.OnionPower.Machines.DropperBased.Multiblock.ArcFurnace;
 import de.oninoni.OnionPower.Machines.DropperBased.Multiblock.Enricher;
-import de.oninoni.OnionPower.Machines.DropperBased.Multiblock.GoldArkFurnace;
-import de.oninoni.OnionPower.Machines.DropperBased.Multiblock.IronArkFurnace;
+import de.oninoni.OnionPower.Machines.DropperBased.Multiblock.GoldArcFurnace;
+import de.oninoni.OnionPower.Machines.DropperBased.Multiblock.IronArcFurnace;
 import de.oninoni.OnionPower.Machines.DropperBased.Multiblock.MachineDropperMultiblock;
 import de.oninoni.OnionPower.Machines.FurnaceBased.ElectricFurnace;
 import de.oninoni.OnionPower.Machines.FurnaceBased.Generator;
@@ -167,12 +167,12 @@ public class MachineManager {
 					machines.put(l, new UpgradeStation(l, this));
 				} else if (MachineClass == SolarHopper.class){
 					machines.put(l, new SolarHopper(l, this));
-				} else if (MachineClass == GoldArkFurnace.class){
-					ArkFurnace aF = new GoldArkFurnace(l, this);
+				} else if (MachineClass == GoldArcFurnace.class){
+					ArcFurnace aF = new GoldArcFurnace(l, this);
 					machines.put(l, aF);
 					addProtectedBlock(aF);
-				} else if (MachineClass == IronArkFurnace.class){
-					ArkFurnace aF = new IronArkFurnace(l, this);
+				} else if (MachineClass == IronArcFurnace.class){
+					ArcFurnace aF = new IronArcFurnace(l, this);
 					machines.put(l, aF);
 					addProtectedBlock(aF);
 				} else if (MachineClass == Enricher.class){
@@ -278,13 +278,13 @@ public class MachineManager {
 			if (Machine.canCreate(e, SolarHopper.class.getName(), InventoryType.HOPPER))
 				machines.put(location, new SolarHopper(owner, location, this, 
 						Machine.getAllBatrodsPower(e.getView().getTopInventory())));
-			if (Machine.canCreate(e, GoldArkFurnace.class.getName(), InventoryType.DROPPER)){
-				ArkFurnace aF = new GoldArkFurnace(owner, location, this, Machine.getAllBatrodsPower(e.getView().getTopInventory()));
+			if (Machine.canCreate(e, GoldArcFurnace.class.getName(), InventoryType.DROPPER)){
+				ArcFurnace aF = new GoldArcFurnace(owner, location, this, Machine.getAllBatrodsPower(e.getView().getTopInventory()));
 				machines.put(location, aF);
 				addProtectedBlock(aF);
 			}
-			if (Machine.canCreate(e, IronArkFurnace.class.getName(), InventoryType.DROPPER)){
-				ArkFurnace aF = new IronArkFurnace(owner, location, this, Machine.getAllBatrodsPower(e.getView().getTopInventory()));
+			if (Machine.canCreate(e, IronArcFurnace.class.getName(), InventoryType.DROPPER)){
+				ArcFurnace aF = new IronArcFurnace(owner, location, this, Machine.getAllBatrodsPower(e.getView().getTopInventory()));
 				machines.put(location, aF);
 				addProtectedBlock(aF);
 			}

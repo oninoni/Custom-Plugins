@@ -21,15 +21,18 @@ import de.oninoni.OnionPower.Machines.Machine;
 public class UpgradeManager {
 
 	public enum UpgradeType {
-		Upgrade, RangeUpgrade, RedstoneUpgrade, EfficiencyUpgrade, LavaUpgrade,
+		Upgrade, 
+		RedstoneUpgrade, 
+		EfficiencyUpgrade, 
+		RangeUpgrade, 
+		LavaUpgrade,
 	}
-
+	
 	protected static OnionPower plugin = OnionPower.get();
 
-	@SuppressWarnings("incomplete-switch")
 	private static HashMap<Integer, Upgrade> load(Machine m) {
 		// plugin.getLogger().info("Loading... Upgrades...");
-		HashMap<Integer, Upgrade> loaded = new HashMap<>();
+		HashMap<Integer, Upgrade> result = new HashMap<>();
 
 		List<String> lore = m.getPowerCore().getItemMeta().getLore();
 		lore = lore.subList(5, lore.size());
@@ -44,17 +47,22 @@ public class UpgradeManager {
 				// plugin.getLogger().info(type + " / " +
 				// UpgradeType.RedstoneUpgrade.toString());
 				// plugin.getLogger().info(id + "|" + type + "|" + value);
-				switch (type) {
+				switch (type) 
+				{
+				case Upgrade:
+					// Should not be able to happen, if it does, just don't add it on the next load
+					break;
 				case RedstoneUpgrade:
-					loaded.put(id, new RedstoneUpgrade(m, value));
+					result.put(id, new RedstoneUpgrade(m, value));
 					break;
 				case EfficiencyUpgrade:
+					result.put(id, new EfficencyUpgrade(m, value));
 					break;
 				case RangeUpgrade:
-					loaded.put(id, new RangeUpgrade(m, value));
+					result.put(id, new RangeUpgrade(m, value));
 					break;
 				case LavaUpgrade:
-					loaded.put(id, new LavaUpgrade(m, value));
+					result.put(id, new LavaUpgrade(m, value));
 					break;
 				}
 			}
@@ -62,7 +70,7 @@ public class UpgradeManager {
 
 		// plugin.getLogger().info("Loaded " + loaded.size() + " Upgrades");
 
-		return loaded;
+		return result;
 	}
 
 	private Machine machine;
