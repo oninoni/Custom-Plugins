@@ -1,7 +1,6 @@
 package de.oninoni.OnionPower.Machines.DropperBased.Multiblock;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 import org.bukkit.Location;
@@ -10,12 +9,12 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.Dropper;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.Colorable;
 import org.bukkit.material.Directional;
 import org.bukkit.material.Hopper;
 import org.bukkit.material.MaterialData;
@@ -49,6 +48,8 @@ public abstract class ArcFurnace extends MachineDropperMultiblock {
 		plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
 			@Override
 			public void run() {
+				Dropper dropper = getDropper();
+				
 				for (int i = 0; i < 9; i++)
 					if (i % 3 != 1)
 						dropper.getInventory().setItem(i, CustomsItems.getArcFurnaceFurnace());
@@ -71,6 +72,8 @@ public abstract class ArcFurnace extends MachineDropperMultiblock {
 	private void getHoppers(){
 		Vector vecOutput = new Vector( 0,-1, 2);
 		Vector vecInput = new Vector( 0, 1, 1);
+		
+		Dropper dropper = getDropper();
 		
 		vecInput = rotateVector(vecInput, ((Directional)dropper.getData()).getFacing());
 		vecOutput = rotateVector(vecOutput, ((Directional)dropper.getData()).getFacing());
@@ -203,16 +206,16 @@ public abstract class ArcFurnace extends MachineDropperMultiblock {
 		switch (id)
 		{
 		case 1:
-			dropper.getInventory().setItem(1, new ItemStack(getSmeltingMaterial()));
+			getDropper().getInventory().setItem(1, new ItemStack(getSmeltingMaterial()));
 			break;
 		case 4:
-			dropper.getInventory().setItem(id, new Batrod(getPower()));
+			getDropper().getInventory().setItem(id, new Batrod(getPower()));
 			break;
 		case 7:
-			dropper.getInventory().setItem(7, new ItemStack(Material.MAGMA));
+			getDropper().getInventory().setItem(7, new ItemStack(Material.MAGMA));
 			break;
 		default:
-			dropper.getInventory().setItem(id, new ItemStack(Material.FURNACE));					
+			getDropper().getInventory().setItem(id, new ItemStack(Material.FURNACE));					
 		}
 	}
 
@@ -233,6 +236,8 @@ public abstract class ArcFurnace extends MachineDropperMultiblock {
 
 	@Override
 	public void updateBlock() {
+		Dropper dropper = getDropper();
+		
 		position.getWorld().spawnParticle(Particle.SMOKE_LARGE, smokePosition, 1, 0.1, 0.0, 0.1, 0);
 		if(isInactive())return;
 		for (int i = 0; i < inputHopper.getInventory().getSize(); i++) {

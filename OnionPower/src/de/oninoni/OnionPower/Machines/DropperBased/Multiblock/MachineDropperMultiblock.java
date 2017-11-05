@@ -88,7 +88,7 @@ public abstract class MachineDropperMultiblock extends MachineDropper{
 	}
 	
 	protected boolean checkTemplate(HashMap<Vector, MaterialData> template){
-		BlockFace forward = ((Directional)dropper.getData()).getFacing();
+		BlockFace forward = ((Directional)getDropper().getData()).getFacing();
 		if(template == null) return false;
 		for (Vector v : template.keySet()) {
 			MaterialData mat = template.get(v).clone();
@@ -141,7 +141,7 @@ public abstract class MachineDropperMultiblock extends MachineDropper{
 	}
 	
 	private void setTemplate(HashMap<Vector, MaterialData> template){
-		BlockFace forward = ((Directional)dropper.getData()).getFacing();
+		BlockFace forward = ((Directional)getDropper().getData()).getFacing();
 		for (Vector v : template.keySet()) {
 			Vector vec = rotateVector(v, forward);
 			if(vec == null) return;
@@ -170,7 +170,7 @@ public abstract class MachineDropperMultiblock extends MachineDropper{
 		List<Location> protectedBlocks = new ArrayList<>();
 		
 		for (Vector v : templateInActive.keySet()) {
-			Vector vec = rotateVector(v, ((Directional)dropper.getData()).getFacing());
+			Vector vec = rotateVector(v, ((Directional)getDropper().getData()).getFacing());
 			Location protectedBlock = position.clone();
 			protectedBlock.add(vec);
 			protectedBlocks.add(protectedBlock);
