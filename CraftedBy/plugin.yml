@@ -1,0 +1,4 @@
+name: CraftedBy
+main: de.oninoni.CraftedBy.CraftedBy
+description: Adds Crafted by <player> to all crafted items
+version: 0.42
