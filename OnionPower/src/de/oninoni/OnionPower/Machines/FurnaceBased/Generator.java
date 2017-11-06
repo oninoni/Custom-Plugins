@@ -104,9 +104,9 @@ public class Generator extends MachineFurnace {
 	}
 
 	@Override
-	protected void resetItemAt(int id) {
-		if (id == coreSlot) {
-			getFurnace().getInventory().setItem(id, new Batrod(getPower()));
+	protected void resetItemAt(int slot) {
+		if (slot == getCoreSlot()) {
+			getFurnace().getInventory().setItem(slot, new Batrod(getPower()));
 		}
 	}
 
@@ -116,8 +116,8 @@ public class Generator extends MachineFurnace {
 	}
 
 	@Override
-	protected void setCoreSlot() {
-		coreSlot = 2;
+	protected int getCoreSlot() {
+		return 2;
 	}
 
 	private void SetupPowerIO() {

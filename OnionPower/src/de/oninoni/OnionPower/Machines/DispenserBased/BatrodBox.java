@@ -27,11 +27,11 @@ public class BatrodBox extends MachineDispenser {
 			@Override
 			public void run() {
 				for (int i = 0; i < 9; i++) {
-					if (i != coreSlot)
+					if (i != getCoreSlot())
 						getDispenser().getInventory().setItem(i, new ItemStack(Material.AIR));
 				}
-				getDispenser().getInventory().setItem(coreSlot - 1, new ItemStack(Material.STAINED_GLASS_PANE));
-				getDispenser().getInventory().setItem(coreSlot + 1, new ItemStack(Material.STAINED_GLASS_PANE));
+				getDispenser().getInventory().setItem(getCoreSlot() - 1, new ItemStack(Material.STAINED_GLASS_PANE));
+				getDispenser().getInventory().setItem(getCoreSlot() + 1, new ItemStack(Material.STAINED_GLASS_PANE));
 
 				reOpenInventories();
 			}
@@ -71,7 +71,7 @@ public class BatrodBox extends MachineDispenser {
 
 	@Override
 	public boolean onClickFixed(Inventory inv, int slot, ItemStack cursor, Player p) {
-		if (slot >= coreSlot - 1 && slot <= coreSlot + 1) {
+		if (slot >= getCoreSlot() - 1 && slot <= getCoreSlot() + 1) {
 			return true;
 		}
 		return false;
@@ -88,8 +88,8 @@ public class BatrodBox extends MachineDispenser {
 	}
 
 	@Override
-	protected void resetItemAt(int id) {
-		getDispenser().getInventory().setItem(id, new Batrod(getPower() / 10));
+	protected void resetItemAt(int slot) {
+		getDispenser().getInventory().setItem(slot, new Batrod(getPower() / 10));
 	}
 
 	@Override
@@ -98,8 +98,8 @@ public class BatrodBox extends MachineDispenser {
 	}
 
 	@Override
-	protected void setCoreSlot() {
-		coreSlot = 4;
+	protected int getCoreSlot() {
+		return 4;
 	}
 
 	private void setupPowerIO() {

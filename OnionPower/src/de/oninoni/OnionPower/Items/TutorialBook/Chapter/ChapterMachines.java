@@ -38,7 +38,7 @@ public class ChapterMachines extends Chapter{
 		);
 		
 		chapter.add("{\"text\":\"\",\"extra\":["
-				+ BookRecipes.createRecipe(MachineTemplates.buildTemplates.get(Sorter.class.getName()))
+				+ BookRecipes.createRecipe(MachineTemplates.buildTemplates.get(Sorter.class))
 				+ "]}"
 		);
 		

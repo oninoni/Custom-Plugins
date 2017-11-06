@@ -241,12 +241,12 @@ public class Sorter extends MachineDispenser {
 	}
 
 	@Override
-	protected void resetItemAt(int id) {
-		if (id != 4) {
-			if (id % 2 == 0) {
-				getDispenser().getInventory().setItem(id, new Batrod(getPower()));
+	protected void resetItemAt(int slot) {
+		if (slot != 4) {
+			if (slot % 2 == 0) {
+				getDispenser().getInventory().setItem(slot, new Batrod(getPower()));
 			} else {
-				getDispenser().getInventory().setItem(id, new ItemStack(Material.CHEST));
+				getDispenser().getInventory().setItem(slot, new ItemStack(Material.CHEST));
 			}
 		}
 	}
@@ -276,8 +276,8 @@ public class Sorter extends MachineDispenser {
 	}
 
 	@Override
-	protected void setCoreSlot() {
-		coreSlot = 0;
+	protected int getCoreSlot() {
+		return 0;
 	}
 
 	private void setupPowerIO() {

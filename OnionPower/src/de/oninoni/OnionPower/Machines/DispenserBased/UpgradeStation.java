@@ -160,16 +160,16 @@ public class UpgradeStation extends MachineDispenser{
 	}
 
 	@Override
-	protected void resetItemAt(int id) {
-		switch (id) {
+	protected void resetItemAt(int slot) {
+		switch (slot) {
 		case 0:
-			getDispenser().getInventory().setItem(id, new Batrod(getPower()));
+			getDispenser().getInventory().setItem(slot, new Batrod(getPower()));
 			break;
 		case 1:
-			getDispenser().getInventory().setItem(id, new ItemStack(Material.WORKBENCH));
+			getDispenser().getInventory().setItem(slot, new ItemStack(Material.WORKBENCH));
 			break;
 		case 2:
-			getDispenser().getInventory().setItem(id, new ItemStack(Material.DIAMOND));
+			getDispenser().getInventory().setItem(slot, new ItemStack(Material.DIAMOND));
 			break;
 		}
 	}
@@ -180,8 +180,8 @@ public class UpgradeStation extends MachineDispenser{
 	}
 
 	@Override
-	protected void setCoreSlot() {
-		coreSlot = 0;
+	protected int getCoreSlot() {
+		return 0;
 	}
 
 	@Override

@@ -185,18 +185,16 @@ public class MachineManager {
 		}
 	}
 	
-	private void destroyProtectedBlock(Entity destroyer, Location l){
+	private void destroyProtectedBlock(Location l){
 		BlockState blockState = l.getBlock().getState();
 		if(blockState instanceof InventoryHolder){
-			List<HumanEntity> viewers = ((InventoryHolder) blockState).getInventory().getViewers();
-			for (HumanEntity humanEntity : viewers) {
+			for (HumanEntity humanEntity : ((InventoryHolder) blockState).getInventory().getViewers()) {
 				humanEntity.closeInventory();
 			}
 		}
-		protectedBlocks.get(l).destroyMachine((OfflinePlayer) destroyer);
-		Set<Location> keySet = protectedBlocks.keySet();
+		protectedBlocks.get(l).destroyMachine();
 		List<Location> toBeRemoved = new ArrayList<>();
-		for (Location loc : keySet) {
+		for (Location loc : protectedBlocks.keySet()) {
 			Machine m = protectedBlocks.get(loc);
 			if(m == protectedBlocks.get(l)){
 				toBeRemoved.add(loc);
@@ -222,7 +220,7 @@ public class MachineManager {
 				}
 			}else if(protectedBlocks.containsKey(location)){
 				if(protectedBlocks.get(location).doesExplode()){
-					destroyProtectedBlock(e.getEntity(), location);
+					destroyProtectedBlock(location);
 				}else{
 					notExloding.add(block);
 				}
@@ -240,7 +238,7 @@ public class MachineManager {
 			machines.get(location).onBreak(e);
 			machines.remove(location);
 		}else if(protectedBlocks.containsKey(location)){
-			destroyProtectedBlock(e.getPlayer(), location);
+			destroyProtectedBlock(location);
 		}
 	}
 
@@ -254,45 +252,59 @@ public class MachineManager {
 			if (e.getRawSlot() != e.getView().convertSlot(e.getRawSlot()) || e.getSlot() >= e.getInventory().getSize())
 				return;
 			Location location = e.getView().getTopInventory().getLocation();
-			if (Machine.canCreate(e, Generator.class.getName(), InventoryType.FURNACE))
-				machines.put(location, new Generator(owner, location, this,
-						Machine.getAllBatrodsPower(e.getView().getTopInventory())));
-			if (Machine.canCreate(e, ElectricFurnace.class.getName(), InventoryType.FURNACE))
-				machines.put(location, new ElectricFurnace(owner, location, this,
-						Machine.getAllBatrodsPower(e.getView().getTopInventory())));
-			if (Machine.canCreate(e, BatrodBox.class.getName(), InventoryType.DISPENSER))
-				machines.put(location, new BatrodBox(owner, location, this,
-						Machine.getAllBatrodsPower(e.getView().getTopInventory())));
-			if (Machine.canCreate(e, Sorter.class.getName(), InventoryType.DISPENSER))
-				machines.put(location, new Sorter(owner, location, this,
-						Machine.getAllBatrodsPower(e.getView().getTopInventory())));
-			if (Machine.canCreate(e, Miner.class.getName(), InventoryType.DISPENSER))
-				machines.put(location, new Miner(owner, location, this,
-						Machine.getAllBatrodsPower(e.getView().getTopInventory())));
-			if (Machine.canCreate(e, FluidHandler.class.getName(), InventoryType.HOPPER))
-				machines.put(location, new FluidHandler(owner, location, this,
-						Machine.getAllBatrodsPower(e.getView().getTopInventory())));
-			if (Machine.canCreate(e, UpgradeStation.class.getName(), InventoryType.DISPENSER))
-				machines.put(location, new UpgradeStation(owner, location, this, 
-						Machine.getAllBatrodsPower(e.getView().getTopInventory())));
-			if (Machine.canCreate(e, SolarHopper.class.getName(), InventoryType.HOPPER))
-				machines.put(location, new SolarHopper(owner, location, this, 
-						Machine.getAllBatrodsPower(e.getView().getTopInventory())));
-			if (Machine.canCreate(e, GoldArcFurnace.class.getName(), InventoryType.DROPPER)){
-				ArcFurnace aF = new GoldArcFurnace(owner, location, this, Machine.getAllBatrodsPower(e.getView().getTopInventory()));
-				machines.put(location, aF);
-				addProtectedBlock(aF);
+						
+			if (Machine.canCreate(e, Generator.class, InventoryType.FURNACE))
+				machine = new Generator(owner, location, this, 
+						Machine.getAllBatrodsPower(e.getView().getTopInventory()));
+			else if (Machine.canCreate(e, ElectricFurnace.class, InventoryType.FURNACE))
+				machine = new ElectricFurnace(owner, location, this,
+						Machine.getAllBatrodsPower(e.getView().getTopInventory()));
+			else if (Machine.canCreate(e, BatrodBox.class, InventoryType.DISPENSER))
+				machine = new BatrodBox(owner, location, this,
+						Machine.getAllBatrodsPower(e.getView().getTopInventory()));
+			else if (Machine.canCreate(e, Sorter.class, InventoryType.DISPENSER))
+				machine = new Sorter(owner, location, this,
+						Machine.getAllBatrodsPower(e.getView().getTopInventory()));
+			else if (Machine.canCreate(e, Miner.class, InventoryType.DISPENSER))
+				machine = new Miner(owner, location, this,
+						Machine.getAllBatrodsPower(e.getView().getTopInventory()));
+			else if (Machine.canCreate(e, FluidHandler.class, InventoryType.HOPPER))
+				machine = new FluidHandler(owner, location, this,
+						Machine.getAllBatrodsPower(e.getView().getTopInventory()));
+			else if (Machine.canCreate(e, UpgradeStation.class, InventoryType.DISPENSER))
+				machine = new UpgradeStation(owner, location, this, 
+						Machine.getAllBatrodsPower(e.getView().getTopInventory()));
+			else if (Machine.canCreate(e, SolarHopper.class, InventoryType.HOPPER))
+				machine = new SolarHopper(owner, location, this, 
+						Machine.getAllBatrodsPower(e.getView().getTopInventory()));
+			else if (Machine.canCreate(e, GoldArcFurnace.class, InventoryType.DROPPER))
+				machine = new GoldArcFurnace(owner, location, this, 
+						Machine.getAllBatrodsPower(e.getView().getTopInventory()));
+			else if (Machine.canCreate(e, IronArcFurnace.class, InventoryType.DROPPER))
+				machine = new IronArcFurnace(owner, location, this, 
+						Machine.getAllBatrodsPower(e.getView().getTopInventory()));
+			else if (Machine.canCreate(e, Enricher.class, InventoryType.DROPPER))
+				machine = new Enricher(owner, location, this, 
+						Machine.getAllBatrodsPower(e.getView().getTopInventory()));
+			
+			boolean addToList = machine != null;
+			
+			if (machine instanceof MachineDropperMultiblock)
+			{
+				MachineDropperMultiblock multiblock = (MachineDropperMultiblock)machine;
+				if (multiblock.valid())
+				{
+					addProtectedBlock(multiblock);												
+				}
+				else
+				{
+					addToList = false;
+				}
 			}
-			if (Machine.canCreate(e, IronArcFurnace.class.getName(), InventoryType.DROPPER)){
-				ArcFurnace aF = new IronArcFurnace(owner, location, this, Machine.getAllBatrodsPower(e.getView().getTopInventory()));
-				machines.put(location, aF);
-				addProtectedBlock(aF);
-			}
-			if (Machine.canCreate(e, Enricher.class.getName(), InventoryType.DROPPER)){
-				Enricher enricher = new Enricher(owner, location, this, Machine.getAllBatrodsPower(e.getView().getTopInventory()));
-				machines.put(location, enricher);
-				addProtectedBlock(enricher);
-			}
+			
+			if (addToList)
+				machines.put(location, machine);			
+			
 			if (machines.get(e.getInventory().getLocation()) != null)
 				saveData();
 		} else {

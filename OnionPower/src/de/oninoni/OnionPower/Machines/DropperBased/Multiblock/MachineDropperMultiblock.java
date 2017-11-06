@@ -3,6 +3,7 @@ package de.oninoni.OnionPower.Machines.DropperBased.Multiblock;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -24,7 +25,14 @@ public abstract class MachineDropperMultiblock extends MachineDropper{
 	private HashMap<Vector, MaterialData> templateInActive;
 	private HashMap<Vector, MaterialData> templateActive;
 	
+	// TODO: verneinungen unnötig...
+	//       if (!blablaNot) ist schwerer zu verstehen
 	boolean shouldNotGenerate = false;
+	
+	public boolean valid()
+	{
+		return !shouldNotGenerate;
+	}
 	
 	public MachineDropperMultiblock(Location position, MachineManager machineManager) {
 		super(position, machineManager);
@@ -32,7 +40,7 @@ public abstract class MachineDropperMultiblock extends MachineDropper{
 		templateActive = new HashMap<>();
 		setMutltiblockTemplates();
 		if(!checkActive()){
-			destroyMachine(owner);
+			destroyMachine();
 		}
 	}
 	
@@ -45,7 +53,7 @@ public abstract class MachineDropperMultiblock extends MachineDropper{
 			setActive();
 		}else{
 			shouldNotGenerate = true;
-			destroyMachine(owner);
+			destroyMachine();
 		}
 	}
 	
@@ -89,17 +97,17 @@ public abstract class MachineDropperMultiblock extends MachineDropper{
 	
 	protected boolean checkTemplate(HashMap<Vector, MaterialData> template){
 		BlockFace forward = ((Directional)getDropper().getData()).getFacing();
-		if(template == null) return false;
-		for (Vector v : template.keySet()) {
-			MaterialData mat = template.get(v).clone();
+		for (Entry<Vector, MaterialData> block : template.entrySet()) {
+			MaterialData mat = block.getValue().clone();
 			
-			Vector vec = rotateVector(v, forward);
-			if(vec == null) return false;
+			Vector vec = rotateVector(block.getKey(), forward);
+			// if(vec == null) return false;
 			
 			Location targetLocation = position.clone().add(vec);
 			Block targetBlock = targetLocation.getBlock();
 			
-			//plugin.getLogger().info(vec + " / " + targetLocation + " : " + targetBlock.getState().getData() + " / " + mat);
+			// plugin.getLogger().info(vec + " / " + targetLocation + " : " + targetBlock.getState().getData() + " / " + mat);
+			// plugin.getLogger().info("got " + targetBlock.getType() + ", want " + block.getValue().getItemType());
 			
 			if((targetBlock == null || targetBlock.getType() == Material.AIR) && mat.getItemType() != Material.AIR) return false;
 			
@@ -120,6 +128,7 @@ public abstract class MachineDropperMultiblock extends MachineDropper{
 				if(colMat.getColor() != ((Colorable) targetBlock.getState().getData()).getColor()) return false;
 			}
 		}
+		
 		return true;
 	}
 	

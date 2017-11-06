@@ -10,13 +10,13 @@ import org.bukkit.Particle;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Dropper;
+import org.bukkit.block.Hopper;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Directional;
-import org.bukkit.material.Hopper;
 import org.bukkit.material.MaterialData;
 import org.bukkit.material.Stairs;
 import org.bukkit.util.Vector;
@@ -30,13 +30,14 @@ import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager.UpgradeType;
 
 public abstract class ArcFurnace extends MachineDropperMultiblock {
 	
-	org.bukkit.block.Hopper inputHopper, outputHopper;
+	Hopper inputHopper, outputHopper;
 	
 	private int chimneyHeight;
 	private Location smokePosition;
 
 	public ArcFurnace(Location position, MachineManager machineManager) {
 		super(position, machineManager);
+		
 		effectOffset = new Vector(0.0f, 1.0f, 0.0f);
 		
 		getHoppers();
@@ -44,34 +45,35 @@ public abstract class ArcFurnace extends MachineDropperMultiblock {
 	
 	public ArcFurnace(OfflinePlayer owner, Location position, MachineManager machineManager, int power) {
 		super(owner, position, machineManager, power);
-		effectOffset = new Vector(0.0f, 1.0f, 0.0f);
-		plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
-			@Override
-			public void run() {
-				Dropper dropper = getDropper();
-				
-				for (int i = 0; i < 9; i++)
-					if (i % 3 != 1)
-						dropper.getInventory().setItem(i, CustomsItems.getArcFurnaceFurnace());
-				
-				dropper.getInventory().setItem(1, ArcFurnaceCore.create(getSmeltingMaterial()));
-				dropper.getInventory().setItem(7, ArcHeater.create(0));
-				
-				reOpenInventories();
-			}
-		}, 1L);
-		
-		if(!shouldNotGenerate){
+		if(valid()){
+			effectOffset = new Vector(0.0f, 1.0f, 0.0f);
+			
 			getHoppers();
 			
 			plugin.getNMSAdapter().setInvName(inputHopper, getDisplayName() + "§4§l Input");
 			plugin.getNMSAdapter().setInvName(outputHopper, getDisplayName() + "§4§l Output");
+			
+			plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
+				@Override
+				public void run() {					
+					Dropper dropper = getDropper();
+					
+					for (int i = 0; i < 9; i++)
+						if (i % 3 != 1)
+							dropper.getInventory().setItem(i, CustomsItems.getArcFurnaceFurnace());
+					
+					dropper.getInventory().setItem(1, ArcFurnaceCore.create(getSmeltingMaterial()));
+					dropper.getInventory().setItem(7, ArcHeater.create(0));
+					
+					reOpenInventories();
+				}
+			}, 1L);
 		}
 	}
 	
 	private void getHoppers(){
-		Vector vecOutput = new Vector( 0,-1, 2);
-		Vector vecInput = new Vector( 0, 1, 1);
+		Vector vecOutput = new Vector(0, -1, 2);
+		Vector vecInput = new Vector(0, 1, 1);
 		
 		Dropper dropper = getDropper();
 		
@@ -138,8 +140,8 @@ public abstract class ArcFurnace extends MachineDropperMultiblock {
 		tA.put(new Vector( 1, 1, 1), stairs.clone());
 		tA.put(new Vector( 1, 1, 2), stairs.clone());
 		
-		tA.put(new Vector( 0, 1, 1), new Hopper(BlockFace.DOWN));
-		tA.put(new Vector( 0,-1, 2), new Hopper(BlockFace.SOUTH));
+		tA.put(new Vector( 0, 1, 1), new org.bukkit.material.Hopper(BlockFace.DOWN));
+		tA.put(new Vector( 0,-1, 2), new org.bukkit.material.Hopper(BlockFace.SOUTH));
 		
 		tA.put(new Vector( 0, 0, 1), new MaterialData(Material.STATIONARY_LAVA));
 		tA.put(new Vector( 0, 0, 2), new MaterialData(Material.STAINED_GLASS, (byte) 7));
@@ -150,19 +152,31 @@ public abstract class ArcFurnace extends MachineDropperMultiblock {
 	@SuppressWarnings("deprecation")
 	@Override
 	protected boolean checkTemplate(HashMap<Vector, MaterialData> template) {
-		int i;
+		if (!super.checkTemplate(template))
+			return false;
+		
 		Location checkChimney = position;
+		int i;
 		for(i = 0; i < 32; i++){
 			checkChimney = position.clone().add(0.0f, 2.0f + i, 0.0f);
-			if(checkChimney.getBlock() == null || checkChimney.getBlock().getType() != Material.BRICK)break;
+			if(checkChimney.getBlock() == null || checkChimney.getBlock().getType() != Material.BRICK)
+				break;
 		}
-		if(i <= 2)return false;
+		
+		plugin.getLogger().info("Chimney height: " + i);
+		
+		
+		if(i <= 2)
+			return false;
+		
 		//plugin.getLogger().info(checkChimney.getBlock().getType() + " / " + checkChimney.getBlock().getData());
-		if(checkChimney.getBlock() == null || checkChimney.getBlock().getType() != Material.STEP || checkChimney.getBlock().getData() != 0)return false;
+		if(checkChimney.getBlock() == null || checkChimney.getBlock().getType() != Material.STEP || checkChimney.getBlock().getData() != 0)
+			return false;
 		chimneyHeight = i;
 		smokePosition = position.clone().add(0.5f, 2.0f + i, 0.5f);
 		
-		return super.checkTemplate(template);
+		plugin.getLogger().info("truly success");
+		return true;
 	}
 
 	@Override
@@ -202,20 +216,20 @@ public abstract class ArcFurnace extends MachineDropperMultiblock {
 	}
 
 	@Override
-	protected void resetItemAt(int id) {
-		switch (id)
+	protected void resetItemAt(int slot) {
+		switch (slot)
 		{
 		case 1:
 			getDropper().getInventory().setItem(1, new ItemStack(getSmeltingMaterial()));
 			break;
 		case 4:
-			getDropper().getInventory().setItem(id, new Batrod(getPower()));
+			getDropper().getInventory().setItem(slot, new Batrod(getPower()));
 			break;
 		case 7:
 			getDropper().getInventory().setItem(7, new ItemStack(Material.MAGMA));
 			break;
 		default:
-			getDropper().getInventory().setItem(id, new ItemStack(Material.FURNACE));					
+			getDropper().getInventory().setItem(slot, new ItemStack(Material.FURNACE));					
 		}
 	}
 
@@ -225,8 +239,8 @@ public abstract class ArcFurnace extends MachineDropperMultiblock {
 	}
 
 	@Override
-	protected void setCoreSlot() {
-		coreSlot = 4;
+	protected int getCoreSlot() {
+		return 4;
 	}
 
 	@Override
@@ -236,7 +250,7 @@ public abstract class ArcFurnace extends MachineDropperMultiblock {
 
 	@Override
 	public void updateBlock() {
-		Dropper dropper = getDropper();
+		Dropper dropper = getDropper();		
 		
 		position.getWorld().spawnParticle(Particle.SMOKE_LARGE, smokePosition, 1, 0.1, 0.0, 0.1, 0);
 		if(isInactive())return;

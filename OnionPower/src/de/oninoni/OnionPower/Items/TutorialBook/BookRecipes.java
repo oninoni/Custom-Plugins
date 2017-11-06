@@ -14,13 +14,14 @@ public class BookRecipes {
 		String json = "";
 		
 		for(int i = 0; i < 9; i++){
-			ItemStack item;
 			
 			if(recipe[i] == Material.COMMAND){
 				if(i != 0)
 					json += ",";
 				json += "{\"text\":\"[]\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":\"Empty Slot\"}}";
 			}else{
+				ItemStack item;
+				
 				if(recipe[i] == Material.BARRIER){
 					item = new Batrod(0);
 				}else{

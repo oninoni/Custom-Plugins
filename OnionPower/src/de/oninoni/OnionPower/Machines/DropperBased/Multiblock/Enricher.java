@@ -161,9 +161,9 @@ public class Enricher extends MachineDropperMultiblock{
 	}
 
 	@Override
-	protected void resetItemAt(int id) {
-		if(id == coreSlot)
-			getDropper().getInventory().setItem(id, new Batrod(getPower()));
+	protected void resetItemAt(int slot) {
+		if(slot == getCoreSlot())
+			getDropper().getInventory().setItem(slot, new Batrod(getPower()));
 		//TODO Auto-generated method stub
 	}
 
@@ -173,8 +173,8 @@ public class Enricher extends MachineDropperMultiblock{
 	}
 
 	@Override
-	protected void setCoreSlot() {
-		coreSlot = 4;
+	protected int getCoreSlot() {
+		return 4;
 	}
 	
 	@Override

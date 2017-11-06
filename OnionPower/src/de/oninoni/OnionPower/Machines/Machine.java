@@ -36,6 +36,7 @@ import de.oninoni.OnionPower.OnionPower;
 import de.oninoni.OnionPower.Items.PowerItems.Batrod;
 import de.oninoni.OnionPower.Items.PowerItems.PowerCore;
 import de.oninoni.OnionPower.Items.PowerItems.PowerItem;
+import de.oninoni.OnionPower.Machines.DropperBased.Multiblock.MachineDropperMultiblock;
 import de.oninoni.OnionPower.Machines.Upgrades.RedstoneUpgrade;
 import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager;
 import de.oninoni.OnionPower.Machines.Upgrades.UpgradeManager.UpgradeType;
@@ -49,9 +50,9 @@ public abstract class Machine {
 	protected Vector effectOffset;
 
 	@SuppressWarnings("deprecation")
-	public static boolean canCreate(InventoryClickEvent e, String key, InventoryType type) {
+	public static boolean canCreate(InventoryClickEvent e, Class<? extends Machine> machineclass, InventoryType type) {
 		// plugin.getLogger().info("Type: " + key);
-		Material[] template = MachineTemplates.buildTemplates.get(key);
+		Material[] template = MachineTemplates.buildTemplates.get(machineclass);
 
 		if (!(e.getView().getTopInventory().getType() == type))
 			return false;
@@ -113,8 +114,8 @@ public abstract class Machine {
 
 		return result;
 	}
-
-	protected int coreSlot;
+	
+	protected abstract int getCoreSlot();
 
 	protected EnumSet<UpgradeType> upgradesAvailable;
 	protected UpgradeManager upgradeManager;
@@ -147,10 +148,9 @@ public abstract class Machine {
 		return (InventoryHolder) position.getBlock().getState();
 	}
 
-	public Machine(Location position, MachineManager machineManager) {
+	public Machine(Location position, MachineManager machineManager) {		
 		initValues(position, machineManager);
-		
-		setCoreSlot();
+
 		BlockState state = position.getBlock().getState();
 		if (state instanceof InventoryHolder) {
 			PowerCore powerCore = new PowerCore(getPowerCore(), this);
@@ -170,11 +170,10 @@ public abstract class Machine {
 		plugin.getLogger().info(owner.getName());
 	}
 
-	public Machine(OfflinePlayer owner, Location position, MachineManager machineManager, int power) {
+	public Machine(OfflinePlayer owner, Location position, MachineManager machineManager, int power) {		
 		this.owner = owner;
 		initValues(position, machineManager);
 		
-		setCoreSlot();
 		plugin.getNMSAdapter().setInvName(getInvHolder(), getDisplayName());
 		this.power = power;
 		setPowerCore(new PowerCore(this));
@@ -291,7 +290,7 @@ public abstract class Machine {
 	}
 
 	public ItemStack getPowerCore() {
-		return getInvHolder().getInventory().getItem(coreSlot);
+		return getInvHolder().getInventory().getItem(getCoreSlot());
 	}
 
 	public int getPowerIntputTotal() {
@@ -367,7 +366,7 @@ public abstract class Machine {
 	
 	public void onClick(InventoryClickEvent e) {
 		Inventory inv = e.getView().getTopInventory();
-		if (coreSlot == e.getRawSlot() && inv.getName() != upgradeManager.getName() && inv.getName() == getInvHolder().getInventory().getName()) {
+		if (getCoreSlot() == e.getRawSlot() && inv.getName() != upgradeManager.getName() && inv.getName() == getInvHolder().getInventory().getName()) {
 			e.setCancelled(true);
 			upgradeManager.openInterface(e.getWhoClicked());
 			return;
@@ -494,11 +493,9 @@ public abstract class Machine {
 		powerOutputTotal = 0;
 	}
 
-	protected abstract void resetItemAt(int id);
+	protected abstract void resetItemAt(int slot);
 
 	protected abstract void setAvailableUpgrades();
-
-	protected abstract void setCoreSlot();
 
 	protected void setEntity(int id, ArmorStand a) {
 		if (designEntities.size() <= id) {
@@ -509,7 +506,7 @@ public abstract class Machine {
 	}
 
 	public void setPowerCore(ItemStack powerCore) {
-		getInvHolder().getInventory().setItem(coreSlot, powerCore);
+		getInvHolder().getInventory().setItem(getCoreSlot(), powerCore);
 	}
 
 	public void saveUpgradeAsLore() {
@@ -643,9 +640,9 @@ public abstract class Machine {
 		return upgradesAvailable.contains(type);
 	}
 	
-	public void destroyMachine(OfflinePlayer destroyer){
-		plugin.getMachineManager().onBreak(new BlockBreakEvent(position.getBlock(), (Player) destroyer));
+	public void destroyMachine(){
 		plugin.getNMSAdapter().resetInvName(getInvHolder());
+		plugin.getMachineManager().onBreak(new BlockBreakEvent(position.getBlock(), null));
 	}
 	
 	public Vector getEffectOffset() {

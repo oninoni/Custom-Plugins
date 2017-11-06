@@ -147,19 +147,19 @@ public class Miner extends MachineDispenser {
 	}
 
 	@Override
-	protected void resetItemAt(int id) {
+	protected void resetItemAt(int slot) {
 		Dispenser dispenser = getDispenser();
 		
-		if (id == 1) {
-			dispenser.getInventory().setItem(id, new Batrod(getPower()));
-		} else if (id == 4) {
-			dispenser.getInventory().setItem(id, new ItemStack(Material.REDSTONE_BLOCK));
-		} else if (id == 7) {
+		if (slot == 1) {
+			dispenser.getInventory().setItem(slot, new Batrod(getPower()));
+		} else if (slot == 4) {
+			dispenser.getInventory().setItem(slot, new ItemStack(Material.REDSTONE_BLOCK));
+		} else if (slot == 7) {
 			ItemStack i = new ItemStack(Material.IRON_PICKAXE);
 			i.setDurability(dispenser.getInventory().getItem(7).getDurability());
-			dispenser.getInventory().setItem(id, i);
+			dispenser.getInventory().setItem(slot, i);
 		} else {
-			dispenser.getInventory().setItem(id, new ItemStack(Material.AIR));
+			dispenser.getInventory().setItem(slot, new ItemStack(Material.AIR));
 		}
 	}
 
@@ -170,8 +170,8 @@ public class Miner extends MachineDispenser {
 	}
 
 	@Override
-	protected void setCoreSlot() {
-		coreSlot = 1;
+	protected int getCoreSlot() {
+		return 1;
 	}
 
 	private void SetupPowerIO() {

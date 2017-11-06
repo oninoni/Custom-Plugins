@@ -71,9 +71,9 @@ public class ElectricFurnace extends MachineFurnace {
 	}
 	
 	@Override
-	protected void resetItemAt(int id) {
-		if (id == coreSlot) {
-			getFurnace().getInventory().setItem(id, new Batrod(getPower()));
+	protected void resetItemAt(int slot) {
+		if (slot == getCoreSlot()) {
+			getFurnace().getInventory().setItem(slot, new Batrod(getPower()));
 		}
 	}
 
@@ -83,8 +83,8 @@ public class ElectricFurnace extends MachineFurnace {
 	}
 
 	@Override
-	protected void setCoreSlot() {
-		coreSlot = 1;
+	protected int getCoreSlot() {
+		return 1;
 	}
 
 	@Override

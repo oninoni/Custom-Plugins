@@ -215,18 +215,18 @@ public class FluidHandler extends MachineHopper {
 	}
 
 	@Override
-	protected void resetItemAt(int id) {
+	protected void resetItemAt(int slot) {
 		Hopper hopper = getHopper();
 		
-		switch (id) {
+		switch (slot) {
 		case 2:
-			hopper.getInventory().setItem(id, new Batrod(getPower()));
+			hopper.getInventory().setItem(slot, new Batrod(getPower()));
 			break;
 		case 3:
-			hopper.getInventory().setItem(id, new ItemStack(Material.GLASS));
+			hopper.getInventory().setItem(slot, new ItemStack(Material.GLASS));
 			break;
 		case 4:
-			hopper.getInventory().setItem(id, new ItemStack(Material.WORKBENCH));
+			hopper.getInventory().setItem(slot, new ItemStack(Material.WORKBENCH));
 			break;
 		}
 	}
@@ -238,8 +238,8 @@ public class FluidHandler extends MachineHopper {
 	}
 
 	@Override
-	protected void setCoreSlot() {
-		coreSlot = 2;
+	protected int getCoreSlot() {
+		return 2;
 	}
 
 	@Override
